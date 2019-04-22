@@ -20,3 +20,30 @@ struct ThemeConst {
 
 let TextEditorFontName = "PingFangSC-Regular"
 let DigestTitleLength = 40
+
+enum DigestType {
+    case sentence
+    case paragraph
+    
+    var toMachine: String {
+        get {
+            switch self {
+            case .sentence:
+                return "sentence"
+            case .paragraph:
+                return "paragraph"
+            }
+        }
+    }
+    
+    var toHuman: String {
+        get {
+            switch self {
+            case .sentence:
+                return "句子"
+            case .paragraph:
+                return "段落"
+            }
+        }
+    }
+}

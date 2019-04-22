@@ -100,7 +100,7 @@ class TextEditViewController: UIViewController {
 
 private extension TextEditViewController {
     func setupNavigationBar() {
-        title = "正文"
+        title = "\(digestType.toHuman) - 正文"
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = creating ? submitBarItem : nextBarItem

@@ -87,7 +87,7 @@ class WordDigestInfoViewController: FormViewController {
 
 private extension WordDigestInfoViewController {
     func setupNavigationBar() {
-        title = "基本信息"
+        title = "\(digestType.toHuman) - 基本信息"
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = creating ? nextItem : submitItem

@@ -8,11 +8,6 @@
 
 import RealmSwift
 
-enum DigestType {
-    case sentence
-    case paragraph
-}
-
 protocol KvasirRealmCRUDable : class {
     func save() -> Bool
     func update() -> Bool

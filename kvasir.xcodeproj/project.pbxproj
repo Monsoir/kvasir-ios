@@ -394,6 +394,7 @@
 		44A7ED1F2246A62300D1C402 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				44B2C038226DD56100B584F5 /* Array */,
 				44B2C013226B43D900B584F5 /* NSAttributedString */,
 				44B2BFFF226AE94600B584F5 /* UIViewController */,
 				44A7ED202246A62300D1C402 /* UIImage */,
@@ -520,6 +521,13 @@
 				444B761C2265F74C004B9CD4 /* WordDigestInfoViewController.swift */,
 			);
 			path = DetailInfo;
+			sourceTree = "<group>";
+		};
+		44B2C038226DD56100B584F5 /* Array */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Array;
 			sourceTree = "<group>";
 		};
 		656747A6593936160D864F63 /* Frameworks */ = {

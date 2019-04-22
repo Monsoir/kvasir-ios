@@ -79,6 +79,12 @@ class TextDetailViewController: UIViewController {
     private var coordinator: TextDetailCoordinator?
     private var data: TextDetailViewModel?
     
+    private var digestType: DigestType {
+        get {
+            return coordinator?.digestType ?? DigestType.sentence
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -158,7 +164,7 @@ extension TextDetailViewController: UITableViewDelegate {
 
 private extension TextDetailViewController {
     func setupNavigationBar() {
-        title = "正文"
+        title = "\(digestType.toHuman) - 正文"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }

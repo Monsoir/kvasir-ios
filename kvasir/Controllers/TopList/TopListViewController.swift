@@ -155,11 +155,13 @@ extension TopListViewController: UITableViewDelegate {
         }
         
         header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
-        header.seeAllHandler = { [weak self] in
-            guard let strongSelf = self else { return }
+        header.seeAllHandler = {
+            let dict = [
+                DigestType.sentence: KvasirURLs.allSentences,
+                DigestType.paragraph: KvasirURLs.allParagraphs,
+            ]
             DispatchQueue.main.async {
-                let nextNC = TextListViewController(type: digestType)
-                strongSelf.navigationController?.pushViewController(nextNC)
+                KvasirNavigator.push(dict[digestType]!)
             }
         }
         
@@ -233,23 +235,17 @@ extension TopListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let collectionLocation = getLocationOfCollectionView(collectionView) else { return }
         
-        var nextNC: UIViewController?
         switch collectionLocation.section {
         case 0:
             guard let digests = RealmSentence.allObjectsSortedByUpdatedAt() else { return }
             let digest = digests[indexPath.row]
-            nextNC = TextDetailViewController(mode: .local, digestType: .sentence, digestId: digest.id)
+            KvasirNavigator.push(KvasirURLs.detailSentence(digest.id), context: nil, from: navigationController, animated: true)
         case 1:
             guard let digests = RealmParagraph.allObjectsSortedByUpdatedAt() else { return }
             let digest = digests[indexPath.row]
-            nextNC = TextDetailViewController(mode: .local, digestType: .paragraph, digestId: digest.id)
+            KvasirNavigator.push(KvasirURLs.detailParagraph(digest.id), context: nil, from: navigationController, animated: true)
         default:
             break
-        }
-        
-        guard let nc = nextNC else { return }
-        DispatchQueue.main.async {
-            self.navigationController?.pushViewController(nc)
         }
     }
     
@@ -288,18 +284,26 @@ private extension TopListViewController {
 private extension TopListViewController {
     @objc func actionNew() {
         let sheet = UIAlertController(title: "创建摘录", message: "请选择摘录类型", preferredStyle: .actionSheet)
-        let actionSentence = UIAlertAction(title: "句子", style: .default) { [weak self] (_) in
-            guard let strongSelf = self else { return }
-            let vc = WordDigestInfoViewController(digestType: .sentence, digest: RealmSentence(), creating: true)
-            let nc = UINavigationController(rootViewController: vc)
-            strongSelf.navigationController?.present(nc, animated: true, completion: nil)
+        let actionSentence = UIAlertAction(title: "句子", style: .default) { (_) in
+            KvasirNavigator.present(
+                KvasirURLs.newSentence,
+                context: nil,
+                wrap: UINavigationController.self,
+                from: AppRootViewController,
+                animated: true,
+                completion: nil
+            )
         }
         
-        let actionParagraph = UIAlertAction(title: "段落", style: .default) { [weak self] (_) in
-            guard let strongSelf = self else { return }
-            let vc = WordDigestInfoViewController(digestType: .paragraph, digest: RealmParagraph(), creating: true)
-            let nc = UINavigationController(rootViewController: vc)
-            strongSelf.navigationController?.present(nc, animated: true, completion: nil)
+        let actionParagraph = UIAlertAction(title: "段落", style: .default) { (_) in
+            KvasirNavigator.present(
+                KvasirURLs.newParagraph,
+                context: nil,
+                wrap: UINavigationController.self,
+                from: AppRootViewController,
+                animated: true,
+                completion: nil
+            )
         }
         
         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)

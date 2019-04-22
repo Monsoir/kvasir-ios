@@ -81,6 +81,8 @@ class TextListViewController: UIViewController {
 private extension TextListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
         switch digestType {
         case .sentence:
             title = "句子"
@@ -149,4 +151,21 @@ extension TextListViewController: UITableViewDataSource {
 }
 
 extension TextListViewController: UITableViewDelegate {}
+
+private extension TextListViewController {
+    @objc func actionCreate() {
+        let dict = [
+            DigestType.sentence: KvasirURLs.newSentence,
+            DigestType.paragraph: KvasirURLs.newParagraph,
+        ]
+        KvasirNavigator.present(
+            dict[digestType]!,
+            context: nil,
+            wrap: UINavigationController.self,
+            from: AppRootViewController,
+            animated: true,
+            completion: nil
+        )
+    }
+}
 
