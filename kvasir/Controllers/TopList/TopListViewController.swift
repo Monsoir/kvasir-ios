@@ -104,17 +104,19 @@ class TopListViewController: UIViewController {
     }
     
     func reloadSentenceView() {
+        sentencesCollectionView?.backgroundView = sentencesData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的句子") : nil
         sentencesCollectionView?.reloadData()
     }
     
     func reloadParagraphView() {
+        paragraphCollectionView?.backgroundView = paragraphsData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的段落") : nil
         paragraphCollectionView?.reloadData()
     }
 }
 
 private extension TopListViewController {
     func setupNavigationBar() {
-        title = "广场"
+        title = "最近"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         

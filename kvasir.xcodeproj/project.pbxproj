@@ -101,6 +101,12 @@
 		44B2C05E226EEE9100B584F5 /* RouteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05D226EEE9100B584F5 /* RouteConstants.swift */; };
 		44B2C05F226EEE9100B584F5 /* RouteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05D226EEE9100B584F5 /* RouteConstants.swift */; };
 		44B2C060226EEEAD00B584F5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* Routes.swift */; };
+		44B2C062226EF5F900B584F5 /* RealmNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C061226EF5F900B584F5 /* RealmNote.swift */; };
+		44B2C063226EF5F900B584F5 /* RealmNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C061226EF5F900B584F5 /* RealmNote.swift */; };
+		44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */; };
+		44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */; };
+		44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C067226F037D00B584F5 /* ExpandedLabel.swift */; };
+		44B2C069226F037D00B584F5 /* ExpandedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C067226F037D00B584F5 /* ExpandedLabel.swift */; };
 		7E473980D8AF351BC84D8DC1 /* Pods_kvasirUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */; };
 		D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */; };
 		DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */; };
@@ -186,6 +192,9 @@
 		44B2C055226EEDE100B584F5 /* ModelConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConstants.swift; sourceTree = "<group>"; };
 		44B2C05A226EEE5000B584F5 /* SchemaBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaBuilder.swift; sourceTree = "<group>"; };
 		44B2C05D226EEE9100B584F5 /* RouteConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteConstants.swift; sourceTree = "<group>"; };
+		44B2C061226EF5F900B584F5 /* RealmNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmNote.swift; sourceTree = "<group>"; };
+		44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTypeEmptyBackgroundView.swift; sourceTree = "<group>"; };
+		44B2C067226F037D00B584F5 /* ExpandedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedLabel.swift; sourceTree = "<group>"; };
 		86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.release.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.release.xcconfig"; sourceTree = "<group>"; };
 		B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -237,10 +246,11 @@
 		444B760A226491D0004B9CD4 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
-				444B760B226491F0004B9CD4 /* RealmSentence.swift */,
 				44B2C01D226C332800B584F5 /* RealmCommonInfo.swift */,
 				444B760D22649558004B9CD4 /* RealmWordDigest.swift */,
+				444B760B226491F0004B9CD4 /* RealmSentence.swift */,
 				44B2BFBF2268A1A600B584F5 /* RealmParagraph.swift */,
+				44B2C061226EF5F900B584F5 /* RealmNote.swift */,
 				44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */,
 			);
 			path = Realm;
@@ -364,8 +374,10 @@
 				44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */,
 				44A7ED282246A62300D1C402 /* TopListTableViewCell.swift */,
 				44A7ED292246A62300D1C402 /* TopAlignedLabel.swift */,
+				44B2C067226F037D00B584F5 /* ExpandedLabel.swift */,
 				44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */,
 				44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */,
+				44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -847,7 +859,9 @@
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
 				44B2C056226EEDE100B584F5 /* ModelConstants.swift in Sources */,
+				44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44A7ED512246A62300D1C402 /* TextEditViewController.swift in Sources */,
+				44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
 				44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				44B2C030226C941000B584F5 /* TextListViewModel.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
@@ -875,6 +889,7 @@
 				44A7ED4A2246A62300D1C402 /* TopListCollectionViewCell.swift in Sources */,
 				44B2C053226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2C011226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */,
+				44B2C062226EF5F900B584F5 /* RealmNote.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
 			);
@@ -911,6 +926,7 @@
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
 				44B2C031226C941000B584F5 /* TextListViewModel.swift in Sources */,
 				44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
+				44B2C069226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44B2C04F226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2BFD622698BA400B584F5 /* TextEditViewController.swift in Sources */,
 				44B2C04A226EEA1F00B584F5 /* UIImageEx.swift in Sources */,
@@ -921,6 +937,7 @@
 				44B2BFDA22698BA400B584F5 /* TopListViewController.swift in Sources */,
 				44B2C025226C469400B584F5 /* TopListViewModel.swift in Sources */,
 				44B2BFDC22698BA400B584F5 /* TextListTableViewCell.swift in Sources */,
+				44B2C063226EF5F900B584F5 /* RealmNote.swift in Sources */,
 				44B2C05F226EEE9100B584F5 /* RouteConstants.swift in Sources */,
 				44B2C028226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				44B2C012226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */,
@@ -937,6 +954,7 @@
 				44B2C02E226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */,
 				44B2BFE922698BA400B584F5 /* TopListTableViewHeader.swift in Sources */,
 				44B2BFEA22698BA400B584F5 /* RealmSentence.swift in Sources */,
+				44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
 				44B2C040226EE99700B584F5 /* TypeAlias.swift in Sources */,
 				44B2C047226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44B2BFED22698BA400B584F5 /* TopListCollectionViewCell.swift in Sources */,

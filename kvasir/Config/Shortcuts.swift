@@ -10,3 +10,6 @@ import UIKit
 
 let ScreenWidth = UIScreen.main.bounds.width
 let ScreenHeight = UIScreen.main.bounds.height
+
+let PingFangSCLightFont = UIFont(name: "PingFangSC-Light", size: 20)
+let PingFangSCRegularFont = UIFont(name: "PingFangSC-Regular", size: 20)

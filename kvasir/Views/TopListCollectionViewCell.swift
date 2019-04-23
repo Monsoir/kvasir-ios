@@ -31,20 +31,20 @@ class TopListCollectionViewCell: UICollectionViewCell {
     
     private lazy var lbTitle: TopAlignedLabel = {
         let label = TopAlignedLabel()
-        label.font = UIFont(name: "PingFangSC-Regular", size: 25)
+        label.font = PingFangSCRegularFont?.withSize(25)
         label.numberOfLines = 3
         return label
     }()
     
     private lazy var lbBookName: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "PingFangSC-Light", size: 18)
+        label.font = PingFangSCLightFont?.withSize(18)
         return label
     }()
     
     private lazy var lbRecordUpdatedDate: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "PingFangSC-Light", size: 12)
+        label.font = PingFangSCLightFont?.withSize(12)
         return label
     }()
     

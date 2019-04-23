@@ -9,7 +9,10 @@
 import RealmSwift
 
 class RealmSentence: RealmWordDigest {
-    override func detach() -> RealmSentence {
+}
+
+extension RealmSentence: KvasirRealmDetachable {
+    func detach() -> RealmSentence {
         return RealmSentence(value: self)
     }
 }

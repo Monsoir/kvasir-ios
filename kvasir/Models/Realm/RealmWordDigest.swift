@@ -24,14 +24,10 @@ class RealmWordDigest: RealmCommonInfo {
     override static func primaryKey() -> String? {
         return "id"
     }
-    
-    func detach() -> RealmWordDigest {
-        return RealmWordDigest(value: self)
-    }
 }
 
-extension RealmWordDigest: KvasirRealmCRUDable {
-    func save() -> Bool {
+extension RealmWordDigest {
+    override func save() -> Bool {
         self.content.trim()
         self.bookName.trim()
         self.publisher.trim()
@@ -46,7 +42,7 @@ extension RealmWordDigest: KvasirRealmCRUDable {
         }
     }
     
-    func update() -> Bool {
+    override func update() -> Bool {
         self.content.trim()
         self.bookName.trim()
         self.publisher.trim()
@@ -54,17 +50,6 @@ extension RealmWordDigest: KvasirRealmCRUDable {
             self.updatedAt = Date()
             try Realm().write {
                 try Realm().add(self, update: true)
-            }
-            return true
-        } catch {
-            return false
-        }
-    }
-    
-    func delete() -> Bool {
-        do {
-            try Realm().write {
-                try Realm().delete(self)
             }
             return true
         } catch {

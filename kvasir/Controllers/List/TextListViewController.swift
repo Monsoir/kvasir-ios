@@ -59,7 +59,7 @@ class TextListViewController: UIViewController {
                 switch changes {
                 case .initial: fallthrough
                 case .update:
-                    self?.tableView.reloadData()
+                    self?.reload()
                 case .error:
                     break
                 }
@@ -69,7 +69,7 @@ class TextListViewController: UIViewController {
                 switch changes {
                 case .initial: fallthrough
                 case .update:
-                    self?.tableView.reloadData()
+                    self?.reload()
                 case .error:
                     break
                 }
@@ -99,6 +99,16 @@ private extension TextListViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    func reload() {
+        switch digestType {
+        case .sentence:
+            tableView.backgroundView = sentenceResults?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(digestType.toHuman)的摘录", position: .upper) : nil
+        case .paragraph:
+            tableView.backgroundView = paragraphResults?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(digestType.toHuman)的摘录", position: .upper) : nil
+        }
+        tableView.reloadData()
     }
 }
 

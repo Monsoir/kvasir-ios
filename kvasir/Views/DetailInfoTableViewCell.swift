@@ -23,7 +23,7 @@ class DetailInfoTableViewCell: UITableViewCell {
     
     private lazy var lbLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "PingFangSC-Light", size: 14)
+        label.font = PingFangSCLightFont?.withSize(14)
         label.numberOfLines = 1
         return label
     }()
@@ -31,7 +31,7 @@ class DetailInfoTableViewCell: UITableViewCell {
     private lazy var lbValue: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = UIFont(name: "PingFangSC-Regular", size: 22)
+        label.font = PingFangSCRegularFont?.withSize(22)
         return label
     }()
     

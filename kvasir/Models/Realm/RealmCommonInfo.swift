@@ -10,6 +10,7 @@ import RealmSwift
 
 class RealmCommonInfo: Object {
     @objc dynamic var id = UUID().uuidString
+    @objc dynamic var serverId  = ""
     @objc dynamic var createdAt = Date()
     @objc dynamic var updatedAt = Date()
 }

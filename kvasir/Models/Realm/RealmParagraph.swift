@@ -9,7 +9,10 @@
 import RealmSwift
 
 class RealmParagraph: RealmWordDigest {
-    override func detach() -> RealmParagraph {
+}
+
+extension RealmParagraph: KvasirRealmDetachable {
+    func detach() -> RealmParagraph {
         return RealmParagraph(value: self)
     }
 }

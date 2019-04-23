@@ -223,10 +223,10 @@ private extension TextDetailViewController {
         var nextVC: TextEditViewController?
         switch coordinator.digestType {
         case .sentence:
-            let editingDigest = model.detach() as! RealmSentence
+            let editingDigest = (model as! RealmSentence).detach()
             nextVC = TextEditViewController(digestType: coordinator.digestType, digest: editingDigest, creating: false)
         case .paragraph:
-            let editingDigest = model.detach() as! RealmParagraph
+            let editingDigest = (model as! RealmParagraph).detach()
             nextVC = TextEditViewController(digestType: coordinator.digestType, digest: editingDigest, creating: false)
         }
 
