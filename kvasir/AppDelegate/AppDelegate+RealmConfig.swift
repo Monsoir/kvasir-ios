@@ -9,12 +9,14 @@
 import Foundation
 import RealmSwift
 
-func setDefaultRealm() {
-    var config = Realm.Configuration()
-    
-    // Use the default directory, but replace the filename with the username
-    config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent("kvasir.realm")
-    
-    // Set this as the configuration used for the default Realm
-    Realm.Configuration.defaultConfiguration = config
+extension AppDelegate {
+    func setDefaultRealm() {
+        var config = Realm.Configuration()
+        
+        // Use the default directory, but replace the filename with the username
+        config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent("kvasir.realm")
+        
+        // Set this as the configuration used for the default Realm
+        Realm.Configuration.defaultConfiguration = config
+    }
 }

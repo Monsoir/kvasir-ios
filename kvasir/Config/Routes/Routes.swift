@@ -8,48 +8,23 @@
 
 import URLNavigator
 
-let KvasirNavigator = Navigator()
-
-private struct Const {
-    static let kvasir = "kvasir"
-    static let digest = "digest"
-}
-
-class SchemaBuilder {
-    private var schema: String
-    
-    init(schema: String = Const.kvasir) {
-        self.schema = "\(schema):/"
-    }
-    
-    func component(_ aComponent: String) -> SchemaBuilder {
-        if aComponent.isEmpty { fatalError("route component should not be empty") }
-        schema.append(contentsOf: "/\(aComponent)")
-        return self
-    }
-    
-    func extract() -> String {
-        return schema
-    }
-}
-
 struct KvasirURLs {
     // kvasir://digest/new/sentence
-    static let newSentence = SchemaBuilder().component(Const.digest).component("new").component(DigestType.sentence.toMachine).extract()
-    static let newParagraph = SchemaBuilder().component(Const.digest).component("new").component(DigestType.paragraph.toMachine).extract()
+    static let newSentence = SchemaBuilder().component(RouteConstants.digest).component("new").component(DigestType.sentence.toMachine).extract()
+    static let newParagraph = SchemaBuilder().component(RouteConstants.digest).component("new").component(DigestType.paragraph.toMachine).extract()
     
     // kvasir://digest/all/sentence
-    static let allSentences = SchemaBuilder().component(Const.digest).component("all").component(DigestType.sentence.toMachine).extract()
-    static let allParagraphs = SchemaBuilder().component(Const.digest).component("all").component(DigestType.paragraph.toMachine).extract()
+    static let allSentences = SchemaBuilder().component(RouteConstants.digest).component("all").component(DigestType.sentence.toMachine).extract()
+    static let allParagraphs = SchemaBuilder().component(RouteConstants.digest).component("all").component(DigestType.paragraph.toMachine).extract()
     
     // kvasir://digest/sentence/an-id
-    static let detailSentenceTemplate = SchemaBuilder().component(Const.digest).component(DigestType.sentence.toMachine).component("<string:id>").extract()
+    static let detailSentenceTemplate = SchemaBuilder().component(RouteConstants.digest).component(DigestType.sentence.toMachine).component("<string:id>").extract()
     static let detailSentence = { (id: String) -> String in
-        return "\(SchemaBuilder().component(Const.digest).component(DigestType.sentence.toMachine).component(id).extract())"
+        return "\(SchemaBuilder().component(RouteConstants.digest).component(DigestType.sentence.toMachine).component(id).extract())"
     }
-    static let detailParagraphTemplate = SchemaBuilder().component(Const.digest).component(DigestType.paragraph.toMachine).component("<string:id>").extract()
+    static let detailParagraphTemplate = SchemaBuilder().component(RouteConstants.digest).component(DigestType.paragraph.toMachine).component("<string:id>").extract()
     static let detailParagraph = { (id: String) -> String in
-        return "\(SchemaBuilder().component(Const.digest).component(DigestType.paragraph.toMachine).component(id).extract())"
+        return "\(SchemaBuilder().component(RouteConstants.digest).component(DigestType.paragraph.toMachine).component(id).extract())"
     }
 }
 

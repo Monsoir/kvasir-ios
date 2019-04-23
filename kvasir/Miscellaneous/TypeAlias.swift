@@ -1,11 +1,11 @@
 //
-//  UITypeAlias.swift
-//  kvasir-ios
+//  TypeAlias.swift
+//  kvasir
 //
-//  Created by Monsoir on 2019/3/18.
+//  Created by Monsoir on 4/23/19.
 //  Copyright © 2019 monsoir. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 typealias StringAttributes = [NSAttributedString.Key : NSObject]

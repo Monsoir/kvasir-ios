@@ -1,8 +1,8 @@
 //
-//  AttributedStringExtensions.swift
+//  NSAttributedStringEx.swift
 //  kvasir
 //
-//  Created by Monsoir on 4/20/19.
+//  Created by Monsoir on 4/23/19.
 //  Copyright © 2019 monsoir. All rights reserved.
 //
 

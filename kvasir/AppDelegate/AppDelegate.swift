@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import URLNavigator
 
 let AppRootViewController = UIApplication.shared.keyWindow?.rootViewController
 
@@ -15,16 +14,14 @@ let AppRootViewController = UIApplication.shared.keyWindow?.rootViewController
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    private var navigator: NavigatorType?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        URLNavigaionMap.initialize(navigator: KvasirNavigator)
+        setupNavigator()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = setupControllers()
-        
         
         setAppTintColor()
         setDefaultRealm()

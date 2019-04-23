@@ -8,6 +8,9 @@
 
 import URLNavigator
 
-func setupNavigator() -> NavigatorType? {
-    return nil
+let KvasirNavigator = Navigator()
+extension AppDelegate {
+    func setupNavigator() {
+        URLNavigaionMap.initialize(navigator: KvasirNavigator)
+    }
 }

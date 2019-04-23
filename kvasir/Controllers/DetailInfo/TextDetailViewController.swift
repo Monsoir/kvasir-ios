@@ -19,6 +19,8 @@ private let SectionTitles = [
     "上次修改时间",
 ]
 
+private let ContainerHeight = 50
+
 class TextDetailViewController: UIViewController {
     
     private lazy var headerView: UIView = {
@@ -194,7 +196,7 @@ private extension TextDetailViewController {
         
         buttonsContainer.snp.makeConstraints { (make) in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(ThemeConst.functionalButtonContainerHeight)
+            make.height.equalTo(ContainerHeight)
             make.trailing.equalTo(buttonsContainer.snp.trailing)
         }
         

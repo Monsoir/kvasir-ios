@@ -106,17 +106,3 @@ class TopListCoordinator {
     private func fetchRemoteData() {
     }
 }
-
-extension RealmWordDigest {
-    func displayOutline() -> TopListViewModel {
-        let title: String = {
-            var temp = self.content.replacingOccurrences(of: "\n", with: " ")
-            let endIndex = temp.index(temp.startIndex, offsetBy: temp.count < DigestTitleLength ? temp.count : DigestTitleLength)
-            let range = temp.startIndex ..< endIndex
-            temp = String(temp[range])
-            return temp.trimmed
-        }()
-        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-        return TopListViewModel(id: id, title: title, bookName: bookName, updatedAt: updateAtString)
-    }
-}

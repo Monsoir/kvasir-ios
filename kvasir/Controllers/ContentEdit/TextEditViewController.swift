@@ -17,6 +17,9 @@ import RealmSwift
 import TesseractOCR
 #endif
 
+private let ContainerHeight = 50
+private let TextEditorFontName = "PingFangSC-Regular"
+
 class TextEditViewController: UIViewController {
     
     private var digestType = DigestType.sentence
@@ -40,8 +43,6 @@ class TextEditViewController: UIViewController {
         view.layoutMargins = UIEdgeInsets(horizontal: 10, vertical: 0)
         return view
     }()
-    
-//    private lazy var btnMoreInfo = makeAFunctionalButtonFromAwesomeFont(title: String.fontAwesomeIcon(name: .infoCircle), leadingInset: 30, topInset: 10)
     
     private lazy var btnPhotos = makeAFunctionalButtonFromAwesomeFont(name: .images, leadingInset: 30, topInset: 10)
     private lazy var btnCamera = makeAFunctionalButtonFromAwesomeFont(code: "fa-camera", leadingInset: 30, topInset: 10)
@@ -118,7 +119,7 @@ private extension TextEditViewController {
         
         buttonsContainer.snp.makeConstraints { (make) in
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(ThemeConst.functionalButtonContainerHeight)
+            make.height.equalTo(ContainerHeight)
             make.trailing.equalTo(buttonsContainer.snp.trailing)
         }
         
