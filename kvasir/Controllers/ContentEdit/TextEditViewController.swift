@@ -18,7 +18,6 @@ import TesseractOCR
 #endif
 
 private let ContainerHeight = 50
-private let TextEditorFontName = "PingFangSC-Regular"
 
 class TextEditViewController: UIViewController {
     
@@ -28,14 +27,6 @@ class TextEditViewController: UIViewController {
     
     private var editorContainerNotEditingBottomConstraint: Constraint? = nil
     private var editorContainerEditingBottomConstraint: Constraint? = nil
-    
-    fileprivate lazy var editorContainer: UIScrollView = {
-        let view = UIScrollView()
-        view.alwaysBounceHorizontal = false
-        view.alwaysBounceVertical = true
-        view.showsVerticalScrollIndicator = false
-        return view
-    }()
     
     private lazy var buttonsContainer: UIView = {
         let view = UIView()
@@ -51,17 +42,7 @@ class TextEditViewController: UIViewController {
     private lazy var submitBarItem = UIBarButtonItem(title: "提交", style: .done, target: self, action: #selector(actionSubmit))
     private lazy var nextBarItem = UIBarButtonItem(title: "编辑信息", style: .done, target: self, action: #selector(actionNext))
     
-    private lazy var tvContent: UITextView = {
-        [unowned self] in
-        let view = UITextView()
-        view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
-        view.font = UIFont.init(name: TextEditorFontName, size: 25)
-        view.bounces = true
-        view.tintColor = Color(hexString: ThemeConst.outlineColor)
-        view.textContainerInset = UIEdgeInsets(horizontal: 20, vertical: 20)
-        view.delegate = self
-        return view
-    }()
+    private lazy var editor = KvasirEditor(noCarriageReturn: self.digestType == .sentence)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,12 +91,11 @@ private extension TextEditViewController {
     func setupSubviews() {
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
         
-        view.addSubview(editorContainer)
+        view.addSubview(editor)
         view.addSubview(buttonsContainer)
         
         let stackView = UIStackView(arrangedSubviews: [btnPhotos, btnCamera], axis: NSLayoutConstraint.Axis.horizontal, spacing: 10, alignment: UIStackView.Alignment.center, distribution: UIStackView.Distribution.equalSpacing)
         buttonsContainer.addSubview(stackView)
-        editorContainer.addSubview(tvContent)
         
         buttonsContainer.snp.makeConstraints { (make) in
             make.leading.trailing.bottom.equalToSuperview()
@@ -129,15 +109,9 @@ private extension TextEditViewController {
             make.trailing.equalToSuperview().offset(-10)
         }
         
-        editorContainer.snp.makeConstraints { (make) in
+        editor.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             editorContainerNotEditingBottomConstraint = make.bottom.equalTo(buttonsContainer.snp.top).constraint
-        }
-        
-        tvContent.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalTo(editorContainer)
         }
         
         bindActions()
@@ -160,6 +134,10 @@ private extension TextEditViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(editorDidBeginEditing(notif:)), name: UITextView.textDidBeginEditingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editorDidEndEditing(notif:)), name: UITextView.textDidEndEditingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editorDidChange(notif:)), name: UITextView.textDidChangeNotification, object: nil)
     }
     
     func clearupNotification () {
@@ -195,7 +173,7 @@ private extension TextEditViewController {
                 if let editingBottomConstraint = self.editorContainerEditingBottomConstraint {
                     editingBottomConstraint.update(offset: -keyboardHeight)
                 } else {
-                    self.editorContainer.snp.makeConstraints({ (make) in
+                    self.editor.snp.makeConstraints({ (make) in
                         self.editorContainerEditingBottomConstraint = make.bottom.equalTo(self.view).offset(-keyboardHeight).constraint
                     })
                 }
@@ -212,7 +190,7 @@ private extension TextEditViewController {
                 if let editingBottomConstraint = self.editorContainerEditingBottomConstraint {
                     editingBottomConstraint.update(offset: -keyboardHeight)
                 } else {
-                    self.editorContainer.snp.makeConstraints({ (make) in
+                    self.editor.snp.makeConstraints({ (make) in
                         self.editorContainerEditingBottomConstraint = make.bottom.equalTo(self.view).offset(-keyboardHeight).constraint
                     })
                 }
@@ -233,7 +211,7 @@ private extension TextEditViewController {
     }
     
     func putContentToModel() -> Bool {
-        let content = tvContent.text.trimmed
+        let content = editor.text
         guard !content.isEmpty else {
             let alert = UIAlertController(title: "提示", message: "请填写内容", defaultActionButtonTitle: "好的", tintColor: Color(hexString: ThemeConst.outlineColor))
             present(alert, animated: true, completion: nil)
@@ -321,23 +299,34 @@ private extension TextEditViewController {
     }
 }
 
-extension TextEditViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        guard textView == tvContent else { return }
+extension TextEditViewController {
+    @objc func editorDidBeginEditing(notif: Notification) {
+        // notif 的内容：
+        // name = UITextViewTextDidBeginEditingNotification,
+        // object = Optional(<UITextView: 0x7fc9d5863000; frame = (0 0; 375 553);
+        // text = ''; clipsToBounds = YES;
+        // tintColor = UIExtendedSRGBColorSpace 0 0 0 1;
+        // gestureRecognizers = <NSArray: 0x600000621b60>;
+        // layer = <CALayer: 0x600000831700>;
+        // contentOffset: {0, 0}; contentSize: {375, 55};
+        // adjustedContentInset: {0, 0, 0, 0}>),
+        // userInfo = nil
+        
+        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
         DispatchQueue.main.async {
             self.navigationItem.rightBarButtonItem = self.endEditingBarItem
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        guard textView == tvContent else { return }
+    @objc func editorDidEndEditing(notif: Notification) {
+        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
         DispatchQueue.main.async {
             self.navigationItem.rightBarButtonItem = self.creating ? self.submitBarItem : self.nextBarItem
         }
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        guard textView == tvContent else { return }
+    @objc func editorDidChange(notif: Notification) {
+        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
         DispatchQueue.main.async {
             if self.creating {
                 self.submitBarItem.isEnabled = !textView.text.isEmpty
@@ -350,6 +339,6 @@ extension TextEditViewController: UITextViewDelegate {
 
 private extension TextEditViewController {
     func fillBlanks() {
-        tvContent.text = digest?.content
+        editor.text = digest?.content ?? ""
     }
 }
