@@ -252,19 +252,13 @@ extension TopListViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        let scaleTransform = CGAffineTransform(scaleX: TopListConstants.collectionViewCellScale, y: TopListConstants.collectionViewCellScale)
-        UIView.animate(withDuration: TopListConstants.collectionViewCellAnimationDuration) {
-            cell.transform = scaleTransform
-        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TopListCollectionViewCell else { return }
+        cell.shrinkSize()
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        
-        UIView.animate(withDuration: TopListConstants.collectionViewCellAnimationDuration) {
-            cell.transform = CGAffineTransform.identity
-        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TopListCollectionViewCell else { return }
+        cell.restoreSize()
     }
 }
 

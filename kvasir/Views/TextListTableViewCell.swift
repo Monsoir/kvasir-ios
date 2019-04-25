@@ -9,7 +9,7 @@
 import UIKit
 import SwifterSwift
 
-class TextListTableViewCell: UITableViewCell {
+class TextListTableViewCell: UITableViewCell, ViewScalable {
     var title: String? = nil {
         didSet {
             lbTitle.text = title
@@ -92,10 +92,7 @@ class TextListTableViewCell: UITableViewCell {
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        let transform = highlighted ? CGAffineTransform(scaleX: TopListConstants.collectionViewCellScale, y: TopListConstants.collectionViewCellScale) : CGAffineTransform.identity
-        UIView.animate(withDuration: TopListConstants.collectionViewCellAnimationDuration) {
-            self.transform = transform
-        }
+        highlighted ? shrinkSize() : restoreSize()
     }
     
     override func layoutSubviews() {

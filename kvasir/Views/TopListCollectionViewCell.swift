@@ -9,7 +9,7 @@
 import UIKit
 import SwifterSwift
 
-class TopListCollectionViewCell: UICollectionViewCell {
+class TopListCollectionViewCell: UICollectionViewCell, Reusable, ViewScalable {
     
     var title: String? = nil {
         didSet {
@@ -108,5 +108,3 @@ private extension TopListCollectionViewCell {
         contentView.addSubview(lbRecordUpdatedDate)
     }
 }
-
-extension TopListCollectionViewCell: Reusable {}

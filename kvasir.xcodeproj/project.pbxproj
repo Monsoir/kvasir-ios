@@ -109,6 +109,10 @@
 		44B2C069226F037D00B584F5 /* ExpandedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C067226F037D00B584F5 /* ExpandedLabel.swift */; };
 		44B2C06B226F12F500B584F5 /* KvasirEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06A226F12F500B584F5 /* KvasirEditor.swift */; };
 		44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06A226F12F500B584F5 /* KvasirEditor.swift */; };
+		44B2C07022719A8D00B584F5 /* UIViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06F22719A8D00B584F5 /* UIViewEx.swift */; };
+		44B2C07122719A8D00B584F5 /* UIViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06F22719A8D00B584F5 /* UIViewEx.swift */; };
+		44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07222719AC100B584F5 /* UIViewAbilities.swift */; };
+		44B2C07422719AC100B584F5 /* UIViewAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07222719AC100B584F5 /* UIViewAbilities.swift */; };
 		7E473980D8AF351BC84D8DC1 /* Pods_kvasirUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */; };
 		D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */; };
 		DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */; };
@@ -198,6 +202,8 @@
 		44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTypeEmptyBackgroundView.swift; sourceTree = "<group>"; };
 		44B2C067226F037D00B584F5 /* ExpandedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedLabel.swift; sourceTree = "<group>"; };
 		44B2C06A226F12F500B584F5 /* KvasirEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirEditor.swift; sourceTree = "<group>"; };
+		44B2C06F22719A8D00B584F5 /* UIViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewEx.swift; sourceTree = "<group>"; };
+		44B2C07222719AC100B584F5 /* UIViewAbilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewAbilities.swift; sourceTree = "<group>"; };
 		86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.release.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.release.xcconfig"; sourceTree = "<group>"; };
 		B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -469,6 +475,7 @@
 				44B2C042226EE9DA00B584F5 /* NSAttributedStringEx.swift */,
 				44B2C045226EE9F400B584F5 /* UIViewControllerEx.swift */,
 				44B2C048226EEA1F00B584F5 /* UIImageEx.swift */,
+				44B2C06F22719A8D00B584F5 /* UIViewEx.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -477,6 +484,7 @@
 			isa = PBXGroup;
 			children = (
 				44A7ED382246A62300D1C402 /* Reusable.swift */,
+				44B2C07222719AC100B584F5 /* UIViewAbilities.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -863,6 +871,7 @@
 				44B2C01A226C2C2000B584F5 /* Routes.swift in Sources */,
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
+				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				44B2C056226EEDE100B584F5 /* ModelConstants.swift in Sources */,
 				44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44A7ED512246A62300D1C402 /* TextEditViewController.swift in Sources */,
@@ -897,6 +906,7 @@
 				44B2C062226EF5F900B584F5 /* RealmNote.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
+				44B2C07022719A8D00B584F5 /* UIViewEx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,7 +941,9 @@
 				44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */,
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
 				44B2C031226C941000B584F5 /* TextListViewModel.swift in Sources */,
+				44B2C07122719A8D00B584F5 /* UIViewEx.swift in Sources */,
 				44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
+				44B2C07422719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				44B2C069226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44B2C04F226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2BFD622698BA400B584F5 /* TextEditViewController.swift in Sources */,
