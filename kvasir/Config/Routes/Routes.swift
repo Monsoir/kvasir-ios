@@ -10,21 +10,21 @@ import URLNavigator
 
 struct KvasirURLs {
     // kvasir://digest/new/sentence
-    static let newSentence = SchemaBuilder().component(RouteConstants.digest).component("new").component(DigestType.sentence.toMachine).extract()
-    static let newParagraph = SchemaBuilder().component(RouteConstants.digest).component("new").component(DigestType.paragraph.toMachine).extract()
+    static let newSentence = SchemaBuilder().component(RouteConstants.digest).component("new").component(RealmSentence.toMachine()).extract()
+    static let newParagraph = SchemaBuilder().component(RouteConstants.digest).component("new").component(RealmParagraph.toMachine()).extract()
     
     // kvasir://digest/all/sentence
-    static let allSentences = SchemaBuilder().component(RouteConstants.digest).component("all").component(DigestType.sentence.toMachine).extract()
-    static let allParagraphs = SchemaBuilder().component(RouteConstants.digest).component("all").component(DigestType.paragraph.toMachine).extract()
+    static let allSentences = SchemaBuilder().component(RouteConstants.digest).component("all").component(RealmSentence.toMachine()).extract()
+    static let allParagraphs = SchemaBuilder().component(RouteConstants.digest).component("all").component(RealmParagraph.toMachine()).extract()
     
     // kvasir://digest/sentence/an-id
-    static let detailSentenceTemplate = SchemaBuilder().component(RouteConstants.digest).component(DigestType.sentence.toMachine).component("<string:id>").extract()
+    static let detailSentenceTemplate = SchemaBuilder().component(RouteConstants.digest).component(RealmSentence.toMachine()).component("<string:id>").extract()
     static let detailSentence = { (id: String) -> String in
-        return "\(SchemaBuilder().component(RouteConstants.digest).component(DigestType.sentence.toMachine).component(id).extract())"
+        return "\(SchemaBuilder().component(RouteConstants.digest).component(RealmSentence.toMachine()).component(id).extract())"
     }
-    static let detailParagraphTemplate = SchemaBuilder().component(RouteConstants.digest).component(DigestType.paragraph.toMachine).component("<string:id>").extract()
+    static let detailParagraphTemplate = SchemaBuilder().component(RouteConstants.digest).component(RealmParagraph.toMachine()).component("<string:id>").extract()
     static let detailParagraph = { (id: String) -> String in
-        return "\(SchemaBuilder().component(RouteConstants.digest).component(DigestType.paragraph.toMachine).component(id).extract())"
+        return "\(SchemaBuilder().component(RouteConstants.digest).component(RealmParagraph.toMachine()).component(id).extract())"
     }
 }
 
@@ -41,29 +41,52 @@ struct URLNavigaionMap {
     }
 }
 
-private typealias RouteParams = (digestType: DigestType, createDigest: (() -> RealmWordDigest))
+private typealias RouteParams = (createDigest: (() -> RealmWordDigest), holder: String)
 private let RouteParamsDict: [String: RouteParams] = [
-    DigestType.sentence.toMachine: (.sentence, { return RealmSentence() }),
-    DigestType.paragraph.toMachine: (.paragraph, { return RealmParagraph() }),
+    DigestType.sentence.toMachine: ({ return RealmSentence() }, ""),
+    DigestType.paragraph.toMachine: ({ return RealmParagraph() }, ""),
 ]
 
 private func newDigestControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
     guard let identifier = get(url: url, componentAt: 2) else { return nil }
     guard let param = RouteParamsDict[identifier] else { return nil }
-    return WordDigestInfoViewController(digestType: param.digestType, digest: param.createDigest(), creating: true)
+    
+    switch identifier {
+    case RealmSentence.toMachine():
+        return WordDigestInfoViewController<RealmSentence>(digest: param.createDigest(), creating: true)
+    case RealmParagraph.toMachine():
+        return WordDigestInfoViewController<RealmParagraph>(digest: param.createDigest(), creating: true)
+    default:
+        return nil
+    }
 }
 
 private func allDigestControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
     guard let identifier = get(url: url, componentAt: 2) else { return nil }
-    guard let param = RouteParamsDict[identifier] else { return nil }
-    return TextListViewController(type: param.digestType)
+    
+    switch identifier {
+    case RealmSentence.toMachine():
+        return TextListViewController<RealmSentence>()
+    case RealmParagraph.toMachine():
+        return TextListViewController<RealmParagraph>()
+    default:
+        return nil
+    }
 }
 
 private func detailDigestControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
     guard let identifier = get(url: url, componentAt: 1) else { return nil }
     guard let param = RouteParamsDict[identifier] else { return nil }
     guard let id = values["id"] as? String else { return nil }
-    return TextDetailViewController(mode: .local, digestType: param.digestType, digestId: id)
+    
+    switch identifier {
+    case RealmSentence.toMachine():
+        return TextDetailViewController<RealmSentence>(digestId: id)
+    case RealmParagraph.toMachine():
+        return TextDetailViewController<RealmParagraph>(digestId: id)
+    default:
+        return nil
+    }
 }
 
 private func get(url: URLConvertible, componentAt index: Int) -> String? {

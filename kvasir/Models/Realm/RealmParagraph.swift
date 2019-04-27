@@ -9,24 +9,11 @@
 import RealmSwift
 
 class RealmParagraph: RealmWordDigest {
-}
-
-extension RealmParagraph {
-//    typealias ModelType = RealmParagraph
-
-//    static func allObjects() -> Results<RealmParagraph>? {
-//        return try? Realm().objects(RealmParagraph.self)
-//    }
-//
-//    static func allObjectsSortedByUpdatedAt() -> Results<RealmParagraph>? {
-//        return self.allObjects()?.sorted(byKeyPath: "updatedAt", ascending: false)
-//    }
-//
-//    static func queryObjectWithPrimaryKey(_ key: String) -> RealmParagraph? {
-//        do {
-//            return try Realm().object(ofType: RealmParagraph.self, forPrimaryKey: key)
-//        } catch {
-//            return nil
-//        }
-//    }
+    override class func toHuman() -> String {
+        return "段落"
+    }
+    
+    override class func toMachine() -> String {
+        return "paragraph"
+    }
 }

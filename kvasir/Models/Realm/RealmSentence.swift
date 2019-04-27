@@ -9,4 +9,11 @@
 import RealmSwift
 
 class RealmSentence: RealmWordDigest {
+    override class func toHuman() -> String {
+        return "语句"
+    }
+    
+    override class func toMachine() -> String {
+        return "sentence"
+    }
 }

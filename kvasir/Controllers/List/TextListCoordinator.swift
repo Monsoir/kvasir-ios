@@ -10,7 +10,6 @@ import Foundation
 import RealmSwift
 
 class TextListCoordinator {
-    private var mode = CoordinatorMode.local
     private var digestType = DigestType.sentence
     private var data = [TopListViewModel]() {
         didSet {
@@ -22,8 +21,7 @@ class TextListCoordinator {
     
     var reload: ((_ data: [TopListViewModel]) -> Void)?
     
-    init(mode: CoordinatorMode = .local, digestType: DigestType = .sentence) {
-        self.mode = mode
+    init(digestType: DigestType = .sentence) {
         self.digestType = digestType
     }
     

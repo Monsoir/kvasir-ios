@@ -13,10 +13,9 @@ import RealmSwift
 
 private typealias InitialValues = (bookName: String, localeBookName: String, isbn: String, publisher: String, authors: [String], translators: [String], pageIndex: Int?)
 
-class WordDigestInfoViewController: FormViewController {
+class WordDigestInfoViewController<Digest: RealmWordDigest>: FormViewController {
     
-    private var digestType = DigestType.sentence
-    private var digest: RealmWordDigest?
+    private var digest: Digest?
     private var creating = true
     
     private lazy var nextItem: UIBarButtonItem = UIBarButtonItem(title: "记录正文", style: .done, target: self, action: #selector(actionNext))
@@ -83,9 +82,7 @@ class WordDigestInfoViewController: FormViewController {
         clearupNotification()
     }
     
-    init(digestType: DigestType = .sentence, digest: RealmWordDigest, creating: Bool = true) {
-        self.digestType = digestType
-        self.digest = digest
+    init(digest: RealmWordDigest, creating: Bool = true) {
         self.creating = creating
         super.init(nibName: nil, bundle: nil)
     }
@@ -99,11 +96,35 @@ class WordDigestInfoViewController: FormViewController {
         print("\(self) deinit")
         #endif
     }
+    
+    @objc func actionSubmit() {
+        guard
+            putFormValuesToModel(),
+            let savedResult = digest?.update(),
+            savedResult
+            else { return }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func actionNext() {
+        guard putFormValuesToModel() else { return }
+        
+        let nextVC = TextEditViewController<Digest>(digest: digest!, creating: creating)
+        navigationController?.pushViewController(nextVC)
+    }
+    
+    @objc func didBeginEditing() {
+        nextItem.isEnabled = false
+    }
+    
+    @objc func didEndEditing() {
+        nextItem.isEnabled = true
+    }
 }
 
 private extension WordDigestInfoViewController {
     func setupNavigationBar() {
-        title = "\(digestType.toHuman) - 基本信息"
+        title = "\(Digest.toHuman()) - 基本信息"
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = creating ? nextItem : submitItem
@@ -290,7 +311,7 @@ private extension WordDigestInfoViewController {
 
 // MARK: - Actions
 private extension WordDigestInfoViewController {
-    func putFormValuesToModel() {
+    func putFormValuesToModel() -> Bool {
 //        let values = form.values()
 //        let authors = values["authors"] as? [String] ?? []
 //        let translators = values["translators"] as? [String] ?? []
@@ -307,28 +328,8 @@ private extension WordDigestInfoViewController {
 //        digest?.bookName = bookName
 //        digest?.pageIndex = pageIndex
 //        digest?.publisher = publisher
-    }
-    
-    @objc func actionSubmit() {
-        putFormValuesToModel()
         
-        var savedResult = false
-        switch digestType {
-        case .sentence:
-            savedResult = (digest as! RealmSentence).update()
-        case .paragraph:
-            savedResult = (digest as! RealmParagraph).update()
-        }
-        
-        guard savedResult else { return }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func actionNext() {
-        putFormValuesToModel()
-        
-        let nextVC = TextEditViewController(digestType: digestType, digest: digest!, creating: creating)
-        navigationController?.pushViewController(nextVC)
+        return true
     }
 }
 
@@ -343,14 +344,6 @@ private extension WordDigestInfoViewController {
     
     func clearupNotification() {
         NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func didBeginEditing() {
-        nextItem.isEnabled = false
-    }
-    
-    @objc func didEndEditing() {
-        nextItem.isEnabled = true
     }
 }
 

@@ -19,10 +19,9 @@ import TesseractOCR
 
 private let ContainerHeight = 50
 
-class TextEditViewController: UIViewController {
+class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    private var digestType = DigestType.sentence
-    private var digest: RealmWordDigest?
+    private var digest: Digest?
     private var creating = true
     
     private var editorContainerNotEditingBottomConstraint: Constraint? = nil
@@ -42,7 +41,7 @@ class TextEditViewController: UIViewController {
     private lazy var submitBarItem = UIBarButtonItem(title: "提交", style: .done, target: self, action: #selector(actionSubmit))
     private lazy var nextBarItem = UIBarButtonItem(title: "编辑信息", style: .done, target: self, action: #selector(actionNext))
     
-    private lazy var editor = KvasirEditor(noCarriageReturn: self.digestType == .sentence)
+    private lazy var editor = KvasirEditor(noCarriageReturn: Digest.self == RealmSentence.self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,8 +60,7 @@ class TextEditViewController: UIViewController {
         view.endEditing(true)
     }
     
-    init(digestType: DigestType = .sentence, digest: RealmWordDigest, creating: Bool = true) {
-        self.digestType = digestType
+    init(digest: Digest, creating: Bool = true) {
         self.digest = digest
         self.creating = creating
         super.init(nibName: nil, bundle: nil)
@@ -78,11 +76,127 @@ class TextEditViewController: UIViewController {
         #endif
         clearupNotification()
     }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        HUD.show(.labeledProgress(title: "识别中", subtitle: nil))
+        DispatchQueue.global(qos: .userInitiated).async {
+            let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+            self.recognizeImage(image: image)
+        }
+    }
+    
+    @objc func keyboardWillChangeFrame(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            DispatchQueue.main.async {
+                self.editorContainerNotEditingBottomConstraint?.deactivate()
+                if let editingBottomConstraint = self.editorContainerEditingBottomConstraint {
+                    editingBottomConstraint.update(offset: -keyboardHeight)
+                } else {
+                    self.editor.snp.makeConstraints({ (make) in
+                        self.editorContainerEditingBottomConstraint = make.bottom.equalTo(self.view).offset(-keyboardHeight).constraint
+                    })
+                }
+                self.editorContainerEditingBottomConstraint?.activate()
+            }
+        }
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            DispatchQueue.main.async {
+                self.editorContainerNotEditingBottomConstraint?.deactivate()
+                if let editingBottomConstraint = self.editorContainerEditingBottomConstraint {
+                    editingBottomConstraint.update(offset: -keyboardHeight)
+                } else {
+                    self.editor.snp.makeConstraints({ (make) in
+                        self.editorContainerEditingBottomConstraint = make.bottom.equalTo(self.view).offset(-keyboardHeight).constraint
+                    })
+                }
+                self.editorContainerEditingBottomConstraint?.activate()
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.editorContainerEditingBottomConstraint?.deactivate()
+            self.editorContainerNotEditingBottomConstraint?.activate()
+        }
+    }
+    
+    @objc func actionStopEditing() {
+        view.endEditing(true)
+    }
+    
+    @objc func actionSubmit(){
+        guard putContentToModel() else { return }
+        guard let savedResult = digest?.save(), savedResult else { return }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func actionNext() {
+        guard putContentToModel() else { return }
+        
+        let nextVC = WordDigestInfoViewController(digest: digest!, creating: creating)
+        navigationController?.pushViewController(nextVC)
+    }
+    
+    @objc func actionReadImageFromLibrary() {
+        showImagePickerOfSource(source: .photoLibrary)
+    }
+    
+    @objc func actionTakePhoto() {
+        showImagePickerOfSource(source: .camera)
+    }
+    
+    @objc func editorDidBeginEditing(notif: Notification) {
+        // notif 的内容：
+        // name = UITextViewTextDidBeginEditingNotification,
+        // object = Optional(<UITextView: 0x7fc9d5863000; frame = (0 0; 375 553);
+        // text = ''; clipsToBounds = YES;
+        // tintColor = UIExtendedSRGBColorSpace 0 0 0 1;
+        // gestureRecognizers = <NSArray: 0x600000621b60>;
+        // layer = <CALayer: 0x600000831700>;
+        // contentOffset: {0, 0}; contentSize: {375, 55};
+        // adjustedContentInset: {0, 0, 0, 0}>),
+        // userInfo = nil
+        
+        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
+        DispatchQueue.main.async {
+            self.navigationItem.rightBarButtonItem = self.endEditingBarItem
+        }
+    }
+    
+    @objc func editorDidEndEditing(notif: Notification) {
+        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
+        DispatchQueue.main.async {
+            self.navigationItem.rightBarButtonItem = self.creating ? self.submitBarItem : self.nextBarItem
+        }
+    }
+    
+    @objc func editorDidChange(notif: Notification) {
+        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
+        DispatchQueue.main.async {
+            if self.creating {
+                self.submitBarItem.isEnabled = !textView.text.isEmpty
+            } else {
+                self.nextBarItem.isEnabled = !textView.text.isEmpty
+            }
+        }
+    }
 }
 
 private extension TextEditViewController {
     func setupNavigationBar() {
-        title = "\(digestType.toHuman) - 正文"
+        title = "\(Digest.toHuman()) - 正文"
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = creating ? submitBarItem : nextBarItem
@@ -145,70 +259,7 @@ private extension TextEditViewController {
     }
 }
 
-extension TextEditViewController: UINavigationControllerDelegate {
-}
-
-extension TextEditViewController: UIImagePickerControllerDelegate {
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        
-        HUD.show(.labeledProgress(title: "识别中", subtitle: nil))
-        DispatchQueue.global(qos: .userInitiated).async {
-            let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-            self.recognizeImage(image: image)
-        }
-    }
-}
-
 private extension TextEditViewController {
-    @objc func keyboardWillChangeFrame(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardHeight = keyboardFrame.cgRectValue.height
-            DispatchQueue.main.async {
-                self.editorContainerNotEditingBottomConstraint?.deactivate()
-                if let editingBottomConstraint = self.editorContainerEditingBottomConstraint {
-                    editingBottomConstraint.update(offset: -keyboardHeight)
-                } else {
-                    self.editor.snp.makeConstraints({ (make) in
-                        self.editorContainerEditingBottomConstraint = make.bottom.equalTo(self.view).offset(-keyboardHeight).constraint
-                    })
-                }
-                self.editorContainerEditingBottomConstraint?.activate()
-            }
-        }
-    }
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardHeight = keyboardFrame.cgRectValue.height
-            DispatchQueue.main.async {
-                self.editorContainerNotEditingBottomConstraint?.deactivate()
-                if let editingBottomConstraint = self.editorContainerEditingBottomConstraint {
-                    editingBottomConstraint.update(offset: -keyboardHeight)
-                } else {
-                    self.editor.snp.makeConstraints({ (make) in
-                        self.editorContainerEditingBottomConstraint = make.bottom.equalTo(self.view).offset(-keyboardHeight).constraint
-                    })
-                }
-                self.editorContainerEditingBottomConstraint?.activate()
-            }
-        }
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.editorContainerEditingBottomConstraint?.deactivate()
-            self.editorContainerNotEditingBottomConstraint?.activate()
-        }
-    }
-    
-    @objc func actionStopEditing() {
-        view.endEditing(true)
-    }
     
     func putContentToModel() -> Bool {
         let content = editor.text
@@ -220,35 +271,6 @@ private extension TextEditViewController {
         
         digest?.content = content
         return true
-    }
-    
-    @objc func actionSubmit(){
-        guard putContentToModel() else { return }
-        
-        var savedResult = false
-        switch digestType {
-        case .sentence:
-            savedResult = (digest as! RealmSentence).save()
-        case .paragraph:
-            savedResult = (digest as! RealmParagraph).save()
-        }
-        guard savedResult else { return }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func actionNext() {
-        guard putContentToModel() else { return }
-        
-        let nextVC = WordDigestInfoViewController(digestType: digestType, digest: digest!, creating: creating)
-        navigationController?.pushViewController(nextVC)
-    }
-    
-    @objc func actionReadImageFromLibrary() {
-        showImagePickerOfSource(source: .photoLibrary)
-    }
-    
-    @objc func actionTakePhoto() {
-        showImagePickerOfSource(source: .camera)
     }
     
     func showImagePickerOfSource(source: UIImagePickerController.SourceType) {
@@ -296,44 +318,6 @@ private extension TextEditViewController {
             self.tvContent.text = ocr.recognizedText.trimmed
         }
         #endif
-    }
-}
-
-extension TextEditViewController {
-    @objc func editorDidBeginEditing(notif: Notification) {
-        // notif 的内容：
-        // name = UITextViewTextDidBeginEditingNotification,
-        // object = Optional(<UITextView: 0x7fc9d5863000; frame = (0 0; 375 553);
-        // text = ''; clipsToBounds = YES;
-        // tintColor = UIExtendedSRGBColorSpace 0 0 0 1;
-        // gestureRecognizers = <NSArray: 0x600000621b60>;
-        // layer = <CALayer: 0x600000831700>;
-        // contentOffset: {0, 0}; contentSize: {375, 55};
-        // adjustedContentInset: {0, 0, 0, 0}>),
-        // userInfo = nil
-        
-        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
-        DispatchQueue.main.async {
-            self.navigationItem.rightBarButtonItem = self.endEditingBarItem
-        }
-    }
-    
-    @objc func editorDidEndEditing(notif: Notification) {
-        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
-        DispatchQueue.main.async {
-            self.navigationItem.rightBarButtonItem = self.creating ? self.submitBarItem : self.nextBarItem
-        }
-    }
-    
-    @objc func editorDidChange(notif: Notification) {
-        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
-        DispatchQueue.main.async {
-            if self.creating {
-                self.submitBarItem.isEnabled = !textView.text.isEmpty
-            } else {
-                self.nextBarItem.isEnabled = !textView.text.isEmpty
-            }
-        }
     }
 }
 

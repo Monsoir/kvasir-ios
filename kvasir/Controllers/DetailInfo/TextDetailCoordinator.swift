@@ -8,11 +8,9 @@
 
 import RealmSwift
 
-class TextDetailCoordinator {
-    private var mode = CoordinatorMode.local
-    private(set) var digestType = DigestType.sentence
+class TextDetailCoordinator<Digest: RealmWordDigest> {
     private var digestId = ""
-    private(set) var model: RealmWordDigest?
+    private(set) var model: Digest?
     private var data = TextDetailViewModel(id: "", content: "", bookName: "", authors: "", translators: "", publisher: "", pageIndex: "", updatedAt: "") {
         didSet {
             reload?(data)
@@ -23,10 +21,8 @@ class TextDetailCoordinator {
     
     var reload: ((_ data: TextDetailViewModel) -> Void)?
     
-    init(mode: CoordinatorMode = .local, digestType: DigestType = .sentence, digestId: String) {
-        self.mode = mode
+    init(digestId: String) {
         self.digestId = digestId
-        self.digestType = digestType
     }
     
     deinit {
@@ -40,57 +36,23 @@ class TextDetailCoordinator {
     }
     
     func fetchData() {
-        switch mode {
-        case .local:
-            fetchLocalData()
-        case .remote:
-            fetchRemoteData()
-        }
-    }
-    
-    private func fetchLocalData() {
-        switch digestType {
-        case .sentence:
-            guard let result = RealmSentence.queryObjectWithPrimaryKey(of: RealmSentence.self, key: digestId) else { return }
-            
-            func setData(object: RealmSentence) {
-                model = object
-                data = object.display()
-            }
-            
-            realmNotificationToken = result.observe { [weak self] change in
-                switch change {
-                case .change:
-                    setData(object: result)
-                case .deleted: fallthrough
-                case .error:
-                    break
-                }
-            }
-            setData(object: result)
-        case .paragraph:
-            guard let result = RealmParagraph.queryObjectWithPrimaryKey(of: RealmParagraph.self, key: digestId) else { return }
-            
-            func setData(object: RealmParagraph) {
-                model = object
-                data = object.display()
-            }
-            
-            realmNotificationToken = result.observe({ change in
-                switch change {
-                case .change:
-                    setData(object: result)
-                case .deleted: fallthrough
-                case .error:
-                    break
-                }
-            })
-            setData(object: result)
-        }
-    }
-    
-    private func fetchRemoteData() {
+        guard let result = Digest.queryObjectWithPrimaryKey(of: Digest.self, key: digestId) else { return }
         
+        func setData(object: Digest) {
+            model = object
+            data = object.display()
+        }
+        
+        realmNotificationToken = result.observe { change in
+            switch change {
+            case .change:
+                setData(object: result)
+            case .deleted: fallthrough
+            case .error:
+                break
+            }
+        }
+        setData(object: result)
     }
     
     func delete() -> Bool {

@@ -21,7 +21,7 @@ private let SectionTitles = [
 
 private let ContainerHeight = 50
 
-class TextDetailViewController: UIViewController {
+class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     private lazy var headerView: UIView = {
         let view = UIView()
@@ -78,14 +78,8 @@ class TextDetailViewController: UIViewController {
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue", size: 28)!
     ]
     
-    private var coordinator: TextDetailCoordinator?
+    private var coordinator: TextDetailCoordinator<Digest>?
     private var data: TextDetailViewModel?
-    
-    private var digestType: DigestType {
-        get {
-            return coordinator?.digestType ?? DigestType.sentence
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,8 +103,8 @@ class TextDetailViewController: UIViewController {
         infoTableView.tableHeaderView = headerView
     }
     
-    init(mode: CoordinatorMode, digestType: DigestType, digestId: String) {
-        self.coordinator = TextDetailCoordinator(mode: mode, digestType: digestType, digestId: digestId)
+    init(digestId: String) {
+        self.coordinator = TextDetailCoordinator(digestId: digestId)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -125,10 +119,7 @@ class TextDetailViewController: UIViewController {
         
         coordinator?.reclaim()
     }
-}
-
-// MARK: - UITableViewDataSource
-extension TextDetailViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return SectionTitles.count
     }
@@ -158,15 +149,36 @@ extension TextDetailViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         return cell
     }
-}
-
-// MARK: - UITableViewDelegate
-extension TextDetailViewController: UITableViewDelegate {
+    
+    @objc func actionEdit() {
+        guard let coordinator = coordinator, let model = coordinator.model else { return }
+        
+        let editingDigest = model.detached()
+        let nextVC = TextEditViewController<Digest>(digest: editingDigest, creating: false)
+        let nextNC = UINavigationController(rootViewController: nextVC)
+        UIApplication.shared.keyWindow?.rootViewController?.present(nextNC, animated: true, completion: nil)
+    }
+    
+    @objc func actionDel() {
+        guard let coordinator = coordinator, let _ = coordinator.model else { return }
+        
+        let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
+        alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
+            guard let strongSelf = self else { return }
+            if coordinator.delete() {
+                strongSelf.navigationController?.popViewController()
+            } else {
+                #warning("删除出错处理")
+            }
+        }
+        alert.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
+        navigationController?.present(alert, animated: true, completion: nil)
+    }
 }
 
 private extension TextDetailViewController {
     func setupNavigationBar() {
-        title = "\(digestType.toHuman) - 正文"
+        title = "\(Digest.toHuman()) - 正文"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
@@ -214,41 +226,6 @@ private extension TextDetailViewController {
             make.top.left.right.equalToSuperview()
             make.bottom.equalTo(buttonsContainer.snp.top)
         }
-    }
-}
-
-private extension TextDetailViewController {
-    @objc func actionEdit() {
-        guard let coordinator = coordinator, let model = coordinator.model else { return }
-        var nextVC: TextEditViewController?
-        switch coordinator.digestType {
-        case .sentence:
-            let editingDigest = (model as! RealmSentence).detached()
-            nextVC = TextEditViewController(digestType: coordinator.digestType, digest: editingDigest, creating: false)
-        case .paragraph:
-            let editingDigest = (model as! RealmParagraph).detached()
-            nextVC = TextEditViewController(digestType: coordinator.digestType, digest: editingDigest, creating: false)
-        }
-
-        guard let vc = nextVC else { return }
-        let nextNC = UINavigationController(rootViewController: vc)
-        UIApplication.shared.keyWindow?.rootViewController?.present(nextNC, animated: true, completion: nil)
-    }
-    
-    @objc func actionDel() {
-        guard let coordinator = coordinator, let _ = coordinator.model else { return }
-        
-        let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
-        alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
-            guard let strongSelf = self else { return }
-            if coordinator.delete() {
-                strongSelf.navigationController?.popViewController()
-            } else {
-                #warning("删除出错处理")
-            }
-        }
-        alert.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
-        navigationController?.present(alert, animated: true, completion: nil)
     }
 }
 

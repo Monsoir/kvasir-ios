@@ -11,12 +11,10 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
-class TextListViewController: UIViewController {
+class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    private lazy var sentenceResults: Results<RealmSentence>? = RealmSentence.allObjectsSortedByUpdatedAt(of: RealmSentence.self)
-    private lazy var paragraphResults: Results<RealmParagraph>? = RealmParagraph.allObjectsSortedByUpdatedAt(of: RealmParagraph.self)
+    private lazy var results: Results<Digest>? = Digest.allObjectsSortedByUpdatedAt(of: Digest.self)
     private var realmNotificationToken: NotificationToken?
-    private var digestType = DigestType.sentence
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
@@ -28,15 +26,6 @@ class TextListViewController: UIViewController {
         view.separatorStyle = .none
         return view
     }()
-    
-    init(type: DigestType) {
-        self.digestType = type
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     deinit {
         #if DEBUG
@@ -52,28 +41,54 @@ class TextListViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
+        realmNotificationToken = results?.observe({ [weak self] changes in
+            switch changes {
+            case .initial: fallthrough
+            case .update:
+                self?.reload()
+            case .error:
+                break
+            }
+        })
+    }
+    
+    @objc func actionCreate() {
+        let dict = [
+            RealmSentence.toMachine(): KvasirURLs.newSentence,
+            RealmParagraph.toMachine(): KvasirURLs.newParagraph,
+        ]
+        KvasirNavigator.present(
+            dict[Digest.toMachine()]!,
+            context: nil,
+            wrap: UINavigationController.self,
+            from: AppRootViewController,
+            animated: true,
+            completion: nil
+        )
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return results?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(), for: indexPath) as! TextListTableViewCell
         
-        switch digestType {
-        case .sentence:
-            realmNotificationToken = sentenceResults?.observe({ [weak self] changes in
-                switch changes {
-                case .initial: fallthrough
-                case .update:
-                    self?.reload()
-                case .error:
-                    break
-                }
-            })
-        case .paragraph:
-            realmNotificationToken = sentenceResults?.observe({ [weak self] changes in
-                switch changes {
-                case .initial: fallthrough
-                case .update:
-                    self?.reload()
-                case .error:
-                    break
-                }
-            })
+        let digest = results?[indexPath.row]
+        
+        let outline = digest?.displayOutline()
+        cell.title = outline?.title
+        cell.bookName = outline?.bookName
+        cell.recordUpdatedDate = outline?.updatedAt
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let digest = results?[indexPath.row] else { return }
+        let nextNC = TextDetailViewController(digestId: digest.id)
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(nextNC)
         }
     }
 }
@@ -81,14 +96,8 @@ class TextListViewController: UIViewController {
 private extension TextListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
-        switch digestType {
-        case .sentence:
-            title = "句子"
-        case .paragraph:
-            title = "段落"
-        }
+        title = Digest.toHuman()
     }
     
     func setupSubviews() {
@@ -102,80 +111,7 @@ private extension TextListViewController {
     }
     
     func reload() {
-        switch digestType {
-        case .sentence:
-            tableView.backgroundView = sentenceResults?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(digestType.toHuman)的摘录", position: .upper) : nil
-        case .paragraph:
-            tableView.backgroundView = paragraphResults?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(digestType.toHuman)的摘录", position: .upper) : nil
-        }
+        tableView.backgroundView = results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
         tableView.reloadData()
     }
 }
-
-extension TextListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch digestType {
-        case .sentence:
-            return sentenceResults?.count ?? 0
-        case .paragraph:
-            return paragraphResults?.count ?? 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(), for: indexPath) as! TextListTableViewCell
-        
-        let digest: RealmWordDigest? = {
-            switch digestType {
-            case .sentence:
-                return sentenceResults?[indexPath.row]
-            case .paragraph:
-                return paragraphResults?[indexPath.row]
-            }
-        }()
-        
-        let outline = digest?.displayOutline()
-        cell.title = outline?.title
-        cell.bookName = outline?.bookName
-        cell.recordUpdatedDate = outline?.updatedAt
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let nextNC: UIViewController? = {
-            switch digestType {
-            case .sentence:
-                guard let digest = sentenceResults?[indexPath.row] else { return nil }
-                return TextDetailViewController(mode: .local, digestType: .sentence, digestId: digest.id)
-            case .paragraph:
-                guard let digest = paragraphResults?[indexPath.row] else { return nil }
-                return TextDetailViewController(mode: .local, digestType: .paragraph, digestId: digest.id)
-            }
-        }()
-        guard let nc = nextNC else { return }
-        DispatchQueue.main.async {
-            self.navigationController?.pushViewController(nc)
-        }
-    }
-}
-
-extension TextListViewController: UITableViewDelegate {}
-
-private extension TextListViewController {
-    @objc func actionCreate() {
-        let dict = [
-            DigestType.sentence: KvasirURLs.newSentence,
-            DigestType.paragraph: KvasirURLs.newParagraph,
-        ]
-        KvasirNavigator.present(
-            dict[digestType]!,
-            context: nil,
-            wrap: UINavigationController.self,
-            from: AppRootViewController,
-            animated: true,
-            completion: nil
-        )
-    }
-}
-

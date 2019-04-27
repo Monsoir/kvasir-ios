@@ -54,6 +54,14 @@ class RealmWordDigest: RealmBasicObject {
             return false
         }
     }
+    
+    class func toHuman() -> String {
+        return "文字"
+    }
+    
+    class func toMachine() -> String {
+        return "word"
+    }
 }
 
 private let DigestTitleLength = 40

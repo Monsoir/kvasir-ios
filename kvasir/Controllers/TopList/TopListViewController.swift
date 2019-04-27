@@ -29,16 +29,16 @@ class TopListViewController: UIViewController {
     private weak var sentencesCollectionView: UICollectionView? = nil
     private weak var paragraphCollectionView: UICollectionView? = nil
     
-    private lazy var sentenceViewModelCoordinator: TopListCoordinator = { [weak self ] in
-        let coordinator = TopListCoordinator(mode: .local, digestType: .sentence)
+    private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [weak self ] in
+        let coordinator = TopListCoordinator<RealmSentence>()
         coordinator.reload = { data in
             self?.sentencesData = data
             self?.reloadSentenceView()
         }
         return coordinator
     }()
-    private lazy var paragraphViewModelCoordinator: TopListCoordinator = { [weak self ] in
-        let coordinator = TopListCoordinator(mode: .local, digestType: .paragraph)
+    private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [weak self ] in
+        let coordinator = TopListCoordinator<RealmParagraph>()
         coordinator.reload = { data in
             self?.paragraphsData = data
             self?.reloadParagraphView()
