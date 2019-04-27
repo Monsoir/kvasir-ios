@@ -8,13 +8,15 @@
 
 import RealmSwift
 
+typealias RealmSaveCompletion = (_ success: Bool) -> Void
+
 protocol KvasirRealmDetachable : AnyObject {
     func detached() -> Self
 }
 
 protocol KvasirRealmCRUDable : class {
     func preSave()
-    func save() -> Bool
+    func save(completion: @escaping RealmSaveCompletion)
     
     func preUpdate()
     func update() -> Bool

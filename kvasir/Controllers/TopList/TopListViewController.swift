@@ -104,12 +104,12 @@ class TopListViewController: UIViewController {
     }
     
     func reloadSentenceView() {
-        sentencesCollectionView?.backgroundView = sentencesData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的句子") : nil
+        sentencesCollectionView?.backgroundView = sentencesData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmSentence.toHuman())") : nil
         sentencesCollectionView?.reloadData()
     }
     
     func reloadParagraphView() {
-        paragraphCollectionView?.backgroundView = paragraphsData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的段落") : nil
+        paragraphCollectionView?.backgroundView = paragraphsData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmParagraph.toHuman())") : nil
         paragraphCollectionView?.reloadData()
     }
 }

@@ -138,8 +138,15 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
     
     @objc func actionSubmit(){
         guard putContentToModel() else { return }
-        guard let savedResult = digest?.save(), savedResult else { return }
-        dismiss(animated: true, completion: nil)
+        digest?.save(completion: { (success) in
+            guard success else {
+                #warning("错误处理")
+                return
+            }
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
+        })
     }
     
     @objc func actionNext() {

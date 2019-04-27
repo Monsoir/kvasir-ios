@@ -32,6 +32,12 @@ class BookListViewController: UIViewController {
         setupSubviews()
         setupRealmNotification()
     }
+    
+    deinit {
+        #if DEBUG
+        print("\(self) deinit")
+        #endif
+    }
 }
 
 private extension BookListViewController {

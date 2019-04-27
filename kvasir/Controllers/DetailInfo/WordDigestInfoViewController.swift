@@ -82,8 +82,9 @@ class WordDigestInfoViewController<Digest: RealmWordDigest>: FormViewController 
         clearupNotification()
     }
     
-    init(digest: RealmWordDigest, creating: Bool = true) {
+    init(digest: Digest, creating: Bool = true) {
         self.creating = creating
+        self.digest = digest
         super.init(nibName: nil, bundle: nil)
     }
     

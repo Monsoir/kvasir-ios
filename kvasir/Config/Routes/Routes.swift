@@ -53,9 +53,9 @@ private func newDigestControllerFactory(url: URLConvertible, values: [String: An
     
     switch identifier {
     case RealmSentence.toMachine():
-        return WordDigestInfoViewController<RealmSentence>(digest: param.createDigest(), creating: true)
+        return WordDigestInfoViewController<RealmSentence>(digest: param.createDigest() as! RealmSentence, creating: true)
     case RealmParagraph.toMachine():
-        return WordDigestInfoViewController<RealmParagraph>(digest: param.createDigest(), creating: true)
+        return WordDigestInfoViewController<RealmParagraph>(digest: param.createDigest() as! RealmParagraph, creating: true)
     default:
         return nil
     }

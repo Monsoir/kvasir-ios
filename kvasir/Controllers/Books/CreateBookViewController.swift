@@ -182,42 +182,18 @@ private extension CreateBookViewController {
     
     @objc func actionCreateSave() {
         guard putFormValuesToModel() else { return }
-        
-        guard book.save() else {
-            let alert = UIAlertController(title: "提示", message: "保存失败", defaultActionButtonTitle: "确定", tintColor: .black)
-            navigationController?.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        let values = form.values()
-        let authors = values["authors"] as? [EurekaLabelValueModel] ?? []
-        let translators = values["translators"] as? [EurekaLabelValueModel] ?? []
-        let authorIds: [String] =  authors.map{ $0.value }.duplicatesRemoved()
-        let translatorIds: [String] = translators.map{ $0.value }.duplicatesRemoved()
-        
-        do {
-            let objects = RealmAuthor.objectsForPrimaryKeys(of: RealmAuthor.self, keys: authorIds)
-            try objects?.forEach { (object) in
-                print(object.name)
-                try Realm().write {
-                    object.books.append(book)
+        saveBookAlongWithRelatedCreators { (success) in
+            guard success else {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "提示", message: "保存失败", defaultActionButtonTitle: "确定", tintColor: .black)
+                    self.navigationController?.present(alert, animated: true, completion: nil)
                 }
+                return
             }
-            
-            let os = RealmTranslator.objectsForPrimaryKeys(of: RealmTranslator.self, keys: translatorIds)
-            try os?.forEach { (object) in
-                print(object.name)
-                try Realm().write {
-                    object.books.append(book)
-                }
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
             }
-        } catch {
-            let alert = UIAlertController(title: "提示", message: "保存失败", defaultActionButtonTitle: "确定", tintColor: .black)
-            navigationController?.present(alert, animated: true, completion: nil)
-            return
         }
-        
-        dismiss(animated: true, completion: nil)
     }
     
     func putFormValuesToModel() -> Bool {
@@ -236,5 +212,40 @@ private extension CreateBookViewController {
         book.publisher = (values["publisher"] as? String ?? "").trimmed
         
         return true
+    }
+    
+    func saveBookAlongWithRelatedCreators(completion: @escaping RealmSaveCompletion) {
+        let values = form.values()
+        let authors = values["authors"] as? [EurekaLabelValueModel] ?? []
+        let translators = values["translators"] as? [EurekaLabelValueModel] ?? []
+        let authorIds: [String] =  authors.map{ $0.value }.duplicatesRemoved()
+        let translatorIds: [String] = translators.map{ $0.value }.duplicatesRemoved()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let strongSelf = self else { return }
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    
+                    let relatedAuthors = realm.objects(RealmAuthor.self).filter("\(RealmAuthor.primaryKey()!) IN %@", authorIds)
+                    let relatedTranslators = realm.objects(RealmTranslator.self).filter("\(RealmTranslator.primaryKey()!) IN %@", translatorIds)
+                    
+                    try realm.write {
+                        realm.add(strongSelf.book)
+                        
+                        relatedAuthors.forEach({ (ele) in
+                            ele.books.append(strongSelf.book)
+                        })
+                        
+                        relatedTranslators.forEach({ (ele) in
+                            ele.books.append(strongSelf.book)
+                        })
+                    }
+                    completion(true)
+                } catch {
+                    completion(false)
+                }
+            })
+        }
     }
 }

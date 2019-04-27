@@ -60,11 +60,16 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
     @objc private func actionCreateSave() {
         guard putFormValuesToModel() else { return }
         
-        guard creator.save() else {
-            #warning("错误处理")
-            return
+        creator.save { (success) in
+            guard success else {
+                #warning("错误处理")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
         }
-        dismiss(animated: true, completion: nil)
     }
 }
 

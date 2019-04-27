@@ -78,8 +78,6 @@
 		44B2C02E226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */; };
 		44B2C030226C941000B584F5 /* TextListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02F226C941000B584F5 /* TextListViewModel.swift */; };
 		44B2C031226C941000B584F5 /* TextListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02F226C941000B584F5 /* TextListViewModel.swift */; };
-		44B2C033226C942C00B584F5 /* TextListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C032226C942C00B584F5 /* TextListCoordinator.swift */; };
-		44B2C034226C942C00B584F5 /* TextListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C032226C942C00B584F5 /* TextListCoordinator.swift */; };
 		44B2C036226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */; };
 		44B2C037226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */; };
 		44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C03E226EE99700B584F5 /* TypeAlias.swift */; };
@@ -205,7 +203,6 @@
 		44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetailViewModel.swift; sourceTree = "<group>"; };
 		44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetailCoordinator.swift; sourceTree = "<group>"; };
 		44B2C02F226C941000B584F5 /* TextListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListViewModel.swift; sourceTree = "<group>"; };
-		44B2C032226C942C00B584F5 /* TextListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListCoordinator.swift; sourceTree = "<group>"; };
 		44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoTableViewCell.swift; sourceTree = "<group>"; };
 		44B2C03E226EE99700B584F5 /* TypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
 		44B2C042226EE9DA00B584F5 /* NSAttributedStringEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedStringEx.swift; sourceTree = "<group>"; };
@@ -467,7 +464,6 @@
 			children = (
 				44A7ED312246A62300D1C402 /* TextListViewController.swift */,
 				44B2C02F226C941000B584F5 /* TextListViewModel.swift */,
-				44B2C032226C942C00B584F5 /* TextListCoordinator.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -948,7 +944,6 @@
 				44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				44B2C030226C941000B584F5 /* TextListViewModel.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
-				44B2C033226C942C00B584F5 /* TextListCoordinator.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
@@ -1016,7 +1011,6 @@
 				44B2BFD022698BA400B584F5 /* Reusable.swift in Sources */,
 				44B2BFD122698BA400B584F5 /* TextDetailViewController.swift in Sources */,
 				44B2BFD322698BA400B584F5 /* ButtonBaker.swift in Sources */,
-				44B2C034226C942C00B584F5 /* TextListCoordinator.swift in Sources */,
 				44B2C0942272DD0400B584F5 /* CreatorListViewController.swift in Sources */,
 				44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */,
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,

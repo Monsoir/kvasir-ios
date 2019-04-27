@@ -23,17 +23,20 @@ class RealmWordDigest: RealmBasicObject {
         content.trim()
     }
     
-    override func save() -> Bool {
+    override func save(completion: @escaping RealmSaveCompletion) {
         preSave()
-        
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(self)
-            }
-            return true
-        } catch {
-            return false
+        DispatchQueue.global(qos: .userInitiated).async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    try realm.write {
+                        realm.add(self)
+                    }
+                    completion(true)
+                } catch {
+                    completion(false)
+                }
+            })
         }
     }
     

@@ -99,6 +99,12 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UIViewControlle
         onDismissCallback = callback
     }
     
+    deinit {
+        #if DEBUG
+        print("\(self) deinit")
+        #endif
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

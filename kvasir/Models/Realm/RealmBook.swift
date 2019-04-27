@@ -29,18 +29,8 @@ class RealmBook: RealmBasicObject {
         publisher.trim()
     }
     
-    override func save() -> Bool {
+    override func save(completion: @escaping RealmSaveCompletion) {
         preSave()
-        
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(self)
-            }
-            return true
-        } catch {
-            return false
-        }
     }
     
     override func preUpdate() {

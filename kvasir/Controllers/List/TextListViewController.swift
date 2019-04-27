@@ -111,7 +111,9 @@ private extension TextListViewController {
     }
     
     func reload() {
-        tableView.backgroundView = results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
+            self.tableView.reloadData()
+        }
     }
 }

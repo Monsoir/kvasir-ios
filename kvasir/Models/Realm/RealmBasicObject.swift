@@ -22,8 +22,8 @@ class RealmBasicObject: Object {
 extension RealmBasicObject: KvasirRealmCRUDable {
     @objc func preSave() {}
     
-    @objc func save() -> Bool {
-        return false
+    @objc func save(completion: @escaping RealmSaveCompletion) {
+        completion(false)
     }
     
     @objc func preUpdate() {}
