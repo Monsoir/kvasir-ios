@@ -11,7 +11,7 @@ import Eureka
 import FontAwesome_swift
 import RealmSwift
 
-private typealias InitialValues = (bookName: String, publisher: String, authors: [String], translators: [String], pageIndex: Int?)
+private typealias InitialValues = (bookName: String, localeBookName: String, isbn: String, publisher: String, authors: [String], translators: [String], pageIndex: Int?)
 
 class WordDigestInfoViewController: FormViewController {
     
@@ -26,12 +26,28 @@ class WordDigestInfoViewController: FormViewController {
     
     private var initialValues: InitialValues {
         get {
-            guard !creating,  let digest = digest else { return ("", "", [], [], nil)}
+            guard !creating,  let digest = digest else { return ("", "", "", "", [], [], nil)}
+            let authors: [String] = {
+                var temp = [String]()
+                digest.book?.authors.forEach({ (ele) in
+                    temp.append(ele.name)
+                })
+                return temp
+            }()
+            let translators: [String] = {
+                var temp = [String]()
+                digest.book?.translators.forEach({ (ele) in
+                    temp.append(ele.name)
+                })
+                return temp
+            }()
             return (
-                digest.bookName,
-                digest.publisher,
-                Array(digest.authors),
-                Array(digest.translators),
+                digest.book?.name ?? "",
+                digest.book?.localeName ?? "",
+                digest.book?.isbn ?? "",
+                digest.book?.publisher ?? "",
+                authors,
+                translators,
                 digest.pageIndex == -1 ? nil : digest.pageIndex
             )
         }
@@ -43,10 +59,10 @@ class WordDigestInfoViewController: FormViewController {
         // Do any additional setup after loading the view.
         
         setupNavigationBar()
-        setupSubviews()
+        setupSubviews2()
         
         if !didEnter {
-            let bookNameRow = form.rowBy(tag: "bookName") as! TextRow
+            let bookNameRow = form.rowBy(tag: "pageIndex") as! IntRow
             bookNameRow.cell.textField.becomeFirstResponder()
             didEnter = true
         }
@@ -91,6 +107,82 @@ private extension WordDigestInfoViewController {
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = creating ? nextItem : submitItem
+    }
+    
+    func setupSubviews2() {
+        let values = initialValues
+        
+        let digestRelatedSection = Section("摘录相关")
+        digestRelatedSection <<< IntRow() {
+            $0.tag = "pageIndex"
+            $0.title = "摘录页码"
+            $0.value = values.pageIndex
+        }
+        form +++ digestRelatedSection
+        
+        let bookRelatedSection = Section("书籍相关")
+        bookRelatedSection <<< TextRow() {
+            $0.title = "书籍原名称"
+            $0.value = values.bookName
+            $0.baseCell.isUserInteractionEnabled = false
+        }
+        if !values.localeBookName.isEmpty {
+            bookRelatedSection <<< TextRow() {
+                $0.title = "书籍翻译名称"
+                $0.value = values.localeBookName
+                $0.baseCell.isUserInteractionEnabled = false
+            }
+        }
+        bookRelatedSection <<< TextRow() {
+            $0.title = "书籍名称"
+            $0.value = values.bookName
+            $0.baseCell.isUserInteractionEnabled = false
+        }
+        bookRelatedSection <<< TextRow() {
+            $0.title = "ISBN"
+            $0.value = values.isbn
+            $0.baseCell.isUserInteractionEnabled = false
+        }
+        bookRelatedSection <<< TextRow() {
+            $0.title = "出版商"
+            $0.value = values.publisher
+            $0.baseCell.isUserInteractionEnabled = false
+        }
+        bookRelatedSection <<< ButtonRow() { (row: ButtonRow) in
+            row.title = "关联一本书籍"
+            }.onCellSelection({ [weak self] (cell, row) in
+                let vc = BookListViewController()
+                self?.navigationController?.pushViewController(vc, completion: nil)
+            })
+        form +++ bookRelatedSection
+        
+        if !values.authors.isEmpty {
+            let authorsRelatedSection = MultivaluedSection(multivaluedOptions: [], header: "作者", footer: "") { section in
+                values.authors.forEach({ (ele) in
+                    section <<< TextRow() {
+                        $0.value = ele
+                        $0.disabled = true
+                    }
+                })
+            }
+            form +++ authorsRelatedSection
+        }
+        
+        if !values.translators.isEmpty {
+            let translatorsRelatedSection = MultivaluedSection(multivaluedOptions: [], header: "译者", footer: "") { section in
+                values.translators.forEach({ (ele) in
+                    section <<< TextRow() {
+                        $0.value = ele
+                        $0.disabled = true
+                    }
+                })
+            }
+            form +++ translatorsRelatedSection
+        }
+        
+        navigationOptions = RowNavigationOptions.Enabled.union(.StopDisabledRow)
+        animateScroll = true
+        rowKeyboardSpacing = 20
     }
     
     func setupSubviews() {
@@ -199,22 +291,22 @@ private extension WordDigestInfoViewController {
 // MARK: - Actions
 private extension WordDigestInfoViewController {
     func putFormValuesToModel() {
-        let values = form.values()
-        let authors = values["authors"] as? [String] ?? []
-        let translators = values["translators"] as? [String] ?? []
-        let bookName = values["bookName"] as? String ?? ""
-        let pageIndex = values["pageIndex"] as? Int ?? -1
-        let publisher = values["publisher"] as? String ?? ""
-        
-        digest?.authors.removeAll()
-        digest?.authors.append(objectsIn: authors)
-        
-        digest?.translators.removeAll()
-        digest?.translators.append(objectsIn: translators)
-        
-        digest?.bookName = bookName
-        digest?.pageIndex = pageIndex
-        digest?.publisher = publisher
+//        let values = form.values()
+//        let authors = values["authors"] as? [String] ?? []
+//        let translators = values["translators"] as? [String] ?? []
+//        let bookName = values["bookName"] as? String ?? ""
+//        let pageIndex = values["pageIndex"] as? Int ?? -1
+//        let publisher = values["publisher"] as? String ?? ""
+//
+//        digest?.authors.removeAll()
+//        digest?.authors.append(objectsIn: authors)
+//
+//        digest?.translators.removeAll()
+//        digest?.translators.append(objectsIn: translators)
+//
+//        digest?.bookName = bookName
+//        digest?.pageIndex = pageIndex
+//        digest?.publisher = publisher
     }
     
     @objc func actionSubmit() {
@@ -268,10 +360,4 @@ private struct DigestRecoverViewModel {
     var translators: [String]
     var publisher: String
     var pageIndex: Int
-}
-
-private extension RealmWordDigest {
-    func displayInfo() -> DigestRecoverViewModel {
-        return DigestRecoverViewModel(bookName: bookName, authors: Array(authors), translators: Array(translators), publisher: publisher, pageIndex: pageIndex)
-    }
 }

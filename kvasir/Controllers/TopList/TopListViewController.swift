@@ -239,11 +239,11 @@ extension TopListViewController: UICollectionViewDelegate {
         
         switch collectionLocation.section {
         case 0:
-            guard let digests = RealmSentence.allObjectsSortedByUpdatedAt() else { return }
+            guard let digests = RealmSentence.allObjectsSortedByUpdatedAt(of: RealmSentence.self) else { return }
             let digest = digests[indexPath.row]
             KvasirNavigator.push(KvasirURLs.detailSentence(digest.id), context: nil, from: navigationController, animated: true)
         case 1:
-            guard let digests = RealmParagraph.allObjectsSortedByUpdatedAt() else { return }
+            guard let digests = RealmParagraph.allObjectsSortedByUpdatedAt(of: RealmParagraph.self) else { return }
             let digest = digests[indexPath.row]
             KvasirNavigator.push(KvasirURLs.detailParagraph(digest.id), context: nil, from: navigationController, animated: true)
         default:

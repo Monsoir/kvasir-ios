@@ -11,13 +11,13 @@ import RealmSwift
 
 extension AppDelegate {
     func setDefaultRealm() {
-        var config = Realm.Configuration(
-            schemaVersion: 0,
-            migrationBlock: { (migration, oldSchemaVersion) in
-                if (oldSchemaVersion < 1) {}
-            }
-        )
-        
+//        var config = Realm.Configuration(
+//            schemaVersion: 0,
+//            migrationBlock: { (migration, oldSchemaVersion) in
+//                if (oldSchemaVersion < 1) {}
+//            }
+//        )
+        var config = Realm.Configuration()
         // Use the default directory, but replace the filename with the username
         config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent("kvasir.realm")
         

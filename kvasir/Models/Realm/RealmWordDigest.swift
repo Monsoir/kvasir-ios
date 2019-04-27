@@ -8,29 +8,24 @@
 
 import RealmSwift
 
-class RealmWordDigest: RealmCommonInfo {
+class RealmWordDigest: RealmBasicObject {
     @objc dynamic var content = ""
-    
-    @objc dynamic var bookName = ""
-    let authors = List<String>()
-    let translators = List<String>()
-    @objc dynamic var publisher = ""
     @objc dynamic var pageIndex = -1
     
+    @objc dynamic var book: RealmBook?
+    
     override static func indexedProperties() -> [String] {
-        return ["content", "bookName"]
+        return ["content"]
     }
     
-    override static func primaryKey() -> String? {
-        return "id"
+    override func preSave() {
+        super.preSave()
+        content.trim()
     }
-}
-
-extension RealmWordDigest {
+    
     override func save() -> Bool {
-        self.content.trim()
-        self.bookName.trim()
-        self.publisher.trim()
+        preSave()
+        
         do {
             let realm = try Realm()
             try realm.write {
@@ -42,12 +37,15 @@ extension RealmWordDigest {
         }
     }
     
+    override func preUpdate() {
+        super.preUpdate()
+        content.trim()
+        updatedAt = Date()
+    }
+    
     override func update() -> Bool {
-        self.content.trim()
-        self.bookName.trim()
-        self.publisher.trim()
+        preUpdate()
         do {
-            self.updatedAt = Date()
             try Realm().write {
                 try Realm().add(self, update: true)
             }
@@ -69,6 +67,6 @@ extension RealmWordDigest {
             return temp.trimmed
         }()
         let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-        return TopListViewModel(id: id, title: title, bookName: bookName, updatedAt: updateAtString)
+        return TopListViewModel(id: id, title: title, bookName: "", updatedAt: updateAtString)
     }
 }

@@ -13,8 +13,8 @@ import RealmSwift
 
 class TextListViewController: UIViewController {
 
-    private lazy var sentenceResults: Results<RealmSentence>? = RealmSentence.allObjectsSortedByUpdatedAt()
-    private lazy var paragraphResults: Results<RealmParagraph>? = RealmParagraph.allObjectsSortedByUpdatedAt()
+    private lazy var sentenceResults: Results<RealmSentence>? = RealmSentence.allObjectsSortedByUpdatedAt(of: RealmSentence.self)
+    private lazy var paragraphResults: Results<RealmParagraph>? = RealmParagraph.allObjectsSortedByUpdatedAt(of: RealmParagraph.self)
     private var realmNotificationToken: NotificationToken?
     private var digestType = DigestType.sentence
     

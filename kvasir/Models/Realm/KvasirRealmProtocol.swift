@@ -8,44 +8,28 @@
 
 import RealmSwift
 
-protocol KvasirRealmDetachable : class {
-    associatedtype ModelType: RealmCollectionValue
-    
-    func detach() -> ModelType
+protocol KvasirRealmDetachable : AnyObject {
+    func detached() -> Self
 }
 
 protocol KvasirRealmCRUDable : class {
+    func preSave()
     func save() -> Bool
+    
+    func preUpdate()
     func update() -> Bool
+    
     func delete() -> Bool
 }
 
 protocol KvasirRealmQuerable : class {
-    associatedtype ModelType: RealmCollectionValue
+//    associatedtype ModelType: RealmCollectionValue
     
-    static func allObjects() -> Results<ModelType>?
-    static func allObjectsSortedByUpdatedAt() -> Results<ModelType>?
-    static func queryObjectWithPrimaryKey(_ key: String) -> ModelType?
+    static func allObjects<T: RealmBasicObject>() -> Results<T>?
+    static func allObjectsSortedByUpdatedAt<T: RealmBasicObject>() -> Results<T>?
+    static func queryObjectWithPrimaryKey<T: RealmBasicObject>(_ key: String) -> T?
 }
 
-extension Object: KvasirRealmCRUDable {
-    @objc func save() -> Bool {
-        return false
-    }
-    
-    @objc func update() -> Bool {
-        return false
-    }
-    
-    @objc func delete() -> Bool {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.delete(self)
-            }
-            return true
-        } catch {
-            return false
-        }
-    }
+protocol KvasirRealmReadable {
+    static func toHuman() -> String
 }

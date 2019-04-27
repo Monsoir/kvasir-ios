@@ -51,7 +51,7 @@ class TextDetailCoordinator {
     private func fetchLocalData() {
         switch digestType {
         case .sentence:
-            guard let result = RealmSentence.queryObjectWithPrimaryKey(digestId) else { return }
+            guard let result = RealmSentence.queryObjectWithPrimaryKey(of: RealmSentence.self, key: digestId) else { return }
             
             func setData(object: RealmSentence) {
                 model = object
@@ -69,7 +69,7 @@ class TextDetailCoordinator {
             }
             setData(object: result)
         case .paragraph:
-            guard let result = RealmParagraph.queryObjectWithPrimaryKey(digestId) else { return }
+            guard let result = RealmParagraph.queryObjectWithPrimaryKey(of: RealmParagraph.self, key: digestId) else { return }
             
             func setData(object: RealmParagraph) {
                 model = object
@@ -101,9 +101,13 @@ class TextDetailCoordinator {
 private extension RealmWordDigest {
     func display() -> TextDetailViewModel {
         let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-        let authorsString = authors.joined(separator: "\n")
-        let translatorsString = translators.joined(separator: "\n")
+        let authorsString = book?.authors.map({ (ele) -> String in
+            return ele.name
+        }).joined(separator: "\n") ?? ""
+        let translatorsString = book?.translators.map({ (ele) -> String in
+            return ele.name
+        }).joined(separator: "\n") ?? ""
         let pageIndexString = pageIndex == -1 ? "---" : "\(pageIndex)"
-        return TextDetailViewModel(id: id, content: content, bookName: bookName, authors: authorsString, translators: translatorsString, publisher: publisher, pageIndex: pageIndexString, updatedAt: updateAtString)
+        return TextDetailViewModel(id: id, content: content, bookName: book?.name ?? "", authors: authorsString, translators: translatorsString, publisher: book?.publisher ?? "", pageIndex: pageIndexString, updatedAt: updateAtString)
     }
 }

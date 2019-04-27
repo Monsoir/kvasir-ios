@@ -56,12 +56,12 @@ class TopListCoordinator {
     private func fetchLocalData() {
         switch digestType {
         case .sentence:
-            guard let results = RealmSentence.allObjectsSortedByUpdatedAt() else { return }
+            guard let results = RealmSentence.allObjectsSortedByUpdatedAt(of: RealmSentence.self) else { return }
             func loadTopSentence() -> [TopListViewModel] {
                 let showCount = results.count > 5 ? 5 : results.count
                 var payload = [TopListViewModel]()
                 for i in 0..<showCount {
-                    let ele = results[i]
+                    let ele = results[i] 
                     let vm = ele.displayOutline()
                     payload.append(vm)
                 }
@@ -79,7 +79,7 @@ class TopListCoordinator {
             }
             
         case .paragraph:
-            guard let results = RealmParagraph.allObjectsSortedByUpdatedAt() else { return }
+            guard let results = RealmParagraph.allObjectsSortedByUpdatedAt(of: RealmParagraph.self) else { return }
             func loadTopParagraph() -> [TopListViewModel] {
                 let showCount = results.count > 5 ? 5 : results.count
                 var payload = [TopListViewModel]()

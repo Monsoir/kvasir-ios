@@ -67,7 +67,7 @@
 		44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C017226C2BF100B584F5 /* AppDelegate+Navigator.swift */; };
 		44B2C01A226C2C2000B584F5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* Routes.swift */; };
 		44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */; };
-		44B2C01E226C332800B584F5 /* RealmCommonInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01D226C332800B584F5 /* RealmCommonInfo.swift */; };
+		44B2C01E226C332800B584F5 /* RealmBasicObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01D226C332800B584F5 /* RealmBasicObject.swift */; };
 		44B2C024226C469400B584F5 /* TopListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C023226C469400B584F5 /* TopListViewModel.swift */; };
 		44B2C025226C469400B584F5 /* TopListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C023226C469400B584F5 /* TopListViewModel.swift */; };
 		44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C026226C47C100B584F5 /* TopListCoordinator.swift */; };
@@ -101,8 +101,6 @@
 		44B2C05E226EEE9100B584F5 /* RouteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05D226EEE9100B584F5 /* RouteConstants.swift */; };
 		44B2C05F226EEE9100B584F5 /* RouteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05D226EEE9100B584F5 /* RouteConstants.swift */; };
 		44B2C060226EEEAD00B584F5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* Routes.swift */; };
-		44B2C062226EF5F900B584F5 /* RealmNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C061226EF5F900B584F5 /* RealmNote.swift */; };
-		44B2C063226EF5F900B584F5 /* RealmNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C061226EF5F900B584F5 /* RealmNote.swift */; };
 		44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */; };
 		44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */; };
 		44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C067226F037D00B584F5 /* ExpandedLabel.swift */; };
@@ -113,6 +111,26 @@
 		44B2C07122719A8D00B584F5 /* UIViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06F22719A8D00B584F5 /* UIViewEx.swift */; };
 		44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07222719AC100B584F5 /* UIViewAbilities.swift */; };
 		44B2C07422719AC100B584F5 /* UIViewAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07222719AC100B584F5 /* UIViewAbilities.swift */; };
+		44B2C0762271A93500B584F5 /* RealmCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0752271A93500B584F5 /* RealmCreator.swift */; };
+		44B2C0772271A93500B584F5 /* RealmCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0752271A93500B584F5 /* RealmCreator.swift */; };
+		44B2C0792271AA5500B584F5 /* RealmBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0782271AA5500B584F5 /* RealmBook.swift */; };
+		44B2C07A2271AA5500B584F5 /* RealmBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0782271AA5500B584F5 /* RealmBook.swift */; };
+		44B2C07C2271B1C800B584F5 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07B2271B1C800B584F5 /* BookListViewController.swift */; };
+		44B2C07D2271B1C800B584F5 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07B2271B1C800B584F5 /* BookListViewController.swift */; };
+		44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */; };
+		44B2C0822271B2B500B584F5 /* BookListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */; };
+		44B2C0882271EEDE00B584F5 /* CreateBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0872271EEDE00B584F5 /* CreateBookViewController.swift */; };
+		44B2C0892271EEDE00B584F5 /* CreateBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0872271EEDE00B584F5 /* CreateBookViewController.swift */; };
+		44B2C08C2272DC5800B584F5 /* RealmAuthor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C08B2272DC5800B584F5 /* RealmAuthor.swift */; };
+		44B2C08D2272DC5800B584F5 /* RealmAuthor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C08B2272DC5800B584F5 /* RealmAuthor.swift */; };
+		44B2C08F2272DC7600B584F5 /* RealmTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C08E2272DC7600B584F5 /* RealmTranslator.swift */; };
+		44B2C0902272DC7600B584F5 /* RealmTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C08E2272DC7600B584F5 /* RealmTranslator.swift */; };
+		44B2C0932272DD0400B584F5 /* CreatorListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0922272DD0400B584F5 /* CreatorListViewController.swift */; };
+		44B2C0942272DD0400B584F5 /* CreatorListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0922272DD0400B584F5 /* CreatorListViewController.swift */; };
+		44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */; };
+		44B2C0972272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */; };
+		44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */; };
+		44B2C09C2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */; };
 		7E473980D8AF351BC84D8DC1 /* Pods_kvasirUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */; };
 		D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */; };
 		DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */; };
@@ -181,7 +199,7 @@
 		44B2C017226C2BF100B584F5 /* AppDelegate+Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Navigator.swift"; sourceTree = "<group>"; };
 		44B2C019226C2C2000B584F5 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirRealmProtocol.swift; sourceTree = "<group>"; };
-		44B2C01D226C332800B584F5 /* RealmCommonInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCommonInfo.swift; sourceTree = "<group>"; };
+		44B2C01D226C332800B584F5 /* RealmBasicObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBasicObject.swift; sourceTree = "<group>"; };
 		44B2C023226C469400B584F5 /* TopListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListViewModel.swift; sourceTree = "<group>"; };
 		44B2C026226C47C100B584F5 /* TopListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListCoordinator.swift; sourceTree = "<group>"; };
 		44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetailViewModel.swift; sourceTree = "<group>"; };
@@ -198,12 +216,21 @@
 		44B2C055226EEDE100B584F5 /* ModelConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConstants.swift; sourceTree = "<group>"; };
 		44B2C05A226EEE5000B584F5 /* SchemaBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaBuilder.swift; sourceTree = "<group>"; };
 		44B2C05D226EEE9100B584F5 /* RouteConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteConstants.swift; sourceTree = "<group>"; };
-		44B2C061226EF5F900B584F5 /* RealmNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmNote.swift; sourceTree = "<group>"; };
 		44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTypeEmptyBackgroundView.swift; sourceTree = "<group>"; };
 		44B2C067226F037D00B584F5 /* ExpandedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedLabel.swift; sourceTree = "<group>"; };
 		44B2C06A226F12F500B584F5 /* KvasirEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirEditor.swift; sourceTree = "<group>"; };
 		44B2C06F22719A8D00B584F5 /* UIViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewEx.swift; sourceTree = "<group>"; };
 		44B2C07222719AC100B584F5 /* UIViewAbilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewAbilities.swift; sourceTree = "<group>"; };
+		44B2C0752271A93500B584F5 /* RealmCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCreator.swift; sourceTree = "<group>"; };
+		44B2C0782271AA5500B584F5 /* RealmBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBook.swift; sourceTree = "<group>"; };
+		44B2C07B2271B1C800B584F5 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
+		44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListTableViewCell.swift; sourceTree = "<group>"; };
+		44B2C0872271EEDE00B584F5 /* CreateBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookViewController.swift; sourceTree = "<group>"; };
+		44B2C08B2272DC5800B584F5 /* RealmAuthor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmAuthor.swift; sourceTree = "<group>"; };
+		44B2C08E2272DC7600B584F5 /* RealmTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTranslator.swift; sourceTree = "<group>"; };
+		44B2C0922272DD0400B584F5 /* CreatorListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorListViewController.swift; sourceTree = "<group>"; };
+		44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCreatorViewController.swift; sourceTree = "<group>"; };
+		44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EurekaLabelValueRow.swift; sourceTree = "<group>"; };
 		86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.release.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.release.xcconfig"; sourceTree = "<group>"; };
 		B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -255,11 +282,14 @@
 		444B760A226491D0004B9CD4 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
-				44B2C01D226C332800B584F5 /* RealmCommonInfo.swift */,
+				44B2C01D226C332800B584F5 /* RealmBasicObject.swift */,
 				444B760D22649558004B9CD4 /* RealmWordDigest.swift */,
 				444B760B226491F0004B9CD4 /* RealmSentence.swift */,
 				44B2BFBF2268A1A600B584F5 /* RealmParagraph.swift */,
-				44B2C061226EF5F900B584F5 /* RealmNote.swift */,
+				44B2C0752271A93500B584F5 /* RealmCreator.swift */,
+				44B2C08B2272DC5800B584F5 /* RealmAuthor.swift */,
+				44B2C08E2272DC7600B584F5 /* RealmTranslator.swift */,
+				44B2C0782271AA5500B584F5 /* RealmBook.swift */,
 				44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */,
 			);
 			path = Realm;
@@ -378,6 +408,7 @@
 		44A7ED262246A62300D1C402 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				44B2C07F2271B2A800B584F5 /* Books */,
 				44A7ED272246A62300D1C402 /* TopListTableViewHeader.swift */,
 				44B2C010226B1FEE00B584F5 /* DetailTableHeaderView.swift */,
 				44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */,
@@ -403,6 +434,8 @@
 		44A7ED302246A62300D1C402 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				44B2C0912272DCF900B584F5 /* Authors */,
+				44B2C07E2271B1D200B584F5 /* Books */,
 				44B2C01F226C45D600B584F5 /* TopList */,
 				44B2C020226C45E400B584F5 /* List */,
 				44B2C022226C461300B584F5 /* DetailInfo */,
@@ -461,6 +494,7 @@
 		44B2C03C226EE96500B584F5 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
+				44B2C0992273412000B584F5 /* Eureka */,
 				44A7ED192246A62300D1C402 /* Utils */,
 				44B2C04B226EEA6C00B584F5 /* Protocols */,
 				44B2C041226EE9C900B584F5 /* Extensions */,
@@ -514,6 +548,40 @@
 				44B2C019226C2C2000B584F5 /* Routes.swift */,
 			);
 			path = Routes;
+			sourceTree = "<group>";
+		};
+		44B2C07E2271B1D200B584F5 /* Books */ = {
+			isa = PBXGroup;
+			children = (
+				44B2C07B2271B1C800B584F5 /* BookListViewController.swift */,
+				44B2C0872271EEDE00B584F5 /* CreateBookViewController.swift */,
+			);
+			path = Books;
+			sourceTree = "<group>";
+		};
+		44B2C07F2271B2A800B584F5 /* Books */ = {
+			isa = PBXGroup;
+			children = (
+				44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */,
+			);
+			path = Books;
+			sourceTree = "<group>";
+		};
+		44B2C0912272DCF900B584F5 /* Authors */ = {
+			isa = PBXGroup;
+			children = (
+				44B2C0922272DD0400B584F5 /* CreatorListViewController.swift */,
+				44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */,
+			);
+			path = Authors;
+			sourceTree = "<group>";
+		};
+		44B2C0992273412000B584F5 /* Eureka */ = {
+			isa = PBXGroup;
+			children = (
+				44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */,
+			);
+			path = Eureka;
 			sourceTree = "<group>";
 		};
 		656747A6593936160D864F63 /* Frameworks */ = {
@@ -873,6 +941,7 @@
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
 				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				44B2C056226EEDE100B584F5 /* ModelConstants.swift in Sources */,
+				44B2C0932272DD0400B584F5 /* CreatorListViewController.swift in Sources */,
 				44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44A7ED512246A62300D1C402 /* TextEditViewController.swift in Sources */,
 				44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
@@ -882,28 +951,36 @@
 				44B2C033226C942C00B584F5 /* TextListCoordinator.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
-				44B2C01E226C332800B584F5 /* RealmCommonInfo.swift in Sources */,
+				44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
+				44B2C01E226C332800B584F5 /* RealmBasicObject.swift in Sources */,
 				44A7ED4F2246A62300D1C402 /* TopListViewController.swift in Sources */,
+				44B2C08F2272DC7600B584F5 /* RealmTranslator.swift in Sources */,
 				44B2C049226EEA1F00B584F5 /* UIImageEx.swift in Sources */,
 				44A7ED4B2246A62300D1C402 /* TextListTableViewCell.swift in Sources */,
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,
 				44A7ED4E2246A62300D1C402 /* TextListViewController.swift in Sources */,
 				44A7ED402246A62300D1C402 /* AppDelegate+Appearance.swift in Sources */,
 				444B761D2265F74C004B9CD4 /* WordDigestInfoViewController.swift in Sources */,
+				44B2C08C2272DC5800B584F5 /* RealmAuthor.swift in Sources */,
 				444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */,
+				44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
+				44B2C0792271AA5500B584F5 /* RealmBook.swift in Sources */,
+				44B2C07C2271B1C800B584F5 /* BookListViewController.swift in Sources */,
 				44A7ED422246A62300D1C402 /* AppDelegate.swift in Sources */,
 				44B2C05B226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
 				44A7ED522246A62300D1C402 /* TopListCellCarrier.swift in Sources */,
 				44B2C046226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
+				44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
+				44B2C0882271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
 				44A7ED472246A62300D1C402 /* TopListTableViewHeader.swift in Sources */,
 				444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */,
 				44B2C02D226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */,
 				44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */,
+				44B2C0762271A93500B584F5 /* RealmCreator.swift in Sources */,
 				44A7ED4A2246A62300D1C402 /* TopListCollectionViewCell.swift in Sources */,
 				44B2C053226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2C011226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */,
-				44B2C062226EF5F900B584F5 /* RealmNote.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
 				44B2C07022719A8D00B584F5 /* UIViewEx.swift in Sources */,
@@ -933,11 +1010,14 @@
 				44B2BFCC22698BA400B584F5 /* AppDelegate+SetupControllers.swift in Sources */,
 				44B2C057226EEDE100B584F5 /* ModelConstants.swift in Sources */,
 				44B2BFCD22698BA400B584F5 /* TopListConst.swift in Sources */,
+				44B2C09C2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
+				44B2C0902272DC7600B584F5 /* RealmTranslator.swift in Sources */,
 				44B2BFCF22698BA400B584F5 /* ViewController.swift in Sources */,
 				44B2BFD022698BA400B584F5 /* Reusable.swift in Sources */,
 				44B2BFD122698BA400B584F5 /* TextDetailViewController.swift in Sources */,
 				44B2BFD322698BA400B584F5 /* ButtonBaker.swift in Sources */,
 				44B2C034226C942C00B584F5 /* TextListCoordinator.swift in Sources */,
+				44B2C0942272DD0400B584F5 /* CreatorListViewController.swift in Sources */,
 				44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */,
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
 				44B2C031226C941000B584F5 /* TextListViewModel.swift in Sources */,
@@ -952,19 +1032,25 @@
 				44B2BFD722698BA400B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				44B2BFD822698BA400B584F5 /* TopListTableViewCell.swift in Sources */,
 				44B2C060226EEEAD00B584F5 /* Routes.swift in Sources */,
+				44B2C07A2271AA5500B584F5 /* RealmBook.swift in Sources */,
 				44B2BFDA22698BA400B584F5 /* TopListViewController.swift in Sources */,
 				44B2C025226C469400B584F5 /* TopListViewModel.swift in Sources */,
 				44B2BFDC22698BA400B584F5 /* TextListTableViewCell.swift in Sources */,
-				44B2C063226EF5F900B584F5 /* RealmNote.swift in Sources */,
+				44B2C08D2272DC5800B584F5 /* RealmAuthor.swift in Sources */,
 				44B2C05F226EEE9100B584F5 /* RouteConstants.swift in Sources */,
+				44B2C0822271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
 				44B2C028226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
+				44B2C0892271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
 				44B2C012226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */,
+				44B2C07D2271B1C800B584F5 /* BookListViewController.swift in Sources */,
 				44B2BFDF22698BA400B584F5 /* RealmParagraph.swift in Sources */,
 				44B2C037226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */,
 				44B2BFE022698BA400B584F5 /* TextListViewController.swift in Sources */,
 				44B2BFE122698BA400B584F5 /* AppDelegate+Appearance.swift in Sources */,
 				44B2BFE222698BA400B584F5 /* WordDigestInfoViewController.swift in Sources */,
+				44B2C0772271A93500B584F5 /* RealmCreator.swift in Sources */,
 				44B2BFE322698BA400B584F5 /* RealmWordDigest.swift in Sources */,
+				44B2C0972272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				44B2C044226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				44B2C054226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2BFE522698BA400B584F5 /* AppDelegate.swift in Sources */,

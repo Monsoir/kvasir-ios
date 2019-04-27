@@ -10,29 +10,3 @@ import RealmSwift
 
 class RealmSentence: RealmWordDigest {
 }
-
-extension RealmSentence: KvasirRealmDetachable {
-    func detach() -> RealmSentence {
-        return RealmSentence(value: self)
-    }
-}
-
-extension RealmSentence: KvasirRealmQuerable {
-    typealias ModelType = RealmSentence
-    
-    static func allObjects() -> Results<RealmSentence>? {
-        return try? Realm().objects(RealmSentence.self)
-    }
-    
-    static func allObjectsSortedByUpdatedAt() -> Results<RealmSentence>? {
-        return self.allObjects()?.sorted(byKeyPath: "updatedAt", ascending: false)
-    }
-    
-    static func queryObjectWithPrimaryKey(_ key: String) -> RealmSentence? {
-        do {
-            return try Realm().object(ofType: RealmSentence.self, forPrimaryKey: key)
-        } catch {
-            return nil
-        }
-    }
-}
