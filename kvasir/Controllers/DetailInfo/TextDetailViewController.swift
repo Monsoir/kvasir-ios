@@ -20,8 +20,18 @@ private let SectionTitles = [
 ]
 
 private let ContainerHeight = 50
+private let CellIdentifierEditable = "editable"
+private let CellIdentifierUneditable = "uneditable"
 
 class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    private var modifying = false {
+        didSet {
+            btnEdit.setTitle(modifying ? "完成修改" : "修改", for: .normal)
+            btnContentEdit.isHidden = !modifying
+            reloadData()
+        }
+    }
     
     private lazy var headerView: UIView = {
         let view = UIView()
@@ -43,13 +53,21 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
         return view
     }()
     
+    private lazy var btnContentEdit: UIButton = {
+        let btn = simpleButtonWithButtonFromAwesomefont(name: .paintBrush)
+        btn.addTarget(self, action: #selector(actionEditContent), for: .touchUpInside)
+        btn.isHidden = true
+        return btn
+    }()
+    
     private lazy var infoTableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
 //        view.rowHeight = 80
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
-        view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier())
+        view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable))
+        view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable))
         view.tableFooterView = UIView()
 //        view.separatorStyle = .none
         return view
@@ -125,54 +143,58 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DetailInfoTableViewCell.reuseIdentifier(), for: indexPath) as! DetailInfoTableViewCell
+        func configureCell(_ identifier: String, indexPath: IndexPath, label: String, value: String, modifying: Bool?) -> DetailInfoTableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! DetailInfoTableViewCell
+            cell.label = label
+            cell.value = value
+            if let m = modifying {
+                cell.modifying = m
+            }
+            cell.selectionStyle = .none
+            return cell
+        }
         
         guard let digest = data else { return UITableViewCell() }
-        cell.label = SectionTitles[indexPath.row]
         switch indexPath.row {
         case 0:
-            cell.value = digest.bookName
+            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.bookName, modifying: modifying)
+            cell.modifyHandler = { [weak self] cell in
+                guard let strongSelf = self else { return }
+                strongSelf.showBookList(cell)
+            }
+            return cell
         case 1:
-            cell.value = digest.authors
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.authors, modifying: nil)
         case 2:
-            cell.value = digest.translators
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.translators, modifying: nil)
         case 3:
-            cell.value = digest.publisher
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.publisher, modifying: nil)
         case 4:
-            cell.value = "\(digest.pageIndex)"
+            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(digest.pageIndex)", modifying: modifying)
+            cell.modifyHandler = { [weak self] cell in
+                guard let strongSelf = self else { return }
+                strongSelf.showPageIndexEdit(cell)
+            }
+            return cell
         case 5:
-            cell.value = digest.updatedAt
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.updatedAt, modifying: nil)
         default:
             break
         }
         
-        cell.selectionStyle = .none
-        return cell
+        return UITableViewCell()
     }
     
     @objc func actionEdit() {
-        guard let coordinator = coordinator, let model = coordinator.model else { return }
-        
-        let editingDigest = model.detached()
-        let nextVC = TextEditViewController<Digest>(digest: editingDigest, creating: false)
-        let nextNC = UINavigationController(rootViewController: nextVC)
-        UIApplication.shared.keyWindow?.rootViewController?.present(nextNC, animated: true, completion: nil)
+        modifying.toggle()
     }
     
     @objc func actionDel() {
-        guard let coordinator = coordinator, let _ = coordinator.model else { return }
-        
-        let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
-        alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
-            guard let strongSelf = self else { return }
-            if coordinator.delete() {
-                strongSelf.navigationController?.popViewController()
-            } else {
-                #warning("删除出错处理")
-            }
-        }
-        alert.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
-        navigationController?.present(alert, animated: true, completion: nil)
+        deleteDigest()
+    }
+    
+    @objc private func actionEditContent() {
+        showContentEdit()
     }
 }
 
@@ -188,6 +210,7 @@ private extension TextDetailViewController {
         
         headerView.addSubview(headerContentView)
         headerContentView.addSubview(lbContent)
+        headerContentView.addSubview(btnContentEdit)
         headerContentView.snp.makeConstraints { (make) in
             make.top.leading.equalToSuperview().offset(10)
             make.bottom.trailing.equalToSuperview().offset(-10)
@@ -197,6 +220,11 @@ private extension TextDetailViewController {
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().offset(-10)
             make.center.equalToSuperview()
+        }
+        btnContentEdit.snp.makeConstraints { (make) in
+            make.trailing.equalToSuperview().offset(-10)
+            make.size.equalTo(CGSize(width: 22, height: 22))
+            make.bottom.equalToSuperview().offset(-10)
         }
         
         view.addSubview(infoTableView)
@@ -230,10 +258,72 @@ private extension TextDetailViewController {
 }
 
 private extension TextDetailViewController {
+    func deleteDigest() {
+        guard let coordinator = coordinator, let _ = coordinator.model else { return }
+        
+        let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
+        alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
+            guard let strongSelf = self else { return }
+            strongSelf.coordinator?.delete(completion: { (success) in
+                DispatchQueue.main.async {
+                    guard success else {
+                        Bartendar.handleSimpleAlert(title: "抱歉", message: "删除失败", on: self?.navigationController ?? self)
+                        return
+                    }
+                    strongSelf.navigationController?.popViewController()
+                }
+            })
+        }
+        alert.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
+        navigationController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func showContentEdit() {
+        guard let editingData = data else { return }
+        let vc = TextEditViewController(text: editingData.content, singleLine: Digest.self === RealmSentence.self) { [weak self] (text) in
+            guard !text.isEmpty else {
+                Bartendar.handleSimpleAlert(title: "提示", message: "内容不能为空", on: self?.navigationController)
+                return
+            }
+            self?.coordinator?.updateContent(text: text, completion: { (success) in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.navigationController?.popViewController()
+                    }
+                }
+            })
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showBookList(_ sender: DetailInfoTableViewCell) {
+        let vc = BookListViewController { [weak self] (book) in
+            guard let strongSelf = self else { return }
+            strongSelf.coordinator?.updateBookRef(book: book, completion: { (success) in
+                DispatchQueue.main.async {
+                    guard success else {
+                        Bartendar.handleSimpleAlert(title: "抱歉", message: "修改失败", on: self?.navigationController)
+                        return
+                    }
+                    
+                    self?.navigationController?.popViewController()
+                }
+            })
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showPageIndexEdit(_ sender: DetailInfoTableViewCell) {
+    }
+}
+
+private extension TextDetailViewController {
     func reloadData() {
-        lbContent.attributedText = NSAttributedString(string: data?.content ?? "", attributes: contentAttributes)
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-        infoTableView.reloadData()
+        DispatchQueue.main.async {
+            self.lbContent.attributedText = NSAttributedString(string: self.data?.content ?? "", attributes: self.contentAttributes)
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+            self.infoTableView.reloadData()
+        }
     }
 }

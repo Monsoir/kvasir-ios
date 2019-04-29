@@ -9,12 +9,15 @@
 import UIKit
 
 protocol Reusable {
-    static func reuseIdentifier() -> String
+    static func reuseIdentifier(extra: String?) -> String
 }
 
 extension Reusable {
-    static func reuseIdentifier() -> String {
-        return String(describing: self)
+    static func reuseIdentifier(extra: String? = nil) -> String {
+        guard let e = extra else {
+            return String(describing: self)
+        }
+        return "\(String(describing: self)) - \(e)"
     }
 }
 

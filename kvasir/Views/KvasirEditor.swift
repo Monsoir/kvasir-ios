@@ -14,7 +14,7 @@ class KvasirEditor: UIView {
     
     var text: String {
         set {
-            editor.text = text
+            editor.text = newValue
         }
         get {
             return editor.text
@@ -35,10 +35,12 @@ class KvasirEditor: UIView {
         view.bounces = true
         view.tintColor = Color(hexString: ThemeConst.outlineColor)
         view.textContainerInset = UIEdgeInsets(horizontal: 20, vertical: 20)
+        view.keyboardDismissMode = .interactive
         if self.noCarriageReturn {
             view.delegate = self
             view.returnKeyType = .done
         }
+        
         return view
     }()
     

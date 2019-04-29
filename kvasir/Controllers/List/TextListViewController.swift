@@ -86,9 +86,13 @@ class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let digest = results?[indexPath.row] else { return }
-        let nextNC = TextDetailViewController(digestId: digest.id)
-        DispatchQueue.main.async {
-            self.navigationController?.pushViewController(nextNC)
+        switch digest {
+        case is RealmSentence:
+            KvasirNavigator.push(KvasirURLs.detailSentence(digest.id), context: nil, from: navigationController, animated: true)
+        case is RealmParagraph:
+            KvasirNavigator.push(KvasirURLs.detailParagraph(digest.id), context: nil, from: navigationController, animated: true)
+        default:
+            break
         }
     }
 }

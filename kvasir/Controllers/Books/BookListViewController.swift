@@ -10,9 +10,12 @@ import UIKit
 import RealmSwift
 import SwifterSwift
 
+typealias BookSelectCompletion = (_ book: RealmBook) -> Void
+
 class BookListViewController: UIViewController {
     private lazy var bookResults: Results<RealmBook>? = RealmBook.allObjectsSortedByUpdatedAt(of: RealmBook.self)
     private var realmNotificationToken: NotificationToken?
+    var selectCompletion: BookSelectCompletion?
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
@@ -23,7 +26,20 @@ class BookListViewController: UIViewController {
         view.tableFooterView = UIView()
         return view
     }()
-
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init(selectCompletion: @escaping BookSelectCompletion) {
+        self.init(nibName: nil, bundle: nil)
+        self.selectCompletion = selectCompletion
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -86,7 +102,12 @@ extension BookListViewController: UITableViewDataSource {
     }
 }
 
-extension BookListViewController: UITableViewDelegate {}
+extension BookListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let book = bookResults?[indexPath.row] else { return }
+        selectCompletion?(book)
+    }
+}
 
 private extension BookListViewController {
     @objc func actionCreate() {

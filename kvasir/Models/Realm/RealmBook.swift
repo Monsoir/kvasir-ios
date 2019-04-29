@@ -14,6 +14,8 @@ class RealmBook: RealmBasicObject {
     @objc dynamic var localeName = ""
     @objc dynamic var publisher = ""
     
+    let sentences = List<RealmSentence>()
+    let paragraphs = List<RealmParagraph>()
     let authors = LinkingObjects(fromType: RealmAuthor.self, property: "books")
     let translators = LinkingObjects(fromType: RealmTranslator.self, property: "books")
     
@@ -29,7 +31,7 @@ class RealmBook: RealmBasicObject {
         publisher.trim()
     }
     
-    override func save(completion: @escaping RealmSaveCompletion) {
+    func save(completion: @escaping RealmSaveCompletion) {
         preSave()
     }
     
@@ -40,17 +42,5 @@ class RealmBook: RealmBasicObject {
         localeName.trim()
         publisher.trim()
         updatedAt = Date()
-    }
-    
-    override func update() -> Bool {
-        preUpdate()
-        do {
-            try Realm().write {
-                try Realm().add(self, update: true)
-            }
-            return true
-        } catch {
-            return false
-        }
     }
 }

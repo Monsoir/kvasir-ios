@@ -19,6 +19,14 @@ private func makeAFunctionalButton(leadingInset a: CGFloat = 30.0, topInset b: C
     return btn
 }
 
+func simpleButtonWithButtonFromAwesomefont(name: FontAwesome, fontSize: CGFloat = 20) -> UIButton {
+    let btn = UIButton(type: .system)
+    btn.setTitleColor(Color(hexString: ThemeConst.outlineColor), for: .normal)
+    btn.titleLabel?.font = UIFont.fontAwesome(ofSize: fontSize, style: .solid)
+    btn.setTitle(String.fontAwesomeIcon(name: name), for: .normal)
+    return btn
+}
+
 func makeAFunctionalButtonWith(title: String, leadingInset a: CGFloat = 30.0, topInset b: CGFloat = 20.0, cornerRadius c: CGFloat = 10) -> UIButton {
     let btn = makeAFunctionalButton(leadingInset: a, topInset: b, cornerRadius: c)
     btn.setTitle(title, for: .normal)

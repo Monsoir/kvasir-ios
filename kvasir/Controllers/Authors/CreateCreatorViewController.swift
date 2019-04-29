@@ -62,7 +62,7 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
         
         creator.save { (success) in
             guard success else {
-                #warning("错误处理")
+                Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
                 return
             }
             

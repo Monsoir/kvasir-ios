@@ -19,28 +19,55 @@ class RealmBasicObject: Object {
     }
 }
 
-extension RealmBasicObject: KvasirRealmCRUDable {
+extension RealmBasicObject {
     @objc func preSave() {}
-    
-    @objc func save(completion: @escaping RealmSaveCompletion) {
-        completion(false)
-    }
     
     @objc func preUpdate() {}
     
-    @objc func update() -> Bool {
-        return false
+    @objc func update(pairs: [String: Any], completion: @escaping RealmSaveCompletion) {
+        let objectRef = ThreadSafeReference(to: self)
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let realm = try Realm()
+                guard let objectDeref = realm.resolve(objectRef) else {
+                    completion(false)
+                    return
+                }
+                
+                try realm.write {
+                    objectDeref.preUpdate()
+                    pairs.forEach({ (key, value) in
+                        objectDeref.setValue(value, forKey: key)
+                    })
+                }
+                completion(true)
+            } catch {
+                completion(false)
+            }
+        }
     }
     
-    @objc func delete() -> Bool {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.delete(self)
+    @objc func preDelete() {
+    }
+    
+    @objc func delete(completion: @escaping RealmSaveCompletion){
+        let objectRef = ThreadSafeReference(to: self)
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let realm = try Realm()
+                guard let objectDeref = realm.resolve(objectRef) else {
+                    completion(false)
+                    return
+                }
+                
+                try realm.write {
+                    objectDeref.preUpdate()
+                    realm.delete(objectDeref)
+                }
+                completion(true)
+            } catch {
+                completion(false)
             }
-            return true
-        } catch {
-            return false
         }
     }
 }
@@ -60,6 +87,56 @@ extension RealmBasicObject {
     
     static func objectsForPrimaryKeys<T: RealmBasicObject>(of type: T.Type, keys: [String]) -> Results<T>? {
         return self.allObjects(of: type.self)?.filter("\(T.primaryKey()!) IN %@", keys)
+    }
+    
+    static func updateManyToOneRelations<Owner: RealmBasicObject, Digest: RealmWordDigest>(newOwner: Owner,
+                                                                                  oldOwner: Owner?,
+                                                                                  key: String,
+                                                                                  inverseKey: String,
+                                                                                  elements: [Digest],
+                                                                                  completion: @escaping RealmSaveCompletion) {
+        let newOwnerRef = ThreadSafeReference(to: newOwner)
+        let oldOwnerRef = oldOwner == nil ? nil : ThreadSafeReference(to: oldOwner!)
+        let elementRefs = elements.map { (ele) -> ThreadSafeReference<Digest> in
+            return ThreadSafeReference(to: ele)
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let realm = try Realm()
+                guard let newOwnerDeref = realm.resolve(newOwnerRef) else {
+                    completion(false)
+                    return
+                }
+                
+                var elementDerefs = [Digest]()
+                elementRefs.forEach({ (ele) in
+                    if let e = realm.resolve(ele) {
+                        elementDerefs.append(e)
+                    }
+                })
+                
+                let oldOwnerDeref = oldOwnerRef == nil ? nil : realm.resolve(oldOwnerRef!)
+                
+                try realm.write {
+                    elementDerefs.forEach({ (ele) in
+                        // old
+                        if let list = oldOwnerDeref?.value(forKey: key) as? List<Digest>, let index = list.index(of: ele) {
+                            list.remove(at: index)
+                        }
+                        
+                        // new
+                        if let list = newOwnerDeref.value(forKey: key) as? List<Digest>, !list.contains(ele) {
+                            list.append(ele)
+                        }
+                        ele.setValue(newOwnerDeref, forKey: inverseKey)
+                    })
+                }
+                
+                completion(true)
+            } catch {
+                completion(false)
+            }
+        }
     }
 }
 

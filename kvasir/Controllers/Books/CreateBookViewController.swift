@@ -185,8 +185,7 @@ private extension CreateBookViewController {
         saveBookAlongWithRelatedCreators { (success) in
             guard success else {
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "提示", message: "保存失败", defaultActionButtonTitle: "确定", tintColor: .black)
-                    self.navigationController?.present(alert, animated: true, completion: nil)
+                    Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
                 }
                 return
             }

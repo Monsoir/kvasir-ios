@@ -129,6 +129,11 @@
 		44B2C0972272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */; };
 		44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */; };
 		44B2C09C2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */; };
+		44ECD94022746A7600618576 /* CreateDigestContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD93F22746A7600618576 /* CreateDigestContentViewController.swift */; };
+		44ECD94222757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
+		44ECD94322757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
+		44ECD9452275804F00618576 /* Bartendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD9442275804F00618576 /* Bartendar.swift */; };
+		44ECD9462275804F00618576 /* Bartendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD9442275804F00618576 /* Bartendar.swift */; };
 		7E473980D8AF351BC84D8DC1 /* Pods_kvasirUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */; };
 		D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */; };
 		DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */; };
@@ -228,6 +233,9 @@
 		44B2C0922272DD0400B584F5 /* CreatorListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorListViewController.swift; sourceTree = "<group>"; };
 		44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCreatorViewController.swift; sourceTree = "<group>"; };
 		44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EurekaLabelValueRow.swift; sourceTree = "<group>"; };
+		44ECD93F22746A7600618576 /* CreateDigestContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestContentViewController.swift; sourceTree = "<group>"; };
+		44ECD94122757EA200618576 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		44ECD9442275804F00618576 /* Bartendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bartendar.swift; sourceTree = "<group>"; };
 		86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.release.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.release.xcconfig"; sourceTree = "<group>"; };
 		B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -377,6 +385,7 @@
 			isa = PBXGroup;
 			children = (
 				44A7ED1A2246A62300D1C402 /* ButtonBaker.swift */,
+				44ECD9442275804F00618576 /* Bartendar.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -480,6 +489,7 @@
 			isa = PBXGroup;
 			children = (
 				44A7ED332246A62300D1C402 /* TextDetailViewController.swift */,
+				44ECD93F22746A7600618576 /* CreateDigestContentViewController.swift */,
 				44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */,
 				44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */,
 				444B761C2265F74C004B9CD4 /* WordDigestInfoViewController.swift */,
@@ -532,6 +542,7 @@
 			isa = PBXGroup;
 			children = (
 				44B2C04D226EEBB400B584F5 /* Theme.swift */,
+				44ECD94122757EA200618576 /* Errors.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -945,6 +956,7 @@
 				44B2C030226C941000B584F5 /* TextListViewModel.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
+				44ECD94222757EA200618576 /* Errors.swift in Sources */,
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
 				44B2C01E226C332800B584F5 /* RealmBasicObject.swift in Sources */,
@@ -958,6 +970,8 @@
 				444B761D2265F74C004B9CD4 /* WordDigestInfoViewController.swift in Sources */,
 				44B2C08C2272DC5800B584F5 /* RealmAuthor.swift in Sources */,
 				444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */,
+				44ECD9452275804F00618576 /* Bartendar.swift in Sources */,
+				44ECD94022746A7600618576 /* CreateDigestContentViewController.swift in Sources */,
 				44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				44B2C0792271AA5500B584F5 /* RealmBook.swift in Sources */,
@@ -1023,6 +1037,7 @@
 				44B2BFD622698BA400B584F5 /* TextEditViewController.swift in Sources */,
 				44B2C04A226EEA1F00B584F5 /* UIImageEx.swift in Sources */,
 				44B2C02B226C5AF800B584F5 /* TextDetailViewModel.swift in Sources */,
+				44ECD9462275804F00618576 /* Bartendar.swift in Sources */,
 				44B2BFD722698BA400B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				44B2BFD822698BA400B584F5 /* TopListTableViewCell.swift in Sources */,
 				44B2C060226EEEAD00B584F5 /* Routes.swift in Sources */,
@@ -1053,6 +1068,7 @@
 				44B2BFE922698BA400B584F5 /* TopListTableViewHeader.swift in Sources */,
 				44B2BFEA22698BA400B584F5 /* RealmSentence.swift in Sources */,
 				44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
+				44ECD94322757EA200618576 /* Errors.swift in Sources */,
 				44B2C040226EE99700B584F5 /* TypeAlias.swift in Sources */,
 				44B2C047226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44B2BFED22698BA400B584F5 /* TopListCollectionViewCell.swift in Sources */,

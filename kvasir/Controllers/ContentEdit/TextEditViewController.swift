@@ -18,11 +18,14 @@ import TesseractOCR
 #endif
 
 private let ContainerHeight = 50
+typealias TextEditCompletion = (_ text: String) -> Void
 
 class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     private var digest: Digest?
-    private var creating = true
+    private var editCompletion: TextEditCompletion?
+    private var editingText: String?
+    private var singleLine = false
     
     private var editorContainerNotEditingBottomConstraint: Constraint? = nil
     private var editorContainerEditingBottomConstraint: Constraint? = nil
@@ -34,14 +37,15 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
         return view
     }()
     
+    private lazy var btnConfirm = UIBarButtonItem(customView: {
+        let btn = simpleButtonWithButtonFromAwesomefont(name: .check)
+        btn.addTarget(self, action: #selector(actionConfirmEdit), for: .touchUpInside)
+        return btn
+    }())
     private lazy var btnPhotos = makeAFunctionalButtonFromAwesomeFont(name: .images, leadingInset: 30, topInset: 10)
     private lazy var btnCamera = makeAFunctionalButtonFromAwesomeFont(code: "fa-camera", leadingInset: 30, topInset: 10)
     
-    private lazy var endEditingBarItem = UIBarButtonItem(title: "结束输入", style: .done, target: self, action: #selector(actionStopEditing))
-    private lazy var submitBarItem = UIBarButtonItem(title: "提交", style: .done, target: self, action: #selector(actionSubmit))
-    private lazy var nextBarItem = UIBarButtonItem(title: "编辑信息", style: .done, target: self, action: #selector(actionNext))
-    
-    private lazy var editor = KvasirEditor(noCarriageReturn: Digest.self == RealmSentence.self)
+    private lazy var editor = KvasirEditor(noCarriageReturn: self.singleLine)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,10 +53,6 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        
-        setupNotification()
-        
-        fillBlanks()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,10 +60,31 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
         view.endEditing(true)
     }
     
-    init(digest: Digest, creating: Bool = true) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupNotification()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        clearupNotification()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    convenience init(digest: Digest) {
+        self.init(nibName: nil, bundle: nil)
         self.digest = digest
-        self.creating = creating
-        super.init(nibName: nil, bundle: nil)
+        self.singleLine = (Digest.self == RealmSentence.self)
+    }
+    
+    convenience init(text: String, singleLine: Bool = false, editCompletion: @escaping TextEditCompletion) {
+        self.init(nibName: nil, bundle: nil)
+        self.editingText = text
+        self.editCompletion = editCompletion
+        self.singleLine = singleLine
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -74,7 +95,6 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
         #if DEBUG
         print("\(self) deinit")
         #endif
-        clearupNotification()
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -132,30 +152,6 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
         }
     }
     
-    @objc func actionStopEditing() {
-        view.endEditing(true)
-    }
-    
-    @objc func actionSubmit(){
-        guard putContentToModel() else { return }
-        digest?.save(completion: { (success) in
-            guard success else {
-                #warning("错误处理")
-                return
-            }
-            DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
-            }
-        })
-    }
-    
-    @objc func actionNext() {
-        guard putContentToModel() else { return }
-        
-        let nextVC = WordDigestInfoViewController(digest: digest!, creating: creating)
-        navigationController?.pushViewController(nextVC)
-    }
-    
     @objc func actionReadImageFromLibrary() {
         showImagePickerOfSource(source: .photoLibrary)
     }
@@ -175,38 +171,19 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
         // contentOffset: {0, 0}; contentSize: {375, 55};
         // adjustedContentInset: {0, 0, 0, 0}>),
         // userInfo = nil
-        
-        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
-        DispatchQueue.main.async {
-            self.navigationItem.rightBarButtonItem = self.endEditingBarItem
-        }
     }
     
-    @objc func editorDidEndEditing(notif: Notification) {
-        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
-        DispatchQueue.main.async {
-            self.navigationItem.rightBarButtonItem = self.creating ? self.submitBarItem : self.nextBarItem
-        }
-    }
-    
-    @objc func editorDidChange(notif: Notification) {
-        guard let textView = notif.object as? UITextView, textView == editor.backend else { return }
-        DispatchQueue.main.async {
-            if self.creating {
-                self.submitBarItem.isEnabled = !textView.text.isEmpty
-            } else {
-                self.nextBarItem.isEnabled = !textView.text.isEmpty
-            }
-        }
+    @objc func actionConfirmEdit() {
+        editCompletion?(editor.text)
     }
 }
 
 private extension TextEditViewController {
     func setupNavigationBar() {
-        title = "\(Digest.toHuman()) - 正文"
-        setupImmersiveAppearance()
-        navigationItem.leftBarButtonItem = autoGenerateBackItem()
-        navigationItem.rightBarButtonItem = creating ? submitBarItem : nextBarItem
+        if editCompletion != nil {
+            title = "修改"
+            navigationItem.rightBarButtonItem = btnConfirm
+        }
     }
     
     func setupSubviews() {
@@ -237,12 +214,8 @@ private extension TextEditViewController {
         
         bindActions()
         
-        if let content = digest?.content {
-            if creating {
-                submitBarItem.isEnabled = !content.isEmpty
-            } else {
-                nextBarItem.isEnabled = !content.isEmpty
-            }
+        if editCompletion != nil, let text = editingText {
+            editor.text = text
         }
     }
     
@@ -255,10 +228,10 @@ private extension TextEditViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(editorDidBeginEditing(notif:)), name: UITextView.textDidBeginEditingNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(editorDidEndEditing(notif:)), name: UITextView.textDidEndEditingNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(editorDidChange(notif:)), name: UITextView.textDidChangeNotification, object: nil)
+
+//        NotificationCenter.default.addObserver(self, selector: #selector(editorDidBeginEditing(notif:)), name: UITextView.textDidBeginEditingNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(editorDidEndEditing(notif:)), name: UITextView.textDidEndEditingNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(editorDidChange(notif:)), name: UITextView.textDidChangeNotification, object: nil)
     }
     
     func clearupNotification () {
@@ -266,20 +239,19 @@ private extension TextEditViewController {
     }
 }
 
-private extension TextEditViewController {
-    
-    func putContentToModel() -> Bool {
-        let content = editor.text
-        guard !content.isEmpty else {
-            let alert = UIAlertController(title: "提示", message: "请填写内容", defaultActionButtonTitle: "好的", tintColor: Color(hexString: ThemeConst.outlineColor))
-            present(alert, animated: true, completion: nil)
-            return false
+extension TextEditViewController {
+    func getValues() throws -> [String: Any] {
+        guard !editor.text.isEmpty else {
+            throw KvasirError.contentEmpty
         }
         
-        digest?.content = content
-        return true
+        return [
+            "content": editor.text
+        ]
     }
-    
+}
+
+private extension TextEditViewController {
     func showImagePickerOfSource(source: UIImagePickerController.SourceType) {
         guardAccessToImagePickerSource(.camera) {
             let imagePicker = UIImagePickerController()
@@ -325,11 +297,5 @@ private extension TextEditViewController {
             self.tvContent.text = ocr.recognizedText.trimmed
         }
         #endif
-    }
-}
-
-private extension TextEditViewController {
-    func fillBlanks() {
-        editor.text = digest?.content ?? ""
     }
 }

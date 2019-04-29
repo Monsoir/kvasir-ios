@@ -23,7 +23,7 @@ class RealmWordDigest: RealmBasicObject {
         content.trim()
     }
     
-    override func save(completion: @escaping RealmSaveCompletion) {
+    func save(with bookId: String?, completion: @escaping RealmSaveCompletion) {
         preSave()
         DispatchQueue.global(qos: .userInitiated).async {
             autoreleasepool(invoking: { () -> Void in
@@ -31,6 +31,21 @@ class RealmWordDigest: RealmBasicObject {
                     let realm = try Realm()
                     try realm.write {
                         realm.add(self)
+                        
+                        if let id = bookId, !id.isEmpty {
+                            if let book = realm.object(ofType: RealmBook.self, forPrimaryKey: bookId) {
+                                switch self {
+                                case is RealmSentence:
+                                    book.sentences.append(self as! RealmSentence)
+                                    self.book = book
+                                case is RealmParagraph:
+                                    book.paragraphs.append(self as! RealmParagraph)
+                                    self.book = book
+                                default:
+                                    break
+                                }
+                            }
+                        }
                     }
                     completion(true)
                 } catch {
@@ -44,18 +59,6 @@ class RealmWordDigest: RealmBasicObject {
         super.preUpdate()
         content.trim()
         updatedAt = Date()
-    }
-    
-    override func update() -> Bool {
-        preUpdate()
-        do {
-            try Realm().write {
-                try Realm().add(self, update: true)
-            }
-            return true
-        } catch {
-            return false
-        }
     }
     
     class func toHuman() -> String {
@@ -78,6 +81,6 @@ extension RealmWordDigest {
             return temp.trimmed
         }()
         let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-        return TopListViewModel(id: id, title: title, bookName: "", updatedAt: updateAtString)
+        return TopListViewModel(id: id, title: title, bookName: book?.name ?? "", updatedAt: updateAtString)
     }
 }

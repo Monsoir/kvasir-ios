@@ -22,7 +22,7 @@ class RealmCreator: RealmBasicObject, KvasirRealmReadable {
         localeName.trim()
     }
     
-    override func save(completion: @escaping RealmSaveCompletion) {
+    func save(completion: @escaping RealmSaveCompletion) {
         preSave()
         DispatchQueue.global(qos: .userInitiated).async {
             autoreleasepool(invoking: { () -> Void in
@@ -44,18 +44,6 @@ class RealmCreator: RealmBasicObject, KvasirRealmReadable {
         name.trim()
         localeName.trim()
         updatedAt = Date()
-    }
-    
-    override func update() -> Bool {
-        preUpdate()
-        do {
-            try Realm().write {
-                try Realm().add(self, update: true)
-            }
-            return true
-        } catch {
-            return false
-        }
     }
     
     class func toHuman() -> String {

@@ -53,9 +53,9 @@ private func newDigestControllerFactory(url: URLConvertible, values: [String: An
     
     switch identifier {
     case RealmSentence.toMachine():
-        return WordDigestInfoViewController<RealmSentence>(digest: param.createDigest() as! RealmSentence, creating: true)
+        return CreateDigestContentViewController(digest: param.createDigest() as! RealmSentence)
     case RealmParagraph.toMachine():
-        return WordDigestInfoViewController<RealmParagraph>(digest: param.createDigest() as! RealmParagraph, creating: true)
+        return CreateDigestContentViewController(digest: param.createDigest() as! RealmParagraph)
     default:
         return nil
     }
@@ -76,7 +76,6 @@ private func allDigestControllerFactory(url: URLConvertible, values: [String: An
 
 private func detailDigestControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
     guard let identifier = get(url: url, componentAt: 1) else { return nil }
-    guard let param = RouteParamsDict[identifier] else { return nil }
     guard let id = values["id"] as? String else { return nil }
     
     switch identifier {

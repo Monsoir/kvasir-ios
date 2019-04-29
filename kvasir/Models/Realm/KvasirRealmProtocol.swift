@@ -19,9 +19,10 @@ protocol KvasirRealmCRUDable : class {
     func save(completion: @escaping RealmSaveCompletion)
     
     func preUpdate()
-    func update() -> Bool
+    func update(pairs: [String: Any], completion: @escaping RealmSaveCompletion)
     
-    func delete() -> Bool
+    func preDelete()
+    func delete(completion: @escaping RealmSaveCompletion)
 }
 
 protocol KvasirRealmQuerable : class {
