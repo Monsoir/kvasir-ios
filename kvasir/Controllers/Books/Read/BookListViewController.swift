@@ -13,8 +13,21 @@ import SwifterSwift
 typealias BookSelectCompletion = (_ book: RealmBook) -> Void
 
 class BookListViewController: UIViewController {
-    private lazy var bookResults: Results<RealmBook>? = RealmBook.allObjectsSortedByUpdatedAt(of: RealmBook.self)
-    private var realmNotificationToken: NotificationToken?
+    
+    private lazy var coordinator: BookListCoordinator = { [unowned self] in
+        let c = BookListCoordinator()
+        c.reload = { [weak self] _ in
+            self?.tableView.reloadData()
+        }
+        c.errorHandler = nil
+        return c
+    }()
+    private var results: Results<RealmBook>? {
+        get {
+            return coordinator.results
+        }
+    }
+
     var selectCompletion: BookSelectCompletion?
     
     private lazy var tableView: UITableView = { [unowned self] in
@@ -46,7 +59,12 @@ class BookListViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        setupRealmNotification()
+        coordinator.setupQuery()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        coordinator.reclaim()
     }
     
     deinit {
@@ -72,31 +90,17 @@ private extension BookListViewController {
             make.edges.equalToSuperview()
         }
     }
-    
-    func setupRealmNotification() {
-        realmNotificationToken = bookResults?.observe({ [weak self] (changes) in
-            switch changes {
-            case .initial: fallthrough
-            case .update:
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            case .error:
-                break
-            }
-        })
-    }
 }
 
 extension BookListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookResults?.count ?? 0
+        return results?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier(), for: indexPath)
         
-        guard let book = bookResults?[indexPath.row] else { return cell }
+        guard let book = results?[indexPath.row] else { return cell }
         cell.textLabel?.text = book.name
         return cell
     }
@@ -104,7 +108,7 @@ extension BookListViewController: UITableViewDataSource {
 
 extension BookListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let book = bookResults?[indexPath.row] else { return }
+        guard let book = results?[indexPath.row] else { return }
         selectCompletion?(book)
     }
 }

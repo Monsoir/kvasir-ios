@@ -13,8 +13,12 @@ import RealmSwift
 
 class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    private lazy var results: Results<Digest>? = Digest.allObjectsSortedByUpdatedAt(of: Digest.self)
-    private var realmNotificationToken: NotificationToken?
+    private lazy var coordinator = TextListCoordinator<Digest>()
+    private var results: Results<Digest>? {
+        get {
+            return coordinator.results
+        }
+    }
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
@@ -31,8 +35,6 @@ class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITable
         #if DEBUG
         print("\(self) deinit")
         #endif
-        
-        realmNotificationToken?.invalidate()
     }
     
     override func viewDidLoad() {
@@ -41,15 +43,7 @@ class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITable
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        realmNotificationToken = results?.observe({ [weak self] changes in
-            switch changes {
-            case .initial: fallthrough
-            case .update:
-                self?.reload()
-            case .error:
-                break
-            }
-        })
+        configureCoordinator()
     }
     
     @objc func actionCreate() {
@@ -76,10 +70,9 @@ class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITable
         
         let digest = results?[indexPath.row]
         
-        let outline = digest?.displayOutline()
-        cell.title = outline?.title
-        cell.bookName = outline?.bookName
-        cell.recordUpdatedDate = outline?.updatedAt
+        cell.title = digest?.title
+        cell.bookName = digest?.book?.name
+        cell.recordUpdatedDate = digest?.updateAtReadable
         
         return cell
     }
@@ -112,6 +105,14 @@ private extension TextListViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    func configureCoordinator() {
+        coordinator.reload = { [weak self] _ in
+            self?.reload()
+        }
+        coordinator.errorHandler = nil
+        coordinator.setupQuery()
     }
     
     func reload() {

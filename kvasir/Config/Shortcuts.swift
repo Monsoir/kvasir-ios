@@ -13,3 +13,7 @@ let ScreenHeight = UIScreen.main.bounds.height
 
 let PingFangSCLightFont = UIFont(name: "PingFangSC-Light", size: 20)
 let PingFangSCRegularFont = UIFont(name: "PingFangSC-Regular", size: 20)
+
+let MainQueue = DispatchQueue.main
+let UserInitiatedGlobalDispatchQueue = DispatchQueue.global(qos: .userInitiated)
+let DefaultGlobalDispatchQueue = DispatchQueue.global(qos: .default)

@@ -1,21 +1,21 @@
 //
-//  TopListCoordinator.swift
+//  CreateListCoordinator.swift
 //  kvasir
 //
-//  Created by Monsoir on 4/21/19.
+//  Created by Monsoir on 4/29/19.
 //  Copyright © 2019 monsoir. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import RealmSwift
 
-class TopListCoordinator<Digest: RealmWordDigest> {
-    private lazy var repository = RealmWordRepository<Digest>()
-    private(set) var results: Results<Digest>?
+class CreatorListCoordinator<Creator: RealmCreator> {
+    private lazy var repository = RealmCreatorRepository<Creator>()
+    private(set) var results: Results<Creator>?
     
     private var realmNotificationToken: NotificationToken? = nil
     
-    var reload: ((_ results: Results<Digest>) -> Void)?
+    var reload: ((_ results: Results<Creator>) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
     deinit {

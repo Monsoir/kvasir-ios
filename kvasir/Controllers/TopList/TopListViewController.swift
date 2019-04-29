@@ -29,32 +29,34 @@ class TopListViewController: UIViewController {
     private weak var sentencesCollectionView: UICollectionView? = nil
     private weak var paragraphCollectionView: UICollectionView? = nil
     
-    private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [weak self ] in
+    private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmSentence>()
         coordinator.reload = { data in
-            self?.sentencesData = data
-            self?.reloadSentenceView()
+            self.reloadSentenceView()
+        }
+        coordinator.errorHandler = { e in
         }
         return coordinator
     }()
-    private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [weak self ] in
+    private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmParagraph>()
         coordinator.reload = { data in
-            self?.paragraphsData = data
-            self?.reloadParagraphView()
+            self.reloadParagraphView()
+        }
+        coordinator.errorHandler = { e in
         }
         return coordinator
     }()
     
-    private var sentencesData: [TopListViewModel] = [] {
-        didSet {
-            sentencesCollectionView?.reloadData()
+    private var sentencesData: Results<RealmSentence>? {
+        get {
+            return sentenceViewModelCoordinator.results
         }
     }
     
-    private var paragraphsData: [TopListViewModel] = [] {
-        didSet {
-            paragraphCollectionView?.reloadData()
+    private var paragraphsData: Results<RealmParagraph>? {
+        get {
+            return paragraphViewModelCoordinator.results
         }
     }
     
@@ -99,18 +101,22 @@ class TopListViewController: UIViewController {
         setupNavigationBar()
         setupSubviews()
         
-        sentenceViewModelCoordinator.fetchData()
-        paragraphViewModelCoordinator.fetchData()
+        sentenceViewModelCoordinator.setupQuery()
+        paragraphViewModelCoordinator.setupQuery()
     }
     
     func reloadSentenceView() {
-        sentencesCollectionView?.backgroundView = sentencesData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmSentence.toHuman())") : nil
-        sentencesCollectionView?.reloadData()
+        MainQueue.async {
+            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmSentence.toHuman())") : nil
+            self.sentencesCollectionView?.reloadData()
+        }
     }
     
     func reloadParagraphView() {
-        paragraphCollectionView?.backgroundView = paragraphsData.count <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmParagraph.toHuman())") : nil
-        paragraphCollectionView?.reloadData()
+        MainQueue.async {
+            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmParagraph.toHuman())") : nil
+            self.paragraphCollectionView?.reloadData()
+        }
     }
 }
 
@@ -203,9 +209,9 @@ extension TopListViewController: UICollectionViewDataSource {
         
         switch location.section {
         case 0:
-            return sentencesData.count
+            return (sentencesData?.count ?? 0) <= ShowMost ? (sentencesData?.count ?? 0) : ShowMost
         case 1:
-            return paragraphsData.count
+            return (paragraphsData?.count ?? 0) <= ShowMost ? (paragraphsData?.count ?? 0) : ShowMost
         default:
             return 0
         }
@@ -214,20 +220,20 @@ extension TopListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCell.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
         
-        let digest: TopListViewModel? = {
+        let digest: RealmWordDigest? = {
             guard let location = getLocationOfCollectionView(collectionView) else { return nil }
             switch location.section {
             case 0:
-                return sentencesData[indexPath.row]
+                return sentencesData?[indexPath.row]
             case 1:
-                return paragraphsData[indexPath.row]
+                return paragraphsData?[indexPath.row]
             default:
                 return nil
             }
         }()
         cell.title = digest?.title
-        cell.bookName = digest?.bookName
-        cell.recordUpdatedDate = digest?.updatedAt
+        cell.bookName = digest?.book?.name
+        cell.recordUpdatedDate = digest?.updateAtReadable
         return cell
     }
 }

@@ -14,6 +14,12 @@ class RealmBasicObject: Object {
     @objc dynamic var createdAt = Date()
     @objc dynamic var updatedAt = Date()
     
+    var updateAtReadable: String {
+        get {
+            return updatedAt.string(withFormat: "yyyy-MM-dd")
+        }
+    }
+    
     override static func primaryKey() -> String? {
         return "id"
     }

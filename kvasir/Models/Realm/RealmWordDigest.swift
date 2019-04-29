@@ -14,6 +14,16 @@ class RealmWordDigest: RealmBasicObject {
     
     @objc dynamic var book: RealmBook?
     
+    var title: String {
+        get {
+            var temp = content.replacingOccurrences(of: "\n", with: " ")
+            let endIndex = temp.index(temp.startIndex, offsetBy: temp.count < DigestTitleLength ? temp.count : DigestTitleLength)
+            let range = temp.startIndex ..< endIndex
+            temp = String(temp[range])
+            return temp.trimmed
+        }
+    }
+    
     override static func indexedProperties() -> [String] {
         return ["content"]
     }
@@ -71,16 +81,16 @@ class RealmWordDigest: RealmBasicObject {
 }
 
 private let DigestTitleLength = 40
-extension RealmWordDigest {
-    func displayOutline() -> TopListViewModel {
-        let title: String = {
-            var temp = self.content.replacingOccurrences(of: "\n", with: " ")
-            let endIndex = temp.index(temp.startIndex, offsetBy: temp.count < DigestTitleLength ? temp.count : DigestTitleLength)
-            let range = temp.startIndex ..< endIndex
-            temp = String(temp[range])
-            return temp.trimmed
-        }()
-        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-        return TopListViewModel(id: id, title: title, bookName: book?.name ?? "", updatedAt: updateAtString)
-    }
-}
+//extension RealmWordDigest {
+//    func displayOutline() -> TopListViewModel {
+//        let title: String = {
+//            var temp = self.content.replacingOccurrences(of: "\n", with: " ")
+//            let endIndex = temp.index(temp.startIndex, offsetBy: temp.count < DigestTitleLength ? temp.count : DigestTitleLength)
+//            let range = temp.startIndex ..< endIndex
+//            temp = String(temp[range])
+//            return temp.trimmed
+//        }()
+//        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
+//        return TopListViewModel(id: id, title: title, bookName: book?.name ?? "", updatedAt: updateAtString)
+//    }
+//}

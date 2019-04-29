@@ -12,8 +12,14 @@ import SwifterSwift
 
 class CreatorListViewController<Creator: RealmCreator>: UIViewController, UITableViewDataSource, UITableViewDelegate {
     typealias SelectCompletion =  ((_ creators: [Creator]) -> Void)
-    private lazy var creatorResults: Results<Creator>? = Creator.allObjectsSortedByUpdatedAt(of: Creator.self)
-    private var realmNotificationToken: NotificationToken?
+    
+    private lazy var coordinator = CreatorListCoordinator<Creator>()
+    private var results: Results<Creator>? {
+        get {
+            return coordinator.results
+        }
+    }
+    
     private var selectCompletion: SelectCompletion?
     private var preSelectionIds: [String] = []
     
@@ -51,24 +57,24 @@ class CreatorListViewController<Creator: RealmCreator>: UIViewController, UITabl
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        setupRealmNotification()
+        configureCoordinator()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return creatorResults?.count ?? 0
+        return results?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier(), for: indexPath) as! BookListTableViewCell
         
-        guard let creator = creatorResults?[indexPath.row] else { return UITableViewCell() }
+        guard let creator = results?[indexPath.row] else { return UITableViewCell() }
         cell.textLabel?.text = "\(creator.name) / \(creator.localeName)"
         cell.accessoryType = preSelectionIds.contains(creator.id) ? .checkmark : .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let creator = creatorResults?[indexPath.row] else { return }
+        guard let creator = results?[indexPath.row] else { return }
         if let completion = selectCompletion, !preSelectionIds.contains(creator.id) {
             completion([creator])
         }
@@ -99,19 +105,13 @@ private extension CreatorListViewController {
             make.edges.equalToSuperview()
         }
     }
-    
-    func setupRealmNotification() {
-        realmNotificationToken = creatorResults?.observe({ [weak self] (changes) in
-            switch changes {
-            case .initial: fallthrough
-            case .update:
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            case .error:
-                break
-            }
-        })
+
+    func configureCoordinator() {
+        coordinator.reload = { [weak self] _ in
+            self?.tableView.reloadData()
+        }
+        coordinator.errorHandler = nil
+        coordinator.setupQuery()
     }
 }
 
