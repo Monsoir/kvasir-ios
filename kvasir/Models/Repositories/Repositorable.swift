@@ -48,6 +48,55 @@ protocol Repositorable {
 
 extension Repositorable {
     
+    
+    /// 将查询出来的单个对象传回到 main queue 执行，逻辑中包含了为对象配置线程保护
+    ///
+    /// - Parameters:
+    ///   - objectRef: 未配置有线程保护罩的对象
+    ///   - okHandler: 定义为成功时的回调
+    ///   - notOkHandler: 定义为失败时的回调
+    private static func switchBackToMainQueue(object: Model, okHandler: @escaping ((_ objectDeref: Model) -> Void), notOkHandler: @escaping (() -> Void)) {
+        let objectRef = ThreadSafeReference(to: object)
+        MainQueue.async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    guard let objectdeRef = realm.resolve(objectRef) else {
+                        notOkHandler()
+                        return
+                    }
+                    okHandler(objectdeRef)
+                } catch {
+                    notOkHandler()
+                }
+            })
+        }
+    }
+    
+    /// 将查询出来的对象集合传回到 main queue 执行，逻辑中包含了为对象配置线程保护
+    ///
+    /// - Parameters:
+    ///   - objectRef: 未配置有线程保护罩的对象
+    ///   - okHandler: 定义为成功时的回调
+    ///   - notOkHandler: 定义为失败时的回调
+    private static func switchBackToMainQueue(objects: Results<Model>, okHandler: @escaping ((_ objectsDeref: Results<Model>) -> Void), notOkHandler: @escaping (() -> Void)) {
+        let objectsRef = ThreadSafeReference(to: objects)
+        MainQueue.async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    guard let objectsdeRef = realm.resolve(objectsRef) else {
+                        notOkHandler()
+                        return
+                    }
+                    okHandler(objectsdeRef)
+                } catch {
+                    notOkHandler()
+                }
+            })
+        }
+    }
+    
     // R
     func queryAll(completion: @escaping RealmQueryResultsCompletion<Model>) {
         UserInitiatedGlobalDispatchQueue.async {
@@ -55,7 +104,12 @@ extension Repositorable {
                 do {
                     let realm = try Realm()
                     let objects = realm.objects(Model.self)
-                    completion(true, objects)
+                    
+                    Self.switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
+                        completion(true, objectsDeref)
+                    }, notOkHandler: {
+                        completion(false, nil)
+                    })
                 } catch {
                     completion(false, nil)
                 }
@@ -69,7 +123,11 @@ extension Repositorable {
                 do {
                     let realm = try Realm()
                     let objects = realm.objects(Model.self).sorted(byKeyPath: "updatedAt", ascending: false)
-                    completion(true, objects)
+                    Self.switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
+                        completion(true, objectsDeref)
+                    }, notOkHandler: {
+                        completion(false, nil)
+                    })
                 } catch {
                     completion(false, nil)
                 }
@@ -88,25 +146,11 @@ extension Repositorable {
                         completion(false, nil)
                         return
                     }
-                    let entityRef = ThreadSafeReference(to: entity)
-                    
-                    // 将查询出来的对象传回到 main queue 执行
-                    MainQueue.async {
-                        autoreleasepool(invoking: { () -> Void in
-                            do {
-                                let realm2 = try Realm()
-                                guard let entityDeref = realm2.resolve(entityRef) else {
-                                    completion(false, nil)
-                                    return
-                                }
-                                completion(true, entityDeref)
-                            } catch {
-                                completion(false, nil)
-                            }
-                        })
-                    }
-                    
-                    
+                    Self.switchBackToMainQueue(object: entity, okHandler: { (object) in
+                        completion(true, object)
+                    }, notOkHandler: {
+                        completion(false, nil)
+                    })
                 } catch {
                     completion(false, nil)
                 }

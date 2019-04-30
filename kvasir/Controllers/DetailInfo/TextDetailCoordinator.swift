@@ -122,17 +122,3 @@ class TextDetailCoordinator<Digest: RealmWordDigest> {
         }
     }
 }
-
-//private extension RealmWordDigest {
-//    func display() -> TextDetailViewModel {
-//        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-//        let authorsString = book?.authors.map({ (ele) -> String in
-//            return ele.name
-//        }).joined(separator: "\n") ?? ""
-//        let translatorsString = book?.translators.map({ (ele) -> String in
-//            return ele.name
-//        }).joined(separator: "\n") ?? ""
-//        let pageIndexString = pageIndex == -1 ? "$$$" : "\(pageIndex)"
-//        return TextDetailViewModel(id: id, content: content, bookName: book?.name ?? "", authors: authorsString, translators: translatorsString, publisher: book?.publisher ?? "", pageIndex: pageIndexString, updatedAt: updateAtString)
-//    }
-//}

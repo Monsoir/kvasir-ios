@@ -34,27 +34,19 @@ class TopListCoordinator<Digest: RealmWordDigest> {
                 return
             }
             
-            let resultsRef = ThreadSafeReference(to: results)
-            MainQueue.async {
-                autoreleasepool(invoking: { () -> Void in
-                    let realm = try? Realm()
-                    guard let resultsDeref = realm?.resolve(resultsRef) else { return }
-                    
-                    // link to results
-                    strongSelf.results = resultsDeref
-                    
-                    // setup notification
-                    strongSelf.realmNotificationToken = resultsDeref.observe({ (changes) in
-                        switch changes {
-                        case .initial: fallthrough
-                        case .update:
-                            strongSelf.reload?(results)
-                        case .error(let e):
-                            strongSelf.errorHandler?(e)
-                        }
-                    })
-                })
-            }
+            // link to results
+            strongSelf.results = results
+            
+            // setup notification
+            strongSelf.realmNotificationToken = results.observe({ (changes) in
+                switch changes {
+                case .initial: fallthrough
+                case .update:
+                    strongSelf.reload?(results)
+                case .error(let e):
+                    strongSelf.errorHandler?(e)
+                }
+            })
         }
     }
 }
