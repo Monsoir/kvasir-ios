@@ -14,14 +14,7 @@ typealias BookSelectCompletion = (_ book: RealmBook) -> Void
 
 class BookListViewController: UIViewController {
     
-    private lazy var coordinator: BookListCoordinator = { [unowned self] in
-        let c = BookListCoordinator()
-        c.reload = { [weak self] _ in
-            self?.tableView.reloadData()
-        }
-        c.errorHandler = nil
-        return c
-    }()
+    private lazy var coordinator: BookListCoordinator = BookListCoordinator()
     private var results: Results<RealmBook>? {
         get {
             return coordinator.results
@@ -59,12 +52,7 @@ class BookListViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        coordinator.setupQuery()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        coordinator.reclaim()
+        configureCoordinator()
     }
     
     deinit {
@@ -89,6 +77,17 @@ private extension BookListViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+    }
+    
+    func configureCoordinator() {
+        coordinator.reload = { [weak self] _ in
+            MainQueue.async {
+                guard let strongSelf = self else { return }
+                strongSelf.tableView.reloadData()
+            }
+        }
+        coordinator.errorHandler = nil
+        coordinator.setupQuery()
     }
 }
 

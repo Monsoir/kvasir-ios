@@ -11,3 +11,15 @@ import Foundation
 enum KvasirError: Error {
     case contentEmpty
 }
+
+struct ValidateError: Error {
+    let message: String
+    
+    init(message: String) {
+        self.message = message
+    }
+    
+    public var localizedDescription: String {
+        return message
+    }
+}

@@ -8,4 +8,4 @@
 
 import Foundation
 
-typealias TextListCoordinator = TopListCoordinator
+typealias DigestListCoordinator = TopListCoordinator

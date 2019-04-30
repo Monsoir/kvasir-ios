@@ -13,13 +13,18 @@ import RealmSwift
 
 private let DefaultTab = 0
 
-class CreateDigestContentViewController<Digest: RealmWordDigest>: UIViewController {
+class CreateDigestContainerViewController<Digest: RealmWordDigest>: UIViewController {
     
-    private var digest: Digest
+    private var digest: Digest {
+        get {
+            return coordinator.entity
+        }
+    }
+    private var coordinator: CreateDigestCoordinator<Digest>!
     
     private lazy var constraintDict = [String: Constraint]()
-    private lazy var basicInfoVC = WordDigestInfoViewController(digest: self.digest, creating: true)
-    private lazy var contentVC = TextEditViewController(digest: self.digest)
+    private lazy var basicInfoVC = CreateDigestInfoViewController(digest: self.digest, creating: true)
+    private lazy var contentVC = DigestEditViewController(digest: self.digest)
     private lazy var vcs = [self.basicInfoVC, self.contentVC]
     private var currentVC: UIViewController? {
         get {
@@ -35,7 +40,7 @@ class CreateDigestContentViewController<Digest: RealmWordDigest>: UIViewControll
     }()
     
     init(digest: Digest) {
-        self.digest = digest
+        self.coordinator = CreateDigestCoordinator(entity: digest)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -57,42 +62,34 @@ class CreateDigestContentViewController<Digest: RealmWordDigest>: UIViewControll
     
     @objc func actionSubmit() {
         let formValues = basicInfoVC.getFormValues()
+        let contentValues = contentVC.getValues()
         
-        var contentValues: [String: Any]!
         do {
-            contentValues = try contentVC.getValues()
-        } catch let error as KvasirError {
-            switch error {
-            case .contentEmpty:
-                Bartendar.handleSimpleAlert(title: "提示", message: "内容不能为空", on: self)
-            }
+            try coordinator.post(info: formValues.merging(contentValues, uniquingKeysWith: { (_, new) -> Any in
+                return new
+            }))
+        } catch let e as ValidateError {
+            Bartendar.handleSimpleAlert(title: "提示", message: e.message, on: self.navigationController)
             return
         } catch {
+            Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self.navigationController)
             return
         }
         
-        let content = contentValues["content"] as! String
-        
-        digest.content = content
-        digest.pageIndex = formValues["pageIndex"] as? Int ?? -1
-        
-        saveDigest(otherInfo: ["bookId": formValues["bookId"] ?? ""]) { (success) in
-            guard success else {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "提示", message: "内容不能为空", defaultActionButtonTitle: "确定", tintColor: .black)
+        coordinator.create { (success) in
+            MainQueue.async {
+                guard success else {
+                    let alert = UIAlertController(title: "抱歉", message: "创建失败", defaultActionButtonTitle: "确定", tintColor: .black)
                     self.present(alert, animated: true, completion: nil)
+                    return
                 }
-                return
-            }
-            
-            DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
 }
 
-private extension CreateDigestContentViewController {
+private extension CreateDigestContainerViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.titleView = segement
@@ -131,40 +128,6 @@ private extension CreateDigestContentViewController {
             }
             constraintDict[toVC.toMachine()] = constraint
         }
-    }
-    
-    func saveDigest(otherInfo: [String: Any]?, completion: @escaping RealmSaveCompletion) {
-        digest.save(with: otherInfo?["bookId"] as? String) { (success) in
-            completion(success)
-        }
-//        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-//            guard let strongSelf = self else { return }
-//            autoreleasepool(invoking: { () -> Void in
-//                do {
-//                    let realm = try Realm()
-//
-//                    var book: RealmBook?
-//                    if let bookId = otherInfo?["bookId"] as? String, !bookId.isEmpty {
-//                        book = realm.object(ofType: RealmBook.self, forPrimaryKey: bookId)
-//                    }
-//
-//                    try realm.write {
-//                        realm.add(strongSelf.digest)
-//                        if let book = book {
-//                            strongSelf.digest.book = book
-//                            if Digest.self === RealmSentence.self {
-//                                book.sentences.append(strongSelf.digest as! RealmSentence)
-//                            } else {
-//                                book.paragraphs.append(strongSelf.digest as! RealmParagraph)
-//                            }
-//                        }
-//                    }
-//                    completion(true)
-//                } catch {
-//                    completion(false)
-//                }
-//            })
-//        }
     }
 }
 

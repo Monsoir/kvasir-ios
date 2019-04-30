@@ -11,9 +11,9 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
-class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    private lazy var coordinator = TextListCoordinator<Digest>()
+    private lazy var coordinator = DigestListCoordinator<Digest>()
     private var results: Results<Digest>? {
         get {
             return coordinator.results
@@ -90,7 +90,7 @@ class TextListViewController<Digest: RealmWordDigest>: UIViewController, UITable
     }
 }
 
-private extension TextListViewController {
+private extension DigestListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))

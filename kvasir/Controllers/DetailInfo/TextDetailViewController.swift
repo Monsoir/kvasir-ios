@@ -280,7 +280,7 @@ private extension TextDetailViewController {
     
     func showContentEdit() {
         guard let editingData = data else { return }
-        let vc = TextEditViewController(text: editingData.content, singleLine: Digest.self === RealmSentence.self) { [weak self] (text) in
+        let vc = DigestEditViewController(text: editingData.content, singleLine: Digest.self === RealmSentence.self) { [weak self] (text) in
             guard !text.isEmpty else {
                 Bartendar.handleSimpleAlert(title: "提示", message: "内容不能为空", on: self?.navigationController)
                 return

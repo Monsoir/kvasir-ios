@@ -108,7 +108,10 @@ private extension CreatorListViewController {
 
     func configureCoordinator() {
         coordinator.reload = { [weak self] _ in
-            self?.tableView.reloadData()
+            MainQueue.async {
+                guard let strongSelf = self else { return }
+                strongSelf.tableView.reloadData()
+            }
         }
         coordinator.errorHandler = nil
         coordinator.setupQuery()

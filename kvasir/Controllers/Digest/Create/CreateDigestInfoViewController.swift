@@ -11,41 +11,10 @@ import Eureka
 import FontAwesome_swift
 import RealmSwift
 
-private typealias InitialValues = (bookName: String, localeBookName: String, isbn: String, publisher: String, authors: [String], translators: [String], pageIndex: Int?)
-
-class WordDigestInfoViewController<Digest: RealmWordDigest>: FormViewController {
+class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewController {
     
     private var digest: Digest?
     private var creating = true
-    
-    private var initialValues: InitialValues {
-        get {
-            guard !creating,  let digest = digest else { return ("", "", "", "", [], [], nil)}
-            let authors: [String] = {
-                var temp = [String]()
-                digest.book?.authors.forEach({ (ele) in
-                    temp.append(ele.name)
-                })
-                return temp
-            }()
-            let translators: [String] = {
-                var temp = [String]()
-                digest.book?.translators.forEach({ (ele) in
-                    temp.append(ele.name)
-                })
-                return temp
-            }()
-            return (
-                digest.book?.name ?? "",
-                digest.book?.localeName ?? "",
-                digest.book?.isbn ?? "",
-                digest.book?.publisher ?? "",
-                authors,
-                translators,
-                digest.pageIndex == -1 ? nil : digest.pageIndex
-            )
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +46,7 @@ class WordDigestInfoViewController<Digest: RealmWordDigest>: FormViewController 
     }
 }
 
-private extension WordDigestInfoViewController {
+private extension CreateDigestInfoViewController {
     func setupNavigationBar() {
         
     }
@@ -150,7 +119,7 @@ private extension WordDigestInfoViewController {
     }
 }
 
-extension WordDigestInfoViewController {
+extension CreateDigestInfoViewController {
     func getFormValues() -> [String: Any] {
         let values = form.values(includeHidden: true)
         let pageIndex = values["pageIndex"] as? Int ?? -1
@@ -162,7 +131,7 @@ extension WordDigestInfoViewController {
     }
 }
 
-private extension WordDigestInfoViewController {
+private extension CreateDigestInfoViewController {
     func bookDidSelect(book: RealmBook) {
         let values: [String: Any] = [
             "bookId": book.id,

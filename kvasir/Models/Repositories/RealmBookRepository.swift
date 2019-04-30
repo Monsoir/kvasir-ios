@@ -23,10 +23,26 @@ class RealmBookRepository: Repositorable {
         preCreate(unmanagedModel: unmanagedModel)
         UserInitiatedGlobalDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
+                
+                let authorIds = otherInfo?["authorIds"] as? [String] ?? []
+                let translatorIds = otherInfo?["translators"] as? [String] ?? []
+                
                 do {
                     let realm = try Realm()
+                    
+                    let authors = realm.objects(RealmAuthor.self).filter("\(RealmAuthor.primaryKey()!) IN %@", authorIds)
+                    let translators = realm.objects(RealmTranslator.self).filter("\(RealmTranslator.primaryKey()!) IN %@", translatorIds)
+                    
                     try realm.write {
                         realm.add(unmanagedModel)
+                        
+                        authors.forEach({ (ele) in
+                            ele.books.append(unmanagedModel)
+                        })
+                        
+                        translators.forEach({ (ele) in
+                            ele.books.append(unmanagedModel)
+                        })
                     }
                     completion(true)
                 } catch {

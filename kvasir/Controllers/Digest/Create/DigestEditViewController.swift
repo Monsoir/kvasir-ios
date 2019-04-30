@@ -20,7 +20,7 @@ import TesseractOCR
 private let ContainerHeight = 50
 typealias TextEditCompletion = (_ text: String) -> Void
 
-class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     private var digest: Digest?
     private var editCompletion: TextEditCompletion?
@@ -178,7 +178,7 @@ class TextEditViewController<Digest: RealmWordDigest>: UIViewController, UINavig
     }
 }
 
-private extension TextEditViewController {
+private extension DigestEditViewController {
     func setupNavigationBar() {
         if editCompletion != nil {
             title = "修改"
@@ -239,19 +239,15 @@ private extension TextEditViewController {
     }
 }
 
-extension TextEditViewController {
-    func getValues() throws -> [String: Any] {
-        guard !editor.text.isEmpty else {
-            throw KvasirError.contentEmpty
-        }
-        
+extension DigestEditViewController {
+    func getValues() -> [String: Any] {
         return [
             "content": editor.text
         ]
     }
 }
 
-private extension TextEditViewController {
+private extension DigestEditViewController {
     func showImagePickerOfSource(source: UIImagePickerController.SourceType) {
         guardAccessToImagePickerSource(.camera) {
             let imagePicker = UIImagePickerController()

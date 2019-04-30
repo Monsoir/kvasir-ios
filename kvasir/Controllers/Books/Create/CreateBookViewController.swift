@@ -18,6 +18,7 @@ class CreateBookViewController: FormViewController {
     
     private var creating = true
     private var book: RealmBook
+    private lazy var coordinator = CreateBookCoordinator(entity: self.book)
     
     private lazy var headerView: UIView = {
         let view = UIView()
@@ -181,14 +182,48 @@ private extension CreateBookViewController {
     }
     
     @objc func actionCreateSave() {
-        guard putFormValuesToModel() else { return }
-        saveBookAlongWithRelatedCreators { (success) in
+//        guard putFormValuesToModel() else { return }
+//        saveBookAlongWithRelatedCreators { (success) in
+//            guard success else {
+//                DispatchQueue.main.async {
+//                    Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
+//                }
+//                return
+//            }
+//            DispatchQueue.main.async {
+//                self.dismiss(animated: true, completion: nil)
+//            }
+//        }
+        
+        view.endEditing(true)
+        
+        let errors = form.validate()
+        guard errors.isEmpty else {
+            Bartendar.handleSimpleAlert(title: "提示", message: errors.first!.msg, on: self.navigationController)
+            return
+        }
+        
+        let values = form.values()
+        let authorIds = (values["authors"] as? [EurekaLabelValueModel] ?? []).map { $0.value }.duplicatesRemoved()
+        let translatorIds = (values["translators"] as? [EurekaLabelValueModel] ?? []).map { $0.value }.duplicatesRemoved()
+        
+        let postInfo = values.merging(["authorIds": authorIds, "translatorIds": translatorIds]) { (current, new) -> Any? in
+            return new
+        }
+        
+        do {
+            try coordinator.post(info: postInfo)
+        } catch {
+            Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self.navigationController)
+            return
+        }
+        
+        coordinator.create { (success) in
             guard success else {
-                DispatchQueue.main.async {
-                    Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
-                }
+                Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
                 return
             }
+            
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil)
             }

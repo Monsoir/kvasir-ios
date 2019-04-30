@@ -10,27 +10,15 @@ import UIKit
 import Eureka
 import SwifterSwift
 
-private typealias InitialValues = (
-    name: String,
-    localeName: String
-)
-
 class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
     
     private var creating = true
+    private var coordinator: CreateCreatorCoordinator<Creator>
     
-    private var initialValues: InitialValues {
-        get {
-            return (creator.name, creator.localeName)
-        }
-    }
-    private var creator: Creator
-    
-    private lazy var btnEditSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionEditSave))
     private lazy var btnCreateSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionCreateSave))
     
     init(model: Creator, creating: Bool = true) {
-        self.creator = model
+        self.coordinator = CreateCreatorCoordinator<Creator>(entity: model)
         self.creating = creating
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,14 +41,20 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
         setupSubviews()
     }
     
-    @objc private func actionEditSave() {
-        guard putFormValuesToModel() else { return }
-    }
-    
     @objc private func actionCreateSave() {
-        guard putFormValuesToModel() else { return }
+        view.endEditing(true)
         
-        creator.save { (success) in
+        do {
+            try coordinator.post(info: form.values())
+        } catch let e as ValidateError {
+            Bartendar.handleSimpleAlert(title: "提示", message: e.message, on: self.navigationController)
+            return
+        } catch {
+            Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self.navigationController)
+            return
+        }
+        
+        coordinator.create { (success) in
             guard success else {
                 Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
                 return
@@ -77,44 +71,24 @@ private extension CreateCreatorViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
-        navigationItem.rightBarButtonItem = creating ? btnCreateSave : btnEditSave
+        navigationItem.rightBarButtonItem = btnCreateSave
         title = "收集一个\(Creator.toHuman())"
     }
     
     func setupSubviews() {
         let character = Creator.toHuman()
         
-        let values = initialValues
         form +++ Section()
             <<< TextRow() {
                 $0.tag = "name"
-                $0.value = values.name
+                $0.value = ""
                 $0.title = "\(character)名称"
         }
             <<< TextRow() {
                 $0.tag = "localeName"
-                $0.value = values.localeName
+                $0.value = ""
                 $0.title = "\(character)翻译名称"
         }
-    }
-}
-
-private extension CreateCreatorViewController {
-    func putFormValuesToModel() -> Bool {
-        view.endEditing(true)
-        let values = form.values()
-        let name = (values["name"] as? String ?? "").trimmed
-        let localeName = (values["localeName"] as? String ?? "").trimmed
-        
-        guard !name.isEmpty else {
-            let alert = UIAlertController(title: "提示", message: "\(Creator.toHuman())名称不能为空", defaultActionButtonTitle: "确定", tintColor: .black)
-            navigationController?.present(alert, animated: true, completion: nil)
-            return false
-        }
-        
-        creator.name = name
-        creator.localeName = localeName
-        return true
     }
 }
 

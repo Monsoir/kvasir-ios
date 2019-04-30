@@ -35,6 +35,8 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
                                 default:
                                     break
                                 }
+                                
+                                unmanagedModel.book = book
                             }
                         }
                     }
