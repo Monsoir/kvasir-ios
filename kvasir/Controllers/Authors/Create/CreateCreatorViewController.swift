@@ -47,16 +47,16 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
         do {
             try coordinator.post(info: form.values())
         } catch let e as ValidateError {
-            Bartendar.handleSimpleAlert(title: "提示", message: e.message, on: self.navigationController)
+            Bartendar.handleTipAlert(message: e.message, on: self.navigationController)
             return
         } catch {
-            Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self.navigationController)
+            Bartendar.handleSorryAlert(on: self.navigationController)
             return
         }
         
         coordinator.create { (success) in
             guard success else {
-                Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
+                Bartendar.handleSorryAlert(message: "保存失败", on: self.navigationController)
                 return
             }
             

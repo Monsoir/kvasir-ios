@@ -33,7 +33,6 @@ class CreateBookViewController: FormViewController {
         return btn
     }()
     
-    private lazy var btnEditSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionEditSave))
     private lazy var btnCreateSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionCreateSave))
     
     init(book: RealmBook) {
@@ -69,8 +68,8 @@ private extension CreateBookViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
-        navigationItem.rightBarButtonItem = creating ? btnCreateSave : btnEditSave
-        title = creating ? "添加书籍" : "编辑书籍信息"
+        navigationItem.rightBarButtonItem = btnCreateSave
+        title = "添加书籍"
     }
     
     func setupSubviews() {
@@ -177,24 +176,7 @@ private extension CreateBookViewController {
     @objc func actionScanBarCode() {
     }
     
-    @objc func actionEditSave() {
-        guard putFormValuesToModel() else { return }
-    }
-    
     @objc func actionCreateSave() {
-//        guard putFormValuesToModel() else { return }
-//        saveBookAlongWithRelatedCreators { (success) in
-//            guard success else {
-//                DispatchQueue.main.async {
-//                    Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
-//                }
-//                return
-//            }
-//            DispatchQueue.main.async {
-//                self.dismiss(animated: true, completion: nil)
-//            }
-//        }
-        
         view.endEditing(true)
         
         let errors = form.validate()
@@ -214,72 +196,19 @@ private extension CreateBookViewController {
         do {
             try coordinator.post(info: postInfo)
         } catch {
-            Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self.navigationController)
+            Bartendar.handleSorryAlert(on: self.navigationController)
             return
         }
         
         coordinator.create { (success) in
             guard success else {
-                Bartendar.handleSimpleAlert(title: "抱歉", message: "保存失败", on: self.navigationController ?? self)
+                Bartendar.handleSorryAlert(message: "保存失败", on: self.navigationController)
                 return
             }
             
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil)
             }
-        }
-    }
-    
-    func putFormValuesToModel() -> Bool {
-        view.endEditing(true)
-        
-        let errors = form.validate()
-        guard errors.isEmpty else {
-            navigationController?.present(UIAlertController(title: "提示", message: errors.first!.msg, defaultActionButtonTitle: "确定", tintColor: .black), animated: true, completion: nil)
-            return false
-        }
-        
-        let values = form.values()
-        book.isbn = (values["isbn"] as? String ?? "").trimmed
-        book.name = (values["name"] as? String ?? "").trimmed
-        book.localeName = (values["localeName"] as? String ?? "").trimmed
-        book.publisher = (values["publisher"] as? String ?? "").trimmed
-        
-        return true
-    }
-    
-    func saveBookAlongWithRelatedCreators(completion: @escaping RealmSaveCompletion) {
-        let values = form.values()
-        let authors = values["authors"] as? [EurekaLabelValueModel] ?? []
-        let translators = values["translators"] as? [EurekaLabelValueModel] ?? []
-        let authorIds: [String] =  authors.map{ $0.value }.duplicatesRemoved()
-        let translatorIds: [String] = translators.map{ $0.value }.duplicatesRemoved()
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let strongSelf = self else { return }
-            autoreleasepool(invoking: { () -> Void in
-                do {
-                    let realm = try Realm()
-                    
-                    let relatedAuthors = realm.objects(RealmAuthor.self).filter("\(RealmAuthor.primaryKey()!) IN %@", authorIds)
-                    let relatedTranslators = realm.objects(RealmTranslator.self).filter("\(RealmTranslator.primaryKey()!) IN %@", translatorIds)
-                    
-                    try realm.write {
-                        realm.add(strongSelf.book)
-                        
-                        relatedAuthors.forEach({ (ele) in
-                            ele.books.append(strongSelf.book)
-                        })
-                        
-                        relatedTranslators.forEach({ (ele) in
-                            ele.books.append(strongSelf.book)
-                        })
-                    }
-                    completion(true)
-                } catch {
-                    completion(false)
-                }
-            })
         }
     }
 }

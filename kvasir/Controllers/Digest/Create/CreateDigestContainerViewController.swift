@@ -69,18 +69,17 @@ class CreateDigestContainerViewController<Digest: RealmWordDigest>: UIViewContro
                 return new
             }))
         } catch let e as ValidateError {
-            Bartendar.handleSimpleAlert(title: "提示", message: e.message, on: self.navigationController)
+            Bartendar.handleTipAlert(message: e.message, on: self.navigationController)
             return
         } catch {
-            Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self.navigationController)
+            Bartendar.handleSorryAlert(on: self.navigationController)
             return
         }
         
         coordinator.create { (success) in
             MainQueue.async {
                 guard success else {
-                    let alert = UIAlertController(title: "抱歉", message: "创建失败", defaultActionButtonTitle: "确定", tintColor: .black)
-                    self.present(alert, animated: true, completion: nil)
+                    Bartendar.handleTipAlert(message: "创建失败", on: self.navigationController)
                     return
                 }
                 self.dismiss(animated: true, completion: nil)

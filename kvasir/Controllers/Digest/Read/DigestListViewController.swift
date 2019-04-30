@@ -32,6 +32,7 @@ class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITab
     }()
     
     deinit {
+        coordinator.reclaim()
         #if DEBUG
         print("\(self) deinit")
         #endif

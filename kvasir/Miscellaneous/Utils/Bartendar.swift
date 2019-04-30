@@ -17,4 +17,12 @@ struct Bartendar {
             host?.present(alert, animated: true, completion: nil)
         }
     }
+    
+    static func handleTipAlert(message: String, on viewController: UIViewController?) {
+        self.handleSimpleAlert(title: "提示", message: message, on: viewController)
+    }
+    
+    static func handleSorryAlert(message: String = "发生未知错误", on viewController: UIViewController?) {
+        self.handleSimpleAlert(title: "抱歉", message: message, on: viewController)
+    }
 }

@@ -269,7 +269,7 @@ private extension TextDetailViewController {
             guard let strongSelf = self else { return }
             MainQueue.async {
                 strongSelf.navigationController?.popToRootViewController(animated: true)
-                Bartendar.handleSimpleAlert(title: "抱歉", message: msg, on: nil)
+                Bartendar.handleSorryAlert(message: msg, on: nil)
             }
         }
         coordinator.entityDeleteHandler = { [weak self] in
@@ -289,7 +289,7 @@ private extension TextDetailViewController {
             strongSelf.coordinator?.delete(completion: { (success) in
                 DispatchQueue.main.async {
                     if !success {
-                        Bartendar.handleSimpleAlert(title: "抱歉", message: "删除失败", on: self?.navigationController ?? self)
+                        Bartendar.handleSorryAlert(message: "删除失败", on: self?.navigationController)
                         return
                     }
                 }
@@ -306,16 +306,16 @@ private extension TextDetailViewController {
                 let putInfo = ["content": text]
                 try self?.coordinator.put(info: putInfo)
             } catch let e as ValidateError {
-                Bartendar.handleSimpleAlert(title: "提示", message: e.message, on: self?.navigationController)
+                Bartendar.handleTipAlert(message: e.message, on: self?.navigationController)
                 return
             } catch {
-                Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self?.navigationController)
+                Bartendar.handleSorryAlert(on: self?.navigationController)
                 return
             }
             
             self?.coordinator.update(completion: { (success) in
                 guard success else {
-                    Bartendar.handleSimpleAlert(title: "抱歉", message: "更新失败", on: self?.navigationController)
+                    Bartendar.handleSorryAlert(message: "更新失败", on: self?.navigationController)
                     return
                 }
                 
@@ -334,7 +334,7 @@ private extension TextDetailViewController {
             strongSelf.coordinator?.updateBookRef(book: book, completion: { (success) in
                 DispatchQueue.main.async {
                     guard success else {
-                        Bartendar.handleSimpleAlert(title: "抱歉", message: "修改失败", on: self?.navigationController)
+                        Bartendar.handleSorryAlert(message: "修改失败", on: self?.navigationController)
                         return
                     }
                     
