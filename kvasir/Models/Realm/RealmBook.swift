@@ -43,4 +43,16 @@ class RealmBook: RealmBasicObject {
         publisher.trim()
         updatedAt = Date()
     }
+    
+    private func createListReadable(elements: [String], separator: String) -> String {
+        return elements.joined(separator: separator)
+    }
+    
+    func createAuthorsReadable(_ separator: String) -> String {
+        return createListReadable(elements: authors.map { $0.name }, separator: separator)
+    }
+    
+    func createTranslatorReadabel(_ separator: String) -> String {
+        return createListReadable(elements: translators.map { $0.name }, separator: separator)
+    }
 }

@@ -25,6 +25,13 @@ private let CellIdentifierUneditable = "uneditable"
 
 class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    private var coordinator: TextDetailCoordinator<Digest>!
+    private var entity: Digest? {
+        get {
+            return coordinator.entity
+        }
+    }
+    
     private var modifying = false {
         didSet {
             btnEdit.setTitle(modifying ? "完成修改" : "修改", for: .normal)
@@ -62,14 +69,12 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
     
     private lazy var infoTableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
-//        view.rowHeight = 80
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
         view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable))
         view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable))
         view.tableFooterView = UIView()
-//        view.separatorStyle = .none
         return view
     }()
     
@@ -96,21 +101,20 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue", size: 28)!
     ]
     
-    private var coordinator: TextDetailCoordinator<Digest>?
-    private var data: TextDetailViewModel?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        
-        self.coordinator?.reload = { [weak self] data in
-            self?.data = data
+        configureCoordinator()
+        coordinator.queryOne { [weak self] (success, entity) in
+            guard success else {
+                Bartendar.handleSimpleAlert(title: "提示", message: "没有找到数据", on: self?.navigationController)
+                return
+            }
             self?.reloadData()
         }
-        self.coordinator?.fetchData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -135,7 +139,7 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
         print("\(self) deinit")
         #endif
         
-        coordinator?.reclaim()
+        coordinator.reclaim()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,30 +158,30 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
             return cell
         }
         
-        guard let digest = data else { return UITableViewCell() }
+        guard let entity = entity else { return UITableViewCell() }
         switch indexPath.row {
         case 0:
-            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.bookName, modifying: modifying)
+            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.name ?? "", modifying: modifying)
             cell.modifyHandler = { [weak self] cell in
                 guard let strongSelf = self else { return }
                 strongSelf.showBookList(cell)
             }
             return cell
         case 1:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.authors, modifying: nil)
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createAuthorsReadable("\n") ?? "", modifying: nil)
         case 2:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.translators, modifying: nil)
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createTranslatorReadabel("\n") ?? "", modifying: nil)
         case 3:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.publisher, modifying: nil)
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.publisher ?? "", modifying: nil)
         case 4:
-            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(digest.pageIndex)", modifying: modifying)
+            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(entity.pageIndex)", modifying: modifying)
             cell.modifyHandler = { [weak self] cell in
                 guard let strongSelf = self else { return }
                 strongSelf.showPageIndexEdit(cell)
             }
             return cell
         case 5:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: digest.updatedAt, modifying: nil)
+            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.updateAtReadable, modifying: nil)
         default:
             break
         }
@@ -255,22 +259,39 @@ private extension TextDetailViewController {
             make.bottom.equalTo(buttonsContainer.snp.top)
         }
     }
+    
+    func configureCoordinator() {
+        coordinator.reload = { [weak self] data in
+            guard let strongSelf = self else { return }
+            strongSelf.reloadData()
+        }
+        coordinator.errorHandler = { [weak self] msg in
+            guard let strongSelf = self else { return }
+            MainQueue.async {
+                strongSelf.navigationController?.popToRootViewController(animated: true)
+                Bartendar.handleSimpleAlert(title: "抱歉", message: msg, on: nil)
+            }
+        }
+        coordinator.entityDeleteHandler = { [weak self] in
+            guard let strongSelf = self else { return }
+            MainQueue.async {
+                strongSelf.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+    }
 }
 
 private extension TextDetailViewController {
     func deleteDigest() {
-        guard let coordinator = coordinator, let _ = coordinator.model else { return }
-        
         let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
         alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
             guard let strongSelf = self else { return }
             strongSelf.coordinator?.delete(completion: { (success) in
                 DispatchQueue.main.async {
-                    guard success else {
+                    if !success {
                         Bartendar.handleSimpleAlert(title: "抱歉", message: "删除失败", on: self?.navigationController ?? self)
                         return
                     }
-                    strongSelf.navigationController?.popViewController()
                 }
             })
         }
@@ -279,17 +300,28 @@ private extension TextDetailViewController {
     }
     
     func showContentEdit() {
-        guard let editingData = data else { return }
+        guard let editingData = entity else { return }
         let vc = DigestEditViewController(text: editingData.content, singleLine: Digest.self === RealmSentence.self) { [weak self] (text) in
-            guard !text.isEmpty else {
-                Bartendar.handleSimpleAlert(title: "提示", message: "内容不能为空", on: self?.navigationController)
+            do {
+                let putInfo = ["content": text]
+                try self?.coordinator.put(info: putInfo)
+            } catch let e as ValidateError {
+                Bartendar.handleSimpleAlert(title: "提示", message: e.message, on: self?.navigationController)
+                return
+            } catch {
+                Bartendar.handleSimpleAlert(title: "抱歉", message: "发生未知错误", on: self?.navigationController)
                 return
             }
-            self?.coordinator?.updateContent(text: text, completion: { (success) in
-                if success {
-                    DispatchQueue.main.async {
-                        self?.navigationController?.popViewController()
-                    }
+            
+            self?.coordinator.update(completion: { (success) in
+                guard success else {
+                    Bartendar.handleSimpleAlert(title: "抱歉", message: "更新失败", on: self?.navigationController)
+                    return
+                }
+                
+                MainQueue.async {
+                    self?.navigationController?.popViewController()
+                    self?.reloadData()
                 }
             })
         }
@@ -319,8 +351,8 @@ private extension TextDetailViewController {
 
 private extension TextDetailViewController {
     func reloadData() {
-        DispatchQueue.main.async {
-            self.lbContent.attributedText = NSAttributedString(string: self.data?.content ?? "", attributes: self.contentAttributes)
+        MainQueue.async {
+            self.lbContent.attributedText = NSAttributedString(string: self.entity?.content ?? "", attributes: self.contentAttributes)
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
             self.infoTableView.reloadData()

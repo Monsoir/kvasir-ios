@@ -11,7 +11,7 @@ import Foundation
 typealias SimpleValidator = ((_ testee: Any) throws -> Void)
 
 func createNotEmptyStringValidator(_ subject: String) -> SimpleValidator {
-    return { (_ testee: Any) in
+    return { (_ testee: Any?) in
         if let source = testee as? String, !source.isEmpty { return }
         throw ValidateError(message: "\(subject)不能为空")
     }

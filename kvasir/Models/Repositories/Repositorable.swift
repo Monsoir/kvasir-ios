@@ -16,11 +16,7 @@ typealias RealmUpdateCompletion = (_ success: Bool) -> Void
 typealias RealmDeleteCompletion = (_ success: Bool) -> Void
 
 typealias RealmCreateInfo = [String: Any]
-
-struct RealmUpdateInfo {
-    var key: String
-    var newValue: Any?
-}
+typealias RealmUpdateInfo = RealmCreateInfo
 
 protocol Repositorable {
     associatedtype Model: RealmBasicObject
@@ -36,7 +32,7 @@ protocol Repositorable {
     
     // U
     func preUpdate(managedModel: Model)
-    func updateOne(managedModel: Model, propertiesExcludingRelations properties: [RealmUpdateInfo], completion: @escaping RealmUpdateCompletion)
+    func updateOne(managedModel: Model, propertiesExcludingRelations properties: RealmUpdateInfo, completion: @escaping RealmUpdateCompletion)
     func queryAllSortingByUpdatedAtDesc(completion: @escaping RealmQueryResultsCompletion<Model>)
     
     static func updateManyToOneRelations<Owner: RealmBasicObject, Digest: RealmWordDigest>(newOwner: Owner,
@@ -87,7 +83,30 @@ extension Repositorable {
                 do {
                     let realm = try Realm()
                     let object = realm.object(ofType: Model.self, forPrimaryKey: id)
-                    completion(true, object)
+                    
+                    guard let entity = object else {
+                        completion(false, nil)
+                        return
+                    }
+                    let entityRef = ThreadSafeReference(to: entity)
+                    
+                    // 将查询出来的对象传回到 main queue 执行
+                    MainQueue.async {
+                        autoreleasepool(invoking: { () -> Void in
+                            do {
+                                let realm2 = try Realm()
+                                guard let entityDeref = realm2.resolve(entityRef) else {
+                                    completion(false, nil)
+                                    return
+                                }
+                                completion(true, entityDeref)
+                            } catch {
+                                completion(false, nil)
+                            }
+                        })
+                    }
+                    
+                    
                 } catch {
                     completion(false, nil)
                 }
@@ -96,7 +115,7 @@ extension Repositorable {
     }
     
     // U
-    func updateOne(managedModel: Model, propertiesExcludingRelations properties: [RealmUpdateInfo], completion: @escaping RealmUpdateCompletion) {
+    func updateOne(managedModel: Model, propertiesExcludingRelations properties: RealmUpdateInfo, completion: @escaping RealmUpdateCompletion) {
         let modelRef = ThreadSafeReference(to: managedModel)
         UserInitiatedGlobalDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
@@ -110,8 +129,8 @@ extension Repositorable {
                     try realm.write {
                         modelDeref.preUpdate()
                         
-                        properties.forEach({ (info) in
-                            modelDeref.setValue(info.newValue, forKey: info.key)
+                        properties.forEach({ (key, value) in
+                            modelDeref.setValue(value, forKey: key)
                         })
                     }
                     
@@ -135,7 +154,9 @@ extension Repositorable {
                         return
                     }
                     
-                    realm.delete(modelDeref)
+                    try realm.write {
+                        realm.delete(modelDeref)
+                    }
                     completion(true)
                 } catch {
                     completion(false)

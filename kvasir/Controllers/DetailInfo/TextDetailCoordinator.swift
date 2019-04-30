@@ -10,16 +10,15 @@ import RealmSwift
 
 class TextDetailCoordinator<Digest: RealmWordDigest> {
     private var digestId = ""
-    private(set) var model: Digest?
-    private var data = TextDetailViewModel(id: "", content: "", bookName: "", authors: "", translators: "", publisher: "", pageIndex: "", updatedAt: "") {
-        didSet {
-            reload?(data)
-        }
-    }
+    private(set) var entity: Digest?
+    private var repository = RealmWordRepository<Digest>()
+    private var putInfo = PutInfo()
     
     private var realmNotificationToken: NotificationToken?
     
-    var reload: ((_ data: TextDetailViewModel) -> Void)?
+    var reload: ((_ entity: Digest?) -> Void)?
+    var errorHandler: ((_ message: String) -> Void)?
+    var entityDeleteHandler: (() -> Void)?
     
     init(digestId: String) {
         self.digestId = digestId
@@ -35,38 +34,67 @@ class TextDetailCoordinator<Digest: RealmWordDigest> {
         self.realmNotificationToken?.invalidate()
     }
     
-    func fetchData() {
-        guard let result = Digest.queryObjectWithPrimaryKey(of: Digest.self, key: digestId) else { return }
+    func put(info: PutInfoScript) throws {
+        let validators: [String: SimpleValidator] = [
+            "content": createNotEmptyStringValidator("\(Digest.toHuman())内容")
+        ]
         
-        func setData(object: Digest) {
-            model = object
-            data = object.display()
-        }
-        
-        realmNotificationToken = result.observe { change in
-            switch change {
-            case .change:
-                setData(object: result)
-            case .deleted: fallthrough
-            case .error:
-                break
+        do {
+            try info.keys.forEach { (key) -> Void in
+                if let validator = validators[key] {
+                    do {
+                        try validator(info[key] as Any)
+                    } catch let e {
+                        throw e
+                    }
+                }
             }
+        } catch let e {
+            throw e
         }
-        setData(object: result)
+        
+        putInfo = info as PutInfo
     }
     
-    func updateContent(text: String, completion: @escaping RealmSaveCompletion) {
-        guard let model = model else {
+    func queryOne(completion: @escaping RealmQueryAnEntityCompletion<Digest>) {
+        guard !digestId.isEmpty else {
+            completion(false, nil)
+            return
+        }
+        
+        repository.queryBy(id: digestId) { [weak self] (success, entity) in
+            guard success else {
+                self?.errorHandler?("没找到\(Digest.toHuman())")
+                return
+            }
+            
+            self?.entity = entity
+            self?.realmNotificationToken = self?.entity?.observe({ (changes) in
+                switch changes {
+                case .change:
+                    self?.reload?(entity)
+                case .error:
+                    self?.errorHandler?("发生未知错误")
+                case .deleted:
+                    self?.entityDeleteHandler?()
+                }
+            })
+            completion(success, entity)
+        }
+    }
+    
+    func update(completion: @escaping RealmUpdateCompletion) {
+        guard let entity = entity else {
             completion(false)
             return
         }
-        model.update(pairs: ["content": text]) { (success) in
+        repository.updateOne(managedModel: entity, propertiesExcludingRelations: putInfo) { (success) in
             completion(success)
         }
     }
     
     func updateBookRef(book: RealmBook, completion: @escaping RealmSaveCompletion) {
-        guard let model = model else {
+        guard let model = entity else {
             completion(false)
             return
         }
@@ -74,33 +102,37 @@ class TextDetailCoordinator<Digest: RealmWordDigest> {
         let newBook = book
         
         if Digest.self == RealmSentence.self {
-            RealmBook.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine())s", inverseKey: "book", elements: [model] as! [RealmSentence] ) { (success) in
+            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine())s", inverseKey: "book", elements: [model] as! [RealmSentence] ) { (success) in
                 completion(success)
             }
         } else if Digest.self == RealmParagraph.self {
-            RealmBook.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine())s", inverseKey: "book", elements: [model] as! [RealmParagraph] ) { (success) in
+            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine())s", inverseKey: "book", elements: [model] as! [RealmParagraph] ) { (success) in
                 completion(success)
             }
         }
     }
     
     func delete(completion: @escaping RealmSaveCompletion) {
-        model?.delete(completion: { (success) in
+        guard let entity = entity else {
+            completion(false)
+            return
+        }
+        repository.deleteOne(managedModel: entity) { (success) in
             completion(success)
-        })
+        }
     }
 }
 
-private extension RealmWordDigest {
-    func display() -> TextDetailViewModel {
-        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-        let authorsString = book?.authors.map({ (ele) -> String in
-            return ele.name
-        }).joined(separator: "\n") ?? ""
-        let translatorsString = book?.translators.map({ (ele) -> String in
-            return ele.name
-        }).joined(separator: "\n") ?? ""
-        let pageIndexString = pageIndex == -1 ? "$$$" : "\(pageIndex)"
-        return TextDetailViewModel(id: id, content: content, bookName: book?.name ?? "", authors: authorsString, translators: translatorsString, publisher: book?.publisher ?? "", pageIndex: pageIndexString, updatedAt: updateAtString)
-    }
-}
+//private extension RealmWordDigest {
+//    func display() -> TextDetailViewModel {
+//        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
+//        let authorsString = book?.authors.map({ (ele) -> String in
+//            return ele.name
+//        }).joined(separator: "\n") ?? ""
+//        let translatorsString = book?.translators.map({ (ele) -> String in
+//            return ele.name
+//        }).joined(separator: "\n") ?? ""
+//        let pageIndexString = pageIndex == -1 ? "$$$" : "\(pageIndex)"
+//        return TextDetailViewModel(id: id, content: content, bookName: book?.name ?? "", authors: authorsString, translators: translatorsString, publisher: book?.publisher ?? "", pageIndex: pageIndexString, updatedAt: updateAtString)
+//    }
+//}
