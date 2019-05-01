@@ -22,28 +22,9 @@ class RealmBook: RealmBasicObject {
     override static func indexedProperties() -> [String] {
         return ["isbn", "name", "localeName"]
     }
-    
-    override func preSave() {
-        super.preSave()
-        isbn.trim()
-        name.trim()
-        localeName.trim()
-        publisher.trim()
-    }
-    
-    func save(completion: @escaping RealmSaveCompletion) {
-        preSave()
-    }
-    
-    override func preUpdate() {
-        super.preUpdate()
-        isbn.trim()
-        name.trim()
-        localeName.trim()
-        publisher.trim()
-        updatedAt = Date()
-    }
-    
+}
+
+extension RealmBook {
     private func createListReadable(elements: [String], separator: String) -> String {
         return elements.joined(separator: separator)
     }

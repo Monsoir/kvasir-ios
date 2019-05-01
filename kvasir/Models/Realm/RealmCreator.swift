@@ -16,36 +16,6 @@ class RealmCreator: RealmBasicObject, KvasirRealmReadable {
         return ["name", "localName"]
     }
     
-    override func preSave() {
-        super.preSave()
-        name.trim()
-        localeName.trim()
-    }
-    
-    func save(completion: @escaping RealmSaveCompletion) {
-        preSave()
-        DispatchQueue.global(qos: .userInitiated).async {
-            autoreleasepool(invoking: { () -> Void in
-                do {
-                    let realm = try Realm()
-                    try realm.write {
-                        realm.add(self)
-                    }
-                    completion(true)
-                } catch {
-                    completion(false)
-                }
-            })
-        }
-    }
-    
-    override func preUpdate() {
-        super.preUpdate()
-        name.trim()
-        localeName.trim()
-        updatedAt = Date()
-    }
-    
     class func toHuman() -> String {
         return "创意者"
     }

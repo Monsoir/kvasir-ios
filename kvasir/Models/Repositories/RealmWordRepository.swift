@@ -12,6 +12,13 @@ import SwifterSwift
 
 class RealmWordRepository<T: RealmWordDigest>: Repositorable {
     typealias Model = T
+    
+    deinit {
+        #if DEBUG
+        print("\(self) deinit")
+        #endif
+    }
+    
     func preCreate(unmanagedModel: Model) {
         unmanagedModel.content.trim()
     }

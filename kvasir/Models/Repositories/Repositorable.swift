@@ -171,7 +171,7 @@ extension Repositorable {
                     }
                     
                     try realm.write {
-                        modelDeref.preUpdate()
+                        self.preUpdate(managedModel: modelDeref)
                         
                         properties.forEach({ (key, value) in
                             modelDeref.setValue(value, forKey: key)

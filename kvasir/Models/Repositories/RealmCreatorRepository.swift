@@ -13,6 +13,12 @@ import SwifterSwift
 class RealmCreatorRepository<T: RealmCreator>: Repositorable {
     typealias Model = T
     
+    deinit {
+        #if DEBUG
+        print("\(self) deinit")
+        #endif
+    }
+    
     func preCreate(unmanagedModel: T) {
         unmanagedModel.name.trim()
         unmanagedModel.localeName.trim()

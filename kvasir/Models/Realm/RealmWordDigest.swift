@@ -8,6 +8,8 @@
 
 import RealmSwift
 
+private let DigestTitleLength = 40
+
 class RealmWordDigest: RealmBasicObject {
     @objc dynamic var content = ""
     @objc dynamic var pageIndex = -1
@@ -28,49 +30,6 @@ class RealmWordDigest: RealmBasicObject {
         return ["content"]
     }
     
-    override func preSave() {
-        super.preSave()
-        content.trim()
-    }
-    
-    func save(with bookId: String?, completion: @escaping RealmSaveCompletion) {
-        preSave()
-        DispatchQueue.global(qos: .userInitiated).async {
-            autoreleasepool(invoking: { () -> Void in
-                do {
-                    let realm = try Realm()
-                    try realm.write {
-                        realm.add(self)
-                        
-                        if let id = bookId, !id.isEmpty {
-                            if let book = realm.object(ofType: RealmBook.self, forPrimaryKey: bookId) {
-                                switch self {
-                                case is RealmSentence:
-                                    book.sentences.append(self as! RealmSentence)
-                                    self.book = book
-                                case is RealmParagraph:
-                                    book.paragraphs.append(self as! RealmParagraph)
-                                    self.book = book
-                                default:
-                                    break
-                                }
-                            }
-                        }
-                    }
-                    completion(true)
-                } catch {
-                    completion(false)
-                }
-            })
-        }
-    }
-    
-    override func preUpdate() {
-        super.preUpdate()
-        content.trim()
-        updatedAt = Date()
-    }
-    
     class func toHuman() -> String {
         return "文字"
     }
@@ -79,18 +38,3 @@ class RealmWordDigest: RealmBasicObject {
         return "word"
     }
 }
-
-private let DigestTitleLength = 40
-//extension RealmWordDigest {
-//    func displayOutline() -> TopListViewModel {
-//        let title: String = {
-//            var temp = self.content.replacingOccurrences(of: "\n", with: " ")
-//            let endIndex = temp.index(temp.startIndex, offsetBy: temp.count < DigestTitleLength ? temp.count : DigestTitleLength)
-//            let range = temp.startIndex ..< endIndex
-//            temp = String(temp[range])
-//            return temp.trimmed
-//        }()
-//        let updateAtString = updatedAt.string(withFormat: "yyyy-MM-dd")
-//        return TopListViewModel(id: id, title: title, bookName: book?.name ?? "", updatedAt: updateAtString)
-//    }
-//}

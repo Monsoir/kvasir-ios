@@ -73,7 +73,7 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UIViewControlle
     public var row: RowOf<EurekaLabelValueModel>!
     public var onDismissCallback: ((UIViewController) -> ())?
     
-    private lazy var results: Results<Creator>? = Creator.allObjectsSortedByUpdatedAt(of: Creator.self)
+    private var results: Results<Creator>?
     private var realmNotificationToken: NotificationToken?
     
     private lazy var tableView: UITableView = { [unowned self] in
@@ -116,7 +116,27 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UIViewControlle
             make.edges.equalToSuperview()
         }
         
-        setupRealmNotification()
+        fetchData()
+    }
+    
+    private func fetchData() {
+        let repository = RealmCreatorRepository<Creator>()
+        repository.queryAllSortingByUpdatedAtDesc { [weak self] (success, results) in
+            guard success, let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.results = results
+            strongSelf.realmNotificationToken = results?.observe({ (changes) in
+                switch changes {
+                case .initial: fallthrough
+                case .update:
+                    strongSelf.tableView.reloadData()
+                case .error:
+                    Bartendar.handleSorryAlert(on: self?.navigationController)
+                }
+            })
+        }
     }
     
     private func setupRealmNotification() {

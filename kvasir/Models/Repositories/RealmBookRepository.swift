@@ -12,6 +12,12 @@ import RealmSwift
 class RealmBookRepository: Repositorable {
     typealias Model = RealmBook
     
+    deinit {
+        #if DEBUG
+        print("\(self) deinit")
+        #endif
+    }
+    
     func preCreate(unmanagedModel: Model) {
         unmanagedModel.name.trim()
         unmanagedModel.localeName.trim()
