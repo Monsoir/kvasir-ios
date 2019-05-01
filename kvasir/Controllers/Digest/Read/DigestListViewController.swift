@@ -22,7 +22,7 @@ class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITab
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
-        view.rowHeight = CGFloat(TopListConstants.cellHeight)
+        view.rowHeight = CGFloat(TextListTableViewCell.height)
         view.delegate = self
         view.dataSource = self
         view.register(TextListTableViewCell.self, forCellReuseIdentifier: TextListTableViewCell.reuseIdentifier())

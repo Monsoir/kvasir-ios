@@ -9,7 +9,7 @@
 import UIKit
 import SwifterSwift
 
-class DetailTableHeaderView: UITableViewHeaderFooterView, Reusable {
+class DigestDetailTableHeaderView: UITableViewHeaderFooterView, Reusable {
     var title: String = "" {
         didSet {
             lbTitle.attributedText = NSAttributedString(string: title, attributes: titleAttributes)
@@ -62,7 +62,7 @@ class DetailTableHeaderView: UITableViewHeaderFooterView, Reusable {
     }
 }
 
-private extension DetailTableHeaderView {
+private extension DigestDetailTableHeaderView {
     func setupSubviews() {
         contentView.addSubview(lbTitle)
     }

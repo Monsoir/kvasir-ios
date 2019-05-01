@@ -11,12 +11,13 @@ import SwifterSwift
 import RealmSwift
 
 private let ShowMost = 5
+private let ScaleFactor = 0.9 as CGFloat
+private let ScaleDuration = 0.1
 
 class TopListViewController: UIViewController {
-    
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
-        view.rowHeight = CGFloat(TopListConstants.cellHeight)
+        view.rowHeight = TopListTableViewCell.cellHeight
         view.delegate = self
         view.dataSource = self
         view.register(TopListTableViewCell.self, forCellReuseIdentifier: TopListTableViewCell.reuseIdentifier())
@@ -257,12 +258,12 @@ extension TopListViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TopListCollectionViewCell else { return }
-        cell.shrinkSize()
+        cell.shrinkSize(scaleX: ScaleFactor, scaleY: ScaleFactor, duration: ScaleDuration)
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TopListCollectionViewCell else { return }
-        cell.restoreSize()
+        cell.restoreSize(duration: ScaleDuration)
     }
 }
 

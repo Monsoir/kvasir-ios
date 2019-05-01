@@ -1,5 +1,5 @@
 //
-//  CreateCreatorCoordinator.swift
+//  CreateDigestCoordinator.swift
 //  kvasir
 //
 //  Created by Monsoir on 4/29/19.
@@ -9,30 +9,30 @@
 import Foundation
 import RealmSwift
 
-class CreateCreatorCoordinator<Creator: RealmCreator> {
-    private lazy var repository = RealmCreatorRepository<Creator>()
-    private(set) var entity: Creator!
+class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
+    private lazy var repository = RealmWordRepository<Digest>()
+    private(set) var entity: Digest!
     private var postInfo = PostInfo()
     
-    init(entity: Creator) {
+    init(entity: Digest) {
         self.entity = entity
     }
     
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
-            "name": createNotEmptyStringValidator("\(Creator.toHuman())名字")
+            "content": createNotEmptyStringValidator("\(Digest.toHuman())内容")
         ]
         
         do {
-            try validators.forEach { (key, value) in
+            try validators.forEach({ (key, value) in
                 let testee = info[key]
                 do {
                     try value(testee as Any)
                 } catch let e {
                     throw e
                 }
-            }
+            })
         } catch let e {
             throw e
         }
@@ -41,10 +41,14 @@ class CreateCreatorCoordinator<Creator: RealmCreator> {
     }
     
     func create(completion: @escaping RealmCreateCompletion) {
-        entity.name = postInfo["name"] as? String ?? ""
-        entity.localeName = postInfo["localeName"] as? String ?? ""
+        entity.content = postInfo["content"] as? String ?? ""
+        entity.pageIndex = postInfo["pageIndex"] as? Int ?? -1
         
-        repository.createOne(unmanagedModel: entity, otherInfo: nil) { (success) in
+        let otherInfo = [
+            "bookId": postInfo["bookId"] as? String ?? "",
+        ]
+        
+        repository.createOne(unmanagedModel: entity, otherInfo: otherInfo) { (success) in
             completion(success)
         }
     }

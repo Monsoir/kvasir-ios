@@ -80,9 +80,9 @@ private func detailDigestControllerFactory(url: URLConvertible, values: [String:
     
     switch identifier {
     case RealmSentence.toMachine():
-        return TextDetailViewController<RealmSentence>(digestId: id)
+        return DigestDetailViewController<RealmSentence>(digestId: id)
     case RealmParagraph.toMachine():
-        return TextDetailViewController<RealmParagraph>(digestId: id)
+        return DigestDetailViewController<RealmParagraph>(digestId: id)
     default:
         return nil
     }

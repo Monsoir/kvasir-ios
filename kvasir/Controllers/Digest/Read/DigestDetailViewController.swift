@@ -23,9 +23,9 @@ private let ContainerHeight = 50
 private let CellIdentifierEditable = "editable"
 private let CellIdentifierUneditable = "uneditable"
 
-class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    private var coordinator: TextDetailCoordinator<Digest>!
+    private var coordinator: DigestDetailCoordinator<Digest>!
     private var entity: Digest? {
         get {
             return coordinator.entity
@@ -72,8 +72,8 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
-        view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable))
-        view.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable))
+        view.register(DigestDetailTableViewCell.self, forCellReuseIdentifier: DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable))
+        view.register(DigestDetailTableViewCell.self, forCellReuseIdentifier: DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable))
         view.tableFooterView = UIView()
         return view
     }()
@@ -126,7 +126,7 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
     }
     
     init(digestId: String) {
-        self.coordinator = TextDetailCoordinator(digestId: digestId)
+        self.coordinator = DigestDetailCoordinator(digestId: digestId)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -147,8 +147,8 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        func configureCell(_ identifier: String, indexPath: IndexPath, label: String, value: String, modifying: Bool?) -> DetailInfoTableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! DetailInfoTableViewCell
+        func configureCell(_ identifier: String, indexPath: IndexPath, label: String, value: String, modifying: Bool?) -> DigestDetailTableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! DigestDetailTableViewCell
             cell.label = label
             cell.value = value
             if let m = modifying {
@@ -161,27 +161,27 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
         guard let entity = entity else { return UITableViewCell() }
         switch indexPath.row {
         case 0:
-            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.name ?? "", modifying: modifying)
+            let cell = configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.name ?? "", modifying: modifying)
             cell.modifyHandler = { [weak self] cell in
                 guard let strongSelf = self else { return }
                 strongSelf.showBookList(cell)
             }
             return cell
         case 1:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createAuthorsReadable("\n") ?? "", modifying: nil)
+            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createAuthorsReadable("\n") ?? "", modifying: nil)
         case 2:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createTranslatorReadabel("\n") ?? "", modifying: nil)
+            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createTranslatorReadabel("\n") ?? "", modifying: nil)
         case 3:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.publisher ?? "", modifying: nil)
+            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.publisher ?? "", modifying: nil)
         case 4:
-            let cell = configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(entity.pageIndex)", modifying: modifying)
+            let cell = configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(entity.pageIndex)", modifying: modifying)
             cell.modifyHandler = { [weak self] cell in
                 guard let strongSelf = self else { return }
                 strongSelf.showPageIndexEdit(cell)
             }
             return cell
         case 5:
-            return configureCell(DetailInfoTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.updateAtReadable, modifying: nil)
+            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.updateAtReadable, modifying: nil)
         default:
             break
         }
@@ -202,7 +202,7 @@ class TextDetailViewController<Digest: RealmWordDigest>: UIViewController, UITab
     }
 }
 
-private extension TextDetailViewController {
+private extension DigestDetailViewController {
     func setupNavigationBar() {
         title = "\(Digest.toHuman()) - 正文"
         setupImmersiveAppearance()
@@ -281,7 +281,7 @@ private extension TextDetailViewController {
     }
 }
 
-private extension TextDetailViewController {
+private extension DigestDetailViewController {
     func deleteDigest() {
         let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
         alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
@@ -328,7 +328,7 @@ private extension TextDetailViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func showBookList(_ sender: DetailInfoTableViewCell) {
+    func showBookList(_ sender: DigestDetailTableViewCell) {
         let vc = BookListViewController { [weak self] (book) in
             guard let strongSelf = self else { return }
             strongSelf.coordinator?.updateBookRef(book: book, completion: { (success) in
@@ -345,11 +345,11 @@ private extension TextDetailViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func showPageIndexEdit(_ sender: DetailInfoTableViewCell) {
+    func showPageIndexEdit(_ sender: DigestDetailTableViewCell) {
     }
 }
 
-private extension TextDetailViewController {
+private extension DigestDetailViewController {
     func reloadData() {
         MainQueue.async {
             self.lbContent.attributedText = NSAttributedString(string: self.entity?.content ?? "", attributes: self.contentAttributes)

@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum KvasirError: Error {
-    case contentEmpty
-}
-
 struct ValidateError: Error {
     let message: String
     

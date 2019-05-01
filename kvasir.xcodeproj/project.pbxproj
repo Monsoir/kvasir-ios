@@ -15,7 +15,6 @@
 		44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
 		44A7ECF82246A5DB00D1C402 /* kvasirTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECF72246A5DB00D1C402 /* kvasirTests.swift */; };
 		44A7ED032246A5DB00D1C402 /* kvasirUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED022246A5DB00D1C402 /* kvasirUITests.swift */; };
-		44A7ED3B2246A62300D1C402 /* TopListConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED122246A62200D1C402 /* TopListConst.swift */; };
 		44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED1A2246A62300D1C402 /* ButtonBaker.swift */; };
 		44A7ED402246A62300D1C402 /* AppDelegate+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED1C2246A62300D1C402 /* AppDelegate+Appearance.swift */; };
 		44A7ED412246A62300D1C402 /* AppDelegate+SetupControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED1D2246A62300D1C402 /* AppDelegate+SetupControllers.swift */; };
@@ -27,7 +26,7 @@
 		44A7ED4B2246A62300D1C402 /* TextListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */; };
 		44A7ED4E2246A62300D1C402 /* DigestListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED312246A62300D1C402 /* DigestListViewController.swift */; };
 		44A7ED4F2246A62300D1C402 /* TopListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED322246A62300D1C402 /* TopListViewController.swift */; };
-		44A7ED502246A62300D1C402 /* TextDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED332246A62300D1C402 /* TextDetailViewController.swift */; };
+		44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED332246A62300D1C402 /* DigestDetailViewController.swift */; };
 		44A7ED512246A62300D1C402 /* DigestEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED342246A62300D1C402 /* DigestEditViewController.swift */; };
 		44A7ED522246A62300D1C402 /* TopListCellCarrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED362246A62300D1C402 /* TopListCellCarrier.swift */; };
 		44A7ED532246A62300D1C402 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED382246A62300D1C402 /* Reusable.swift */; };
@@ -36,10 +35,9 @@
 		44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2BFBD2268996A00B584F5 /* AppDelegate+RealmConfig.swift */; };
 		44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2BFBF2268A1A600B584F5 /* RealmParagraph.swift */; };
 		44B2BFCC22698BA400B584F5 /* AppDelegate+SetupControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED1D2246A62300D1C402 /* AppDelegate+SetupControllers.swift */; };
-		44B2BFCD22698BA400B584F5 /* TopListConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED122246A62200D1C402 /* TopListConst.swift */; };
 		44B2BFCF22698BA400B584F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECE42246A5D800D1C402 /* ViewController.swift */; };
 		44B2BFD022698BA400B584F5 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED382246A62300D1C402 /* Reusable.swift */; };
-		44B2BFD122698BA400B584F5 /* TextDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED332246A62300D1C402 /* TextDetailViewController.swift */; };
+		44B2BFD122698BA400B584F5 /* DigestDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED332246A62300D1C402 /* DigestDetailViewController.swift */; };
 		44B2BFD322698BA400B584F5 /* ButtonBaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED1A2246A62300D1C402 /* ButtonBaker.swift */; };
 		44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED292246A62300D1C402 /* TopAlignedLabel.swift */; };
 		44B2BFD722698BA400B584F5 /* AppDelegate+RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2BFBD2268996A00B584F5 /* AppDelegate+RealmConfig.swift */; };
@@ -60,20 +58,18 @@
 		44B2BFF322698BA400B584F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44B2BFF422698BA400B584F5 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ED552246AD2300D1C402 /* tessdata */; };
 		44B2BFF522698BA400B584F5 /* Font Awesome 5 Free-Solid-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = 44B2BFB92268686200B584F5 /* Font Awesome 5 Free-Solid-900.otf */; };
-		44B2C011226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DetailTableHeaderView.swift */; };
-		44B2C012226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DetailTableHeaderView.swift */; };
+		44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */; };
+		44B2C012226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */; };
 		44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C017226C2BF100B584F5 /* AppDelegate+Navigator.swift */; };
 		44B2C01A226C2C2000B584F5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* Routes.swift */; };
 		44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */; };
 		44B2C01E226C332800B584F5 /* RealmBasicObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01D226C332800B584F5 /* RealmBasicObject.swift */; };
 		44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C026226C47C100B584F5 /* TopListCoordinator.swift */; };
 		44B2C028226C47C100B584F5 /* TopListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C026226C47C100B584F5 /* TopListCoordinator.swift */; };
-		44B2C02A226C5AF800B584F5 /* TextDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */; };
-		44B2C02B226C5AF800B584F5 /* TextDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */; };
-		44B2C02D226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */; };
-		44B2C02E226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */; };
-		44B2C036226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */; };
-		44B2C037226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */; };
+		44B2C02D226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02C226C5B5C00B584F5 /* DigestDetailCoordinator.swift */; };
+		44B2C02E226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C02C226C5B5C00B584F5 /* DigestDetailCoordinator.swift */; };
+		44B2C036226CB38900B584F5 /* DigestDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C035226CB38900B584F5 /* DigestDetailTableViewCell.swift */; };
+		44B2C037226CB38900B584F5 /* DigestDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C035226CB38900B584F5 /* DigestDetailTableViewCell.swift */; };
 		44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C03E226EE99700B584F5 /* TypeAlias.swift */; };
 		44B2C040226EE99700B584F5 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C03E226EE99700B584F5 /* TypeAlias.swift */; };
 		44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C042226EE9DA00B584F5 /* NSAttributedStringEx.swift */; };
@@ -99,8 +95,6 @@
 		44B2C069226F037D00B584F5 /* ExpandedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C067226F037D00B584F5 /* ExpandedLabel.swift */; };
 		44B2C06B226F12F500B584F5 /* KvasirEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06A226F12F500B584F5 /* KvasirEditor.swift */; };
 		44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06A226F12F500B584F5 /* KvasirEditor.swift */; };
-		44B2C07022719A8D00B584F5 /* UIViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06F22719A8D00B584F5 /* UIViewEx.swift */; };
-		44B2C07122719A8D00B584F5 /* UIViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C06F22719A8D00B584F5 /* UIViewEx.swift */; };
 		44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07222719AC100B584F5 /* UIViewAbilities.swift */; };
 		44B2C07422719AC100B584F5 /* UIViewAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C07222719AC100B584F5 /* UIViewAbilities.swift */; };
 		44B2C0762271A93500B584F5 /* RealmCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C0752271A93500B584F5 /* RealmCreator.swift */; };
@@ -194,7 +188,6 @@
 		44A7ECFE2246A5DB00D1C402 /* kvasirUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = kvasirUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44A7ED022246A5DB00D1C402 /* kvasirUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kvasirUITests.swift; sourceTree = "<group>"; };
 		44A7ED042246A5DB00D1C402 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		44A7ED122246A62200D1C402 /* TopListConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopListConst.swift; sourceTree = "<group>"; };
 		44A7ED1A2246A62300D1C402 /* ButtonBaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonBaker.swift; sourceTree = "<group>"; };
 		44A7ED1C2246A62300D1C402 /* AppDelegate+Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Appearance.swift"; sourceTree = "<group>"; };
 		44A7ED1D2246A62300D1C402 /* AppDelegate+SetupControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppDelegate+SetupControllers.swift"; sourceTree = "<group>"; };
@@ -206,7 +199,7 @@
 		44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextListTableViewCell.swift; sourceTree = "<group>"; };
 		44A7ED312246A62300D1C402 /* DigestListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestListViewController.swift; sourceTree = "<group>"; };
 		44A7ED322246A62300D1C402 /* TopListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopListViewController.swift; sourceTree = "<group>"; };
-		44A7ED332246A62300D1C402 /* TextDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextDetailViewController.swift; sourceTree = "<group>"; };
+		44A7ED332246A62300D1C402 /* DigestDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestDetailViewController.swift; sourceTree = "<group>"; };
 		44A7ED342246A62300D1C402 /* DigestEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestEditViewController.swift; sourceTree = "<group>"; };
 		44A7ED362246A62300D1C402 /* TopListCellCarrier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopListCellCarrier.swift; sourceTree = "<group>"; };
 		44A7ED382246A62300D1C402 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
@@ -216,15 +209,14 @@
 		44B2BFBF2268A1A600B584F5 /* RealmParagraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmParagraph.swift; sourceTree = "<group>"; };
 		44B2BFFA22698BA400B584F5 /* kvasir-with-tesseract.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "kvasir-with-tesseract.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		44B2BFFB22698BA400B584F5 /* kvasir copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "kvasir copy-Info.plist"; path = "/Users/monsoir/Developer/iOS/kvasir/kvasir copy-Info.plist"; sourceTree = "<absolute>"; };
-		44B2C010226B1FEE00B584F5 /* DetailTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableHeaderView.swift; sourceTree = "<group>"; };
+		44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailTableHeaderView.swift; sourceTree = "<group>"; };
 		44B2C017226C2BF100B584F5 /* AppDelegate+Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Navigator.swift"; sourceTree = "<group>"; };
 		44B2C019226C2C2000B584F5 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirRealmProtocol.swift; sourceTree = "<group>"; };
 		44B2C01D226C332800B584F5 /* RealmBasicObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBasicObject.swift; sourceTree = "<group>"; };
 		44B2C026226C47C100B584F5 /* TopListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListCoordinator.swift; sourceTree = "<group>"; };
-		44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetailViewModel.swift; sourceTree = "<group>"; };
-		44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetailCoordinator.swift; sourceTree = "<group>"; };
-		44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoTableViewCell.swift; sourceTree = "<group>"; };
+		44B2C02C226C5B5C00B584F5 /* DigestDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailCoordinator.swift; sourceTree = "<group>"; };
+		44B2C035226CB38900B584F5 /* DigestDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailTableViewCell.swift; sourceTree = "<group>"; };
 		44B2C03E226EE99700B584F5 /* TypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
 		44B2C042226EE9DA00B584F5 /* NSAttributedStringEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedStringEx.swift; sourceTree = "<group>"; };
 		44B2C045226EE9F400B584F5 /* UIViewControllerEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerEx.swift; sourceTree = "<group>"; };
@@ -237,7 +229,6 @@
 		44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTypeEmptyBackgroundView.swift; sourceTree = "<group>"; };
 		44B2C067226F037D00B584F5 /* ExpandedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedLabel.swift; sourceTree = "<group>"; };
 		44B2C06A226F12F500B584F5 /* KvasirEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirEditor.swift; sourceTree = "<group>"; };
-		44B2C06F22719A8D00B584F5 /* UIViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewEx.swift; sourceTree = "<group>"; };
 		44B2C07222719AC100B584F5 /* UIViewAbilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewAbilities.swift; sourceTree = "<group>"; };
 		44B2C0752271A93500B584F5 /* RealmCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCreator.swift; sourceTree = "<group>"; };
 		44B2C0782271AA5500B584F5 /* RealmBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBook.swift; sourceTree = "<group>"; };
@@ -312,6 +303,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4408B46122794C1C00C5EF68 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */,
+				44B2C035226CB38900B584F5 /* DigestDetailTableViewCell.swift */,
+				44A7ED282246A62300D1C402 /* TopListTableViewCell.swift */,
+				44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */,
+				44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */,
+			);
+			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		4408B46222794C6700C5EF68 /* TableViewHeader */ = {
+			isa = PBXGroup;
+			children = (
+				44A7ED272246A62300D1C402 /* TopListTableViewHeader.swift */,
+				44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */,
+			);
+			path = TableViewHeader;
+			sourceTree = "<group>";
+		};
+		4408B46322794CB400C5EF68 /* Label */ = {
+			isa = PBXGroup;
+			children = (
+				44A7ED292246A62300D1C402 /* TopAlignedLabel.swift */,
+				44B2C067226F037D00B584F5 /* ExpandedLabel.swift */,
+			);
+			path = Label;
+			sourceTree = "<group>";
+		};
 		444B760A226491D0004B9CD4 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -403,7 +424,6 @@
 			children = (
 				44B2C058226EEE1C00B584F5 /* Routes */,
 				44B2C050226EEBC900B584F5 /* Constants */,
-				44A7ED122246A62200D1C402 /* TopListConst.swift */,
 				44B2C052226EEBFE00B584F5 /* Shortcuts.swift */,
 			);
 			path = Config;
@@ -444,15 +464,9 @@
 		44A7ED262246A62300D1C402 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				44B2C07F2271B2A800B584F5 /* Books */,
-				44A7ED272246A62300D1C402 /* TopListTableViewHeader.swift */,
-				44B2C010226B1FEE00B584F5 /* DetailTableHeaderView.swift */,
-				44B2C035226CB38900B584F5 /* DetailInfoTableViewCell.swift */,
-				44A7ED282246A62300D1C402 /* TopListTableViewCell.swift */,
-				44A7ED292246A62300D1C402 /* TopAlignedLabel.swift */,
-				44B2C067226F037D00B584F5 /* ExpandedLabel.swift */,
-				44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */,
-				44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */,
+				4408B46322794CB400C5EF68 /* Label */,
+				4408B46222794C6700C5EF68 /* TableViewHeader */,
+				4408B46122794C1C00C5EF68 /* TableViewCell */,
 				44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */,
 				44B2C06A226F12F500B584F5 /* KvasirEditor.swift */,
 			);
@@ -474,7 +488,6 @@
 				44B2C0912272DCF900B584F5 /* Authors */,
 				44B2C07E2271B1D200B584F5 /* Books */,
 				44B2C01F226C45D600B584F5 /* TopList */,
-				44B2C022226C461300B584F5 /* DetailInfo */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -496,16 +509,6 @@
 			path = TopList;
 			sourceTree = "<group>";
 		};
-		44B2C022226C461300B584F5 /* DetailInfo */ = {
-			isa = PBXGroup;
-			children = (
-				44A7ED332246A62300D1C402 /* TextDetailViewController.swift */,
-				44B2C029226C5AF800B584F5 /* TextDetailViewModel.swift */,
-				44B2C02C226C5B5C00B584F5 /* TextDetailCoordinator.swift */,
-			);
-			path = DetailInfo;
-			sourceTree = "<group>";
-		};
 		44B2C03C226EE96500B584F5 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
@@ -524,7 +527,6 @@
 				44B2C042226EE9DA00B584F5 /* NSAttributedStringEx.swift */,
 				44B2C045226EE9F400B584F5 /* UIViewControllerEx.swift */,
 				44B2C048226EEA1F00B584F5 /* UIImageEx.swift */,
-				44B2C06F22719A8D00B584F5 /* UIViewEx.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -571,15 +573,7 @@
 			isa = PBXGroup;
 			children = (
 				44ECD961227702FF00618576 /* Read */,
-				44ECD960227702F500618576 /* Create */,
-			);
-			path = Books;
-			sourceTree = "<group>";
-		};
-		44B2C07F2271B2A800B584F5 /* Books */ = {
-			isa = PBXGroup;
-			children = (
-				44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */,
+				44ECD960227702F500618576 /* Write */,
 			);
 			path = Books;
 			sourceTree = "<group>";
@@ -588,7 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				44ECD9532276FB4D00618576 /* Read */,
-				44ECD9522276FB4600618576 /* Create */,
+				44ECD9522276FB4600618576 /* Write */,
 			);
 			path = Authors;
 			sourceTree = "<group>";
@@ -612,13 +606,13 @@
 			path = Repositories;
 			sourceTree = "<group>";
 		};
-		44ECD9522276FB4600618576 /* Create */ = {
+		44ECD9522276FB4600618576 /* Write */ = {
 			isa = PBXGroup;
 			children = (
 				44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */,
 				44ECD96E22771A4300618576 /* CreateCreatorCoordinator.swift */,
 			);
-			path = Create;
+			path = Write;
 			sourceTree = "<group>";
 		};
 		44ECD9532276FB4D00618576 /* Read */ = {
@@ -630,13 +624,13 @@
 			path = Read;
 			sourceTree = "<group>";
 		};
-		44ECD960227702F500618576 /* Create */ = {
+		44ECD960227702F500618576 /* Write */ = {
 			isa = PBXGroup;
 			children = (
 				44B2C0872271EEDE00B584F5 /* CreateBookViewController.swift */,
 				44ECD97722782CC700618576 /* CreateBookCoordinator.swift */,
 			);
-			path = Create;
+			path = Write;
 			sourceTree = "<group>";
 		};
 		44ECD961227702FF00618576 /* Read */ = {
@@ -651,7 +645,7 @@
 		44ECD9682277100000618576 /* Digest */ = {
 			isa = PBXGroup;
 			children = (
-				44ECD96A2277101000618576 /* Create */,
+				44ECD96A2277101000618576 /* Write */,
 				44ECD9692277100700618576 /* Read */,
 			);
 			path = Digest;
@@ -662,11 +656,13 @@
 			children = (
 				44A7ED312246A62300D1C402 /* DigestListViewController.swift */,
 				44ECD94E2276F66000618576 /* DigestListCoordinator.swift */,
+				44A7ED332246A62300D1C402 /* DigestDetailViewController.swift */,
+				44B2C02C226C5B5C00B584F5 /* DigestDetailCoordinator.swift */,
 			);
 			path = Read;
 			sourceTree = "<group>";
 		};
-		44ECD96A2277101000618576 /* Create */ = {
+		44ECD96A2277101000618576 /* Write */ = {
 			isa = PBXGroup;
 			children = (
 				44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */,
@@ -674,7 +670,7 @@
 				444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */,
 				44A7ED342246A62300D1C402 /* DigestEditViewController.swift */,
 			);
-			path = Create;
+			path = Write;
 			sourceTree = "<group>";
 		};
 		656747A6593936160D864F63 /* Frameworks */ = {
@@ -1020,14 +1016,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				44B2C06B226F12F500B584F5 /* KvasirEditor.swift in Sources */,
-				44B2C02A226C5AF800B584F5 /* TextDetailViewModel.swift in Sources */,
 				44A7ED412246A62300D1C402 /* AppDelegate+SetupControllers.swift in Sources */,
-				44A7ED3B2246A62300D1C402 /* TopListConst.swift in Sources */,
 				44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */,
-				44B2C036226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */,
+				44B2C036226CB38900B584F5 /* DigestDetailTableViewCell.swift in Sources */,
 				44A7ED532246A62300D1C402 /* Reusable.swift in Sources */,
 				44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */,
-				44A7ED502246A62300D1C402 /* TextDetailViewController.swift in Sources */,
+				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
 				44ECD96C227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
 				44B2C05E226EEE9100B584F5 /* RouteConstants.swift in Sources */,
 				44B2C01A226C2C2000B584F5 /* Routes.swift in Sources */,
@@ -1079,16 +1073,15 @@
 				44A7ED472246A62300D1C402 /* TopListTableViewHeader.swift in Sources */,
 				44ECD9722277201000618576 /* MiscellaneousProtocols.swift in Sources */,
 				444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */,
-				44B2C02D226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */,
+				44B2C02D226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */,
 				44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */,
 				44B2C0762271A93500B584F5 /* RealmCreator.swift in Sources */,
 				44A7ED4A2246A62300D1C402 /* TopListCollectionViewCell.swift in Sources */,
 				44B2C053226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
-				44B2C011226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */,
+				44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
 				44ECD9492276D84600618576 /* Repositorable.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
-				44B2C07022719A8D00B584F5 /* UIViewEx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1114,21 +1107,19 @@
 			files = (
 				44B2BFCC22698BA400B584F5 /* AppDelegate+SetupControllers.swift in Sources */,
 				44B2C057226EEDE100B584F5 /* ModelConstants.swift in Sources */,
-				44B2BFCD22698BA400B584F5 /* TopListConst.swift in Sources */,
 				44B2C09C2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
 				44B2C0902272DC7600B584F5 /* RealmTranslator.swift in Sources */,
 				44ECD9502276F66000618576 /* DigestListCoordinator.swift in Sources */,
 				44B2BFCF22698BA400B584F5 /* ViewController.swift in Sources */,
 				44B2BFD022698BA400B584F5 /* Reusable.swift in Sources */,
 				44ECD96D227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
-				44B2BFD122698BA400B584F5 /* TextDetailViewController.swift in Sources */,
+				44B2BFD122698BA400B584F5 /* DigestDetailViewController.swift in Sources */,
 				44B2BFD322698BA400B584F5 /* ButtonBaker.swift in Sources */,
 				44B2C0942272DD0400B584F5 /* CreatorListViewController.swift in Sources */,
 				44ECD97022771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
 				44ECD9642277031100618576 /* BookListCoordinator.swift in Sources */,
 				44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */,
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
-				44B2C07122719A8D00B584F5 /* UIViewEx.swift in Sources */,
 				44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
 				44ECD9732277201000618576 /* MiscellaneousProtocols.swift in Sources */,
 				44B2C07422719AC100B584F5 /* UIViewAbilities.swift in Sources */,
@@ -1136,7 +1127,6 @@
 				44B2C04F226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2C04A226EEA1F00B584F5 /* UIImageEx.swift in Sources */,
 				44ECD9562276FB6B00618576 /* CreateListCoordinator.swift in Sources */,
-				44B2C02B226C5AF800B584F5 /* TextDetailViewModel.swift in Sources */,
 				44ECD97922782CC700618576 /* CreateBookCoordinator.swift in Sources */,
 				44ECD9462275804F00618576 /* Bartendar.swift in Sources */,
 				44B2BFD722698BA400B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
@@ -1151,11 +1141,11 @@
 				44B2C0822271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
 				44B2C028226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				44B2C0892271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
-				44B2C012226B1FEE00B584F5 /* DetailTableHeaderView.swift in Sources */,
+				44B2C012226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
 				44ECD94A2276D84600618576 /* Repositorable.swift in Sources */,
 				44B2C07D2271B1C800B584F5 /* BookListViewController.swift in Sources */,
 				44B2BFDF22698BA400B584F5 /* RealmParagraph.swift in Sources */,
-				44B2C037226CB38900B584F5 /* DetailInfoTableViewCell.swift in Sources */,
+				44B2C037226CB38900B584F5 /* DigestDetailTableViewCell.swift in Sources */,
 				44B2BFE022698BA400B584F5 /* DigestListViewController.swift in Sources */,
 				44B2BFE122698BA400B584F5 /* AppDelegate+Appearance.swift in Sources */,
 				44B2C0772271A93500B584F5 /* RealmCreator.swift in Sources */,
@@ -1167,7 +1157,7 @@
 				44B2C054226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2BFE522698BA400B584F5 /* AppDelegate.swift in Sources */,
 				44B2BFE722698BA400B584F5 /* TopListCellCarrier.swift in Sources */,
-				44B2C02E226C5B5C00B584F5 /* TextDetailCoordinator.swift in Sources */,
+				44B2C02E226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */,
 				44B2BFE922698BA400B584F5 /* TopListTableViewHeader.swift in Sources */,
 				44B2BFEA22698BA400B584F5 /* RealmSentence.swift in Sources */,
 				44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,

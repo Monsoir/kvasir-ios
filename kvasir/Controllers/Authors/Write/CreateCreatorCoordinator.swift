@@ -1,5 +1,5 @@
 //
-//  CreateDigestCoordinator.swift
+//  CreateCreatorCoordinator.swift
 //  kvasir
 //
 //  Created by Monsoir on 4/29/19.
@@ -9,30 +9,30 @@
 import Foundation
 import RealmSwift
 
-class CreateDigestCoordinator<Digest: RealmWordDigest> {
-    private lazy var repository = RealmWordRepository<Digest>()
-    private(set) var entity: Digest!
+class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
+    private lazy var repository = RealmCreatorRepository<Creator>()
+    private(set) var entity: Creator!
     private var postInfo = PostInfo()
     
-    init(entity: Digest) {
+    init(entity: Creator) {
         self.entity = entity
     }
     
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
-            "content": createNotEmptyStringValidator("\(Digest.toHuman())内容")
+            "name": createNotEmptyStringValidator("\(Creator.toHuman())名字")
         ]
         
         do {
-            try validators.forEach({ (key, value) in
+            try validators.forEach { (key, value) in
                 let testee = info[key]
                 do {
                     try value(testee as Any)
                 } catch let e {
                     throw e
                 }
-            })
+            }
         } catch let e {
             throw e
         }
@@ -41,14 +41,10 @@ class CreateDigestCoordinator<Digest: RealmWordDigest> {
     }
     
     func create(completion: @escaping RealmCreateCompletion) {
-        entity.content = postInfo["content"] as? String ?? ""
-        entity.pageIndex = postInfo["pageIndex"] as? Int ?? -1
+        entity.name = postInfo["name"] as? String ?? ""
+        entity.localeName = postInfo["localeName"] as? String ?? ""
         
-        let otherInfo = [
-            "bookId": postInfo["bookId"] as? String ?? "",
-        ]
-        
-        repository.createOne(unmanagedModel: entity, otherInfo: otherInfo) { (success) in
+        repository.createOne(unmanagedModel: entity, otherInfo: nil) { (success) in
             completion(success)
         }
     }

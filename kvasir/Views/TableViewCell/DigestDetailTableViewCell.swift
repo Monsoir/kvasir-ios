@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailInfoTableViewCell: UITableViewCell {
+class DigestDetailTableViewCell: UITableViewCell {
     var label: String? {
         didSet {
             lbLabel.text = label
@@ -33,7 +33,7 @@ class DetailInfoTableViewCell: UITableViewCell {
         }
     }
     
-    var modifyHandler: ((_ cell: DetailInfoTableViewCell) -> Void)?
+    var modifyHandler: ((_ cell: DigestDetailTableViewCell) -> Void)?
     
     private lazy var lbLabel: UILabel = {
         let label = UILabel()

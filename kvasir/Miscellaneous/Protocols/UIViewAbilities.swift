@@ -8,7 +8,22 @@
 
 import UIKit
 
-protocol ViewScalable {
-    func shrinkSize()
-    func restoreSize()
+protocol ViewScalable where Self: UIView {
+    func shrinkSize(scaleX: CGFloat, scaleY: CGFloat, duration: TimeInterval)
+    func restoreSize(duration: TimeInterval)
+}
+
+extension ViewScalable {
+    func shrinkSize(scaleX: CGFloat, scaleY: CGFloat, duration: TimeInterval) {
+        let scaleTransform = CGAffineTransform(scaleX: scaleX, y: scaleY)
+        UIView.animate(withDuration: duration) {
+            self.transform = scaleTransform
+        }
+    }
+    
+    func restoreSize(duration: TimeInterval) {
+        UIView.animate(withDuration: duration) {
+            self.transform = CGAffineTransform.identity
+        }
+    }
 }

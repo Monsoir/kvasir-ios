@@ -9,7 +9,12 @@
 import UIKit
 import SwifterSwift
 
+private let ScaleFactor = 0.9 as CGFloat
+private let ScaleDuration = 0.1
+
 class TextListTableViewCell: UITableViewCell, ViewScalable {
+    static let height = 200
+    
     var title: String? = nil {
         didSet {
             lbTitle.text = title
@@ -92,7 +97,7 @@ class TextListTableViewCell: UITableViewCell, ViewScalable {
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        highlighted ? shrinkSize() : restoreSize()
+        highlighted ? shrinkSize(scaleX: ScaleFactor, scaleY: ScaleFactor, duration: ScaleDuration) : restoreSize(duration: ScaleDuration)
     }
     
     override func layoutSubviews() {

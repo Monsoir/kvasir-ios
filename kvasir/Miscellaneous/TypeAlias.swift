@@ -10,9 +10,3 @@ import Foundation
 
 typealias StringAttributes = [NSAttributedString.Key : NSObject]
 
-typealias PostInfoScript = [String: Any?]
-typealias PostInfo = [String: Any]
-
-typealias PutInfoScript = [String: Any?]
-typealias PutInfo = [String: Any]
-

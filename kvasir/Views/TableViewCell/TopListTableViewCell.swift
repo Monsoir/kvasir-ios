@@ -11,8 +11,11 @@ import SnapKit
 
 private let CellSpacings = 10 as CGFloat
 private let CellWidth = 300 as CGFloat
+private let CollectionViewMargin = 10 as CGFloat
 
 class TopListTableViewCell: UITableViewCell {
+    static let cellHeight = 200.0 as CGFloat
+    
     var carrier: TopListCellCarrier? = nil {
         didSet {
             guard let c = carrier else {
@@ -56,11 +59,11 @@ private extension TopListTableViewCell {
         selectionStyle = .none
         
         let collectionViewLayout: UICollectionViewLayout = {
-            let layout = UICollectionViewFlowLayout();
-            layout.itemSize = CGSize(width: ScreenWidth - 100, height: TopListConstants.cellHeight - CellSpacings)
+            let layout = UICollectionViewFlowLayout()
+            layout.itemSize = CGSize(width: ScreenWidth - 100, height: type(of: self).cellHeight - CellSpacings)
             layout.scrollDirection = .horizontal
             layout.minimumLineSpacing = CellSpacings
-            layout.sectionInset = UIEdgeInsets(top: 0, left: TopListConstants.collectionViewMargin, bottom: 0, right: TopListConstants.collectionViewMargin)
+            layout.sectionInset = UIEdgeInsets(top: 0, left: CollectionViewMargin, bottom: 0, right: CollectionViewMargin)
             return layout
         }()
         collectionView = {
