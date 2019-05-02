@@ -27,7 +27,7 @@ class RealmBookRepository: Repositorable {
     
     func createOne(unmanagedModel: Model, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
         preCreate(unmanagedModel: unmanagedModel)
-        UserInitiatedGlobalDispatchQueue.async {
+        GlobalUserInitiatedDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 
                 let authorIds = otherInfo?["authorIds"] as? [String] ?? []

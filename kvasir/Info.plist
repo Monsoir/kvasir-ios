@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>允许语斋使用照相机捕捉文字</string>
+	<string>请允许语斋使用照相机捕捉文字</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Font Awesome 5 Free.otf</string>

@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+import Eureka
 
 private let SectionTitles = [
     "书名",
@@ -346,6 +347,47 @@ private extension DigestDetailViewController {
     }
     
     func showPageIndexEdit(_ sender: DigestDetailTableViewCell) {
+        let completion: FieldEditCompletion = { [weak self] newValue in
+            guard let strongSelf = self else { return }
+            MainQueue.async {
+                let putInfo = [
+                    "pageIndex": newValue as? Int ?? -1
+                ]
+                do {
+                    try strongSelf.coordinator.put(info: putInfo)
+                } catch let e as ValidateError {
+                    Bartendar.handleTipAlert(message: e.message, on: strongSelf.navigationController)
+                    return
+                } catch {
+                    Bartendar.handleSorryAlert(on: strongSelf.navigationController)
+                    return
+                }
+                strongSelf.coordinator.update(completion: { (success) in
+                    guard success else {
+                        Bartendar.handleSorryAlert(message: "更新失败", on: strongSelf.navigationController)
+                        return
+                    }
+                    MainQueue.async {
+                        strongSelf.navigationController?.popViewController()
+                    }
+                })
+            }
+        }
+        
+        let validateErrorHandler: FieldEditValidatorHandler = { [weak self] messages in
+            guard let strongSelf = self else { return }
+            Bartendar.handleTipAlert(message: messages.first ?? "", on: strongSelf.navigationController)
+        }
+        
+        let info: [String: Any?] = [
+            FieldEditInfoPreDefineKeys.title: "摘录页码",
+            FieldEditInfoPreDefineKeys.oldValue: entity?.pageIndex ?? 0,
+            FieldEditInfoPreDefineKeys.completion: completion,
+            FieldEditInfoPreDefineKeys.validateErrorHandler: validateErrorHandler,
+            "greaterOrEqualThan": 0,
+        ]
+        let vc = FieldEditFactory.createAFieldEditController(of: .digit, editInfo: info)
+        navigationController?.pushViewController(vc)
     }
 }
 

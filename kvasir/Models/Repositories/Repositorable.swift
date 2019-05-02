@@ -99,7 +99,7 @@ extension Repositorable {
     
     // R
     func queryAll(completion: @escaping RealmQueryResultsCompletion<Model>) {
-        UserInitiatedGlobalDispatchQueue.async {
+        GlobalUserInitiatedDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -118,7 +118,7 @@ extension Repositorable {
     }
     
     func queryAllSortingByUpdatedAtDesc(completion: @escaping RealmQueryResultsCompletion<Model>) {
-        UserInitiatedGlobalDispatchQueue.async {
+        GlobalUserInitiatedDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -136,7 +136,7 @@ extension Repositorable {
     }
     
     func queryBy(id: String, completion: @escaping RealmQueryAnEntityCompletion<Model>) {
-        UserInitiatedGlobalDispatchQueue.async {
+        GlobalUserInitiatedDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -161,7 +161,7 @@ extension Repositorable {
     // U
     func updateOne(managedModel: Model, propertiesExcludingRelations properties: RealmUpdateInfo, completion: @escaping RealmUpdateCompletion) {
         let modelRef = ThreadSafeReference(to: managedModel)
-        UserInitiatedGlobalDispatchQueue.async {
+        GlobalUserInitiatedDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -189,7 +189,7 @@ extension Repositorable {
     // D
     func deleteOne(managedModel: Model, completion: @escaping RealmDeleteCompletion) {
         let modelRef = ThreadSafeReference(to: managedModel)
-        UserInitiatedGlobalDispatchQueue.async {
+        GlobalUserInitiatedDispatchQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()

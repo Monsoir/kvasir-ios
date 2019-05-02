@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4408B4672279630800C5EF68 /* FieldEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4662279630800C5EF68 /* FieldEditController.swift */; };
+		4408B4682279630800C5EF68 /* FieldEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4662279630800C5EF68 /* FieldEditController.swift */; };
+		4408B46A2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */; };
+		4408B46B2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */; };
+		4408B46D2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B46C2279794900C5EF68 /* AbstractFieldEditViewController.swift */; };
+		4408B46E2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B46C2279794900C5EF68 /* AbstractFieldEditViewController.swift */; };
+		4408B4742279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4732279B0D200C5EF68 /* CodeScannerViewController.swift */; };
+		4408B4752279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4732279B0D200C5EF68 /* CodeScannerViewController.swift */; };
+		4408B4772279B0E600C5EF68 /* CodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4762279B0E600C5EF68 /* CodeScanner.swift */; };
+		4408B4782279B0E600C5EF68 /* CodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4762279B0E600C5EF68 /* CodeScanner.swift */; };
+		4408B47A227ACC6500C5EF68 /* CodeScannerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B479227ACC6500C5EF68 /* CodeScannerOverlay.swift */; };
 		444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760B226491F0004B9CD4 /* RealmSentence.swift */; };
 		444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760D22649558004B9CD4 /* RealmWordDigest.swift */; };
 		444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */; };
@@ -173,6 +184,12 @@
 		1F1282C45A61E36D3A6A6B70 /* Pods-kvasir-with-tesseract.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir-with-tesseract.release.xcconfig"; path = "Target Support Files/Pods-kvasir-with-tesseract/Pods-kvasir-with-tesseract.release.xcconfig"; sourceTree = "<group>"; };
 		376529B7B79EE921298D9C84 /* Pods-kvasirTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirTests.release.xcconfig"; path = "Target Support Files/Pods-kvasirTests/Pods-kvasirTests.release.xcconfig"; sourceTree = "<group>"; };
 		3C8C50EAFD86CD02063D1765 /* Pods-kvasirUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.release.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.release.xcconfig"; sourceTree = "<group>"; };
+		4408B4662279630800C5EF68 /* FieldEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldEditController.swift; sourceTree = "<group>"; };
+		4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitFieldEditViewController.swift; sourceTree = "<group>"; };
+		4408B46C2279794900C5EF68 /* AbstractFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractFieldEditViewController.swift; sourceTree = "<group>"; };
+		4408B4732279B0D200C5EF68 /* CodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScannerViewController.swift; sourceTree = "<group>"; };
+		4408B4762279B0E600C5EF68 /* CodeScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeScanner.swift; sourceTree = "<group>"; };
+		4408B479227ACC6500C5EF68 /* CodeScannerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScannerOverlay.swift; sourceTree = "<group>"; };
 		444B760B226491F0004B9CD4 /* RealmSentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSentence.swift; sourceTree = "<group>"; };
 		444B760D22649558004B9CD4 /* RealmWordDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmWordDigest.swift; sourceTree = "<group>"; };
 		444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestInfoViewController.swift; sourceTree = "<group>"; };
@@ -333,6 +350,34 @@
 			path = Label;
 			sourceTree = "<group>";
 		};
+		4408B4642279625C00C5EF68 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4408B465227962EA00C5EF68 /* FieldEditController */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		4408B465227962EA00C5EF68 /* FieldEditController */ = {
+			isa = PBXGroup;
+			children = (
+				4408B4662279630800C5EF68 /* FieldEditController.swift */,
+				4408B46C2279794900C5EF68 /* AbstractFieldEditViewController.swift */,
+				4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */,
+			);
+			path = FieldEditController;
+			sourceTree = "<group>";
+		};
+		4408B4722279B0C100C5EF68 /* CodeScannerPack */ = {
+			isa = PBXGroup;
+			children = (
+				4408B4762279B0E600C5EF68 /* CodeScanner.swift */,
+				4408B4732279B0D200C5EF68 /* CodeScannerViewController.swift */,
+				4408B479227ACC6500C5EF68 /* CodeScannerOverlay.swift */,
+			);
+			path = CodeScannerPack;
+			sourceTree = "<group>";
+		};
 		444B760A226491D0004B9CD4 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,6 +477,7 @@
 		44A7ED192246A62300D1C402 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4408B4722279B0C100C5EF68 /* CodeScannerPack */,
 				44A7ED1A2246A62300D1C402 /* ButtonBaker.swift */,
 				44ECD9442275804F00618576 /* Bartendar.swift */,
 				44ECD974227720EB00618576 /* Validator.swift */,
@@ -512,6 +558,7 @@
 		44B2C03C226EE96500B584F5 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
+				4408B4642279625C00C5EF68 /* Controllers */,
 				44B2C0992273412000B584F5 /* Eureka */,
 				44A7ED192246A62300D1C402 /* Utils */,
 				44B2C04B226EEA6C00B584F5 /* Protocols */,
@@ -1020,6 +1067,7 @@
 				44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */,
 				44B2C036226CB38900B584F5 /* DigestDetailTableViewCell.swift in Sources */,
 				44A7ED532246A62300D1C402 /* Reusable.swift in Sources */,
+				4408B46D2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
 				44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */,
 				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
 				44ECD96C227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
@@ -1028,6 +1076,7 @@
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
 				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
+				4408B4742279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */,
 				44B2C056226EEDE100B584F5 /* ModelConstants.swift in Sources */,
 				44B2C0932272DD0400B584F5 /* CreatorListViewController.swift in Sources */,
 				44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
@@ -1045,6 +1094,7 @@
 				44ECD975227720EB00618576 /* Validator.swift in Sources */,
 				44A7ED4F2246A62300D1C402 /* TopListViewController.swift in Sources */,
 				44B2C08F2272DC7600B584F5 /* RealmTranslator.swift in Sources */,
+				4408B46A2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */,
 				44B2C049226EEA1F00B584F5 /* UIImageEx.swift in Sources */,
 				44A7ED4B2246A62300D1C402 /* TextListTableViewCell.swift in Sources */,
 				44ECD9632277031100618576 /* BookListCoordinator.swift in Sources */,
@@ -1055,6 +1105,7 @@
 				44A7ED402246A62300D1C402 /* AppDelegate+Appearance.swift in Sources */,
 				444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */,
 				44B2C08C2272DC5800B584F5 /* RealmAuthor.swift in Sources */,
+				4408B47A227ACC6500C5EF68 /* CodeScannerOverlay.swift in Sources */,
 				444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */,
 				44ECD9452275804F00618576 /* Bartendar.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
@@ -1069,6 +1120,7 @@
 				44B2C046226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
 				44ECD9552276FB6B00618576 /* CreateListCoordinator.swift in Sources */,
+				4408B4772279B0E600C5EF68 /* CodeScanner.swift in Sources */,
 				44B2C0882271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
 				44A7ED472246A62300D1C402 /* TopListTableViewHeader.swift in Sources */,
 				44ECD9722277201000618576 /* MiscellaneousProtocols.swift in Sources */,
@@ -1081,6 +1133,7 @@
 				44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
 				44ECD9492276D84600618576 /* Repositorable.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
+				4408B4672279630800C5EF68 /* FieldEditController.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1119,6 +1172,7 @@
 				44ECD97022771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
 				44ECD9642277031100618576 /* BookListCoordinator.swift in Sources */,
 				44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */,
+				4408B4752279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */,
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
 				44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
 				44ECD9732277201000618576 /* MiscellaneousProtocols.swift in Sources */,
@@ -1141,14 +1195,17 @@
 				44B2C0822271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
 				44B2C028226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				44B2C0892271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
+				4408B4782279B0E600C5EF68 /* CodeScanner.swift in Sources */,
 				44B2C012226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
 				44ECD94A2276D84600618576 /* Repositorable.swift in Sources */,
 				44B2C07D2271B1C800B584F5 /* BookListViewController.swift in Sources */,
 				44B2BFDF22698BA400B584F5 /* RealmParagraph.swift in Sources */,
+				4408B4682279630800C5EF68 /* FieldEditController.swift in Sources */,
 				44B2C037226CB38900B584F5 /* DigestDetailTableViewCell.swift in Sources */,
 				44B2BFE022698BA400B584F5 /* DigestListViewController.swift in Sources */,
 				44B2BFE122698BA400B584F5 /* AppDelegate+Appearance.swift in Sources */,
 				44B2C0772271A93500B584F5 /* RealmCreator.swift in Sources */,
+				4408B46B2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */,
 				44ECD976227720EB00618576 /* Validator.swift in Sources */,
 				44B2BFE322698BA400B584F5 /* RealmWordDigest.swift in Sources */,
 				44ECD9672277032700618576 /* RealmBookRepository.swift in Sources */,
@@ -1164,6 +1221,7 @@
 				44ECD94D2276DD2F00618576 /* RealmWordRepository.swift in Sources */,
 				44ECD94322757EA200618576 /* Errors.swift in Sources */,
 				44B2C040226EE99700B584F5 /* TypeAlias.swift in Sources */,
+				4408B46E2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
 				44B2C047226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44B2BFED22698BA400B584F5 /* TopListCollectionViewCell.swift in Sources */,
 			);

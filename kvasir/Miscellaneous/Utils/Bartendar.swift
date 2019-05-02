@@ -25,4 +25,10 @@ struct Bartendar {
     static func handleSorryAlert(message: String = "发生未知错误", on viewController: UIViewController?) {
         self.handleSimpleAlert(title: "抱歉", message: message, on: viewController)
     }
+    
+    static func debugPrint(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+        #if DEBUG
+        print(items, separator, terminator)
+        #endif
+    }
 }

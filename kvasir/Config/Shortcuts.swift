@@ -15,5 +15,6 @@ let PingFangSCLightFont = UIFont(name: "PingFangSC-Light", size: 20)
 let PingFangSCRegularFont = UIFont(name: "PingFangSC-Regular", size: 20)
 
 let MainQueue = DispatchQueue.main
-let UserInitiatedGlobalDispatchQueue = DispatchQueue.global(qos: .userInitiated)
-let DefaultGlobalDispatchQueue = DispatchQueue.global(qos: .default)
+let GlobalUserInitiatedDispatchQueue = DispatchQueue.global(qos: .userInitiated)
+let GlobalUserInteractiveDispatchQueue = DispatchQueue.global(qos: .userInteractive)
+let GlobalDefaultDispatchQueue = DispatchQueue.global(qos: .default)

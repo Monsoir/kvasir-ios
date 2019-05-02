@@ -174,6 +174,14 @@ private extension CreateBookViewController {
 
 private extension CreateBookViewController {
     @objc func actionScanBarCode() {
+        let vc = CodeScannerViewController(codeType: .bar)
+        vc.completion = { code, theVC in
+            MainQueue.async {
+                theVC.dismiss(animated: true, completion: nil)
+                print(code)
+            }
+        }
+        navigationController?.present(vc, animated: true, completion: nil)
     }
     
     @objc func actionCreateSave() {

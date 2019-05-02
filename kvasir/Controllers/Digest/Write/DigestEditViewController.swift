@@ -14,7 +14,7 @@ import FontAwesome_swift
 import RealmSwift
 
 #if !targetEnvironment(simulator)
-import TesseractOCR
+//import TesseractOCR
 #endif
 
 private let ContainerHeight = 50
@@ -275,23 +275,23 @@ private extension DigestEditViewController {
     
     func recognizeImage(image: UIImage?) {
         #if !targetEnvironment(simulator)
-        //        print("ocr version: \(G8Tesseract.version())") // 3.03
-        guard let image = image else { return }
-        // https://github.com/gali8/Tesseract-OCR-iOS/issues/299#issuecomment-267363981
-        //        guard let ocr = G8Tesseract(language: "eng", engineMode: .tesseractCubeCombined) else { return }
-        guard let ocr = G8Tesseract(language: "eng+chi_sim") else { return }
-        
-        ocr.engineMode = .tesseractOnly
-        ocr.pageSegmentationMode = .auto
-        //        ocr.image = image.g8_blackAndWhite()
-        ocr.image = image.scaleImage(640)
-        ocr.recognize()
-        //        print(ocr.recognizedText)
-        
-        DispatchQueue.main.async {
-            HUD.hide(animated: true)
-            self.tvContent.text = ocr.recognizedText.trimmed
-        }
+//        //        print("ocr version: \(G8Tesseract.version())") // 3.03
+//        guard let image = image else { return }
+//        // https://github.com/gali8/Tesseract-OCR-iOS/issues/299#issuecomment-267363981
+//        //        guard let ocr = G8Tesseract(language: "eng", engineMode: .tesseractCubeCombined) else { return }
+//        guard let ocr = G8Tesseract(language: "eng+chi_sim") else { return }
+//        
+//        ocr.engineMode = .tesseractOnly
+//        ocr.pageSegmentationMode = .auto
+//        //        ocr.image = image.g8_blackAndWhite()
+//        ocr.image = image.scaleImage(640)
+//        ocr.recognize()
+//        //        print(ocr.recognizedText)
+//        
+//        DispatchQueue.main.async {
+//            HUD.hide(animated: true)
+//            self.tvContent.text = ocr.recognizedText.trimmed
+//        }
         #endif
     }
 }
