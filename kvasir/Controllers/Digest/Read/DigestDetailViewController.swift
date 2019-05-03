@@ -44,6 +44,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UIT
     private lazy var headerView: UIView = {
         let view = UIView()
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
+        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -51,15 +52,19 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UIT
         let view = UIView()
         view.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
         view.layer.cornerRadius = 20
+        view.isUserInteractionEnabled = true
         return view
     }()
     
-    private lazy var lbContent: UILabel = {
-        let view = UILabel()
+    private lazy var lbContent: SelectableLabel = { [unowned self] in
+        let view = SelectableLabel()
         view.numberOfLines = 0
         view.backgroundColor = .white
+        view.isUserInteractionEnabled = true
         return view
     }()
+    
+    private lazy var toCopyContentGesture = UILongPressGestureRecognizer(target: self, action: #selector(actionLongPressGesture(recognizer:)))
     
     private lazy var btnContentEdit: UIButton = {
         let btn = simpleButtonWithButtonFromAwesomefont(name: .paintBrush)
@@ -201,6 +206,13 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UIT
     @objc private func actionEditContent() {
         showContentEdit()
     }
+    
+    @objc private func actionLongPressGesture(recognizer: UIGestureRecognizer) {
+        if recognizer == toCopyContentGesture {
+            guard let theView = recognizer.view else { return }
+            showMenuItems(on: theView)
+        }
+    }
 }
 
 private extension DigestDetailViewController {
@@ -214,6 +226,8 @@ private extension DigestDetailViewController {
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
         
         headerView.addSubview(headerContentView)
+        
+        lbContent.addGestureRecognizer(toCopyContentGesture)
         headerContentView.addSubview(lbContent)
         headerContentView.addSubview(btnContentEdit)
         headerContentView.snp.makeConstraints { (make) in
@@ -388,6 +402,15 @@ private extension DigestDetailViewController {
         ]
         let vc = FieldEditFactory.createAFieldEditController(of: .digit, editInfo: info)
         navigationController?.pushViewController(vc)
+    }
+    
+    func showMenuItems(on theView: UIView) {
+        guard let superView = theView.superview else { return }
+        let menuController = UIMenuController.shared
+        guard !menuController.isMenuVisible else { return }
+        menuController.setTargetRect(theView.frame, in: superView)
+        menuController.setMenuVisible(true, animated: true)
+        theView.becomeFirstResponder()
     }
 }
 

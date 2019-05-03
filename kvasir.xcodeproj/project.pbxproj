@@ -18,6 +18,8 @@
 		4408B4772279B0E600C5EF68 /* CodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4762279B0E600C5EF68 /* CodeScanner.swift */; };
 		4408B4782279B0E600C5EF68 /* CodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4762279B0E600C5EF68 /* CodeScanner.swift */; };
 		4408B47A227ACC6500C5EF68 /* CodeScannerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B479227ACC6500C5EF68 /* CodeScannerOverlay.swift */; };
+		4408B47E227C0BF000C5EF68 /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B47D227C0BF000C5EF68 /* SelectableLabel.swift */; };
+		4408B47F227C0BF000C5EF68 /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B47D227C0BF000C5EF68 /* SelectableLabel.swift */; };
 		444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760B226491F0004B9CD4 /* RealmSentence.swift */; };
 		444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760D22649558004B9CD4 /* RealmWordDigest.swift */; };
 		444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */; };
@@ -190,6 +192,7 @@
 		4408B4732279B0D200C5EF68 /* CodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScannerViewController.swift; sourceTree = "<group>"; };
 		4408B4762279B0E600C5EF68 /* CodeScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeScanner.swift; sourceTree = "<group>"; };
 		4408B479227ACC6500C5EF68 /* CodeScannerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScannerOverlay.swift; sourceTree = "<group>"; };
+		4408B47D227C0BF000C5EF68 /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
 		444B760B226491F0004B9CD4 /* RealmSentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSentence.swift; sourceTree = "<group>"; };
 		444B760D22649558004B9CD4 /* RealmWordDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmWordDigest.swift; sourceTree = "<group>"; };
 		444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestInfoViewController.swift; sourceTree = "<group>"; };
@@ -346,6 +349,7 @@
 			children = (
 				44A7ED292246A62300D1C402 /* TopAlignedLabel.swift */,
 				44B2C067226F037D00B584F5 /* ExpandedLabel.swift */,
+				4408B47D227C0BF000C5EF68 /* SelectableLabel.swift */,
 			);
 			path = Label;
 			sourceTree = "<group>";
@@ -1084,6 +1088,7 @@
 				44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
 				44ECD94C2276DD2F00618576 /* RealmWordRepository.swift in Sources */,
 				44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
+				4408B47E227C0BF000C5EF68 /* SelectableLabel.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				44ECD94222757EA200618576 /* Errors.swift in Sources */,
@@ -1172,6 +1177,7 @@
 				44ECD97022771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
 				44ECD9642277031100618576 /* BookListCoordinator.swift in Sources */,
 				44B2C06C226F12F500B584F5 /* KvasirEditor.swift in Sources */,
+				4408B47F227C0BF000C5EF68 /* SelectableLabel.swift in Sources */,
 				4408B4752279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */,
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
 				44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
