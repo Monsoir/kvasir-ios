@@ -9,6 +9,17 @@
 import Foundation
 
 struct RouteConstants {
-    static let kvasir = "kvasir"
-    static let digest = "digest"
+    struct Nouns {
+        static let kvasir = "kvasir"
+        static let digest = "digest"
+        static let book = "book"
+        static let author = "author"
+        static let translator = "translator"
+        static let resource = "resource"
+    }
+    
+    struct Actions {
+        static let new = "new"
+        static let all = "all"
+    }
 }

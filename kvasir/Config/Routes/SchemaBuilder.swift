@@ -11,7 +11,7 @@ import Foundation
 class SchemaBuilder {
     private var schema: String
     
-    init(schema: String = RouteConstants.kvasir) {
+    init(schema: String = RouteConstants.Nouns.kvasir) {
         self.schema = "\(schema):/"
     }
     

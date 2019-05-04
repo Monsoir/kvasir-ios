@@ -12,7 +12,7 @@ import SwifterSwift
 
 typealias BookSelectCompletion = (_ book: RealmBook) -> Void
 
-class BookListViewController: UIViewController {
+class BookListViewController: ResourceListViewController {
     
     private lazy var coordinator: BookListCoordinator = BookListCoordinator()
     private var results: Results<RealmBook>? {
@@ -65,7 +65,6 @@ class BookListViewController: UIViewController {
 private extension BookListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
         title = "选择书籍"
     }
@@ -80,13 +79,28 @@ private extension BookListViewController {
     }
     
     func configureCoordinator() {
-        coordinator.reload = { [weak self] _ in
+        coordinator.initialLoadHandler = { [weak self] _ in
             MainQueue.async {
                 guard let strongSelf = self else { return }
                 strongSelf.tableView.reloadData()
             }
         }
-        coordinator.errorHandler = nil
+        coordinator.updateHandler = { [weak self] (deletions, insertions, modifications) in
+            MainQueue.async {
+                guard let strongSelf = self else { return }
+                strongSelf.tableView.beginUpdates()
+                strongSelf.tableView.deleteRows(at: deletions, with: .fade)
+                strongSelf.tableView.insertRows(at: insertions, with: .fade)
+                strongSelf.tableView.reloadRows(at: modifications, with: .fade)
+                strongSelf.tableView.endUpdates()
+            }
+        }
+        coordinator.errorHandler = { [weak self] _ in
+            MainQueue.async {
+                guard let strongSelf = self else { return }
+                Bartendar.handleSorryAlert(on: strongSelf.navigationController)
+            }
+        }
         coordinator.setupQuery()
     }
 }
@@ -102,6 +116,17 @@ extension BookListViewController: UITableViewDataSource {
         guard let book = results?[indexPath.row] else { return cell }
         cell.textLabel?.text = book.name
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return editable
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard let entity = results?[indexPath.row] else { return }
+            coordinator.delete(a: entity, completion: nil)
+        }
     }
 }
 

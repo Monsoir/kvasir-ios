@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-class TopListTableViewHeader: UITableViewHeaderFooterView, Reusable {
+class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
     var title: String = "" {
         didSet {
             lbTitle.attributedText = NSAttributedString(string: title, attributes: titleAttributes)
@@ -65,12 +65,12 @@ class TopListTableViewHeader: UITableViewHeaderFooterView, Reusable {
     override func updateConstraints() {
         lbTitle.snp.makeConstraints { (make) in
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
-            make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(8)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide.snp.leading).offset(8)
         }
         
         btnSeeAll.snp.makeConstraints { (make) in
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
-            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-8)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide.snp.trailing).offset(-8)
         }
         
 //        btnCreate.snp.makeConstraints { (make) in
@@ -91,7 +91,7 @@ class TopListTableViewHeader: UITableViewHeaderFooterView, Reusable {
     }
 }
 
-private extension TopListTableViewHeader {
+private extension TopListTableViewHeaderActionable {
     func setupSubviews() {
         bindAction()
         contentView.addSubview(lbTitle)

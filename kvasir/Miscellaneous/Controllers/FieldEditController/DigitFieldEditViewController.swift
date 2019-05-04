@@ -8,6 +8,7 @@
 
 import UIKit
 import Eureka
+import SwifterSwift
 
 class DigitFieldEditViewController: AbstractFieldEditViewController {
     override func setupNavigationBar() {
@@ -16,6 +17,7 @@ class DigitFieldEditViewController: AbstractFieldEditViewController {
     }
     
     override func setupSubviews() {
+        tableView.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
         form +++ Section()
             <<< IntRow() { [weak self] in
                 $0.tag = "newValue"

@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import SwifterSwift
 
-class CreatorListViewController<Creator: RealmCreator>: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class CreatorListViewController<Creator: RealmCreator>: ResourceListViewController, UITableViewDataSource, UITableViewDelegate {
     typealias SelectCompletion =  ((_ creators: [Creator]) -> Void)
     
     private lazy var coordinator = CreatorListCoordinator<Creator>()
@@ -33,12 +33,18 @@ class CreatorListViewController<Creator: RealmCreator>: UIViewController, UITabl
         return view
     }()
     
-    init(selectCompletion completion: SelectCompletion? = nil, preSelections: [Creator]) {
-        self.selectCompletion = completion
-        self.preSelectionIds = preSelections.map({ (creator) -> String in
-            return creator.id
-        })
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init(selectCompletion completion: SelectCompletion? = nil, preSelections: [Creator]? = nil) {
+        self.init(nibName: nil, bundle: nil)
+        self.selectCompletion = completion
+        if let selections = preSelections {
+            self.preSelectionIds = selections.map({ (creator) -> String in
+                return creator.id
+            })
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -71,6 +77,17 @@ class CreatorListViewController<Creator: RealmCreator>: UIViewController, UITabl
         cell.textLabel?.text = "\(creator.name) / \(creator.localeName)"
         cell.accessoryType = preSelectionIds.contains(creator.id) ? .checkmark : .none
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return editable
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard let entity = results?[indexPath.row] else { return }
+            coordinator.delete(a: entity, completion: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -107,10 +124,20 @@ private extension CreatorListViewController {
     }
 
     func configureCoordinator() {
-        coordinator.reload = { [weak self] _ in
+        coordinator.initialLoadHandler = { [weak self] _ in
             MainQueue.async {
                 guard let strongSelf = self else { return }
                 strongSelf.tableView.reloadData()
+            }
+        }
+        coordinator.updateHandler = { [weak self] (deletions, insertions, modifications) in
+            MainQueue.async {
+                guard let strongSelf = self else { return }
+                strongSelf.tableView.beginUpdates()
+                strongSelf.tableView.deleteRows(at: deletions, with: .fade)
+                strongSelf.tableView.insertRows(at: insertions, with: .fade)
+                strongSelf.tableView.reloadRows(at: modifications, with: .fade)
+                strongSelf.tableView.endUpdates()
             }
         }
         coordinator.errorHandler = nil

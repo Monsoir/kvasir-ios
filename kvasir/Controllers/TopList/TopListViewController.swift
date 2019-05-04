@@ -14,14 +14,27 @@ private let ShowMost = 5
 private let ScaleFactor = 0.9 as CGFloat
 private let ScaleDuration = 0.1
 
+private let FocusedSection: [(title: String, url: String)] = [
+    ("句摘", KvasirURLs.allSentences),
+    ("段摘", KvasirURLs.allParagraphs),
+]
+private let Resources: [(title: String, url: String)] = [
+    ("书籍", KvasirURLs.allBooks),
+    ("作家们", KvasirURLs.allAuthors),
+    ("翻译家们", KvasirURLs.allTranslators),
+]
+private let ResourceCellIdentifier = "resource"
+
 class TopListViewController: UIViewController {
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
-        view.rowHeight = TopListTableViewCell.cellHeight
+//        view.rowHeight = TopListTableViewCell.cellHeight
         view.delegate = self
         view.dataSource = self
         view.register(TopListTableViewCell.self, forCellReuseIdentifier: TopListTableViewCell.reuseIdentifier())
-        view.register(TopListTableViewHeader.self, forHeaderFooterViewReuseIdentifier: TopListTableViewHeader.reuseIdentifier())
+        view.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseIdentifier(extra: ResourceCellIdentifier))
+        view.register(TopListTableViewHeaderActionable.self, forHeaderFooterViewReuseIdentifier: TopListTableViewHeaderActionable.reuseIdentifier())
+        view.register(TopListTableViewHeaderPlain.self, forHeaderFooterViewReuseIdentifier: TopListTableViewHeaderPlain.reuseIdentifier())
         view.tableFooterView = UIView()
         view.separatorStyle = .none
         return view
@@ -149,57 +162,73 @@ extension TopListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeader.reuseIdentifier()) as? TopListTableViewHeader else { return nil }
-        
-        var digestType: DigestType = .sentence
-        switch section {
-        case 0:
-            header.title = "句摘"
-            digestType = .sentence
-        case 1:
-            header.title = "段摘"
-            digestType = .paragraph
-        default:
-            break;
-        }
-        
-        header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
-        header.seeAllHandler = {
-            let dict = [
-                DigestType.sentence: KvasirURLs.allSentences,
-                DigestType.paragraph: KvasirURLs.allParagraphs,
-            ]
-            DispatchQueue.main.async {
-                KvasirNavigator.push(dict[digestType]!)
+        if section < FocusedSection.count {
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier()) as? TopListTableViewHeaderActionable else { return nil }
+            header.title = FocusedSection[section].title
+            header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
+            header.seeAllHandler = {
+                MainQueue.async {
+                    KvasirNavigator.push(FocusedSection[section].url)
+                }
             }
+            return header
+        } else {
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderPlain.reuseIdentifier()) as? TopListTableViewHeaderPlain else { return nil }
+            header.title = "我收集的"
+            header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
+            return header
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section >= FocusedSection.count else { return }
         
-        return header
+        let resource = Resources[indexPath.row]
+        KvasirNavigator.push(resource.url)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 // MARK: - UITableViewDataSource
 extension TopListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return cellViewModelCarriers.count
+        return FocusedSection.count + 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if section < FocusedSection.count {
+            return 1
+        }
+        return Resources.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section < FocusedSection.count {
+            return TopListTableViewCell.cellHeight
+        }
+        return 48
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TopListTableViewCell.reuseIdentifier(), for: indexPath) as! TopListTableViewCell
-        cell.carrier = cellViewModelCarriers[indexPath.section]
-        switch indexPath.section {
-        case 0:
-            sentencesCollectionView = cell.collectionView
-        case 1:
-            paragraphCollectionView = cell.collectionView
-        default:
-            break
+        if indexPath.section < FocusedSection.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: TopListTableViewCell.reuseIdentifier(), for: indexPath) as! TopListTableViewCell
+            cell.carrier = cellViewModelCarriers[indexPath.section]
+            switch indexPath.section {
+            case 0:
+                sentencesCollectionView = cell.collectionView
+            case 1:
+                paragraphCollectionView = cell.collectionView
+            default:
+                break
+            }
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier(extra: ResourceCellIdentifier), for: indexPath)
+            let resource = Resources[indexPath.row]
+            cell.textLabel?.text = resource.title
+            cell.accessoryType = .disclosureIndicator
+            return cell
         }
-        return cell
     }
 }
 

@@ -15,7 +15,8 @@ class BookListCoordinator {
     
     private var realmNotificationToken: NotificationToken? = nil
     
-    var reload: ((_ results: Results<RealmBook>) -> Void)?
+    var initialLoadHandler: ((_ results: Results<RealmBook>) -> Void)?
+    var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
     deinit {
@@ -40,13 +41,24 @@ class BookListCoordinator {
             // setup notification
             strongSelf.realmNotificationToken = results.observe({ (changes) in
                 switch changes {
-                case .initial: fallthrough
-                case .update:
-                    strongSelf.reload?(results)
+                case .initial:
+                    strongSelf.initialLoadHandler?(results)
+                case .update(_, let deletions, let insertions, let modifications):
+                    strongSelf.updateHandler?(
+                        deletions.map { IndexPath(row: $0, section: 0) },
+                        insertions.map { IndexPath(row: $0, section: 0) },
+                        modifications.map { IndexPath(row: $0, section: 0) }
+                    )
                 case .error(let e):
                     strongSelf.errorHandler?(e)
                 }
             })
+        }
+    }
+    
+    func delete(a book: RealmBook, completion: RealmDeleteCompletion?) {
+        repository.deleteOne(managedModel: book) { (success) in
+            completion?(success)
         }
     }
 }

@@ -10,22 +10,35 @@ import URLNavigator
 
 struct KvasirURLs {
     // kvasir://digest/new/sentence
-    static let newSentence = SchemaBuilder().component(RouteConstants.digest).component("new").component(RealmSentence.toMachine()).extract()
-    static let newParagraph = SchemaBuilder().component(RouteConstants.digest).component("new").component(RealmParagraph.toMachine()).extract()
+    static let newSentence = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.new).component(RealmSentence.toMachine()).extract()
+    static let newParagraph = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.new
+        ).component(RealmParagraph.toMachine()).extract()
     
     // kvasir://digest/all/sentence
-    static let allSentences = SchemaBuilder().component(RouteConstants.digest).component("all").component(RealmSentence.toMachine()).extract()
-    static let allParagraphs = SchemaBuilder().component(RouteConstants.digest).component("all").component(RealmParagraph.toMachine()).extract()
+    static let allSentences = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RealmSentence.toMachine()).extract()
+    static let allParagraphs = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RealmParagraph.toMachine()).extract()
     
     // kvasir://digest/sentence/an-id
-    static let detailSentenceTemplate = SchemaBuilder().component(RouteConstants.digest).component(RealmSentence.toMachine()).component("<string:id>").extract()
+    static let detailSentenceTemplate = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine()).component("<string:id>").extract()
     static let detailSentence = { (id: String) -> String in
-        return "\(SchemaBuilder().component(RouteConstants.digest).component(RealmSentence.toMachine()).component(id).extract())"
+        return "\(SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine()).component(id).extract())"
     }
-    static let detailParagraphTemplate = SchemaBuilder().component(RouteConstants.digest).component(RealmParagraph.toMachine()).component("<string:id>").extract()
+    static let detailParagraphTemplate = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component("<string:id>").extract()
     static let detailParagraph = { (id: String) -> String in
-        return "\(SchemaBuilder().component(RouteConstants.digest).component(RealmParagraph.toMachine()).component(id).extract())"
+        return "\(SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component(id).extract())"
     }
+    
+    // kvasir://resource/all/book
+    static let allBooks = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.book).extract()
+    // kvasir://resource/book/an-id
+    
+    // kvasir://resource/all/author
+    static let allAuthors = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.author).extract()
+    // kvasir://resource/author/an-id
+    
+    // kvasir://resource/all/translator
+    static let allTranslators = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.translator).extract()
+    // kvasir://resource/translator/an-id
 }
 
 struct URLNavigaionMap {
@@ -38,8 +51,14 @@ struct URLNavigaionMap {
         
         navigator.register(KvasirURLs.detailSentenceTemplate, detailDigestControllerFactory(url:values:context:))
         navigator.register(KvasirURLs.detailParagraphTemplate, detailDigestControllerFactory(url:values:context:))
+        
+        navigator.register(KvasirURLs.allBooks, allResourceControllerFactory(url:values:context:))
+        navigator.register(KvasirURLs.allAuthors, allResourceControllerFactory(url:values:context:))
+        navigator.register(KvasirURLs.allTranslators, allResourceControllerFactory(url:values:context:))
     }
 }
+
+// MARK: Controller Factory
 
 private typealias RouteParams = (createDigest: (() -> RealmWordDigest), holder: String)
 private let RouteParamsDict: [String: RouteParams] = [
@@ -87,6 +106,23 @@ private func detailDigestControllerFactory(url: URLConvertible, values: [String:
         return nil
     }
 }
+
+private func allResourceControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    guard let identifier = get(url: url, componentAt: 2) else { return nil }
+    
+    switch identifier {
+    case RouteConstants.Nouns.book:
+        return BookListViewController(editable: true)
+    case RouteConstants.Nouns.author:
+        return AuthorListViewController(editable: true)
+    case RouteConstants.Nouns.translator:
+        return TranslatorListViewController(editable: true)
+    default:
+        return nil
+    }
+}
+
+// MARK: Helpers
 
 private func get(url: URLConvertible, componentAt index: Int) -> String? {
     guard let url = url.urlValue else { return nil }

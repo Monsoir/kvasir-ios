@@ -10,6 +10,7 @@ import UIKit
 import Eureka
 import FontAwesome_swift
 import RealmSwift
+import SwifterSwift
 
 class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewController {
     
@@ -52,6 +53,8 @@ private extension CreateDigestInfoViewController {
     }
     
     func setupSubviews() {
+        tableView.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
+        
         let digestRelatedSection = Section("摘录相关")
         digestRelatedSection <<< IntRow() {
             $0.tag = "pageIndex"
