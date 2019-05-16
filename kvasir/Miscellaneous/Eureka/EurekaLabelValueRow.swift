@@ -10,16 +10,6 @@ import Eureka
 import SnapKit
 import RealmSwift
 
-struct EurekaLabelValueModel: Equatable {
-    var label = ""
-    var value = ""
-    var info: [String: Any]?
-    
-    static func == (lhs: EurekaLabelValueModel, rhs: EurekaLabelValueModel) -> Bool {
-        return lhs.value == rhs.value
-    }
-}
-
 final class EurekaLabelValueRow<creator: RealmCreator>: OptionsRow<PushSelectorCell<EurekaLabelValueModel>>, PresenterRowType, RowType {
     public typealias PresenterRow = CreatorCanidateListViewController
     

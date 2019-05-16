@@ -11,6 +11,7 @@ import RealmSwift
 
 class TopListCoordinator<Digest: RealmWordDigest> {
     private lazy var repository = RealmWordRepository<Digest>()
+    
     private(set) var results: Results<Digest>?
     
     private var realmNotificationToken: NotificationToken? = nil
@@ -19,9 +20,7 @@ class TopListCoordinator<Digest: RealmWordDigest> {
     var errorHandler: ((_ error: Error) -> Void)?
     
     deinit {
-        #if DEBUG
-        print("\(self) deinit")
-        #endif
+        debugPrint("\(self) deinit")
     }
     
     func reclaim() {

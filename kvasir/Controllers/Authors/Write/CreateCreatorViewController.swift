@@ -54,7 +54,7 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
             return
         }
         
-        coordinator.create { (success) in
+        coordinator.create { (success, message) in
             guard success else {
                 Bartendar.handleSorryAlert(message: "保存失败", on: self.navigationController)
                 return

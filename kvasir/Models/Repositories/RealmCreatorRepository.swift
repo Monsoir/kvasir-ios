@@ -33,9 +33,9 @@ class RealmCreatorRepository<T: RealmCreator>: Repositorable {
                     try realm.write {
                         realm.add(unmanagedModel)
                     }
-                    completion(true)
+                    completion(true, nil)
                 } catch {
-                    completion(false)
+                    completion(false, nil)
                 }
             })
         }

@@ -48,8 +48,8 @@ class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
             "bookId": postInfo["bookId"] as? String ?? "",
         ]
         
-        repository.createOne(unmanagedModel: entity, otherInfo: otherInfo) { (success) in
-            completion(success)
+        repository.createOne(unmanagedModel: entity, otherInfo: otherInfo) { (success, message) in
+            completion(success, message)
         }
     }
 }

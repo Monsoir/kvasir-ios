@@ -9,10 +9,13 @@
 import RealmSwift
 
 class RealmBook: RealmBasicObject {
-    @objc dynamic var isbn = ""
+    @objc dynamic var isbn13 = ""
+    @objc dynamic var isbn10 = ""
     @objc dynamic var name = ""
     @objc dynamic var localeName = ""
     @objc dynamic var publisher = ""
+    @objc dynamic var imageLarge = ""
+    @objc dynamic var imageMedium = ""
     
     let sentences = List<RealmSentence>()
     let paragraphs = List<RealmParagraph>()
@@ -35,5 +38,23 @@ extension RealmBook {
     
     func createTranslatorReadabel(_ separator: String) -> String {
         return createListReadable(elements: translators.map { $0.name }, separator: separator)
+    }
+    
+    var hasImage: Bool {
+        get {
+            return !imageLarge.isEmpty || !imageMedium.isEmpty
+        }
+    }
+    
+    var thumbnailImage: String {
+        get {
+            return imageMedium.isEmpty ? imageLarge : imageMedium
+        }
+    }
+    
+    var highQualityImage: String {
+        get{
+            return imageLarge.isEmpty ? imageMedium : imageLarge
+        }
     }
 }

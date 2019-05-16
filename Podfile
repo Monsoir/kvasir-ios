@@ -13,6 +13,8 @@ target 'kvasir' do
   pod 'FontAwesome.swift'
   pod 'Eureka'
   pod 'URLNavigator'
+  pod 'Alamofire'
+  pod 'Kingfisher', '~> 5.0'
   
   target 'kvasir-with-tesseract' do
     inherit! :search_paths

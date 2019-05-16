@@ -21,6 +21,15 @@ class DigestDetailTableViewCell: UITableViewCell {
         }
     }
     
+    var maxLine: Int {
+        set {
+            lbValue.numberOfLines = newValue
+        }
+        get {
+            return lbValue.numberOfLines
+        }
+    }
+    
     var modifying = false {
         didSet {
             if modifying {
@@ -62,6 +71,10 @@ class DigestDetailTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        lbValue.numberOfLines = 1
     }
     
     override class var requiresConstraintBasedLayout: Bool {

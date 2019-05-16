@@ -11,6 +11,7 @@ import Eureka
 import SwifterSwift
 import FontAwesome_swift
 import RealmSwift
+import PKHUD
 
 private let HeaderHeight = 150.0 as CGFloat
 
@@ -45,9 +46,7 @@ class CreateBookViewController: FormViewController {
     }
     
     deinit {
-        #if DEBUG
-        print("\(self) deinit")
-        #endif
+        debugPrint("\(self) deinit")
     }
     
     override func viewDidLoad() {
@@ -58,10 +57,10 @@ class CreateBookViewController: FormViewController {
         setupSubviews()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        reloadHeaderView()
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        reloadHeaderView()
+//    }
 }
 
 private extension CreateBookViewController {
@@ -73,10 +72,10 @@ private extension CreateBookViewController {
     }
     
     func setupSubviews() {
-        headerView.addSubview(btnScanBarCode)
-        btnScanBarCode.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-        }
+//        headerView.addSubview(btnScanBarCode)
+//        btnScanBarCode.snp.makeConstraints { (make) in
+//            make.center.equalToSuperview()
+//        }
         
         setupForm()
     }
@@ -85,9 +84,28 @@ private extension CreateBookViewController {
         
         let nameInfoSection = Section("书籍信息")
         
+//        nameInfoSection <<< EurekaFillableAndActionableRow() {
+//            $0.tag = "isbn"
+//            $0.title = "ISBN"
+//            $0.value = ""
+//            $0.cellSetup({ [weak self] (cell, row) in
+//                guard let strongSelf = self else { return }
+//                cell.action = { [weak strongSelf] value in
+//                    guard let _strongSelf = strongSelf else { return }
+//                    _strongSelf.actionSearch(value)
+//                }
+//            })
+//        }
+        
         nameInfoSection <<< TextRow() {
-            $0.tag = "isbn"
-            $0.title = "ISBN"
+            $0.tag = "isbn13"
+            $0.title = "ISBN13"
+            $0.value = ""
+        }
+        
+        nameInfoSection <<< TextRow() {
+            $0.tag = "isbn10"
+            $0.title = "ISBN10"
             $0.value = ""
         }
         
@@ -208,14 +226,34 @@ private extension CreateBookViewController {
             return
         }
         
-        coordinator.create { (success) in
+        coordinator.create { (success, message) in
             guard success else {
                 Bartendar.handleSorryAlert(message: "保存失败", on: self.navigationController)
                 return
             }
             
-            DispatchQueue.main.async {
+            MainQueue.async {
                 self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    @objc private func actionSearch(_ isbn: String?) {
+        HUD.show(.progress)
+        coordinator.queryFromRemote(isbn: isbn) { (success, data, errorMsg) in
+            guard success else {
+                MainQueue.async {
+                    HUD.flash(.labeledError(title: errorMsg, subtitle: nil), onView: self.view, delay: 1.5, completion: nil)
+                }
+                return
+            }
+            MainQueue.async {
+                let coordinator = RemoteBookCoordinator(with: data ?? [:])
+                let vc = RemoteBookDetailViewController(with: coordinator)
+                let nc = UINavigationController(rootViewController: vc)
+                self.navigationController?.present(nc, animated: true, completion: {
+                    HUD.hide()
+                })
             }
         }
     }

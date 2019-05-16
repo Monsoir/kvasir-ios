@@ -76,7 +76,7 @@ class CreateDigestContainerViewController<Digest: RealmWordDigest>: UIViewContro
             return
         }
         
-        coordinator.create { (success) in
+        coordinator.create { (success, message) in
             MainQueue.async {
                 guard success else {
                     Bartendar.handleTipAlert(message: "创建失败", on: self.navigationController)

@@ -22,23 +22,23 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     
     private var selectCompletion: SelectCompletion?
     private var preSelectionIds: [String] = []
+    private var modifyable: Bool {
+        get {
+            return configuration["editable"] as? Bool ?? false
+        }
+    }
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
-        view.rowHeight = CGFloat(BookListTableViewCell.height)
+        view.rowHeight = 50
         view.dataSource = self
         view.delegate = self
-        view.register(BookListTableViewCell.self, forCellReuseIdentifier: BookListTableViewCell.reuseIdentifier())
         view.tableFooterView = UIView()
         return view
     }()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    convenience init(selectCompletion completion: SelectCompletion? = nil, preSelections: [Creator]? = nil) {
-        self.init(nibName: nil, bundle: nil)
+    init(with configuration: [String: Any], selectCompletion completion: SelectCompletion? = nil, preSelections: [Creator]? = nil) {
+        super.init(with: configuration)
         self.selectCompletion = completion
         if let selections = preSelections {
             self.preSelectionIds = selections.map({ (creator) -> String in
@@ -71,16 +71,38 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier(), for: indexPath) as! BookListTableViewCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier())
+        if cell == nil {
+            cell = UITableViewCell(style: .value1, reuseIdentifier: BookListTableViewCell.reuseIdentifier())
+        }
         
         guard let creator = results?[indexPath.row] else { return UITableViewCell() }
-        cell.textLabel?.text = "\(creator.name) / \(creator.localeName)"
-        cell.accessoryType = preSelectionIds.contains(creator.id) ? .checkmark : .none
-        return cell
+        cell?.textLabel?.text = [creator.name, creator.localeName].joined(separator: "/")
+        cell?.textLabel?.text = {
+            var texts = [creator.name]
+            if !creator.localeName.isEmpty {
+                texts.append(creator.localeName)
+            }
+            return texts.joined(separator: "/")
+        }()
+        cell?.accessoryType = modifyable ? .disclosureIndicator : .none // 可编辑时看作为查看列表而不是进行选择
+        
+        var detail = ""
+        switch creator {
+        case is RealmAuthor:
+            detail = "关联书籍：\((creator as! RealmAuthor).books.count)"
+        case is RealmTranslator:
+            detail = "关联书籍：\((creator as! RealmTranslator).books.count)"
+        default:
+            break
+        }
+        cell?.detailTextLabel?.text = detail
+        
+        return cell!
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return editable
+        return modifyable
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -92,12 +114,20 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let creator = results?[indexPath.row] else { return }
-        if let completion = selectCompletion, !preSelectionIds.contains(creator.id) {
-            completion([creator])
+        if !modifyable, !preSelectionIds.contains(creator.id) {
+            selectCompletion?([creator])
+            navigationController?.popViewController()
         }
         
+        switch creator {
+        case is RealmTranslator:
+            KvasirNavigator.push(KvasirURLs.booksOfATranslator(creator.id), context: nil, from: navigationController, animated: true)
+        case is RealmAuthor:
+            KvasirNavigator.push(KvasirURLs.booksOfAnAuthor(creator.id), context: nil, from: navigationController, animated: true)
+        default:
+            break
+        }
         tableView.deselectRow(at: indexPath, animated: true)
-        navigationController?.popViewController()
     }
     
     @objc func actionCreate() {
@@ -110,9 +140,8 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
 private extension CreatorListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
-        title = "我收集的\(Creator.toHuman())"
+        title = configuration["title"] as? String ?? ""
     }
     
     func setupSubviews() {

@@ -117,7 +117,7 @@ private extension DigestListViewController {
     }
     
     func reload() {
-        DispatchQueue.main.async {
+        MainQueue.async {
             self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
             self.tableView.reloadData()
         }

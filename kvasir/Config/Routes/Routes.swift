@@ -28,17 +28,38 @@ struct KvasirURLs {
         return "\(SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component(id).extract())"
     }
     
+    /// 资源列表查看
+    
     // kvasir://resource/all/book
     static let allBooks = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.book).extract()
-    // kvasir://resource/book/an-id
+    // kvasir://resource/book/an-id - for detail
     
     // kvasir://resource/all/author
     static let allAuthors = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.author).extract()
-    // kvasir://resource/author/an-id
+    // kvasir://resource/author/author-id/books
+    static let booksOfAnAuthorTemplate = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.author).component("<string:id>").component(RouteConstants.Nouns.books).extract()
+    static let booksOfAnAuthor = { (authorId: String) -> String in
+        return SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.author).component(authorId).component(RouteConstants.Nouns.books).extract()
+    }
     
     // kvasir://resource/all/translator
     static let allTranslators = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.translator).extract()
-    // kvasir://resource/translator/an-id
+    // kvasir://resource/translator/translator-id/books
+    static let booksOfATranslatorTemplate = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.translator).component("<string:id>").component(RouteConstants.Nouns.books).extract()
+    static let booksOfATranslator = { (translatorId: String) -> String in
+        return SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.translator).component(translatorId).component(RouteConstants.Nouns.books).extract()
+    }
+    
+    /// 资源列表选择
+    
+    // kvasir://resource/select/book
+    static let selectBooks = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.select).component(RouteConstants.Nouns.book).extract()
+    
+    // kvasir://resource/select/author
+    static let selectAuthors = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.select).component(RouteConstants.Nouns.author).extract()
+    
+    // kvasir://resource/select/translator
+    static let selectTranslators = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.select).component(RouteConstants.Nouns.translator).extract()
 }
 
 struct URLNavigaionMap {
@@ -55,6 +76,13 @@ struct URLNavigaionMap {
         navigator.register(KvasirURLs.allBooks, allResourceControllerFactory(url:values:context:))
         navigator.register(KvasirURLs.allAuthors, allResourceControllerFactory(url:values:context:))
         navigator.register(KvasirURLs.allTranslators, allResourceControllerFactory(url:values:context:))
+        
+        navigator.register(KvasirURLs.booksOfAnAuthorTemplate, booksOfCreatorControllerFactory(url:values:context:))
+        navigator.register(KvasirURLs.booksOfATranslatorTemplate, booksOfCreatorControllerFactory(url:values:context:))
+        
+        navigator.register(KvasirURLs.selectBooks, selectResourceControllerFactory(url:values:context:))
+        navigator.register(KvasirURLs.selectAuthors, selectResourceControllerFactory(url:values:context:))
+        navigator.register(KvasirURLs.selectTranslators, selectResourceControllerFactory(url:values:context:))
     }
 }
 
@@ -112,11 +140,40 @@ private func allResourceControllerFactory(url: URLConvertible, values: [String: 
     
     switch identifier {
     case RouteConstants.Nouns.book:
-        return BookListViewController(editable: true)
+        return BookListViewController(with: ["editable": true, "title": "收集的书籍"])
     case RouteConstants.Nouns.author:
-        return AuthorListViewController(editable: true)
+        return AuthorListViewController(with: ["editable": true, "title": "已知作者", "creatorType": "author"])
     case RouteConstants.Nouns.translator:
-        return TranslatorListViewController(editable: true)
+        return TranslatorListViewController(with: ["editable": true, "title": "已知译者", "creatorType": "translator"])
+    default:
+        return nil
+    }
+}
+
+private func booksOfCreatorControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    guard let id = values["id"] else { return nil }
+    let creatorType = get(url: url, componentAt: 1) ?? "author"
+    
+    switch creatorType {
+    case "author":
+        return BookListViewController(with: ["editable": true, "title": "TA 的书籍", "creatorType": "author", "creatorId": id])
+    case "translator":
+        return BookListViewController(with: ["editable": true, "title": "TA 的书籍", "creatorType": "translator", "creatorId": id])
+    default:
+        return nil
+    }
+}
+
+private func selectResourceControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    guard let identifier = get(url: url, componentAt: 2) else { return nil }
+    
+    switch identifier {
+    case RouteConstants.Nouns.book:
+        return BookListViewController(with: ["editable": false, "title": "选择一本书籍"])
+    case RouteConstants.Nouns.author:
+        return AuthorListViewController(with: ["editable": false, "title": "选择一个作者"])
+    case RouteConstants.Nouns.translator:
+        return TranslatorListViewController(with: ["editable": false, "title": "选择一个译者"])
     default:
         return nil
     }

@@ -48,9 +48,9 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
                         }
                     }
                     
-                    completion(true)
+                    completion(true, nil)
                 } catch {
-                    completion(false)
+                    completion(false, nil)
                 }
             })
         }

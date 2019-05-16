@@ -104,7 +104,7 @@ private extension CreateDigestInfoViewController {
         bookRelatedSection <<< ButtonRow() { (row: ButtonRow) in
             row.title = "关联一本书籍"
             }.onCellSelection({ [weak self] (cell, row) in
-                let vc = BookListViewController(selectCompletion: { [weak self] (book) in
+                let vc = BookListViewController(with: ["editable": false, "title": "选择书籍"], selectCompletion: { [weak self] (book) in
                     self?.bookDidSelect(book: book)
                     self?.navigationController?.popViewController()
                 })
@@ -140,7 +140,8 @@ private extension CreateDigestInfoViewController {
             "bookId": book.id,
             "bookName": book.name,
             "bookLocaleName": book.localeName,
-            "isbn": book.isbn,
+            "isbn13": book.isbn13,
+            "isbn10": book.isbn10,
             "publisher": book.publisher,
         ]
         form.setValues(values)

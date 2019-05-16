@@ -28,11 +28,9 @@ private let ResourceCellIdentifier = "resource"
 class TopListViewController: UIViewController {
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
-//        view.rowHeight = TopListTableViewCell.cellHeight
         view.delegate = self
         view.dataSource = self
         view.register(TopListTableViewCell.self, forCellReuseIdentifier: TopListTableViewCell.reuseIdentifier())
-        view.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseIdentifier(extra: ResourceCellIdentifier))
         view.register(TopListTableViewHeaderActionable.self, forHeaderFooterViewReuseIdentifier: TopListTableViewHeaderActionable.reuseIdentifier())
         view.register(TopListTableViewHeaderPlain.self, forHeaderFooterViewReuseIdentifier: TopListTableViewHeaderPlain.reuseIdentifier())
         view.tableFooterView = UIView()
@@ -46,6 +44,7 @@ class TopListViewController: UIViewController {
     private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmSentence>()
         coordinator.reload = { data in
+            self.tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .automatic)
             self.reloadSentenceView()
         }
         coordinator.errorHandler = { e in
@@ -55,9 +54,17 @@ class TopListViewController: UIViewController {
     private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmParagraph>()
         coordinator.reload = { data in
+            self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
             self.reloadParagraphView()
         }
         coordinator.errorHandler = { e in
+        }
+        return coordinator
+    }()
+    private lazy var deputyCoodinator: TopListDeputyCoodinator = { [unowned self] in
+        let coordinator = TopListDeputyCoodinator()
+        coordinator.reload = { (bookCount, authorCount, translatorCount) in
+            self.tableView.reloadSections(IndexSet(arrayLiteral: 2), with: .automatic)
         }
         return coordinator
     }()
@@ -71,6 +78,24 @@ class TopListViewController: UIViewController {
     private var paragraphsData: Results<RealmParagraph>? {
         get {
             return paragraphViewModelCoordinator.results
+        }
+    }
+    
+    private var booksData: Results<RealmBook>? {
+        get {
+            return deputyCoodinator.bookResults
+        }
+    }
+    
+    private var authorsData: Results<RealmAuthor>? {
+        get {
+            return deputyCoodinator.authorResults
+        }
+    }
+    
+    private var translatorsData: Results<RealmTranslator>? {
+        get {
+            return deputyCoodinator.translatorResults
         }
     }
     
@@ -106,6 +131,7 @@ class TopListViewController: UIViewController {
         
         sentenceViewModelCoordinator.reclaim()
         paragraphViewModelCoordinator.reclaim()
+        deputyCoodinator.reclaim()
     }
     
     override func viewDidLoad() {
@@ -117,6 +143,7 @@ class TopListViewController: UIViewController {
         
         sentenceViewModelCoordinator.setupQuery()
         paragraphViewModelCoordinator.setupQuery()
+        deputyCoodinator.setupQuery()
     }
     
     func reloadSentenceView() {
@@ -161,10 +188,22 @@ extension TopListViewController: UITableViewDelegate {
         return 50
     }
     
+    private func headerAccessoryTitleForSection(_ section: Int) -> String {
+        switch section {
+        case 0:
+            return "查看全部 \(sentencesData?.count ?? 0)"
+        case 1:
+            return "查看全部 \(paragraphsData?.count ?? 0)"
+        default:
+            return ""
+        }
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section < FocusedSection.count {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier()) as? TopListTableViewHeaderActionable else { return nil }
             header.title = FocusedSection[section].title
+            header.actionTitle = headerAccessoryTitleForSection(section)
             header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
             header.seeAllHandler = {
                 MainQueue.async {
@@ -174,7 +213,7 @@ extension TopListViewController: UITableViewDelegate {
             return header
         } else {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderPlain.reuseIdentifier()) as? TopListTableViewHeaderPlain else { return nil }
-            header.title = "我收集的"
+            header.title = headerAccessoryTitleForSection(section)
             header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
             return header
         }
@@ -209,6 +248,23 @@ extension TopListViewController: UITableViewDataSource {
         return 48
     }
     
+    private func detailTextForResouceCellsAtIndexPath(_ indexPath: IndexPath) -> String {
+        guard indexPath.section >= FocusedSection.count else {
+            return ""
+        }
+        
+        switch indexPath.row {
+        case 0:
+            return "\(booksData?.count ?? 0)"
+        case 1:
+            return "\(authorsData?.count ?? 0)"
+        case 2:
+            return "\(translatorsData?.count ?? 0)"
+        default:
+            return ""
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section < FocusedSection.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: TopListTableViewCell.reuseIdentifier(), for: indexPath) as! TopListTableViewCell
@@ -223,11 +279,15 @@ extension TopListViewController: UITableViewDataSource {
             }
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier(extra: ResourceCellIdentifier), for: indexPath)
+            var cell = tableView.dequeueReusableCell(withIdentifier: ResourceCellIdentifier)
+            if cell == nil {
+                cell = UITableViewCell(style: .value1, reuseIdentifier: ResourceCellIdentifier)
+            }
             let resource = Resources[indexPath.row]
-            cell.textLabel?.text = resource.title
-            cell.accessoryType = .disclosureIndicator
-            return cell
+            cell?.textLabel?.text = resource.title
+            cell?.detailTextLabel?.text = detailTextForResouceCellsAtIndexPath(indexPath)
+            cell?.accessoryType = .disclosureIndicator
+            return cell!
         }
     }
 }

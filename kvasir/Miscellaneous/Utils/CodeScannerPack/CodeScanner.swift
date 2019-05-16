@@ -75,9 +75,12 @@ class CodeScanner: NSObject {
         func setupSession() {
             if let session = createCaptureSession(previewOn: view) {
                 captureSession = session
-                let pl = createPreviewLayer(withCaptureSession: session, view: view)
-                view.layer.insertSublayer(pl, at: 0)
-                previewLayer = pl
+                MainQueue.async { [weak self] in
+                    guard let strongSelf = self else { return }
+                    let pl = strongSelf.createPreviewLayer(withCaptureSession: session, view: view)
+                    view.layer.insertSublayer(pl, at: 0)
+                    strongSelf.previewLayer = pl
+                }
             }
         }
         switch AVCaptureDevice.authorizationStatus(for: .video) {

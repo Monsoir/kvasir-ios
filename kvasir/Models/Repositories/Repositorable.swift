@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-typealias RealmCreateCompletion = (_ success: Bool) -> Void
+typealias RealmCreateCompletion = (_ success: Bool, _ message: String?) -> Void
 typealias RealmQueryResultsCompletion<T: RealmCollectionValue> = (_ success: Bool, _ results: Results<T>?) -> Void
 typealias RealmQueryAnEntityCompletion<T: RealmBasicObject> = (_ success: Bool, _ result: T?) -> Void
 typealias RealmUpdateCompletion = (_ success: Bool) -> Void
@@ -55,7 +55,7 @@ extension Repositorable {
     ///   - objectRef: 未配置有线程保护罩的对象
     ///   - okHandler: 定义为成功时的回调
     ///   - notOkHandler: 定义为失败时的回调
-    private static func switchBackToMainQueue(object: Model, okHandler: @escaping ((_ objectDeref: Model) -> Void), notOkHandler: @escaping (() -> Void)) {
+    static func switchBackToMainQueue(object: Model, okHandler: @escaping ((_ objectDeref: Model) -> Void), notOkHandler: @escaping (() -> Void)) {
         let objectRef = ThreadSafeReference(to: object)
         MainQueue.async {
             autoreleasepool(invoking: { () -> Void in
@@ -79,7 +79,7 @@ extension Repositorable {
     ///   - objectRef: 未配置有线程保护罩的对象
     ///   - okHandler: 定义为成功时的回调
     ///   - notOkHandler: 定义为失败时的回调
-    private static func switchBackToMainQueue(objects: Results<Model>, okHandler: @escaping ((_ objectsDeref: Results<Model>) -> Void), notOkHandler: @escaping (() -> Void)) {
+    static func switchBackToMainQueue(objects: Results<Model>, okHandler: @escaping ((_ objectsDeref: Results<Model>) -> Void), notOkHandler: @escaping (() -> Void)) {
         let objectsRef = ThreadSafeReference(to: objects)
         MainQueue.async {
             autoreleasepool(invoking: { () -> Void in

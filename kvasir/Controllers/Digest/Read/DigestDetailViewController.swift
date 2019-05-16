@@ -344,7 +344,7 @@ private extension DigestDetailViewController {
     }
     
     func showBookList(_ sender: DigestDetailTableViewCell) {
-        let vc = BookListViewController { [weak self] (book) in
+        let vc = BookListViewController(with: ["editable": false]) { [weak self] (book) in
             guard let strongSelf = self else { return }
             strongSelf.coordinator?.updateBookRef(book: book, completion: { (success) in
                 DispatchQueue.main.async {

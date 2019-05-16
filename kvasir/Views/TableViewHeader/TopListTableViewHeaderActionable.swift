@@ -17,6 +17,15 @@ class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
         }
     }
     
+    var actionTitle: String? {
+        set {
+            btnSeeAll.setTitle(newValue, for: .normal)
+        }
+        get {
+            return btnSeeAll.titleLabel?.text
+        }
+    }
+    
     var seeAllHandler: (() -> Void)? = nil
     var createHandler: (() -> Void)? = nil
     

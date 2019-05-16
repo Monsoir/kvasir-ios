@@ -44,8 +44,8 @@ class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
         entity.name = postInfo["name"] as? String ?? ""
         entity.localeName = postInfo["localeName"] as? String ?? ""
         
-        repository.createOne(unmanagedModel: entity, otherInfo: nil) { (success) in
-            completion(success)
+        repository.createOne(unmanagedModel: entity, otherInfo: nil) { (success, message) in
+            completion(success, message)
         }
     }
 }

@@ -13,6 +13,7 @@ struct RouteConstants {
         static let kvasir = "kvasir"
         static let digest = "digest"
         static let book = "book"
+        static let books = "books"
         static let author = "author"
         static let translator = "translator"
         static let resource = "resource"
@@ -21,5 +22,6 @@ struct RouteConstants {
     struct Actions {
         static let new = "new"
         static let all = "all"
+        static let select = "select"
     }
 }
