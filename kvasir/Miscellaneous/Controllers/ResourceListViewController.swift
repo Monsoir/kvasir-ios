@@ -10,8 +10,10 @@ import UIKit
 
 class ResourceListViewController: UIViewController {
     
-    private(set) var editable = false
     private(set) var configuration: [String: Any]!
+    var modifyable: Bool {
+        return configuration["editable"] as? Bool ?? false
+    }
     
     init(with configuration: [String: Any]) {
         super.init(nibName: nil, bundle: nil)

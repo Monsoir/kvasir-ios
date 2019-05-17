@@ -22,11 +22,6 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     
     private var selectCompletion: SelectCompletion?
     private var preSelectionIds: [String] = []
-    private var modifyable: Bool {
-        get {
-            return configuration["editable"] as? Bool ?? false
-        }
-    }
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
