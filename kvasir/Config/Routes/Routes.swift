@@ -142,9 +142,9 @@ private func allResourceControllerFactory(url: URLConvertible, values: [String: 
     case RouteConstants.Nouns.book:
         return BookListViewController(with: ["editable": true, "title": "收集的书籍"])
     case RouteConstants.Nouns.author:
-        return AuthorListViewController(with: ["editable": true, "title": "已知作者", "creatorType": "author"])
+        return AuthorListViewController(with: ["editable": true, "title": "已知\(RealmAuthor.toHuman())", "creatorType": "author"])
     case RouteConstants.Nouns.translator:
-        return TranslatorListViewController(with: ["editable": true, "title": "已知译者", "creatorType": "translator"])
+        return TranslatorListViewController(with: ["editable": true, "title": "已知\(RealmTranslator.toHuman())", "creatorType": "translator"])
     default:
         return nil
     }
@@ -171,9 +171,9 @@ private func selectResourceControllerFactory(url: URLConvertible, values: [Strin
     case RouteConstants.Nouns.book:
         return BookListViewController(with: ["editable": false, "title": "选择一本书籍"])
     case RouteConstants.Nouns.author:
-        return AuthorListViewController(with: ["editable": false, "title": "选择一个作者"])
+        return AuthorListViewController(with: ["editable": false, "title": "选择一个\(RealmAuthor.toHuman())"])
     case RouteConstants.Nouns.translator:
-        return TranslatorListViewController(with: ["editable": false, "title": "选择一个译者"])
+        return TranslatorListViewController(with: ["editable": false, "title": "选择一个\(RealmTranslator.toHuman())"])
     default:
         return nil
     }

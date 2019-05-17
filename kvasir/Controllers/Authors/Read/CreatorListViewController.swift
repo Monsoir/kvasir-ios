@@ -52,9 +52,8 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     }
     
     deinit {
-        #if DEBUG
-        print("\(self) deinit")
-        #endif
+        coordinator.reclaim()
+        debugPrint("\(self) deinit")
     }
     
     override func viewDidLoad() {
@@ -151,12 +150,21 @@ private extension CreatorListViewController {
             make.edges.equalToSuperview()
         }
     }
+    
+    func setupBackgroundIfNeeded() {
+        guard let count = results?.count, count <= 0 else {
+            tableView.backgroundView = nil
+            return
+        }
+        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "还没有\(Creator.toHuman())的收集", position: .upper)
+    }
 
     func configureCoordinator() {
         coordinator.initialLoadHandler = { [weak self] _ in
             MainQueue.async {
                 guard let strongSelf = self else { return }
                 strongSelf.tableView.reloadData()
+                strongSelf.setupBackgroundIfNeeded()
             }
         }
         coordinator.updateHandler = { [weak self] (deletions, insertions, modifications) in
@@ -167,6 +175,7 @@ private extension CreatorListViewController {
                 strongSelf.tableView.insertRows(at: insertions, with: .fade)
                 strongSelf.tableView.reloadRows(at: modifications, with: .fade)
                 strongSelf.tableView.endUpdates()
+                strongSelf.setupBackgroundIfNeeded()
             }
         }
         coordinator.errorHandler = nil

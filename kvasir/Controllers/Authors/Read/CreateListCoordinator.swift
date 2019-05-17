@@ -20,9 +20,7 @@ class CreatorListCoordinator<Creator: RealmCreator> {
     var errorHandler: ((_ error: Error) -> Void)?
     
     deinit {
-        #if DEBUG
-        print("\(self) deinit")
-        #endif
+        debugPrint("\(self) deinit")
     }
     
     func reclaim() {

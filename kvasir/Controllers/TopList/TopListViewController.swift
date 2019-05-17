@@ -194,6 +194,8 @@ extension TopListViewController: UITableViewDelegate {
             return "查看全部 \(sentencesData?.count ?? 0)"
         case 1:
             return "查看全部 \(paragraphsData?.count ?? 0)"
+        case 2:
+            return "收集的资源"
         default:
             return ""
         }

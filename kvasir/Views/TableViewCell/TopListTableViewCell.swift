@@ -14,7 +14,7 @@ private let CellWidth = 300 as CGFloat
 private let CollectionViewMargin = 10 as CGFloat
 
 class TopListTableViewCell: UITableViewCell {
-    static let cellHeight = 200.0 as CGFloat
+    static let cellHeight = 180.0 as CGFloat
     
     var carrier: TopListCellCarrier? = nil {
         didSet {
