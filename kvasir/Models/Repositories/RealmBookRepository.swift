@@ -29,7 +29,7 @@ class RealmBookRepository: Repositorable {
     
     func createOne(unmanagedModel: Model, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
         preCreate(unmanagedModel: unmanagedModel)
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 
                 let authorIds = otherInfo?["authorIds"] as? [String] ?? []
@@ -61,7 +61,7 @@ class RealmBookRepository: Repositorable {
     }
     
     func queryByCreatorId(_ id: String, creatorType: RealmCreator.Type, completion: @escaping RealmQueryResultsCompletion<Model>) {
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmReadingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -104,7 +104,7 @@ class RealmBookRepository: Repositorable {
     }
     
     func batchCreate(bookInfo: RealmCreateInfo, authorInfos: [RealmCreateInfo], translatorInfos: [RealmCreateInfo], completion: @escaping RealmCreateCompletion) {
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()

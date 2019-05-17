@@ -18,6 +18,9 @@ typealias RealmDeleteCompletion = (_ success: Bool) -> Void
 typealias RealmCreateInfo = [String: Any]
 typealias RealmUpdateInfo = RealmCreateInfo
 
+let RealmWritingQueue = DispatchQueue(label: "kvasir.realm.writing.queue")
+let RealmReadingQueue = GlobalUserInitiatedDispatchQueue
+
 protocol Repositorable {
     associatedtype Model: RealmBasicObject
     
@@ -99,7 +102,7 @@ extension Repositorable {
     
     // R
     func queryAll(completion: @escaping RealmQueryResultsCompletion<Model>) {
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmReadingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -118,7 +121,7 @@ extension Repositorable {
     }
     
     func queryAllSortingByUpdatedAtDesc(completion: @escaping RealmQueryResultsCompletion<Model>) {
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmReadingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -136,7 +139,7 @@ extension Repositorable {
     }
     
     func queryBy(id: String, completion: @escaping RealmQueryAnEntityCompletion<Model>) {
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmReadingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -161,7 +164,7 @@ extension Repositorable {
     // U
     func updateOne(managedModel: Model, propertiesExcludingRelations properties: RealmUpdateInfo, completion: @escaping RealmUpdateCompletion) {
         let modelRef = ThreadSafeReference(to: managedModel)
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -189,7 +192,7 @@ extension Repositorable {
     // D
     func deleteOne(managedModel: Model, completion: @escaping RealmDeleteCompletion) {
         let modelRef = ThreadSafeReference(to: managedModel)
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
@@ -220,7 +223,7 @@ extension Repositorable {
         let elementRefs = elements.map { (ele) -> ThreadSafeReference<Digest> in
             return ThreadSafeReference(to: ele)
         }
-        DispatchQueue.global(qos: .userInitiated).async {
+        RealmWritingQueue.async {
             do {
                 let realm = try Realm()
                 guard let newOwnerDeref = realm.resolve(newOwnerRef) else {

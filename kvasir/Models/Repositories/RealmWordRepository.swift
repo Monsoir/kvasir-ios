@@ -25,7 +25,7 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
     
     func createOne(unmanagedModel: T, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
         preCreate(unmanagedModel: unmanagedModel)
-        GlobalUserInitiatedDispatchQueue.async {
+        RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
