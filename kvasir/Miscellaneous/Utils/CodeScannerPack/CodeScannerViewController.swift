@@ -39,7 +39,9 @@ class CodeScannerViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         setupSubviews()
-        scanner?.requestSetupSession(previewOn: view)
+        scanner?.requestSetupSession(previewOn: view, notEnoughAuthorizationHandler: {
+            Bartendar.handleTipAlert(message: "没有足够权限使用摄像头", on: nil)
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {

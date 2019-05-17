@@ -199,30 +199,35 @@ private extension BookListViewController {
     }
     
     func showScanner() {
-        let vc = CodeScannerViewController(codeType: .bar)
-        vc.completion = { [weak self] code, theVC in
+        CodeScanner.canCaptureVideo(authorizedHandler: { [weak self] in
             guard let strongSelf = self else { return }
-            MainQueue.async {
-                debugPrint(code)
-                
-                theVC.dismiss(animated: true, completion: {
-                    HUD.show(.labeledProgress(title: "查询中", subtitle: nil))
-                    strongSelf.coordinator.queryBookFromRemote(isbn: code, completion: { (success, data, message) in
-                        guard success else {
-                            MainQueue.async {
-                                HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+            let vc = CodeScannerViewController(codeType: .bar)
+            vc.completion = { [weak self] code, theVC in
+                guard let strongSelf = self else { return }
+                MainQueue.async {
+                    debugPrint(code)
+                    
+                    theVC.dismiss(animated: true, completion: {
+                        HUD.show(.labeledProgress(title: "查询中", subtitle: nil))
+                        strongSelf.coordinator.queryBookFromRemote(isbn: code, completion: { (success, data, message) in
+                            guard success else {
+                                MainQueue.async {
+                                    HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+                                }
+                                return
                             }
-                            return
-                        }
-                        MainQueue.async {
-                            HUD.hide()
-                            strongSelf.previewNewBook(data: data)
-                        }
+                            MainQueue.async {
+                                HUD.hide()
+                                strongSelf.previewNewBook(data: data)
+                            }
+                        })
                     })
-                })
+                }
             }
+            strongSelf.navigationController?.present(vc, animated: true, completion: nil)
+        }) {
+            Bartendar.handleTipAlert(message: "没有权限使用摄像头", on: nil)
         }
-        navigationController?.present(vc, animated: true, completion: nil)
     }
     
     func previewNewBook(data: [String: Any]?) {

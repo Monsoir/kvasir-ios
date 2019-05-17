@@ -71,7 +71,7 @@ class CodeScanner: NSObject {
         }
     }
     
-    func requestSetupSession(previewOn view: UIView) {
+    func requestSetupSession(previewOn view: UIView, notEnoughAuthorizationHandler: (() -> Void)?) {
         func setupSession() {
             if let session = createCaptureSession(previewOn: view) {
                 captureSession = session
@@ -83,22 +83,10 @@ class CodeScanner: NSObject {
                 }
             }
         }
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized: // The user has previously granted access to the camera.
+        type(of: self).canCaptureVideo(authorizedHandler: {
             setupSession()
-            
-        case .notDetermined: // The user has not yet been asked for camera access.
-            AVCaptureDevice.requestAccess(for: .video) { granted in
-                if granted {
-                    setupSession()
-                }
-            }
-        case .denied: // The user has previously denied access.
-            Bartendar.handleTipAlert(message: "没有权限使用摄像头", on: nil)
-            return
-        case .restricted: // The user can't grant access due to restrictions.
-            Bartendar.handleTipAlert(message: "没有权限使用摄像头", on: nil)
-            return
+        }) {
+            notEnoughAuthorizationHandler?()
         }
     }
     
@@ -224,6 +212,30 @@ extension CodeScanner {
             device.torchMode = on ? .on : .off
             device.flashMode = on ? .on : .off
             device.unlockForConfiguration()
+        }
+    }
+}
+
+extension CodeScanner {
+    static func canCaptureVideo(authorizedHandler: @escaping (() -> Void), notEnoughAuthorizationHandler: @escaping (() -> Void)) {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized: // The user has previously granted access to the camera.
+            authorizedHandler()
+            
+        case .notDetermined: // The user has not yet been asked for camera access.
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if granted {
+                    authorizedHandler()
+                } else {
+                    notEnoughAuthorizationHandler()
+                }
+            }
+        case .denied: // The user has previously denied access.
+            notEnoughAuthorizationHandler()
+            return
+        case .restricted: // The user can't grant access due to restrictions.
+            notEnoughAuthorizationHandler()
+            return
         }
     }
 }
