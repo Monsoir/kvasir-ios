@@ -12,6 +12,6 @@ class RealmAuthor: RealmCreator {
     let books = List<RealmBook>()
     
     override class func toHuman() -> String {
-        return "作家"
+        return "作者"
     }
 }

@@ -12,6 +12,6 @@ class RealmTranslator: RealmCreator {
     let books = List<RealmBook>()
     
     override class func toHuman() -> String {
-        return "翻译家"
+        return "译者"
     }
 }
