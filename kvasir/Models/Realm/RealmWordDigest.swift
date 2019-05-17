@@ -37,4 +37,12 @@ class RealmWordDigest: RealmBasicObject {
     class func toMachine() -> String {
         return "word"
     }
+    
+    func preCreate() {
+        content.trim()
+    }
+    
+    func preUpdate() {
+        content.trim()
+    }
 }

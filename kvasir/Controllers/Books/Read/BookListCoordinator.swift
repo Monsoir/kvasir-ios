@@ -89,10 +89,6 @@ class BookListCoordinator {
         }
     }
     
-    func createOneDirectly(with bookInfo: RealmCreateInfo, authorsInfo: [RealmCreateInfo], translatorsInfo: [RealmCreateInfo], completion: @escaping RealmCreateCompletion) {
-        repository.batchCreate(bookInfo: bookInfo, authorInfos: authorsInfo, translatorInfos: translatorsInfo, completion: completion)
-    }
-    
     func queryBookFromRemote(isbn: String?, completion: @escaping ((Bool, [String: Any]?, String?) -> Void)) {
         guard let isbn = isbn, isbn.msr.isISBN else {
             completion(false, nil, "ISBN 不符合规范")

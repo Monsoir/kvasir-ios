@@ -20,11 +20,7 @@ class RealmBookRepository: Repositorable {
     }
     
     func preCreate(unmanagedModel: Model) {
-        unmanagedModel.name.trim()
-        unmanagedModel.localeName.trim()
-        unmanagedModel.isbn13.trim()
-        unmanagedModel.isbn10.trim()
-        unmanagedModel.publisher.trim()
+        unmanagedModel.preCreate()
     }
     
     func createOne(unmanagedModel: Model, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
@@ -95,39 +91,38 @@ class RealmBookRepository: Repositorable {
     }
     
     func preUpdate(managedModel: Model) {
-        managedModel.name.trim()
-        managedModel.localeName.trim()
-        managedModel.isbn13.trim()
-        managedModel.isbn10.trim()
-        managedModel.publisher.trim()
-        managedModel.updatedAt = Date()
+        managedModel.preUpdate()
     }
     
-    func batchCreate(bookInfo: RealmCreateInfo, authorInfos: [RealmCreateInfo], translatorInfos: [RealmCreateInfo], completion: @escaping RealmCreateCompletion) {
+    func batchCreate(unmanagedBook: RealmBook, unmanagedAuthors: [RealmAuthor], unmanagedTranslators: [RealmTranslator], completion: @escaping RealmCreateCompletion) {
         RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
                     
                     // create a book
-                    
+                    unmanagedBook.preCreate()
                     // if book exists
                     // isbn13, isbn10, book name
                     let searchBookConditions: [String] = {
                         var temp = [String]()
-                        if let isbn13 = bookInfo["isbn13"] {
+                        let isbn13 = unmanagedBook.isbn13
+                        if !isbn13.isEmpty {
                             temp.append("isbn13 = '\(isbn13)'")
                         }
                         
-                        if let isbn10 = bookInfo["isbn10"] {
+                        let isbn10 = unmanagedBook.isbn10
+                        if !isbn10.isEmpty {
                             temp.append("isbn10 = '\(isbn10)'")
                         }
                         
-                        if let bookName = bookInfo["name"] {
+                        let bookName = unmanagedBook.name
+                        if !bookName.isEmpty {
                             temp.append("name = '\(bookName)'")
                         }
                         return temp
                     }()
+                    
                     
                     if let _ = realm.objects(Model.self).filter(searchBookConditions.joined(separator: " OR ")).first {
                         // book existed, just return home
@@ -136,49 +131,44 @@ class RealmBookRepository: Repositorable {
                     }
                     
                     // book not existed, then create
-                    let bookToCreate = RealmBook()
-                    bookToCreate.isbn13 = bookInfo["isbn13"] as? String ?? ""
-                    bookToCreate.isbn10 = bookInfo["isbn10"] as? String ?? ""
-                    bookToCreate.name = bookInfo["name"] as? String ?? ""
-                    bookToCreate.localeName = bookInfo["localeName"] as? String ?? ""
-                    bookToCreate.publisher = bookInfo["publisher"] as? String ?? ""
-                    bookToCreate.imageLarge = bookInfo["imageLarge"] as? String ?? ""
-                    bookToCreate.imageMedium = bookInfo["imageMedium"] as? String ?? ""
+                    let bookToCreate = unmanagedBook
                     
-                    func operatingCreatorsFromInfo<creator: RealmCreator>(_ infos: [RealmCreateInfo], type: creator.Type) -> (existedCreator: Results<creator>, toCreate: [creator]) {
-                        let nameSet = Set(infos.map{ $0["name"] as? String ?? "" }).filter{ !$0.isEmpty }
+                    func operatingCreatorsFromInfo<creator: RealmCreator>(_ unmanagedCreators: [creator], type: creator.Type) -> (existedCreator: Results<creator>, toCreate: [creator]) {
+                        // put all creator names into a set, for dedup purpose later.
+                        let nameSet = Set(unmanagedCreators.map{ $0.name }).filter{ !$0.isEmpty }
+                        
+                        // construct filter string components
+                        // find out the existed creator, won't create them again
                         let searchConditions: [String] = nameSet.map{ "name = '\($0)'" } // 字符串形式的断言，记得要加单引号
                         if searchConditions.count <= 0 {
+                            // no components means no creator
                             return (
                                 // workaround to create an empty Results<Type>
                                 realm.objects(creator.self).filter(NSPredicate(value: false)),
                                 []
                             )
                         }
+                        
                         let existedCreators = realm.objects(creator.self).filter(searchConditions.joined(separator: " OR "))
-                        let infosOfCreatorToCreate: [RealmCreateInfo] = {
-                            // use set to dedup
-                            let existedCreatorNameSet = Set(existedCreators.map{ $0.name })
-                            let namesOfCreatorToCreate = nameSet.subtracting(existedCreatorNameSet)
-                            
-                            return namesOfCreatorToCreate.map({ (ele) -> RealmCreateInfo in
-                                return infos.first(where: { $0["name"] as? String ?? "" == ele })!
-                            })
-                        }()
-                        let creatorsToCreate: [creator] = infosOfCreatorToCreate.map {
-                            let c = creator()
-                            c.name = $0["name"] as? String ?? ""
-                            c.localeName = $0["localeName"] as? String ?? ""
-                            return c
-                        }
+                        
+                        // use set to dedup, and now get the creator needed to be created
+                        let existedCreatorNameSet = Set(existedCreators.map{ $0.name })
+                        let namesOfCreatorToCreate = nameSet.subtracting(existedCreatorNameSet)
+                        
+                        let creatorsToCreate = namesOfCreatorToCreate.map({ (ele) -> creator in
+                            let creator = unmanagedCreators.first(where: { $0.name == ele })!
+                            creator.preCreate()
+                            return creator
+                        })
+                        
                         return (existedCreators, creatorsToCreate)
                     }
                     // create authors
-                    let (existedAuthors, authorsToCreate) = operatingCreatorsFromInfo(authorInfos, type: RealmAuthor.self)
+                    let (existedAuthors, authorsToCreate) = operatingCreatorsFromInfo(unmanagedAuthors, type: RealmAuthor.self)
                     
                     
                     // create translators
-                    let (existedTranslators, translatorsToCreate) = operatingCreatorsFromInfo(translatorInfos, type: RealmTranslator.self)
+                    let (existedTranslators, translatorsToCreate) = operatingCreatorsFromInfo(unmanagedTranslators, type: RealmTranslator.self)
                     
                     try realm.write {
                         realm.add(bookToCreate)
@@ -186,11 +176,16 @@ class RealmBookRepository: Repositorable {
                         realm.add(translatorsToCreate)
                         
                         (existedAuthors + authorsToCreate).forEach({ (ele) in
-                            ele.books.append(bookToCreate)
+                            // workaround: 不知怎的，这里会重复添加，即一个作者会有两个相同的书籍
+                            if !ele.books.contains(bookToCreate) {
+                                ele.books.append(bookToCreate)
+                            }
                         })
-                        
+
                         (existedTranslators + translatorsToCreate).forEach({ (ele) in
-                            ele.books.append(bookToCreate)
+                            if !ele.books.contains(bookToCreate) {
+                                ele.books.append(bookToCreate)
+                            }
                         })
                     }
                     completion(true, nil)

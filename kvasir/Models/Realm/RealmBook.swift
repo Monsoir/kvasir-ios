@@ -13,6 +13,7 @@ class RealmBook: RealmBasicObject {
     @objc dynamic var isbn10 = ""
     @objc dynamic var name = ""
     @objc dynamic var localeName = ""
+    @objc dynamic var summary = ""
     @objc dynamic var publisher = ""
     @objc dynamic var imageLarge = ""
     @objc dynamic var imageMedium = ""
@@ -56,5 +57,24 @@ extension RealmBook {
         get{
             return imageLarge.isEmpty ? imageMedium : imageLarge
         }
+    }
+    
+    func preCreate() {
+        name.trim()
+        localeName.trim()
+        isbn13.trim()
+        isbn10.trim()
+        publisher.trim()
+        summary.trim()
+    }
+    
+    func preUpdate() {
+        name.trim()
+        localeName.trim()
+        isbn13.trim()
+        isbn10.trim()
+        publisher.trim()
+        updatedAt = Date()
+        summary.trim()
     }
 }

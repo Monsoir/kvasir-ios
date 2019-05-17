@@ -19,4 +19,22 @@ class RealmCreator: RealmBasicObject, KvasirRealmReadable {
     class func toHuman() -> String {
         return "创意者"
     }
+    
+    class func createAnUnmanagedOneFromPayload<T: RealmCreator>(_ payload: [String: Any]) -> T {
+        let creator = T()
+        creator.name = payload["name"] as? String ?? ""
+        creator.localeName = payload["localeName"] as? String ?? ""
+        return creator
+    }
+    
+    func preCreate() {
+        name.trim()
+        localeName.trim()
+    }
+    
+    func preUpdate() {
+        name.trim()
+        localeName.trim()
+        updatedAt = Date()
+    }
 }

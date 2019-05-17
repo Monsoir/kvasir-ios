@@ -20,7 +20,7 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
     }
     
     func preCreate(unmanagedModel: Model) {
-        unmanagedModel.content.trim()
+        unmanagedModel.preCreate()
     }
     
     func createOne(unmanagedModel: T, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
@@ -57,7 +57,6 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
     }
     
     func preUpdate(managedModel: Model) {
-        managedModel.content.trim()
-        managedModel.updatedAt = Date()
+        managedModel.preUpdate()
     }
 }

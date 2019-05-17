@@ -20,8 +20,7 @@ class RealmCreatorRepository<T: RealmCreator>: Repositorable {
     }
     
     func preCreate(unmanagedModel: T) {
-        unmanagedModel.name.trim()
-        unmanagedModel.localeName.trim()
+        unmanagedModel.preCreate()
     }
     
     func createOne(unmanagedModel: T, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
@@ -42,8 +41,6 @@ class RealmCreatorRepository<T: RealmCreator>: Repositorable {
     }
     
     func preUpdate(managedModel: T) {
-        managedModel.name.trim()
-        managedModel.localeName.trim()
-        managedModel.updatedAt = Date()
+        managedModel.preUpdate()
     }
 }

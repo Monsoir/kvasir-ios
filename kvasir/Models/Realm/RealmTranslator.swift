@@ -14,4 +14,8 @@ class RealmTranslator: RealmCreator {
     override class func toHuman() -> String {
         return "译者"
     }
+    
+    class func createAnUnmanagedOneFromPayload(_ payload: [String: Any]) -> RealmCreator {
+        return super.createAnUnmanagedOneFromPayload(payload)
+    }
 }

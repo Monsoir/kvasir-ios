@@ -128,34 +128,32 @@ class RemoteBookCoordinator {
         let extractFirstImage: (_ images: String) -> String = { images in
             return String(images.split(separator: ",").first ?? "")
         }
-        // book info
-        let bookInfo: [String: Any] = [
-            "isbn13": payload["isbn"] as? String ?? "",
-            "isbn10": payload["isbn10"] as? String ?? "",
-            "name": payload["title"] as? String ?? "",
-            "localeName": "",
-            "publisher": payload["publisher"] as? String ?? "",
-            "imageLarge": extractFirstImage(payload["imagesLarge"] as? String ?? ""),
-            "imageMedium": extractFirstImage(payload["imagesMedium"] as? String ?? ""),
-        ]
         
-        let extractNames: (_ combinedName: String) -> [[String: String]] = { combinedName in
+        let bookToCreate = RealmBook()
+        bookToCreate.isbn13 = payload["isbn13"] as? String ?? ""
+        bookToCreate.isbn10 = payload["isbn10"] as? String ?? ""
+        bookToCreate.name = payload["title"] as? String ?? ""
+        bookToCreate.localeName = payload["localeName"] as? String ?? ""
+        bookToCreate.publisher = payload["publisher"] as? String ?? ""
+        bookToCreate.imageLarge = extractFirstImage(payload["imagesLarge"] as? String ?? "")
+        bookToCreate.imageMedium = extractFirstImage(payload["imagesLarge"] as? String ?? "")
+        
+        func extractCreators<T: RealmCreator>(combinedName: String) -> [T] {
             let names = combinedName.split(separator: ",")
             let nameArray = names.map({ (ele) -> [String: String] in
                 let nameWithoutSpace = ele.replacingOccurrences(of: " ", with: "")
+                // 去除 "[国籍信息]"
                 let nameWithoutNation = nameWithoutSpace.replacingOccurrences(of: #"^\[.*?\]"#, with: "", options: .regularExpression, range: nameWithoutSpace.range(of: nameWithoutSpace))
                 return ["name": nameWithoutNation, "localeName": ""]
             })
-            return nameArray
+            return nameArray.map{ T.createAnUnmanagedOneFromPayload($0) }
         }
+        
         // author infos
-        let authorInfos: [[String: String]] = extractNames(payload["author"] as? String ?? "")
-        
+        let authorsToCreate: [RealmAuthor] = extractCreators(combinedName: payload["author"] as? String ?? "")
         // translator infos
-        let translatorInfos: [[String: String]] = extractNames(payload["translator"] as? String ?? "")
+        let translatorsToCreate: [RealmTranslator] = extractCreators(combinedName: payload["translator"] as? String ?? "")
         
-        debugPrint("book info:", bookInfo, "author info:", authorInfos, "translator info:", translatorInfos, separator: "\n", terminator: "\n")
-        
-        repository.batchCreate(bookInfo: bookInfo, authorInfos: authorInfos, translatorInfos: translatorInfos, completion: completion)
+        repository.batchCreate(unmanagedBook: bookToCreate, unmanagedAuthors: authorsToCreate, unmanagedTranslators: translatorsToCreate, completion: completion)
     }
 }

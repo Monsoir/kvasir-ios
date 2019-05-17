@@ -102,8 +102,23 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let entity = results?[indexPath.row] else { return }
-            coordinator.delete(a: entity, completion: nil)
+            
+            let sheet = UIAlertController(title: "确定删除\(Creator.toHuman())", message: entity.name, preferredStyle: .actionSheet)
+            sheet.addAction(title: "删除", style: .destructive, isEnabled: true) { [weak self] (_) in
+                guard let strongSelf = self else { return }
+                strongSelf.doDeleteAuthor(entity: entity)
+            }
+            sheet.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
+            navigationController?.present(sheet, animated: true, completion: nil)
         }
+    }
+    
+    private func doDeleteAuthor(entity: Creator) {
+        coordinator.delete(a: entity, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "删除"
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

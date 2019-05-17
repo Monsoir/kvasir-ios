@@ -199,8 +199,7 @@ private extension BookListViewController {
     }
     
     func showScanner() {
-        CodeScanner.canCaptureVideo(authorizedHandler: { [weak self] in
-            guard let strongSelf = self else { return }
+        func _showScanner() {
             let vc = CodeScannerViewController(codeType: .bar)
             vc.completion = { [weak self] code, theVC in
                 guard let strongSelf = self else { return }
@@ -224,7 +223,12 @@ private extension BookListViewController {
                     })
                 }
             }
-            strongSelf.navigationController?.present(vc, animated: true, completion: nil)
+            navigationController?.present(vc, animated: true, completion: nil)
+        }
+        CodeScanner.canCaptureVideo(authorizedHandler: {
+            MainQueue.async {
+                _showScanner()
+            }
         }) {
             Bartendar.handleTipAlert(message: "没有权限使用摄像头", on: nil)
         }
