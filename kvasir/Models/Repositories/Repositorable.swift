@@ -21,6 +21,11 @@ typealias RealmUpdateInfo = RealmCreateInfo
 let RealmWritingQueue = DispatchQueue(label: "kvasir.realm.writing.queue")
 let RealmReadingQueue = GlobalUserInitiatedDispatchQueue
 
+protocol RealmNotificationable {
+    var notificationToken: NotificationToken? { get set }
+    func reclaim()
+}
+
 protocol Repositorable {
     associatedtype Model: RealmBasicObject
     

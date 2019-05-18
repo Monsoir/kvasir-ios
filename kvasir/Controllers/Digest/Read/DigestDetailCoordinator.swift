@@ -63,20 +63,20 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         }
         
         repository.queryBy(id: digestId) { [weak self] (success, entity) in
-            guard success else {
+            guard success, let strongSelf = self else {
                 self?.errorHandler?("没找到\(Digest.toHuman())")
                 return
             }
             
-            self?.entity = entity
-            self?.realmNotificationToken = self?.entity?.observe({ (changes) in
+            strongSelf.entity = entity
+            strongSelf.realmNotificationToken = strongSelf.entity?.observe({ (changes) in
                 switch changes {
                 case .change:
-                    self?.reload?(entity)
+                    strongSelf.reload?(entity)
                 case .error:
-                    self?.errorHandler?("发生未知错误")
+                    strongSelf.errorHandler?("发生未知错误")
                 case .deleted:
-                    self?.entityDeleteHandler?()
+                    strongSelf.entityDeleteHandler?()
                 }
             })
             completion(success, entity)

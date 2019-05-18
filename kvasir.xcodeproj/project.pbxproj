@@ -48,8 +48,6 @@
 		446DB7C9228B24CC00BE3DDF /* Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */; };
 		446DB7D1228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */; };
 		446DB7D2228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */; };
-		446DB7D4228BE1D900BE3DDF /* RemoteBookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D3228BE1D900BE3DDF /* RemoteBookCoordinator.swift */; };
-		446DB7D5228BE1D900BE3DDF /* RemoteBookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D3228BE1D900BE3DDF /* RemoteBookCoordinator.swift */; };
 		446DB7D7228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */; };
 		446DB7D8228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */; };
 		446DB7DA228BE6C200BE3DDF /* StringEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D9228BE6C200BE3DDF /* StringEx.swift */; };
@@ -58,6 +56,12 @@
 		446DB7DE228BE8CC00BE3DDF /* MsrCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7DC228BE8CC00BE3DDF /* MsrCompatible.swift */; };
 		446DB7E3228C28D800BE3DDF /* PlainTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7E2228C28D800BE3DDF /* PlainTextViewController.swift */; };
 		446DB7E4228C28D800BE3DDF /* PlainTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7E2228C28D800BE3DDF /* PlainTextViewController.swift */; };
+		44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C18228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift */; };
+		44717C1A228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C18228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift */; };
+		44717C1F228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */; };
+		44717C20228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */; };
+		44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */; };
+		44717C23228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */; };
 		44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECE42246A5D800D1C402 /* ViewController.swift */; };
 		44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
@@ -244,11 +248,13 @@
 		446DB7BC228ABB2900BE3DDF /* CustomEurekaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEurekaModel.swift; sourceTree = "<group>"; };
 		446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kingfisher.swift; sourceTree = "<group>"; };
 		446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBookDetailViewController.swift; sourceTree = "<group>"; };
-		446DB7D3228BE1D900BE3DDF /* RemoteBookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBookCoordinator.swift; sourceTree = "<group>"; };
 		446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBookDetailHeader.swift; sourceTree = "<group>"; };
 		446DB7D9228BE6C200BE3DDF /* StringEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringEx.swift; sourceTree = "<group>"; };
 		446DB7DC228BE8CC00BE3DDF /* MsrCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsrCompatible.swift; sourceTree = "<group>"; };
 		446DB7E2228C28D800BE3DDF /* PlainTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTextViewController.swift; sourceTree = "<group>"; };
+		44717C18228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBookDetailCoordinator.swift; sourceTree = "<group>"; };
+		44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteBookDetailCoordinator.swift; sourceTree = "<group>"; };
+		44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailCoordinator.swift; sourceTree = "<group>"; };
 		44A7ECDF2246A5D800D1C402 /* kvasir.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvasir.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44A7ECE42246A5D800D1C402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44A7ECE72246A5D800D1C402 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -791,7 +797,9 @@
 				44B2C07B2271B1C800B584F5 /* BookListViewController.swift */,
 				44ECD9622277031100618576 /* BookListCoordinator.swift */,
 				446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */,
-				446DB7D3228BE1D900BE3DDF /* RemoteBookCoordinator.swift */,
+				44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */,
+				44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */,
+				44717C18228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift */,
 			);
 			path = Read;
 			sourceTree = "<group>";
@@ -1196,11 +1204,12 @@
 				44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44A7ED512246A62300D1C402 /* DigestEditViewController.swift in Sources */,
 				44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
-				446DB7D4228BE1D900BE3DDF /* RemoteBookCoordinator.swift in Sources */,
 				44ECD94C2276DD2F00618576 /* RealmWordRepository.swift in Sources */,
 				44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				4408B47E227C0BF000C5EF68 /* SelectableLabel.swift in Sources */,
+				44717C1F228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
+				44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				446DB7DA228BE6C200BE3DDF /* StringEx.swift in Sources */,
 				44ECD94222757EA200618576 /* Errors.swift in Sources */,
@@ -1228,6 +1237,7 @@
 				44190D42228D349900DB98E8 /* SessionManagerEx.swift in Sources */,
 				444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */,
 				44ECD9452275804F00618576 /* Bartendar.swift in Sources */,
+				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
 				44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
@@ -1310,7 +1320,6 @@
 				44B2BFD422698BA400B584F5 /* TopAlignedLabel.swift in Sources */,
 				44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
 				44ECD9732277201000618576 /* MiscellaneousProtocols.swift in Sources */,
-				446DB7D5228BE1D900BE3DDF /* RemoteBookCoordinator.swift in Sources */,
 				44B2C07422719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				44B2C069226F037D00B584F5 /* ExpandedLabel.swift in Sources */,
 				44B2C04F226EEBB400B584F5 /* Theme.swift in Sources */,
@@ -1333,6 +1342,7 @@
 				44B2C028226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				4408B482227C373200C5EF68 /* TopListTableViewHeaderPlain.swift in Sources */,
 				44B2C0892271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
+				44717C20228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */,
 				4408B4782279B0E600C5EF68 /* CodeScanner.swift in Sources */,
 				44B2C012226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
 				44ECD94A2276D84600618576 /* Repositorable.swift in Sources */,
@@ -1347,6 +1357,7 @@
 				4408B46B2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */,
 				44ECD976227720EB00618576 /* Validator.swift in Sources */,
 				44B2BFE322698BA400B584F5 /* RealmWordDigest.swift in Sources */,
+				44717C1A228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
 				44ECD9672277032700618576 /* RealmBookRepository.swift in Sources */,
 				44B2C0972272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				446DB7D8228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */,
@@ -1365,6 +1376,7 @@
 				446DB7D2228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */,
 				446DB7AA2289632100BE3DDF /* BookProxySessionManager.swift in Sources */,
 				44ECD94322757EA200618576 /* Errors.swift in Sources */,
+				44717C23228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
 				44190D43228D34E500DB98E8 /* SessionManagerEx.swift in Sources */,
 				446DB7B7228992F300BE3DDF /* BookProxyEndpointTests.swift in Sources */,
 				44B2C040226EE99700B584F5 /* TypeAlias.swift in Sources */,

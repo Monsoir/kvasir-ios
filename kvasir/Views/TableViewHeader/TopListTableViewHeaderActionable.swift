@@ -26,6 +26,8 @@ class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
         }
     }
     
+    private var actionable = true
+    
     var seeAllHandler: (() -> Void)? = nil
     var createHandler: (() -> Void)? = nil
     
@@ -77,21 +79,24 @@ class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
             make.leading.equalTo(contentView.safeAreaLayoutGuide.snp.leading).offset(8)
         }
         
-        btnSeeAll.snp.makeConstraints { (make) in
-            make.centerY.equalTo(contentView.safeAreaLayoutGuide)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide.snp.trailing).offset(-8)
+        if actionable {
+            btnSeeAll.snp.makeConstraints { (make) in
+                make.centerY.equalTo(contentView.safeAreaLayoutGuide)
+                make.trailing.equalTo(contentView.safeAreaLayoutGuide.snp.trailing).offset(-8)
+            }
         }
-        
-//        btnCreate.snp.makeConstraints { (make) in
-//            make.centerY.equalTo(contentView.safeAreaLayoutGuide)
-//            make.right.equalTo(btnSeeAll.safeAreaLayoutGuide.snp.left).offset(-8)
-//        }
         
         super.updateConstraints()
     }
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+        setupSubviews()
+    }
+    
+    init(reuseIdentifier: String?, actionable: Bool = true) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        self.actionable = actionable
         setupSubviews()
     }
     
@@ -102,15 +107,15 @@ class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
 
 private extension TopListTableViewHeaderActionable {
     func setupSubviews() {
-        bindAction()
         contentView.addSubview(lbTitle)
-        contentView.addSubview(btnSeeAll)
-//        contentView.addSubview(btnCreate)
+        if actionable {
+            bindAction()
+            contentView.addSubview(btnSeeAll)
+        }
     }
     
     func bindAction() {
         btnSeeAll.addTarget(self, action: #selector(actionSeeAll), for: .touchUpInside)
-//        btnCreate.addTarget(self, action: #selector(actionCreate), for: .touchUpInside)
     }
     
     @objc func actionSeeAll() {

@@ -54,6 +54,10 @@ class PlainTextViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

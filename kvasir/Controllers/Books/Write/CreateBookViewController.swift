@@ -248,7 +248,7 @@ private extension CreateBookViewController {
                 return
             }
             MainQueue.async {
-                let coordinator = RemoteBookCoordinator(with: data ?? [:])
+                let coordinator = RemoteBookDetailCoordinator(with: data ?? [:])
                 let vc = RemoteBookDetailViewController(with: coordinator)
                 let nc = UINavigationController(rootViewController: vc)
                 self.navigationController?.present(nc, animated: true, completion: {

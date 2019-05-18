@@ -16,9 +16,15 @@ private let DisplayTitles = [
     "总页数", "装订", "价格", "出版社",
 ]
 
+private let DisplayHeaderTitles = ["与我相关", "书籍信息"]
+
+private let DisplayDigestTitles = [
+    "句摘", "段摘",
+]
+
 class RemoteBookDetailViewController: UIViewController {
     
-    private var coordinator: RemoteBookCoordinator!
+    private var coordinator: BookDetailCoordinable!
     private var dataToDisplay = [(label: String, value: Any)]()
     
     private lazy var tableView: UITableView = { [unowned self] in
@@ -39,7 +45,7 @@ class RemoteBookDetailViewController: UIViewController {
     
     private lazy var itemChooseIt: UIBarButtonItem = UIBarButtonItem(title: "选中", style: .done, target: self, action: #selector(actionChooseIt))
     
-    init(with coordinator: RemoteBookCoordinator) {
+    init(with coordinator: BookDetailCoordinable) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
     }
@@ -50,6 +56,7 @@ class RemoteBookDetailViewController: UIViewController {
     
     deinit {
         debugPrint("\(self) deinit")
+        coordinator.reclaim()
     }
     
     override func viewDidLoad() {
@@ -58,7 +65,8 @@ class RemoteBookDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
-        setupData()
+        setupCoordinator()
+        reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -68,8 +76,10 @@ class RemoteBookDetailViewController: UIViewController {
     
     private func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.leftBarButtonItem = autoGenerateBackItem()
-        navigationItem.rightBarButtonItem = itemChooseIt
+        if coordinator is RemoteBookDetailCoordinator {
+            navigationItem.leftBarButtonItem = autoGenerateBackItem()
+            navigationItem.rightBarButtonItem = itemChooseIt
+        }
         title = coordinator.title
     }
     
@@ -80,7 +90,7 @@ class RemoteBookDetailViewController: UIViewController {
         }
     }
     
-    private func setupData() {
+    private func reloadData() {
         // 与 DisplayTitles 顺序对应
         let values: [Any] = [
             coordinator.summary,
@@ -105,7 +115,40 @@ class RemoteBookDetailViewController: UIViewController {
                 return false
             }
         }
+        title = coordinator.title
         dataToDisplay = data
+        tableView.reloadData()
+    }
+    
+    private func setupCoordinator() {
+        if coordinator is LocalBookCoordinator {
+            let c = coordinator as! LocalBookCoordinator
+            c.reload = { [weak self] _ in
+                guard let strongSelf = self else { return }
+                MainQueue.async {
+                    strongSelf.reloadData()
+                }
+            }
+            c.entityDeleteHandler = { [weak self] in
+                guard let strongSelf = self else { return }
+                MainQueue.async {
+                    HUD.flash(.label("书籍已被删除"), onView: nil, delay: 1.5, completion: nil)
+                    strongSelf.navigationController?.popViewController()
+                }
+            }
+            c.errorHandler = { msg in
+                MainQueue.async {
+                    HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
+                }
+            }
+            c.query { [weak self] (success, entity) in
+                guard success, let strongSelf = self else { return }
+                MainQueue.async {
+                    strongSelf.reloadData()
+                    strongSelf.reloadHeaderView()
+                }
+            }
+        }
     }
     
     private func reloadHeaderView() {
@@ -116,8 +159,9 @@ class RemoteBookDetailViewController: UIViewController {
     }
     
     @objc private func actionChooseIt() {
+        guard coordinator is RemoteBookDetailCoordinator else { return }
         HUD.show(.labeledProgress(title: "创建中", subtitle: nil))
-        coordinator.batchCreate { (success, message) in
+        (coordinator as! RemoteBookDetailCoordinator).batchCreate { (success, message) in
             MainQueue.async { [weak self] in
                 HUD.hide()
                 guard success else {
@@ -137,20 +181,79 @@ extension RemoteBookDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard indexPath.row == 0 else { return }
-        let vc = PlainTextViewController()
-        vc.navigationTitle = "简介"
-        vc.content = coordinator.summary
-        navigationController?.pushViewController(vc, animated: true)
+        if coordinator is RemoteBookDetailCoordinator && indexPath.section == 0 && indexPath.row == 0 ||
+            coordinator is LocalBookCoordinator && indexPath.section == 1 && indexPath.row == 0 {
+            let vc = PlainTextViewController()
+            vc.navigationTitle = "简介"
+            vc.content = coordinator.summary
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if coordinator is RemoteBookDetailCoordinator {
+            return 0
+        }
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard coordinator is LocalBookCoordinator else { return nil }
+        var header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier())
+        if header == nil {
+            header = TopListTableViewHeaderActionable(reuseIdentifier: TopListTableViewHeaderActionable.reuseIdentifier(), actionable: false)
+        }
+        
+        (header as! TopListTableViewHeaderActionable).title = DisplayHeaderTitles[section]
+        header?.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
+        return header
     }
 }
 
 extension RemoteBookDetailViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if coordinator is LocalBookCoordinator {
+            return 2
+        }
+        return 1
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if coordinator is LocalBookCoordinator {
+            if section == 0 {
+                return DisplayDigestTitles.count
+            }
+        }
         return dataToDisplay.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if coordinator is LocalBookCoordinator && indexPath.section == 0 {
+            return cellForDigests(tableView: tableView, cellAtIndexPath: indexPath)
+        }
+        return cellForBookInfo(tableView: tableView, cellAtIndexPath: indexPath)
+    }
+    
+    private func cellForDigests(tableView: UITableView, cellAtIndexPath indexPath: IndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier())
+        if cell == nil {
+            cell = UITableViewCell(style: .value1, reuseIdentifier: UITableViewCell.reuseIdentifier())
+        }
+        cell?.textLabel?.text = DisplayDigestTitles[indexPath.row]
+        cell?.detailTextLabel?.text = {
+            switch indexPath.row {
+            case 0:
+                return "\((coordinator as! LocalBookCoordinator).sentencesCount)"
+            case 1:
+                return "\((coordinator as! LocalBookCoordinator).paragraphsCount)"
+            default:
+                return ""
+            }
+        }()
+        cell?.accessoryType = .disclosureIndicator
+        return cell!
+    }
+    
+    private func cellForBookInfo(tableView: UITableView, cellAtIndexPath indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DigestDetailTableViewCell.reuseIdentifier(), for: indexPath) as! DigestDetailTableViewCell
         let data = dataToDisplay[indexPath.row]
         cell.label = data.label

@@ -9,120 +9,73 @@
 import Foundation
 import SwifterSwift
 
-class RemoteBookCoordinator {
-    var thumbnail: String {
-        get {
-            let thumbnails = payload["imagesLarge"] as? String ?? ""
-            return String(thumbnails.split(separator: ",").first ?? "")
-        }
-        set {}
+class RemoteBookDetailCoordinator: BookDetailCoordinator {
+    override var thumbnail: String {
+        let thumbnails = payload["imagesLarge"] as? String ?? ""
+        return String(thumbnails.split(separator: ",").first ?? "")
     }
     
-    var title: String {
-        get {
-            return payload["title"] as? String ?? ""
-        }
-        set {}
+    override var title: String {
+        return payload["title"] as? String ?? ""
     }
     
-    var authors: String {
-        get {
-            let authorString = payload["author"] as? String ?? ""
-            let authors = authorString.split(separator: ",").map { String($0) }
-            return authors.joined(separator: "/")
-        }
-        set {}
+    override var authors: String {
+        let authorString = payload["author"] as? String ?? ""
+        let authors = authorString.split(separator: ",").map { String($0) }
+        return authors.joined(separator: "/")
     }
     
-    var detail: String {
-        get {
-            return payload["authors"] as? String ?? ""
-        }
-        set {}
+    override var detail: String {
+        return payload["authors"] as? String ?? ""
     }
     
-    var summary: String {
-        get {
-            return payload["summary"] as? String ?? ""
-        }
-        set {}
+    override var summary: String {
+        return payload["summary"] as? String ?? ""
     }
     
-    var binding: String {
-        get {
-            return payload["binding"] as? String ?? ""
-        }
-        set {}
+    override var binding: String {
+        return payload["binding"] as? String ?? ""
     }
     
-    var isbn13: String {
-        get {
-            return payload["isbn"] as? String ?? ""
-        }
-        set {}
+    override var isbn13: String {
+        return payload["isbn"] as? String ?? ""
     }
     
-    var isbn10: String {
-        get {
-            return payload["isbn10"] as? String ?? ""
-        }
-        set {}
+    override var isbn10: String {
+        return payload["isbn10"] as? String ?? ""
     }
     
-    var originTitle: String {
-        get {
-            return payload["originTitle"] as? String ?? ""
-        }
-        set {}
+    override var originTitle: String {
+        return payload["originTitle"] as? String ?? ""
     }
     
-    var pages: Int {
-        get {
-            return payload["pages"] as? Int ?? 0
-        }
-        set {}
+    override var pages: Int {
+        return payload["pages"] as? Int ?? 0
     }
     
-    var price: String {
-        get {
-            return payload["price"] as? String ?? ""
-        }
-        set {}
+    override var price: String {
+        return payload["price"] as? String ?? ""
     }
     
-    var publisher: String {
-        get {
-            return payload["publisher"] as? String ?? ""
-        }
-        set {}
+    override var publisher: String {
+        return payload["publisher"] as? String ?? ""
     }
     
-    var translators: String {
-        get {
-            let translatorString = payload["translator"] as? String ?? ""
-            let translators = translatorString.split(separator: ",").map { String($0) }
-            return translators.joined(separator: "/")
-        }
-        set {}
+    override var translators: String {
+        let translatorString = payload["translator"] as? String ?? ""
+        let translators = translatorString.split(separator: ",").map { String($0) }
+        return translators.joined(separator: "/")
     }
     
-    
-    var payloadForHeader: [String: Any] {
-        get {
-            return [
-                "thumbnail": thumbnail,
-                "title": title,
-                "detail": authors,
-            ]
-        }
-        set {}
+     override var payloadForHeader: [String: Any] {
+        return [
+            "thumbnail": thumbnail,
+            "title": title,
+            "detail": authors,
+        ]
     }
     
-    private var payload: [String: Any]!
     private lazy var repository = RealmBookRepository()
-    init(with payload: [String: Any]) {
-        self.payload = payload
-    }
     
     func batchCreate(completion: @escaping RealmCreateCompletion) {
         let extractFirstImage: (_ images: String) -> String = { images in
@@ -134,6 +87,7 @@ class RemoteBookCoordinator {
         bookToCreate.isbn10 = payload["isbn10"] as? String ?? ""
         bookToCreate.name = payload["title"] as? String ?? ""
         bookToCreate.localeName = payload["localeName"] as? String ?? ""
+        bookToCreate.summary = payload["summary"] as? String ?? ""
         bookToCreate.publisher = payload["publisher"] as? String ?? ""
         bookToCreate.imageLarge = extractFirstImage(payload["imagesLarge"] as? String ?? "")
         bookToCreate.imageMedium = extractFirstImage(payload["imagesLarge"] as? String ?? "")

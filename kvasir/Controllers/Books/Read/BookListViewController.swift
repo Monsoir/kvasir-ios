@@ -170,8 +170,16 @@ extension BookListViewController: UITableViewDataSource {
 
 extension BookListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let book = results?[indexPath.row] else { return }
-        selectCompletion?(book)
+        if modifyable {
+            guard let book = results?[indexPath.row] else { return }
+            let coordinator = LocalBookCoordinator(with: ["id": book.id])
+            let vc = RemoteBookDetailViewController(with: coordinator)
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            guard let book = results?[indexPath.row] else { return }
+            selectCompletion?(book)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
@@ -235,7 +243,7 @@ private extension BookListViewController {
     }
     
     func previewNewBook(data: [String: Any]?) {
-        let coordinator = RemoteBookCoordinator(with: data ?? [:])
+        let coordinator = RemoteBookDetailCoordinator(with: data ?? [:])
         let vc = RemoteBookDetailViewController(with: coordinator)
         let nc = UINavigationController(rootViewController: vc)
         navigationController?.present(nc, animated: true, completion: nil)
