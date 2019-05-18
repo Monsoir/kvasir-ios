@@ -81,7 +81,7 @@ class LocalBookCoordinator: BookDetailCoordinator {
     private lazy var repository = RealmBookRepository()
     private var entity: RealmBook?
     
-    override func query(_ completion: @escaping (Bool, RealmBook?) -> Void) {
+    override func query(_ completion: @escaping BookDetailQueryCompletion) {
         guard let bookId = payload["id"] as? String else {
             return
         }
@@ -99,7 +99,7 @@ class LocalBookCoordinator: BookDetailCoordinator {
                     strongSelf.entityDeleteHandler?()
                 }
             })
-            completion(true, entity)
+            completion(true, entity, nil)
         }
     }
     

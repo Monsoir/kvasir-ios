@@ -215,19 +215,22 @@ private extension BookListViewController {
                     debugPrint(code)
                     
                     theVC.dismiss(animated: true, completion: {
-                        HUD.show(.labeledProgress(title: "查询中", subtitle: nil))
-                        strongSelf.coordinator.queryBookFromRemote(isbn: code, completion: { (success, data, message) in
-                            guard success else {
-                                MainQueue.async {
-                                    HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
-                                }
-                                return
-                            }
-                            MainQueue.async {
-                                HUD.hide()
-                                strongSelf.previewNewBook(data: data)
-                            }
-                        })
+                        MainQueue.async {
+                            strongSelf.previewNewBook(code: code)
+                        }
+//                        HUD.show(.labeledProgress(title: "查询中", subtitle: nil))
+//                        strongSelf.coordinator.queryBookFromRemote(isbn: code, completion: { (success, data, message) in
+//                            guard success else {
+//                                MainQueue.async {
+//                                    HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+//                                }
+//                                return
+//                            }
+//                            MainQueue.async {
+//                                HUD.hide()
+//                                strongSelf.previewNewBook(data: data)
+//                            }
+//                        })
                     })
                 }
             }
@@ -244,6 +247,13 @@ private extension BookListViewController {
     
     func previewNewBook(data: [String: Any]?) {
         let coordinator = RemoteBookDetailCoordinator(with: data ?? [:])
+        let vc = RemoteBookDetailViewController(with: coordinator)
+        let nc = UINavigationController(rootViewController: vc)
+        navigationController?.present(nc, animated: true, completion: nil)
+    }
+    
+    func previewNewBook(code: String) {
+        let coordinator = RemoteBookDetailCoordinator(with: ["code": code])
         let vc = RemoteBookDetailViewController(with: coordinator)
         let nc = UINavigationController(rootViewController: vc)
         navigationController?.present(nc, animated: true, completion: nil)

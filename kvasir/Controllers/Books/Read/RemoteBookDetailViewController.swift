@@ -65,8 +65,15 @@ class RemoteBookDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupNavigationBar()
         setupSubviews()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         setupCoordinator()
         reloadData()
+        if coordinator is RemoteBookDetailCoordinator {
+            HUD.show(.progress, onView: navigationController?.view)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -141,9 +148,43 @@ class RemoteBookDetailViewController: UIViewController {
                     HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
                 }
             }
-            c.query { [weak self] (success, entity) in
+            c.query { [weak self] (success, entity, _) in
                 guard success, let strongSelf = self else { return }
                 MainQueue.async {
+                    strongSelf.reloadData()
+                    strongSelf.reloadHeaderView()
+                }
+            }
+        }
+        
+        if coordinator is RemoteBookDetailCoordinator {
+            let c = coordinator as! RemoteBookDetailCoordinator
+            c.reload = { [weak self] _ in
+                guard let strongSelf = self else { return }
+                MainQueue.async {
+                    strongSelf.reloadData()
+                }
+            }
+            c.errorHandler = { [weak self] msg in
+                MainQueue.async {
+                    HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
+                    guard let strongSelf = self else { return }
+                    strongSelf.dismiss(animated: true, completion: nil)
+                }
+            }
+            c.query { [weak self] (success, data, message) in
+                guard success, let strongSelf = self else {
+                    MainQueue.async { [weak self] in
+                        HUD.flash(.labeledError(title: "出错了", subtitle: message ?? ""), onView: nil, delay: 1.5, completion: nil)
+                        guard let innerStrongSelf = self else {
+                            return
+                        }
+                        innerStrongSelf.dismiss(animated: true, completion: nil)
+                    }
+                    return
+                }
+                MainQueue.async {
+                    HUD.hide(animated: true)
                     strongSelf.reloadData()
                     strongSelf.reloadHeaderView()
                 }
@@ -163,15 +204,16 @@ class RemoteBookDetailViewController: UIViewController {
         HUD.show(.labeledProgress(title: "创建中", subtitle: nil))
         (coordinator as! RemoteBookDetailCoordinator).batchCreate { (success, message) in
             MainQueue.async { [weak self] in
+                guard let strongSelf = self else { return }
                 HUD.hide()
                 guard success else {
-                    Bartendar.handleSorryAlert(message: message ?? "", on: nil)
+                    Bartendar.handleSorryAlert(message: message ?? "", on: strongSelf.navigationController)
                     return
                 }
                 if message != nil {
                     HUD.flash(.label(message ?? ""), delay: 1.5)
                 }
-                self?.dismiss(animated: true, completion: nil)
+                strongSelf.dismiss(animated: true, completion: nil)
             }
         }
     }

@@ -123,7 +123,10 @@ class RealmBookRepository: Repositorable {
                         return temp
                     }()
                     
-                    
+                    if searchBookConditions.isEmpty {
+                        completion(false, "书籍信息有误")
+                        return
+                    }
                     if let _ = realm.objects(Model.self).filter(searchBookConditions.joined(separator: " OR ")).first {
                         // book existed, just return home
                         completion(true, "书籍已存在")

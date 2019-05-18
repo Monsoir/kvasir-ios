@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-typealias BookDetailQueryCompletion = RealmQueryAnEntityCompletion
+typealias BookDetailQueryCompletion = (_ success: Bool, _ data: Any?, _ message: String?) -> Void
 
 protocol BookDetailCoordinable: RealmNotificationable {
     var thumbnail: String { get }
@@ -32,7 +32,7 @@ protocol BookDetailCoordinable: RealmNotificationable {
     var entityDeleteHandler: (() -> Void)? { get set }
     
     init(with payload: [String: Any])
-    func query(_ completion: @escaping BookDetailQueryCompletion<RealmBook>)
+    func query(_ completion: @escaping BookDetailQueryCompletion)
 }
 
 class BookDetailCoordinator: BookDetailCoordinable {
@@ -110,8 +110,8 @@ class BookDetailCoordinator: BookDetailCoordinable {
         debugPrint("\(self) deinit")
     }
     
-    func query(_ completion: @escaping BookDetailQueryCompletion<RealmBook>) {
-        completion(false, nil)
+    func query(_ completion: @escaping BookDetailQueryCompletion) {
+        completion(false, nil, "subclass must override `query` method")
     }
     
     func reclaim() {
