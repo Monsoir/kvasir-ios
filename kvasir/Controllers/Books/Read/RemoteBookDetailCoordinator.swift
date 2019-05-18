@@ -10,6 +10,7 @@ import Foundation
 import SwifterSwift
 
 class RemoteBookDetailCoordinator: BookDetailCoordinator {
+    
     override var thumbnail: String {
         let thumbnails = remoteData?["imagesLarge"] as? String ?? ""
         return String(thumbnails.split(separator: ",").first ?? "")

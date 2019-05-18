@@ -13,7 +13,7 @@ import RealmSwift
 
 class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    private lazy var coordinator = DigestListCoordinator<Digest>()
+    private var coordinator: DigestListCoordinator<Digest>!
     private var results: Results<Digest>? {
         get {
             return coordinator.results
@@ -30,6 +30,15 @@ class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITab
         view.separatorStyle = .none
         return view
     }()
+    
+    init(with payload: [String: Any]) {
+        super.init(nibName: nil, bundle: nil)
+        coordinator = DigestListCoordinator<Digest>(with: payload)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     deinit {
         coordinator.reclaim()
@@ -95,7 +104,7 @@ private extension DigestListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
-        title = Digest.toHuman()
+        title = coordinator.bookName.isEmpty ? Digest.toHuman() : "\(coordinator.bookName)的\(Digest.toHuman())"
     }
     
     func setupSubviews() {
@@ -119,6 +128,7 @@ private extension DigestListViewController {
     func reload() {
         MainQueue.async {
             self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
+            self.title = self.coordinator.bookName.isEmpty ? Digest.toHuman() : "\(self.coordinator.bookName) - \(Digest.toHuman())"
             self.tableView.reloadData()
         }
     }

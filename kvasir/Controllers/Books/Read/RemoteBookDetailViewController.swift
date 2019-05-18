@@ -26,6 +26,7 @@ class RemoteBookDetailViewController: UIViewController {
     
     private var coordinator: BookDetailCoordinable!
     private var dataToDisplay = [(label: String, value: Any)]()
+    private var loaded = false
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
@@ -69,10 +70,12 @@ class RemoteBookDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupCoordinator()
-        reloadData()
-        if coordinator is RemoteBookDetailCoordinator {
-            HUD.show(.progress, onView: navigationController?.view)
+        if !loaded {setupCoordinator()
+            reloadData()
+            if coordinator is RemoteBookDetailCoordinator {
+                HUD.show(.progress, onView: navigationController?.view)
+            }
+            loaded = true
         }
     }
     
@@ -225,10 +228,23 @@ extension RemoteBookDetailViewController: UITableViewDelegate {
         
         if coordinator is RemoteBookDetailCoordinator && indexPath.section == 0 && indexPath.row == 0 ||
             coordinator is LocalBookCoordinator && indexPath.section == 1 && indexPath.row == 0 {
+            guard !coordinator.mightAddedManully else { return }
+            
             let vc = PlainTextViewController()
             vc.navigationTitle = "简介"
             vc.content = coordinator.summary
             navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        if coordinator is LocalBookCoordinator && indexPath.section == 0 {
+            switch indexPath.row {
+            case 0:
+                KvasirNavigator.push(KvasirURLs.sentencesOfBook(coordinator.id))
+            case 1:
+                KvasirNavigator.push(KvasirURLs.paragraphsOfBook(coordinator.id))
+            default:
+                break
+            }
         }
     }
     
@@ -301,7 +317,7 @@ extension RemoteBookDetailViewController: UITableViewDataSource {
         cell.label = data.label
         cell.value = "\(data.value)"
         
-        if indexPath.row == 0 {
+        if indexPath.row == 0 && !coordinator.mightAddedManully {
             cell.accessoryType = .disclosureIndicator
             cell.selectionStyle = .default
             cell.maxLine = 4

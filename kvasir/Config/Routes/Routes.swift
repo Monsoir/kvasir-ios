@@ -60,6 +60,19 @@ struct KvasirURLs {
     
     // kvasir://resource/select/translator
     static let selectTranslators = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.select).component(RouteConstants.Nouns.translator).extract()
+    
+    // 某本书籍下的摘要列表
+    
+    // kvasir://resource/book/<book-id>/digest/sentence/all
+    static let sentencesOfBookTemplate = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.book).component("<string:id>").component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine()).component(RouteConstants.Actions.all).extract()
+    static let sentencesOfBook = { (_ bookId: String) -> String in
+    return SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.book).component(bookId).component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine()).component(RouteConstants.Actions.all).extract()
+    }
+    // kvasir://resource/book/<book-id>/digest/paragraph/all
+    static let paragraphsOfBookTemplate = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component("<string:id>").component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component(RouteConstants.Actions.all).extract()
+    static let paragraphsOfBook = { (_ bookId: String) -> String in
+        return SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component(bookId).component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component(RouteConstants.Actions.all).extract()
+    }
 }
 
 struct URLNavigaionMap {
@@ -83,6 +96,9 @@ struct URLNavigaionMap {
         navigator.register(KvasirURLs.selectBooks, selectResourceControllerFactory(url:values:context:))
         navigator.register(KvasirURLs.selectAuthors, selectResourceControllerFactory(url:values:context:))
         navigator.register(KvasirURLs.selectTranslators, selectResourceControllerFactory(url:values:context:))
+        
+        navigator.register(KvasirURLs.sentencesOfBookTemplate, digestOfBookControllerFactory(url:values:context:))
+        navigator.register(KvasirURLs.paragraphsOfBookTemplate, digestOfBookControllerFactory(url:values:context:))
     }
 }
 
@@ -113,9 +129,9 @@ private func allDigestControllerFactory(url: URLConvertible, values: [String: An
     
     switch identifier {
     case RealmSentence.toMachine():
-        return DigestListViewController<RealmSentence>()
+        return DigestListViewController<RealmSentence>(with: [:])
     case RealmParagraph.toMachine():
-        return DigestListViewController<RealmParagraph>()
+        return DigestListViewController<RealmParagraph>(with: [:])
     default:
         return nil
     }
@@ -174,6 +190,18 @@ private func selectResourceControllerFactory(url: URLConvertible, values: [Strin
         return AuthorListViewController(with: ["editable": false, "title": "选择一个\(RealmAuthor.toHuman())"])
     case RouteConstants.Nouns.translator:
         return TranslatorListViewController(with: ["editable": false, "title": "选择一个\(RealmTranslator.toHuman())"])
+    default:
+        return nil
+    }
+}
+
+private func digestOfBookControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    guard let id = values["id"], let digestType = get(url: url, componentAt: 4) else { return nil }
+    switch digestType {
+    case RealmSentence.toMachine():
+        return DigestListViewController<RealmSentence>(with: ["bookId": id])
+    case RealmParagraph.toMachine():
+        return DigestListViewController<RealmParagraph>(with: ["bookId": id])
     default:
         return nil
     }

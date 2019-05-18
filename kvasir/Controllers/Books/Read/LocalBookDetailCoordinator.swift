@@ -10,6 +10,14 @@ import Foundation
 import RealmSwift
 
 class LocalBookCoordinator: BookDetailCoordinator {
+    override var mightAddedManully: Bool {
+        return thumbnail.isEmpty && summary.isEmpty
+    }
+    
+    override var id: String {
+        return entity?.id ?? ""
+    }
+    
     override var thumbnail: String {
         return entity?.thumbnailImage ?? ""
     }

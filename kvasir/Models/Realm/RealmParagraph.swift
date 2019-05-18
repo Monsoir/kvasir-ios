@@ -10,7 +10,7 @@ import RealmSwift
 
 class RealmParagraph: RealmWordDigest {
     override class func toHuman() -> String {
-        return "段落"
+        return "段摘"
     }
     
     override class func toMachine() -> String {

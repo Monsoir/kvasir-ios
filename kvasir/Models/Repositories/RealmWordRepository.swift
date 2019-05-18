@@ -19,6 +19,23 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
         #endif
     }
     
+//    func queryAllSortingByUpdatedAtDesc(with bookId: String, completion: @escaping (Bool, Results<T>?) -> Void) {
+//        guard !bookId.isEmpty else {
+//            completion(false, nil)
+//            return
+//        }
+//        RealmWritingQueue.async {
+//            autoreleasepool(invoking: { () -> Void in
+//                do {
+//                    let realm = try Realm()
+//                    let results = realm.objects(T.self).filter("book = \()")
+//                } catch {
+//                    completion(false, nil)
+//                }
+//            })
+//        }
+//    }
+    
     func preCreate(unmanagedModel: Model) {
         unmanagedModel.preCreate()
     }

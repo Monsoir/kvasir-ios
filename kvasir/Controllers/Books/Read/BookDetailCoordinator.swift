@@ -12,6 +12,8 @@ import RealmSwift
 typealias BookDetailQueryCompletion = (_ success: Bool, _ data: Any?, _ message: String?) -> Void
 
 protocol BookDetailCoordinable: RealmNotificationable {
+    var mightAddedManully: Bool { get }
+    var id: String { get }
     var thumbnail: String { get }
     var title: String { get }
     var authors: String { get }
@@ -36,6 +38,14 @@ protocol BookDetailCoordinable: RealmNotificationable {
 }
 
 class BookDetailCoordinator: BookDetailCoordinable {
+    
+    var mightAddedManully: Bool {
+        return false
+    }
+    
+    var id: String {
+        return ""
+    }
     
     var thumbnail: String {
         return ""
