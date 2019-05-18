@@ -46,8 +46,8 @@
 		446DB7BE228ABB2900BE3DDF /* CustomEurekaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7BC228ABB2900BE3DDF /* CustomEurekaModel.swift */; };
 		446DB7C8228B24CC00BE3DDF /* Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */; };
 		446DB7C9228B24CC00BE3DDF /* Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */; };
-		446DB7D1228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */; };
-		446DB7D2228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */; };
+		446DB7D1228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D0228BE1C700BE3DDF /* BookDetailViewController.swift */; };
+		446DB7D2228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D0228BE1C700BE3DDF /* BookDetailViewController.swift */; };
 		446DB7D7228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */; };
 		446DB7D8228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */; };
 		446DB7DA228BE6C200BE3DDF /* StringEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7D9228BE6C200BE3DDF /* StringEx.swift */; };
@@ -247,7 +247,7 @@
 		446DB7B9228AB02800BE3DDF /* EurekaFillableActionableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EurekaFillableActionableRow.swift; sourceTree = "<group>"; };
 		446DB7BC228ABB2900BE3DDF /* CustomEurekaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEurekaModel.swift; sourceTree = "<group>"; };
 		446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kingfisher.swift; sourceTree = "<group>"; };
-		446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBookDetailViewController.swift; sourceTree = "<group>"; };
+		446DB7D0228BE1C700BE3DDF /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteBookDetailHeader.swift; sourceTree = "<group>"; };
 		446DB7D9228BE6C200BE3DDF /* StringEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringEx.swift; sourceTree = "<group>"; };
 		446DB7DC228BE8CC00BE3DDF /* MsrCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsrCompatible.swift; sourceTree = "<group>"; };
@@ -796,7 +796,7 @@
 			children = (
 				44B2C07B2271B1C800B584F5 /* BookListViewController.swift */,
 				44ECD9622277031100618576 /* BookListCoordinator.swift */,
-				446DB7D0228BE1C700BE3DDF /* RemoteBookDetailViewController.swift */,
+				446DB7D0228BE1C700BE3DDF /* BookDetailViewController.swift */,
 				44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */,
 				44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */,
 				44717C18228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift */,
@@ -1253,7 +1253,7 @@
 				44B2C046226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
 				44ECD9552276FB6B00618576 /* CreateListCoordinator.swift in Sources */,
-				446DB7D1228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */,
+				446DB7D1228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */,
 				446DB7D7228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */,
 				4408B4772279B0E600C5EF68 /* CodeScanner.swift in Sources */,
 				446DB7B322896AAE00BE3DDF /* Sensitive.swift in Sources */,
@@ -1373,7 +1373,7 @@
 				44190D46228D5A6F00DB98E8 /* TopListDeputyCoordinator.swift in Sources */,
 				44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */,
 				44ECD94D2276DD2F00618576 /* RealmWordRepository.swift in Sources */,
-				446DB7D2228BE1C700BE3DDF /* RemoteBookDetailViewController.swift in Sources */,
+				446DB7D2228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */,
 				446DB7AA2289632100BE3DDF /* BookProxySessionManager.swift in Sources */,
 				44ECD94322757EA200618576 /* Errors.swift in Sources */,
 				44717C23228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,

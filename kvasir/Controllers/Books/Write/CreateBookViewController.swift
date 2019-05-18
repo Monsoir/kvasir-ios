@@ -249,7 +249,7 @@ private extension CreateBookViewController {
             }
             MainQueue.async {
                 let coordinator = RemoteBookDetailCoordinator(with: data ?? [:])
-                let vc = RemoteBookDetailViewController(with: coordinator)
+                let vc = BookDetailViewController(with: coordinator)
                 let nc = UINavigationController(rootViewController: vc)
                 self.navigationController?.present(nc, animated: true, completion: {
                     HUD.hide()

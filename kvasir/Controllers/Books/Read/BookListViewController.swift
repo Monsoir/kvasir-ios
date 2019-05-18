@@ -173,7 +173,7 @@ extension BookListViewController: UITableViewDelegate {
         if modifyable {
             guard let book = results?[indexPath.row] else { return }
             let coordinator = LocalBookCoordinator(with: ["id": book.id])
-            let vc = RemoteBookDetailViewController(with: coordinator)
+            let vc = BookDetailViewController(with: coordinator)
             navigationController?.pushViewController(vc, animated: true)
         } else {
             guard let book = results?[indexPath.row] else { return }
@@ -247,14 +247,14 @@ private extension BookListViewController {
     
     func previewNewBook(data: [String: Any]?) {
         let coordinator = RemoteBookDetailCoordinator(with: data ?? [:])
-        let vc = RemoteBookDetailViewController(with: coordinator)
+        let vc = BookDetailViewController(with: coordinator)
         let nc = UINavigationController(rootViewController: vc)
         navigationController?.present(nc, animated: true, completion: nil)
     }
     
     func previewNewBook(code: String) {
         let coordinator = RemoteBookDetailCoordinator(with: ["code": code])
-        let vc = RemoteBookDetailViewController(with: coordinator)
+        let vc = BookDetailViewController(with: coordinator)
         let nc = UINavigationController(rootViewController: vc)
         navigationController?.present(nc, animated: true, completion: nil)
     }

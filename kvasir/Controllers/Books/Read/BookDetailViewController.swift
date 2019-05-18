@@ -22,7 +22,7 @@ private let DisplayDigestTitles = [
     "句摘", "段摘",
 ]
 
-class RemoteBookDetailViewController: UIViewController {
+class BookDetailViewController: UIViewController {
     
     private var coordinator: BookDetailCoordinable!
     private var dataToDisplay = [(label: String, value: Any)]()
@@ -222,7 +222,7 @@ class RemoteBookDetailViewController: UIViewController {
     }
 }
 
-extension RemoteBookDetailViewController: UITableViewDelegate {
+extension BookDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -268,7 +268,7 @@ extension RemoteBookDetailViewController: UITableViewDelegate {
     }
 }
 
-extension RemoteBookDetailViewController: UITableViewDataSource {
+extension BookDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if coordinator is LocalBookCoordinator {
             return 2
