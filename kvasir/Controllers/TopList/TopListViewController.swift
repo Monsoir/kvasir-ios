@@ -15,13 +15,13 @@ private let ScaleFactor = 0.9 as CGFloat
 private let ScaleDuration = 0.1
 
 private let FocusedSection: [(title: String, url: String)] = [
-    ("句摘", KvasirURLs.allSentences),
-    ("段摘", KvasirURLs.allParagraphs),
+    ("句摘", KvasirURL.allSentences.url()),
+    ("段摘", KvasirURL.allParagraphs.url()),
 ]
 private let Resources: [(title: String, url: String)] = [
-    ("书籍", KvasirURLs.allBooks),
-    ("作家们", KvasirURLs.allAuthors),
-    ("翻译家们", KvasirURLs.allTranslators),
+    ("书籍", KvasirURL.allBooks.url()),
+    ("\(RealmAuthor.toHuman())们", KvasirURL.allAuthors.url()),
+    ("\(RealmTranslator.toHuman())们", KvasirURL.allTranslators.url()),
 ]
 private let ResourceCellIdentifier = "resource"
 
@@ -338,10 +338,10 @@ extension TopListViewController: UICollectionViewDelegate {
         switch collectionLocation.section {
         case 0:
             guard let digest = sentencesData?[indexPath.row] else { return }
-            KvasirNavigator.push(KvasirURLs.detailSentence(digest.id), context: nil, from: navigationController, animated: true)
+            KvasirNavigator.push(KvasirURL.detailSentence.url(with: ["id": digest.id]), context: nil, from: navigationController, animated: true)
         case 1:
             guard let digest = paragraphsData?[indexPath.row] else { return }
-            KvasirNavigator.push(KvasirURLs.detailParagraph(digest.id), context: nil, from: navigationController, animated: true)
+            KvasirNavigator.push(KvasirURL.detailParagraph.url(with: ["id": digest.id]), context: nil, from: navigationController, animated: true)
         default:
             break
         }
@@ -378,7 +378,7 @@ private extension TopListViewController {
         let sheet = UIAlertController(title: "创建摘录", message: "请选择摘录类型", preferredStyle: .actionSheet)
         let actionSentence = UIAlertAction(title: "句子", style: .default) { (_) in
             KvasirNavigator.present(
-                KvasirURLs.newSentence,
+                KvasirURL.newSentence.url(),
                 context: nil,
                 wrap: UINavigationController.self,
                 from: AppRootViewController,
@@ -389,7 +389,7 @@ private extension TopListViewController {
         
         let actionParagraph = UIAlertAction(title: "段落", style: .default) { (_) in
             KvasirNavigator.present(
-                KvasirURLs.newParagraph,
+                KvasirURL.newParagraph.url(),
                 context: nil,
                 wrap: UINavigationController.self,
                 from: AppRootViewController,

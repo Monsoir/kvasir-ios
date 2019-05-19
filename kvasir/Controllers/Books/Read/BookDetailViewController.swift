@@ -239,9 +239,9 @@ extension BookDetailViewController: UITableViewDelegate {
         if coordinator is LocalBookCoordinator && indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                KvasirNavigator.push(KvasirURLs.sentencesOfBook(coordinator.id))
+                KvasirNavigator.push(KvasirURL.sentencesOfBook.url(with: ["id": coordinator.id]))
             case 1:
-                KvasirNavigator.push(KvasirURLs.paragraphsOfBook(coordinator.id))
+                KvasirNavigator.push(KvasirURL.paragraphsOfBook.url(with: ["id": coordinator.id]))
             default:
                 break
             }

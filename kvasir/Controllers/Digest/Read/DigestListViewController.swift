@@ -58,8 +58,8 @@ class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITab
     
     @objc func actionCreate() {
         let dict = [
-            RealmSentence.toMachine(): KvasirURLs.newSentence,
-            RealmParagraph.toMachine(): KvasirURLs.newParagraph,
+            RealmSentence.toMachine(): KvasirURL.newSentence.url(),
+            RealmParagraph.toMachine(): KvasirURL.newParagraph.url(),
         ]
         KvasirNavigator.present(
             dict[Digest.toMachine()]!,
@@ -91,9 +91,9 @@ class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITab
         guard let digest = results?[indexPath.row] else { return }
         switch digest {
         case is RealmSentence:
-            KvasirNavigator.push(KvasirURLs.detailSentence(digest.id), context: nil, from: navigationController, animated: true)
+            KvasirNavigator.push(KvasirURL.detailSentence.url(with: ["id": digest.id]), context: nil, from: navigationController, animated: true)
         case is RealmParagraph:
-            KvasirNavigator.push(KvasirURLs.detailParagraph(digest.id), context: nil, from: navigationController, animated: true)
+            KvasirNavigator.push(KvasirURL.detailParagraph.url(with: ["id": digest.id]), context: nil, from: navigationController, animated: true)
         default:
             break
         }

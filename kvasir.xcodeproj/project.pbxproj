@@ -62,6 +62,10 @@
 		44717C20228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */; };
 		44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */; };
 		44717C23228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */; };
+		44717C25229101E00049FEB6 /* RouteDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C24229101E00049FEB6 /* RouteDefs.swift */; };
+		44717C26229101E00049FEB6 /* RouteDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C24229101E00049FEB6 /* RouteDefs.swift */; };
+		44717C28229117140049FEB6 /* RouteControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C27229117140049FEB6 /* RouteControllerFactory.swift */; };
+		44717C29229117140049FEB6 /* RouteControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C27229117140049FEB6 /* RouteControllerFactory.swift */; };
 		44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECE42246A5D800D1C402 /* ViewController.swift */; };
 		44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
@@ -255,6 +259,8 @@
 		44717C18228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBookDetailCoordinator.swift; sourceTree = "<group>"; };
 		44717C1E228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteBookDetailCoordinator.swift; sourceTree = "<group>"; };
 		44717C21228FE2C40049FEB6 /* BookDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailCoordinator.swift; sourceTree = "<group>"; };
+		44717C24229101E00049FEB6 /* RouteDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDefs.swift; sourceTree = "<group>"; };
+		44717C27229117140049FEB6 /* RouteControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteControllerFactory.swift; sourceTree = "<group>"; };
 		44A7ECDF2246A5D800D1C402 /* kvasir.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvasir.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44A7ECE42246A5D800D1C402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44A7ECE72246A5D800D1C402 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -721,6 +727,8 @@
 				44B2C05A226EEE5000B584F5 /* SchemaBuilder.swift */,
 				44B2C05D226EEE9100B584F5 /* RouteConstants.swift */,
 				44B2C019226C2C2000B584F5 /* Routes.swift */,
+				44717C24229101E00049FEB6 /* RouteDefs.swift */,
+				44717C27229117140049FEB6 /* RouteControllerFactory.swift */,
 			);
 			path = Routes;
 			sourceTree = "<group>";
@@ -1207,6 +1215,7 @@
 				44ECD94C2276DD2F00618576 /* RealmWordRepository.swift in Sources */,
 				44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				4408B47E227C0BF000C5EF68 /* SelectableLabel.swift in Sources */,
+				44717C28229117140049FEB6 /* RouteControllerFactory.swift in Sources */,
 				44717C1F228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
 				44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
@@ -1216,6 +1225,7 @@
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
 				44B2C01E226C332800B584F5 /* RealmBasicObject.swift in Sources */,
+				44717C25229101E00049FEB6 /* RouteDefs.swift in Sources */,
 				44ECD95E2276FE7C00618576 /* RealmCreatorRepository.swift in Sources */,
 				44ECD975227720EB00618576 /* Validator.swift in Sources */,
 				44A7ED4F2246A62300D1C402 /* TopListViewController.swift in Sources */,
@@ -1306,6 +1316,7 @@
 				44B2BFCF22698BA400B584F5 /* ViewController.swift in Sources */,
 				44B2BFD022698BA400B584F5 /* Reusable.swift in Sources */,
 				44ECD96D227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
+				44717C26229101E00049FEB6 /* RouteDefs.swift in Sources */,
 				44B2BFD122698BA400B584F5 /* DigestDetailViewController.swift in Sources */,
 				44B2BFD322698BA400B584F5 /* ButtonBaker.swift in Sources */,
 				44B2C0942272DD0400B584F5 /* CreatorListViewController.swift in Sources */,
@@ -1363,6 +1374,7 @@
 				446DB7D8228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */,
 				44B2C044226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				446DB7DE228BE8CC00BE3DDF /* MsrCompatible.swift in Sources */,
+				44717C29229117140049FEB6 /* RouteControllerFactory.swift in Sources */,
 				44B2C054226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2BFE522698BA400B584F5 /* AppDelegate.swift in Sources */,
 				44B2BFE722698BA400B584F5 /* TopListCellCarrier.swift in Sources */,
