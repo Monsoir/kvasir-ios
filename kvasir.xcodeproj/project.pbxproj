@@ -117,7 +117,7 @@
 		44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */; };
 		44B2C012226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */; };
 		44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C017226C2BF100B584F5 /* AppDelegate+Navigator.swift */; };
-		44B2C01A226C2C2000B584F5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* Routes.swift */; };
+		44B2C01A226C2C2000B584F5 /* RoutesRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* RoutesRegister.swift */; };
 		44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */; };
 		44B2C01E226C332800B584F5 /* RealmBasicObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C01D226C332800B584F5 /* RealmBasicObject.swift */; };
 		44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C026226C47C100B584F5 /* TopListCoordinator.swift */; };
@@ -144,7 +144,7 @@
 		44B2C05C226EEE5000B584F5 /* SchemaBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05A226EEE5000B584F5 /* SchemaBuilder.swift */; };
 		44B2C05E226EEE9100B584F5 /* RouteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05D226EEE9100B584F5 /* RouteConstants.swift */; };
 		44B2C05F226EEE9100B584F5 /* RouteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C05D226EEE9100B584F5 /* RouteConstants.swift */; };
-		44B2C060226EEEAD00B584F5 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* Routes.swift */; };
+		44B2C060226EEEAD00B584F5 /* RoutesRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C019226C2C2000B584F5 /* RoutesRegister.swift */; };
 		44B2C065226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */; };
 		44B2C066226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */; };
 		44B2C068226F037D00B584F5 /* ExpandedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C067226F037D00B584F5 /* ExpandedLabel.swift */; };
@@ -296,7 +296,7 @@
 		44B2BFFB22698BA400B584F5 /* kvasir copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "kvasir copy-Info.plist"; path = "/Users/monsoir/Developer/iOS/kvasir/kvasir copy-Info.plist"; sourceTree = "<absolute>"; };
 		44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailTableHeaderView.swift; sourceTree = "<group>"; };
 		44B2C017226C2BF100B584F5 /* AppDelegate+Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Navigator.swift"; sourceTree = "<group>"; };
-		44B2C019226C2C2000B584F5 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
+		44B2C019226C2C2000B584F5 /* RoutesRegister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesRegister.swift; sourceTree = "<group>"; };
 		44B2C01B226C310E00B584F5 /* KvasirRealmProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirRealmProtocol.swift; sourceTree = "<group>"; };
 		44B2C01D226C332800B584F5 /* RealmBasicObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBasicObject.swift; sourceTree = "<group>"; };
 		44B2C026226C47C100B584F5 /* TopListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListCoordinator.swift; sourceTree = "<group>"; };
@@ -726,7 +726,7 @@
 			children = (
 				44B2C05A226EEE5000B584F5 /* SchemaBuilder.swift */,
 				44B2C05D226EEE9100B584F5 /* RouteConstants.swift */,
-				44B2C019226C2C2000B584F5 /* Routes.swift */,
+				44B2C019226C2C2000B584F5 /* RoutesRegister.swift */,
 				44717C24229101E00049FEB6 /* RouteDefs.swift */,
 				44717C27229117140049FEB6 /* RouteControllerFactory.swift */,
 			);
@@ -1201,7 +1201,7 @@
 				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
 				44ECD96C227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
 				44B2C05E226EEE9100B584F5 /* RouteConstants.swift in Sources */,
-				44B2C01A226C2C2000B584F5 /* Routes.swift in Sources */,
+				44B2C01A226C2C2000B584F5 /* RoutesRegister.swift in Sources */,
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
 				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
@@ -1341,7 +1341,7 @@
 				4408B485227C76FD00C5EF68 /* ResourceListViewController.swift in Sources */,
 				44B2BFD722698BA400B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				44B2BFD822698BA400B584F5 /* TopListTableViewCell.swift in Sources */,
-				44B2C060226EEEAD00B584F5 /* Routes.swift in Sources */,
+				44B2C060226EEEAD00B584F5 /* RoutesRegister.swift in Sources */,
 				44B2C07A2271AA5500B584F5 /* RealmBook.swift in Sources */,
 				44B2BFDA22698BA400B584F5 /* TopListViewController.swift in Sources */,
 				44B2BFDC22698BA400B584F5 /* TextListTableViewCell.swift in Sources */,
