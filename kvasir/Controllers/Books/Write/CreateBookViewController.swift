@@ -56,11 +56,6 @@ class CreateBookViewController: FormViewController {
         setupNavigationBar()
         setupSubviews()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        reloadHeaderView()
-//    }
 }
 
 private extension CreateBookViewController {
@@ -72,11 +67,6 @@ private extension CreateBookViewController {
     }
     
     func setupSubviews() {
-//        headerView.addSubview(btnScanBarCode)
-//        btnScanBarCode.snp.makeConstraints { (make) in
-//            make.center.equalToSuperview()
-//        }
-        
         setupForm()
     }
     
@@ -84,29 +74,36 @@ private extension CreateBookViewController {
         
         let nameInfoSection = Section("书籍信息")
         
-//        nameInfoSection <<< EurekaFillableAndActionableRow() {
-//            $0.tag = "isbn"
-//            $0.title = "ISBN"
-//            $0.value = ""
-//            $0.cellSetup({ [weak self] (cell, row) in
-//                guard let strongSelf = self else { return }
-//                cell.action = { [weak strongSelf] value in
-//                    guard let _strongSelf = strongSelf else { return }
-//                    _strongSelf.actionSearch(value)
-//                }
-//            })
-//        }
-        
         nameInfoSection <<< TextRow() {
             $0.tag = "isbn13"
             $0.title = "ISBN13"
             $0.value = ""
+            $0.add(rule: RuleClosure<String> { rawValue in
+                guard let value = rawValue, !value.isEmpty else {
+                    return nil
+                }
+                // ISBN 不为空的情况才检验是否输入符合规范
+                if !value.msr.isISBN13 {
+                    return ValidationError(msg: "不符合规范的 ISBN13")
+                }
+                return nil
+            })
         }
         
         nameInfoSection <<< TextRow() {
             $0.tag = "isbn10"
             $0.title = "ISBN10"
             $0.value = ""
+            $0.add(rule: RuleClosure<String> { rawValue in
+                guard let value = rawValue, !value.isEmpty else {
+                    return nil
+                }
+                // ISBN 不为空的情况才检验是否输入符合规范
+                if !value.msr.isISBN10 {
+                    return ValidationError(msg: "不符合规范的 ISBN10")
+                }
+                return nil
+            })
         }
         
         nameInfoSection <<< TextRow() {

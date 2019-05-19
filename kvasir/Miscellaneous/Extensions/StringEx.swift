@@ -21,9 +21,20 @@ extension MsrWrapper where Base: _StringType {
     }
     
     var isISBN: Bool {
+        return isISBN10 || isISBN13
+    }
+    
+    var isISBN10: Bool {
         guard type(of: self.base) == String.self, let source = base as? String else {
             return false
         }
-        return source.range(of: ISBNRegex.isbn10, options: .regularExpression) != nil || source.range(of: ISBNRegex.isbn13, options: .regularExpression) != nil
+        return source.range(of: ISBNRegex.isbn10, options: .regularExpression) != nil
+    }
+    
+    var isISBN13: Bool {
+        guard type(of: self.base) == String.self, let source = base as? String else {
+            return false
+        }
+        return source.range(of: ISBNRegex.isbn13, options: .regularExpression) != nil
     }
 }
