@@ -32,7 +32,7 @@ class BookListTableViewCell: UITableViewCell {
             let sentencesCount = payload?["sentencesCount"] as? Int ?? 0
             let paragraphsCount = payload?["paragraphsCount"] as? Int ?? 0
             
-            let detail = [author, publisher].joined(separator: "/")
+            let detail = [author.isEmpty ? "[作者]" : author, publisher.isEmpty ? "[出版社]" : publisher].joined(separator: " / ")
             let digest = ["\(sentencesCount)个句摘", "\(paragraphsCount)个段摘"].joined(separator: "/")
             
             ivThumbnail.kf.setImage(with: URL(string: thumbnail), placeholder: nil, options: kingfisherOptions)

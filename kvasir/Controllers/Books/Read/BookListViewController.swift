@@ -218,19 +218,6 @@ private extension BookListViewController {
                         MainQueue.async {
                             strongSelf.previewNewBook(code: code)
                         }
-//                        HUD.show(.labeledProgress(title: "查询中", subtitle: nil))
-//                        strongSelf.coordinator.queryBookFromRemote(isbn: code, completion: { (success, data, message) in
-//                            guard success else {
-//                                MainQueue.async {
-//                                    HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
-//                                }
-//                                return
-//                            }
-//                            MainQueue.async {
-//                                HUD.hide()
-//                                strongSelf.previewNewBook(data: data)
-//                            }
-//                        })
                     })
                 }
             }
@@ -241,7 +228,7 @@ private extension BookListViewController {
                 _showScanner()
             }
         }) {
-            Bartendar.handleTipAlert(message: "没有权限使用摄像头", on: nil)
+            Bartendar.handleTipAlert(message: "没有足够权限使用摄像头", on: nil)
         }
     }
     
