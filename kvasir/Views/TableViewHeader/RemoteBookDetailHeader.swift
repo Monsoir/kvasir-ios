@@ -36,7 +36,7 @@ class RemoteBookDetailHeader: UITableViewHeaderFooterView, Reusable {
     private lazy var ivThumbnail: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .center
-        imageView.backgroundColor = .lightGray
+        imageView.backgroundColor = Color.init(hexString: "#B5B5B5")
         return imageView
     }()
     private lazy var lbTitle: UILabel = {
