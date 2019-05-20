@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.8.1)
+  - CropViewController (2.4.0)
   - Eureka (4.3.1)
   - FontAwesome.swift (1.6.0)
   - Kingfisher (5.2.0)
@@ -32,6 +33,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - CropViewController
   - Eureka
   - FontAwesome.swift
   - Kingfisher (~> 5.0)
@@ -45,6 +47,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - CropViewController
     - Eureka
     - FontAwesome.swift
     - Kingfisher
@@ -67,6 +70,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
   Eureka: 28ea296f06710f6745266b71f17862048941a32d
   FontAwesome.swift: 71a422e7b209ee940c7c21a5d13964ecf2897ca4
   Kingfisher: 07067cfacf371117330dceb4b4b8f5c4b691ab42
@@ -78,6 +82,6 @@ SPEC CHECKSUMS:
   TesseractOCRiOS: 5be498d8fef7a37a38046a05670f9f34b9f042d2
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: 1e0d6b87d2c0309a4ea047c85da6c24a7300445e
+PODFILE CHECKSUM: 694a91af3740c375b9b6ff5decf040b60afe794b
 
 COCOAPODS: 1.6.1

@@ -12,6 +12,7 @@ import SwifterSwift
 import PKHUD
 import FontAwesome_swift
 import RealmSwift
+import CropViewController
 
 #if !targetEnvironment(simulator)
 //import TesseractOCR
@@ -157,7 +158,10 @@ class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINav
     }
     
     @objc func actionTakePhoto() {
-        showImagePickerOfSource(source: .camera)
+//        showImagePickerOfSource(source: .camera)
+        let vc = SessionCameraViewController()
+        vc.delegate = self
+        present(vc, animated: true, completion: nil)
     }
     
     @objc func editorDidBeginEditing(notif: Notification) {
@@ -293,5 +297,11 @@ private extension DigestEditViewController {
 //            self.tvContent.text = ocr.recognizedText.trimmed
 //        }
         #endif
+    }
+}
+
+extension DigestEditViewController: SessionCameraViewControllerDelegate {
+    func didCaptureImage(_ image: UIImage) {
+        debugPrint(image)
     }
 }

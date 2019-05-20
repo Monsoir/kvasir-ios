@@ -13,8 +13,12 @@ struct Bartendar {
     static func handleSimpleAlert(title: String = "", message: String?, on viewController: UIViewController?) {
         MainQueue.async {
             let alert = UIAlertController(title: title, message: message, defaultActionButtonTitle: "确定", tintColor: .black)
-            let host = viewController ?? UIApplication.shared.keyWindow?.rootViewController
-            host?.present(alert, animated: true, completion: nil)
+            let host = viewController ?? {
+                let rootVC = UIApplication.shared.keyWindow?.rootViewController
+                guard let presentedVC = rootVC?.presentedViewController else { return rootVC! }
+                return presentedVC
+                }()
+            host.present(alert, animated: true, completion: nil)
         }
     }
     

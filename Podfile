@@ -15,6 +15,7 @@ target 'kvasir' do
   pod 'URLNavigator'
   pod 'Alamofire'
   pod 'Kingfisher', '~> 5.0'
+  pod 'CropViewController'
   
   target 'kvasir-with-tesseract' do
     inherit! :search_paths
