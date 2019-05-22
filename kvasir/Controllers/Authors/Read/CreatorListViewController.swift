@@ -132,7 +132,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
         case is RealmTranslator:
             KvasirNavigator.push(KvasirURL.booksOfATranslator.url(with: ["id": creator.id]), context: nil, from: navigationController, animated: true)
         case is RealmAuthor:
-            KvasirNavigator.pushURL(KvasirURL.booksOfATranslator.url(with: ["id": creator.id]), context: nil, from: navigationController, animated: true)
+            KvasirNavigator.push(KvasirURL.booksOfAnAuthor.url(with: ["id": creator.id]), context: nil, from: navigationController, animated: true)
         default:
             break
         }
