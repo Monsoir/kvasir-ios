@@ -170,7 +170,8 @@ class BookDetailViewController: UIViewController {
             }
             c.errorHandler = { [weak self] msg in
                 MainQueue.async {
-                    HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
+//                    HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
+                    // 弹出 HUD 已在请求完成后统一处理了
                     guard let strongSelf = self else { return }
                     strongSelf.dismiss(animated: true, completion: nil)
                 }

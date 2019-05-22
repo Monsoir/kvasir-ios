@@ -23,9 +23,3 @@ extension MsrCompatible {
         set { }
     }
 }
-
-// https://forums.swift.org/t/cant-extend-a-generic-type-with-a-non-protocol-constraint/2190/2
-protocol _StringType: Hashable {}
-extension String: _StringType {}
-
-extension String: MsrCompatible {}

@@ -13,28 +13,28 @@ import Alamofire
 enum BookProxyEndpoint: URLRequestConvertible {
     case search(isbn: String)
     
-    private static let baseURL = BookProxySensitive.server
+    private static let baseURL = ProxySensitive.server
     
     func asURLRequest() throws -> URLRequest {
-        let result: (path: String, parameters: Parameters) = {
+        let result: (path: String, parameters: Parameters, headers: [String: String]) = {
             switch self {
             case let .search(isbn):
-                return ("/books/query", ["isbn": isbn])
+                let query = ["isbn": isbn]
+                let headers = ProxySessionManager.authenticationHeaders(with: query)
+                return ("/books/query", query, headers)
             }
         }()
         
         let url = try type(of: self).baseURL.asURL()
         let urlRequest = URLRequest(url: url.appendingPathComponent(result.path))
-        return try URLEncoding.default.encode(urlRequest, with: result.parameters)
-    }
-}
-
-fileprivate extension Dictionary where Key == String, Value == String  {
-    var queryString: [URLQueryItem] {
-        var output = [URLQueryItem]()
-        for (key, value) in self {
-            output.append(URLQueryItem(name: key, value: value))
+        var request = try URLEncoding.default.encode(urlRequest, with: result.parameters)
+        
+        // Add some headers
+        result.headers.forEach { (arg) in
+            let (key, value) = arg
+            request.setValue(value, forHTTPHeaderField: key)
         }
-        return output
+        
+        return request
     }
 }

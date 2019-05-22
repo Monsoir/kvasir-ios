@@ -7,6 +7,12 @@
 //
 
 import UIKit
+import CommonCrypto
+
+// https://forums.swift.org/t/cant-extend-a-generic-type-with-a-non-protocol-constraint/2190/2
+protocol _StringType: Hashable {}
+extension String: _StringType {}
+extension String: MsrCompatible {}
 
 private struct ISBNRegex {
     // https://gist.github.com/oscarmorrison/3744fa216dcfdb3d0bcb
@@ -36,5 +42,26 @@ extension MsrWrapper where Base: _StringType {
             return false
         }
         return source.range(of: ISBNRegex.isbn13, options: .regularExpression) != nil
+    }
+    
+    var md5Base64: String {
+        // https://stackoverflow.com/a/53044349/5211544
+        // https://stackoverflow.com/a/56256719/5211544
+        guard let me = base as? String else { return "" }
+        
+        let md5edData = Data(bytes: type(of: self).md5(me))
+        return md5edData.base64EncodedString()
+    }
+    
+    private static func md5(_ string: String) -> [UInt8] {
+        let length = Int(CC_MD5_DIGEST_LENGTH)
+        var digest = [UInt8](repeating: 0, count: length)
+        
+        if let d = string.data(using: String.Encoding.utf8) {
+            _ = d.withUnsafeBytes { (body: UnsafePointer<UInt8>) in
+                CC_MD5(body, CC_LONG(d.count), &digest)
+            }
+        }
+        return digest
     }
 }

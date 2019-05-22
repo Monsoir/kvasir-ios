@@ -120,11 +120,11 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
     override func query(_ completion: @escaping BookDetailQueryCompletion) {
         guard let code = payload["code"] as? String else { return }
         
-        BookProxySessionManager.shared
+        ProxySessionManager.shared
             .request(BookProxyEndpoint.search(isbn: code))
             .validate(statusCode: 200..<300)
             .responseJSON(queue: GlobalDefaultDispatchQueue, options: .allowFragments, completionHandler: { [weak self] (response) in
-                guard let data = BookProxySessionManager.shared.handleResponse(response), let strongSelf = self else {
+                guard let data = ProxySessionManager.shared.handleResponse(response), let strongSelf = self else {
                     completion(false, nil, nil)
                     return
                 }

@@ -39,7 +39,7 @@ class CreateBookCoordinator: CreateCoordinatorable {
             completion(false, nil, "ISBN 不符合规范")
             return
         }
-        BookProxySessionManager.shared
+        ProxySessionManager.shared
             .request(BookProxyEndpoint.search(isbn: isbn))
             .validate(statusCode: 200..<300)
             .responseJSON(queue: GlobalDefaultDispatchQueue, options: .allowFragments, completionHandler: { (response) in

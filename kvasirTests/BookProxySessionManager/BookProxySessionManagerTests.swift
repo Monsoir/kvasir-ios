@@ -20,10 +20,10 @@ class BookProxySessionManagerTests: XCTestCase {
     }
     
     func testSingleton() {
-        let manager1 = BookProxySessionManager.shared
-        let manager2 = BookProxySessionManager.shared
+        let manager1 = ProxySessionManager.shared
+        let manager2 = ProxySessionManager.shared
 
-        XCTAssertTrue(manager1 === manager2, "\(BookProxySessionManager.self) is not singleton")
+        XCTAssertTrue(manager1 === manager2, "\(BookProxySessionManagerTests.self) is not singleton")
     }
 
     func testExample() {

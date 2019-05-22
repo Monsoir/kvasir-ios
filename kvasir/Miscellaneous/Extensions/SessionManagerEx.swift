@@ -24,7 +24,8 @@ extension SessionManager {
             let value = value as! [String: Any]
             guard let success = value["success"] as? Bool, success else {
                 MainQueue.async {
-                    HUD.flash(.labeledError(title: "抱歉", subtitle: value["message"] as? String ?? "查询出问题了"), onView: nil, delay: 1.5, completion: nil)
+                    let msgHolder = "查询出问题了"
+                    HUD.flash(.labeledError(title: "抱歉", subtitle: value["message"] as? String ?? msgHolder), onView: nil, delay: 1.5, completion: nil)
                 }
                 return nil
             }
@@ -33,18 +34,26 @@ extension SessionManager {
         case .failure(let error):
             guard let code = response.response?.statusCode else {
                 MainQueue.async {
-                    HUD.flash(.labeledError(title: "未知出错", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+                    let msgHolder = "出错了"
+                    HUD.flash(.labeledError(title: msgHolder, subtitle: nil), onView: nil, delay: 1.5, completion: nil)
                 }
                 return nil
             }
             switch code {
+            case 403:
+                MainQueue.async {
+                    let msg = "验证失败"
+                    HUD.flash(.labeledError(title: msg, subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+                }
             case 404:
                 MainQueue.async {
-                    HUD.flash(.labeledError(title: "请求地址出错", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+                    let msg = "请求地址出错"
+                    HUD.flash(.labeledError(title: msg, subtitle: nil), onView: nil, delay: 1.5, completion: nil)
                 }
             case 500:
                 MainQueue.async {
-                    HUD.flash(.labeledError(title: "服务出错 500", subtitle: nil), onView: nil, delay: 1.5, completion: nil)
+                    let msg = "服务出错"
+                    HUD.flash(.labeledError(title: msg, subtitle: nil), onView: nil, delay: 1.5, completion: nil)
                 }
             default:
                 Bartendar.handleSorryAlert(message: error.localizedDescription, on: nil)

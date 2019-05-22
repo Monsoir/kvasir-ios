@@ -206,6 +206,9 @@
 		44ECD976227720EB00618576 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD974227720EB00618576 /* Validator.swift */; };
 		44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD97722782CC700618576 /* CreateBookCoordinator.swift */; };
 		44ECD97922782CC700618576 /* CreateBookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD97722782CC700618576 /* CreateBookCoordinator.swift */; };
+		44ED682D22952DFC000B9B77 /* DateEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED682C22952DFC000B9B77 /* DateEx.swift */; };
+		44ED682E22952DFC000B9B77 /* DateEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED682C22952DFC000B9B77 /* DateEx.swift */; };
+		44ED6833229560AD000B9B77 /* StringExTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED6832229560AD000B9B77 /* StringExTests.swift */; };
 		7E473980D8AF351BC84D8DC1 /* Pods_kvasirUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */; };
 		D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */; };
 		DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */; };
@@ -346,6 +349,8 @@
 		44ECD9712277201000618576 /* MiscellaneousProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscellaneousProtocols.swift; sourceTree = "<group>"; };
 		44ECD974227720EB00618576 /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		44ECD97722782CC700618576 /* CreateBookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookCoordinator.swift; sourceTree = "<group>"; };
+		44ED682C22952DFC000B9B77 /* DateEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateEx.swift; sourceTree = "<group>"; };
+		44ED6832229560AD000B9B77 /* StringExTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExTests.swift; sourceTree = "<group>"; };
 		86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.release.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.release.xcconfig"; sourceTree = "<group>"; };
 		B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -571,6 +576,7 @@
 		44A7ECF62246A5DB00D1C402 /* kvasirTests */ = {
 			isa = PBXGroup;
 			children = (
+				44ED682F22956076000B9B77 /* Extensions */,
 				446DB7AB228965F100BE3DDF /* BookProxySessionManager */,
 				44A7ECF72246A5DB00D1C402 /* kvasirTests.swift */,
 				44A7ECF92246A5DB00D1C402 /* Info.plist */,
@@ -704,6 +710,7 @@
 				44B2C048226EEA1F00B584F5 /* UIImageEx.swift */,
 				446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */,
 				44190D41228D349900DB98E8 /* SessionManagerEx.swift */,
+				44ED682C22952DFC000B9B77 /* DateEx.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -857,6 +864,14 @@
 				44A7ED342246A62300D1C402 /* DigestEditViewController.swift */,
 			);
 			path = Write;
+			sourceTree = "<group>";
+		};
+		44ED682F22956076000B9B77 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				44ED6832229560AD000B9B77 /* StringExTests.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		656747A6593936160D864F63 /* Frameworks */ = {
@@ -1236,6 +1251,7 @@
 				44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */,
 				4408B47E227C0BF000C5EF68 /* SelectableLabel.swift in Sources */,
 				44717C28229117140049FEB6 /* RouteControllerFactory.swift in Sources */,
+				44ED682D22952DFC000B9B77 /* DateEx.swift in Sources */,
 				44717C1F228FE2000049FEB6 /* RemoteBookDetailCoordinator.swift in Sources */,
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
 				44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
@@ -1311,6 +1327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				446DB7AD2289662000BE3DDF /* BookProxySessionManagerTests.swift in Sources */,
+				44ED6833229560AD000B9B77 /* StringExTests.swift in Sources */,
 				446DB7B6228992F300BE3DDF /* BookProxyEndpointTests.swift in Sources */,
 				44A7ECF82246A5DB00D1C402 /* kvasirTests.swift in Sources */,
 			);
@@ -1417,6 +1434,7 @@
 				4408B46E2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
 				446DB7C9228B24CC00BE3DDF /* Kingfisher.swift in Sources */,
 				44B2C047226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
+				44ED682E22952DFC000B9B77 /* DateEx.swift in Sources */,
 				44B2BFED22698BA400B584F5 /* TopListCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1619,6 +1637,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A9WCJZAVJ6;
 				INFOPLIST_FILE = kvasirTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1640,6 +1659,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A9WCJZAVJ6;
 				INFOPLIST_FILE = kvasirTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1660,6 +1680,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A9WCJZAVJ6;
 				INFOPLIST_FILE = kvasirUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1680,6 +1701,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A9WCJZAVJ6;
 				INFOPLIST_FILE = kvasirUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
