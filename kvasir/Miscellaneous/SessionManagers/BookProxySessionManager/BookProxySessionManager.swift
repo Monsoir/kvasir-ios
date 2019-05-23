@@ -18,12 +18,35 @@ class ProxySessionManager {
     }()
     private init() {}
     
-    static func authenticationHeaders(with payload: [String: Any]) -> [String: String] {
+    static func authenticationHeaders(with payload: [String: Any]? = nil) -> [String: String] {
         let timestamp = Date().iso8601String
         return [
-            "authorization": "\(payload.queryString)-\(timestamp)-\(ProxySensitive.appSecret)".msr.md5Base64,
+            "authorization": "\(payload?.queryString ?? "")-\(timestamp)-\(ProxySensitive.appSecret)".msr.md5Base64,
             "timestamp": timestamp,
         ]
+    }
+}
+
+extension SessionManager {
+    func uploadFormData(to path: String, with datas: [(data: URL, name: String)], completion: @escaping ([String: Any]?) -> Void) {
+        upload(
+            multipartFormData: { (multipartFormData) in
+                for ele in datas {
+                    multipartFormData.append(ele.data, withName: ele.name)
+                }
+        },
+            to: path,
+            headers: ProxySessionManager.authenticationHeaders(with: nil)) { encodingResult in
+                switch encodingResult {
+                case .success(let uploadRequest, _, _):
+                    uploadRequest.responseJSON(completionHandler: { (response) in
+                        let data = ProxySessionManager.handleResponse(response)
+                        completion(data)
+                    })
+                case .failure(let err):
+                    Bartendar.handleSorryAlert(message: "数据传输出错：\(err.localizedDescription)", on: nil)
+                }
+        }
     }
 }
 

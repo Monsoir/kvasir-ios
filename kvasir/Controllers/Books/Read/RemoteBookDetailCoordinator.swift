@@ -124,7 +124,7 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
             .request(BookProxyEndpoint.search(isbn: code))
             .validate(statusCode: 200..<300)
             .responseJSON(queue: GlobalDefaultDispatchQueue, options: .allowFragments, completionHandler: { [weak self] (response) in
-                guard let data = ProxySessionManager.shared.handleResponse(response), let strongSelf = self else {
+                guard let data = ProxySessionManager.handleResponse(response), let strongSelf = self else {
                     completion(false, nil, nil)
                     return
                 }

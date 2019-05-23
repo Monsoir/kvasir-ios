@@ -12,8 +12,22 @@ import Alamofire
 
 enum BookProxyEndpoint: URLRequestConvertible {
     case search(isbn: String)
+    case ocr
     
     private static let baseURL = ProxySensitive.server
+    
+    var path: String {
+        switch self {
+        case .search(isbn: _):
+            return "/books/query"
+        case .ocr:
+            return "/ocr"
+        }
+    }
+    
+    var absolutePath: String {
+        return URL(string: ProxySensitive.server)?.appendingPathComponent(path).absoluteString ?? ""
+    }
     
     func asURLRequest() throws -> URLRequest {
         let result: (path: String, parameters: Parameters, headers: [String: String]) = {
@@ -21,7 +35,9 @@ enum BookProxyEndpoint: URLRequestConvertible {
             case let .search(isbn):
                 let query = ["isbn": isbn]
                 let headers = ProxySessionManager.authenticationHeaders(with: query)
-                return ("/books/query", query, headers)
+                return (path, query, headers)
+            case .ocr:
+                return (path, [:], [:])
             }
         }()
         
@@ -38,3 +54,4 @@ enum BookProxyEndpoint: URLRequestConvertible {
         return request
     }
 }
+

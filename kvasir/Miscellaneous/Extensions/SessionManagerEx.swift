@@ -9,14 +9,14 @@
 import PKHUD
 import Alamofire
 
-extension SessionManager {
+extension ProxySessionManager {
     
     /// 处理请求返回的结果
     /// 当请求出错时，同一处理；请求成功时，返回数据
     ///
     /// - Parameter response: 请求返回的响应
     /// - Returns: 请求成功时的数据
-    func handleResponse(_ response: DataResponse<Any>) -> [String: Any]? {
+    static func handleResponse(_ response: DataResponse<Any>) -> [String: Any]? {
         debugPrint(response)
         
         switch response.result {

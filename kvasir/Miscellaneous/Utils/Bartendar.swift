@@ -9,6 +9,26 @@
 import UIKit
 import SwifterSwift
 
+enum SystemDirectories {
+    case document
+    case caches
+    case library
+    case tmp
+    
+    var url: URL? {
+        switch self {
+        case .document:
+            return try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        case .library:
+            return try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        case .caches:
+            return try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        case .tmp:
+            return try? FileManager.default.temporaryDirectory
+        }
+    }
+}
+
 struct Bartendar {
     static func handleSimpleAlert(title: String = "", message: String?, on viewController: UIViewController?) {
         MainQueue.async {
@@ -35,6 +55,4 @@ struct Bartendar {
         print(items, separator, terminator)
         #endif
     }
-    
-    
 }

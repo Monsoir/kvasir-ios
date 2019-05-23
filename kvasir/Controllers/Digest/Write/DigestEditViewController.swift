@@ -104,12 +104,9 @@ class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINav
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
         
-        HUD.show(.labeledProgress(title: "识别中", subtitle: nil))
-        DispatchQueue.global(qos: .userInitiated).async {
-            let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-            self.recognizeImage(image: image)
-        }
+        proxyOCR(image: image)
     }
     
     @objc func keyboardWillChangeFrame(_ notification: Notification) {
@@ -158,10 +155,12 @@ class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINav
     }
     
     @objc func actionTakePhoto() {
-//        showImagePickerOfSource(source: .camera)
-        let vc = SessionCameraViewController()
-        vc.delegate = self
-        present(vc, animated: true, completion: nil)
+        Guard.guardAVCaptureDeviceAuthorized(authorizedHandler: { [weak self] in
+            guard let self = self else { return }
+            let vc = SessionCameraViewController()
+            vc.delegate = self
+            self.present(vc, animated: true, completion: nil)
+        }, notEnoughAuthorizationHandler: nil)
     }
     
     @objc func editorDidBeginEditing(notif: Notification) {
@@ -302,6 +301,56 @@ private extension DigestEditViewController {
 
 extension DigestEditViewController: SessionCameraViewControllerDelegate {
     func didCaptureImage(_ image: UIImage) {
-        debugPrint(image)
+        proxyOCR(image: image)
+    }
+    
+    private func proxyOCR(image: UIImage) {
+        HUD.show(.labeledProgress(title: "上传识别中...", subtitle: nil))
+        
+        let unit = Double(1024)
+        let maxImageSizeInBytes = 2.2 * unit * unit
+        
+        scaleImage(image, to: maxImageSizeInBytes) { (tempImageURL) in
+            guard let url = tempImageURL else {
+                MainQueue.async {
+                    HUD.flash(.labeledError(title: "出错了", subtitle: "图片无法上传"), onView: nil, delay: 1.5, completion: nil)
+                }
+                return
+            }
+            ProxySessionManager.shared.uploadFormData(
+                to: BookProxyEndpoint.ocr.absolutePath,
+                with: [
+                    (data: url, name: "image"),
+            ]) { [weak self] data in
+                guard let self = self, let data = data, let texts = data["texts"] as? [String] else { return }
+                MainQueue.async {
+                    debugPrint(texts)
+                    HUD.hide()
+                    self.editor.text = texts.joined(separator: "\n")
+                }
+            }
+        }
+    }
+    
+    private func scaleImage(_ image: UIImage, to limit: Double, completion: @escaping (URL?) -> Void) {
+        GlobalDefaultDispatchQueue.async {
+            guard let imageData = image.msr.scaleImageJPEGDataFitToProperFileSize(limited: limit) else {
+                completion(nil)
+                return
+            }
+            
+            // image maybe too large, cache it, and get by url
+            do {
+                guard let url = SystemDirectories.tmp.url else {
+                    completion(nil)
+                    return
+                }
+                let cacheURL = url.appendingPathComponent("ocring.jpeg")
+                try imageData.write(to: cacheURL)
+                completion(cacheURL)
+            } catch {
+                completion(nil)
+            }
+        }
     }
 }

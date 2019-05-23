@@ -99,7 +99,7 @@ class BookListCoordinator {
             .request(BookProxyEndpoint.search(isbn: isbn))
             .validate(statusCode: 200..<300)
             .responseJSON(queue: GlobalDefaultDispatchQueue, options: .allowFragments, completionHandler: { (response) in
-                guard let data = ProxySessionManager.shared.handleResponse(response) else { return }
+                guard let data = ProxySessionManager.handleResponse(response) else { return }
                 completion(true, data, nil)
             })
     }

@@ -44,3 +44,24 @@ extension UIImage {
         return scaledImage
     }
 }
+
+extension UIImage: MsrCompatible {}
+extension MsrWrapper where Base: UIImage {
+    func scaleImageJPEGDataFitToProperFileSize(limited to: Double) -> Data? {
+        guard let imageData = base.jpegData(compressionQuality: 1) else { return nil }
+        
+        // calculate as byte
+        let originJPEGFileSize = Double(imageData.count)
+        
+        // the max is larger than the origin file size, just return
+        if to >= originJPEGFileSize {
+            return imageData
+        }
+        
+        // origin file size is larger than the max, scale it
+        // compression quality scales from 0.0 to 1.0
+        // as a result, limit should be divived by origin
+        let factor = to / originJPEGFileSize
+        return base.jpegData(compressionQuality: CGFloat(factor))
+    }
+}
