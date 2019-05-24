@@ -112,7 +112,7 @@ private extension BookListViewController {
             tableView.backgroundView = nil
             return
         }
-        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "还没有书籍的收集", position: .upper)
+        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一本书籍吧", position: .upper)
     }
 }
 

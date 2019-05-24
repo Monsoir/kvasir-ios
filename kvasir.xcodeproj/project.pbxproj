@@ -33,6 +33,8 @@
 		444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760B226491F0004B9CD4 /* RealmSentence.swift */; };
 		444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760D22649558004B9CD4 /* RealmWordDigest.swift */; };
 		444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */; };
+		4459A60E229804ED0080A6F9 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4459A60D229804ED0080A6F9 /* LaunchView.swift */; };
+		4459A60F229804ED0080A6F9 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4459A60D229804ED0080A6F9 /* LaunchView.swift */; };
 		446DB7A92289632100BE3DDF /* BookProxySessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7A82289632100BE3DDF /* BookProxySessionManager.swift */; };
 		446DB7AA2289632100BE3DDF /* BookProxySessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7A82289632100BE3DDF /* BookProxySessionManager.swift */; };
 		446DB7AD2289662000BE3DDF /* BookProxySessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446DB7AC2289662000BE3DDF /* BookProxySessionManagerTests.swift */; };
@@ -253,6 +255,7 @@
 		444B760B226491F0004B9CD4 /* RealmSentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSentence.swift; sourceTree = "<group>"; };
 		444B760D22649558004B9CD4 /* RealmWordDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmWordDigest.swift; sourceTree = "<group>"; };
 		444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestInfoViewController.swift; sourceTree = "<group>"; };
+		4459A60D229804ED0080A6F9 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		446DB7A82289632100BE3DDF /* BookProxySessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookProxySessionManager.swift; sourceTree = "<group>"; };
 		446DB7AC2289662000BE3DDF /* BookProxySessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookProxySessionManagerTests.swift; sourceTree = "<group>"; };
 		446DB7AE22896A0100BE3DDF /* BookProxyEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookProxyEndpoint.swift; sourceTree = "<group>"; };
@@ -649,6 +652,7 @@
 				4408B46122794C1C00C5EF68 /* TableViewCell */,
 				44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */,
 				44B2C06A226F12F500B584F5 /* KvasirEditor.swift */,
+				4459A60D229804ED0080A6F9 /* LaunchView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1260,6 +1264,7 @@
 				44A7ED482246A62300D1C402 /* TopListTableViewCell.swift in Sources */,
 				44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
+				4459A60E229804ED0080A6F9 /* LaunchView.swift in Sources */,
 				446DB7DA228BE6C200BE3DDF /* StringEx.swift in Sources */,
 				44ECD94222757EA200618576 /* Errors.swift in Sources */,
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
@@ -1387,6 +1392,7 @@
 				44B2BFD822698BA400B584F5 /* TopListTableViewCell.swift in Sources */,
 				44B2C060226EEEAD00B584F5 /* RoutesRegister.swift in Sources */,
 				44B2C07A2271AA5500B584F5 /* RealmBook.swift in Sources */,
+				4459A60F229804ED0080A6F9 /* LaunchView.swift in Sources */,
 				44B2BFDA22698BA400B584F5 /* TopListViewController.swift in Sources */,
 				44B2BFDC22698BA400B584F5 /* TextListTableViewCell.swift in Sources */,
 				44B2C08D2272DC5800B584F5 /* RealmAuthor.swift in Sources */,
@@ -1601,6 +1607,7 @@
 			baseConfigurationReference = DD0C03333A3A3A25906A243C /* Pods-kvasir.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9WCJZAVJ6;
 				ENABLE_BITCODE = NO;
@@ -1621,6 +1628,7 @@
 			baseConfigurationReference = 86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9WCJZAVJ6;
 				ENABLE_BITCODE = NO;

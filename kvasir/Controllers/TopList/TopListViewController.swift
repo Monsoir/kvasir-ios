@@ -27,7 +27,8 @@ private let ResourceCellIdentifier = "resource"
 
 class TopListViewController: UIViewController {
     private lazy var tableView: UITableView = { [unowned self] in
-        let view = UITableView(frame: CGRect.zero, style: .plain)
+        let view = UITableView(frame: CGRect.zero, style: .grouped)
+        view.backgroundColor = Color.init(hexString: ThemeConst.mainBackgroundColor)
         view.delegate = self
         view.dataSource = self
         view.register(TopListTableViewCell.self, forCellReuseIdentifier: TopListTableViewCell.reuseIdentifier())
@@ -148,14 +149,14 @@ class TopListViewController: UIViewController {
     
     func reloadSentenceView() {
         MainQueue.async {
-            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmSentence.toHuman())") : nil
+            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmSentence.toHuman())吧") : nil
             self.sentencesCollectionView?.reloadData()
         }
     }
     
     func reloadParagraphView() {
         MainQueue.async {
-            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "还没有摘录的\(RealmParagraph.toHuman())") : nil
+            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmParagraph.toHuman())吧") : nil
             self.paragraphCollectionView?.reloadData()
         }
     }
@@ -186,6 +187,10 @@ private extension TopListViewController {
 extension TopListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return .leastNonzeroMagnitude
     }
     
     private func headerAccessoryTitleForSection(_ section: Int) -> String {
@@ -219,6 +224,10 @@ extension TopListViewController: UITableViewDelegate {
             header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
             return header
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

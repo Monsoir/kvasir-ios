@@ -166,7 +166,7 @@ private extension CreatorListViewController {
             tableView.backgroundView = nil
             return
         }
-        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "还没有\(Creator.toHuman())的收集", position: .upper)
+        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(Creator.toHuman())吧", position: .upper)
     }
 
     func configureCoordinator() {
