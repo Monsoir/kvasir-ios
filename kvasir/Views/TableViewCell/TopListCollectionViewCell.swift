@@ -31,7 +31,7 @@ class TopListCollectionViewCell: UICollectionViewCell, Reusable, ViewScalable {
     
     private lazy var lbTitle: TopAlignedLabel = {
         let label = TopAlignedLabel()
-        label.font = PingFangSCRegularFont?.withSize(25)
+        label.font = PingFangSCRegularFont?.withSize(22)
         label.numberOfLines = 3
         return label
     }()

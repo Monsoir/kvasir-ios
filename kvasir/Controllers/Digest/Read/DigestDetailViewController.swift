@@ -125,8 +125,9 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UIT
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let headerHeight = lbContent.attributedText?.height(containerWidth: infoTableView.bounds.width) ?? 0
-        headerView.height = headerHeight + 100
+        // 记得减去 superview 的左右间距
+        let headerHeight = lbContent.attributedText?.height(containerWidth: infoTableView.bounds.width - 40) ?? 0
+        headerView.height = headerHeight + 50
         
         infoTableView.tableHeaderView = headerView
     }

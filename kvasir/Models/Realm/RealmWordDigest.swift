@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-private let DigestTitleLength = 40
+private let DigestTitleLength = 60
 
 class RealmWordDigest: RealmBasicObject {
     @objc dynamic var content = ""
