@@ -252,14 +252,16 @@ extension DigestEditViewController {
 
 private extension DigestEditViewController {
     func showImagePickerOfSource(source: UIImagePickerController.SourceType) {
-        guardAccessToImagePickerSource(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = source
-            
-            HUD.show(.progress, onView: self.view)
-            self.present(imagePicker, animated: true) {
-                HUD.hide(animated: false)
+        guardAccessToImagePickerSource(source) {
+            MainQueue.async {
+                HUD.show(.progress, onView: nil)
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = source
+                
+                self.present(imagePicker, animated: true) {
+                    HUD.hide(animated: false)
+                }
             }
         }
     }

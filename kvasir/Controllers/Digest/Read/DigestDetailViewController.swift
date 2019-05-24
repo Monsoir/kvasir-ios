@@ -181,7 +181,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UIT
         case 3:
             return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.publisher ?? "", modifying: nil)
         case 4:
-            let cell = configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(entity.pageIndex)", modifying: modifying)
+            let cell = configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(entity.pageIndex >= 0 ? "\(entity.pageIndex)" : "")", modifying: modifying)
             cell.modifyHandler = { [weak self] cell in
                 guard let strongSelf = self else { return }
                 strongSelf.showPageIndexEdit(cell)
@@ -396,7 +396,12 @@ private extension DigestDetailViewController {
         
         let info: [String: Any?] = [
             FieldEditInfoPreDefineKeys.title: "摘录页码",
-            FieldEditInfoPreDefineKeys.oldValue: entity?.pageIndex ?? 0,
+            FieldEditInfoPreDefineKeys.oldValue: {
+                guard let pageIndex = entity?.pageIndex else {
+                    return ""
+                }
+                return pageIndex >= 0 ? "\(pageIndex)" : ""
+            }(),
             FieldEditInfoPreDefineKeys.completion: completion,
             FieldEditInfoPreDefineKeys.validateErrorHandler: validateErrorHandler,
             "greaterOrEqualThan": 0,
