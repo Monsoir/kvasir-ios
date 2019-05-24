@@ -36,7 +36,7 @@ class TextListTableViewCell: UITableViewCell, ViewScalable {
     private lazy var lbTitle: TopAlignedLabel = {
         let label = TopAlignedLabel()
         label.font = PingFangSCRegularFont?.withSize(25)
-        label.numberOfLines = 3
+        label.numberOfLines = 0
         return label
     }()
     
@@ -83,14 +83,14 @@ class TextListTableViewCell: UITableViewCell, ViewScalable {
             make.bottom.equalTo(lbRecordUpdatedDate.snp.top).offset(-8)
             make.leading.equalTo(lbTitle)
             make.trailing.equalTo(lbTitle)
-            make.height.lessThanOrEqualTo(25)
+            make.height.equalTo(25)
         }
         
         lbRecordUpdatedDate.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview().offset(-8)
             make.leading.equalTo(lbTitle)
             make.trailing.equalTo(lbTitle)
-            make.height.lessThanOrEqualTo(20)
+            make.height.equalTo(20)
         }
         super.updateConstraints()
     }
