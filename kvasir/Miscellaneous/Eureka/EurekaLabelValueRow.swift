@@ -29,6 +29,10 @@ final class EurekaLabelValueRow<creator: RealmCreator>: OptionsRow<PushSelectorC
         }
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     /**
      Extends `didSelect` method
      */
@@ -107,6 +111,10 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewCont
         }
         
         fetchData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        realmNotificationToken?.invalidate()
     }
     
     private func fetchData() {

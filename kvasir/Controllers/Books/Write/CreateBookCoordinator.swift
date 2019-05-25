@@ -18,6 +18,10 @@ class CreateBookCoordinator: CreateCoordinatorable {
         self.entity = entity
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     func post(info: PostInfoScript) throws  {
         postInfo = info as PostInfo
     }

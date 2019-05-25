@@ -18,6 +18,10 @@ class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
         self.entity = entity
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
