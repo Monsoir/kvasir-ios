@@ -70,7 +70,7 @@ func makeBackButtonFromAwesomeFont() -> UIBarButtonItem {
     return btn
 }
 
-func makeBackButtonWithChevron() -> UIBarButtonItem {
+func makeBackButton() -> UIBarButtonItem {
     let presentedController = UIApplication.shared.keyWindow?.rootViewController?.presentedViewController
     let (target, action): (UIViewController?, Selector?) = {
         let isNavigationController = presentedController?.isKind(of: UINavigationController.self) ?? false
@@ -89,7 +89,17 @@ func makeBackButtonWithChevron() -> UIBarButtonItem {
         return (target, action)
     }()
 
-    let chevron = UIImage(named: "Chevron")
-    let btn = UIBarButtonItem(image: chevron, style: .plain, target: target, action: action)
-    return btn
+    if let target = target, let action = action {
+        if action == #selector(UINavigationController.dismiss(animated:completion:)) {
+            let btn = UIBarButtonItem(customView: simpleButtonWithButtonFromAwesomefont(name: .times))
+            btn.addTargetForAction(target, action: action)
+            return btn
+        } else  {
+            let btn = UIBarButtonItem(customView: simpleButtonWithButtonFromAwesomefont(name: .chevronLeft))
+            btn.addTargetForAction(target, action: action)
+            return btn
+        }
+    }
+    
+    return UIBarButtonItem(customView: simpleButtonWithButtonFromAwesomefont(name: .chevronLeft))
 }

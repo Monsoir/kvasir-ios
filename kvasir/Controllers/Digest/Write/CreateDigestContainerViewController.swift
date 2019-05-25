@@ -13,7 +13,7 @@ import RealmSwift
 
 private let DefaultTab = 0
 
-class CreateDigestContainerViewController<Digest: RealmWordDigest>: UIViewController {
+class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewController {
     
     private var digest: Digest {
         get {
@@ -92,7 +92,6 @@ private extension CreateDigestContainerViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.titleView = segement
-        navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: { [weak self] in
             let btn = simpleButtonWithButtonFromAwesomefont(name: .check, fontSize: 22)
             btn.addTarget(self, action: #selector(actionSubmit), for: .touchUpInside)

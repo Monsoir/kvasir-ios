@@ -22,7 +22,7 @@ private let DisplayDigestTitles = [
     "句摘", "段摘",
 ]
 
-class BookDetailViewController: UIViewController {
+class BookDetailViewController: UnifiedViewController {
     
     private var coordinator: BookDetailCoordinable!
     private var dataToDisplay = [(label: String, value: Any)]()
@@ -87,7 +87,6 @@ class BookDetailViewController: UIViewController {
     private func setupNavigationBar() {
         setupImmersiveAppearance()
         if coordinator is RemoteBookDetailCoordinator {
-            navigationItem.leftBarButtonItem = autoGenerateBackItem()
             navigationItem.rightBarButtonItem = itemChooseIt
         }
         title = coordinator.title

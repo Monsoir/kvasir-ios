@@ -24,7 +24,7 @@ private let ContainerHeight = 50
 private let CellIdentifierEditable = "editable"
 private let CellIdentifierUneditable = "uneditable"
 
-class DigestDetailViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
     
     private var coordinator: DigestDetailCoordinator<Digest>!
     private var entity: Digest? {

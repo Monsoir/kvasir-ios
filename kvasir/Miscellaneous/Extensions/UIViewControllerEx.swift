@@ -10,17 +10,27 @@ import UIKit
 
 extension UIViewController {
     func autoGenerateBackItem() -> UIBarButtonItem {
-        let backItem = makeBackButtonWithChevron()
+        let backItem = makeBackButton()
+        var action: Selector
         if let navigationController = self.navigationController {
             if navigationController.viewControllers.count <= 1 {
-                backItem.addTargetForAction(self, action: #selector(actionDismiss))
+                action = #selector(actionDismiss)
             } else {
-                backItem.addTargetForAction(self, action: #selector(actionPop))
+                action = #selector(actionPop)
             }
         } else {
-            backItem.addTargetForAction(self, action: #selector(actionDismiss))
+            action = #selector(actionDismiss)
         }
         
+        if let btn = backItem.customView as? UIButton {
+            btn.addTarget(self, action: action, for: .touchUpInside)
+        } else {
+            backItem.addTargetForAction(self, action: action)
+        }
+        
+        // https://stackoverflow.com/a/19076323/5211544
+        // Avoid that after customizing navigation bar left item, swipe back gesture is disabled.
+        navigationController?.interactivePopGestureRecognizer?.delegate = self as? UIGestureRecognizerDelegate
         return backItem
     }
     
@@ -41,6 +51,10 @@ extension UIViewController {
     
     func removeBackButtonTitle() {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+    }
+    
+    func setupFontBackButton() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(customView: simpleButtonWithButtonFromAwesomefont(name: .chevronLeft))
     }
     
     func setupImmersiveAppearance() {

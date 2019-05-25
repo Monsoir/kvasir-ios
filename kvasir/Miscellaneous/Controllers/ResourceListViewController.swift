@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ResourceListViewController: UIViewController {
+class ResourceListViewController: UnifiedViewController {
     
     private(set) var configuration: [String: Any]!
     var modifyable: Bool {

@@ -182,6 +182,7 @@
 		44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */; };
 		44B2C09C2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */; };
 		44BB703122991C6F00754156 /* ShadowedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BB703022991C6F00754156 /* ShadowedTableViewCell.swift */; };
+		44BB7033229974C000754156 /* UnifiedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BB7032229974C000754156 /* UnifiedViewController.swift */; };
 		44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */; };
 		44ECD94222757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
 		44ECD94322757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
@@ -342,6 +343,7 @@
 		44B2C0952272DFDC00B584F5 /* CreateCreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCreatorViewController.swift; sourceTree = "<group>"; };
 		44B2C09A2273415F00B584F5 /* EurekaLabelValueRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EurekaLabelValueRow.swift; sourceTree = "<group>"; };
 		44BB703022991C6F00754156 /* ShadowedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedTableViewCell.swift; sourceTree = "<group>"; };
+		44BB7032229974C000754156 /* UnifiedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedViewController.swift; sourceTree = "<group>"; };
 		44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestContainerViewController.swift; sourceTree = "<group>"; };
 		44ECD94122757EA200618576 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		44ECD9442275804F00618576 /* Bartendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bartendar.swift; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 			children = (
 				4408B483227C76FD00C5EF68 /* ResourceListViewController.swift */,
 				446DB7E2228C28D800BE3DDF /* PlainTextViewController.swift */,
+				44BB7032229974C000754156 /* UnifiedViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1297,6 +1300,7 @@
 				44190D42228D349900DB98E8 /* SessionManagerEx.swift in Sources */,
 				444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */,
 				44ECD9452275804F00618576 /* Bartendar.swift in Sources */,
+				44BB7033229974C000754156 /* UnifiedViewController.swift in Sources */,
 				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,

@@ -11,7 +11,7 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
-class DigestListViewController<Digest: RealmWordDigest>: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
 
     private var coordinator: DigestListCoordinator<Digest>!
     private var results: Results<Digest>? {

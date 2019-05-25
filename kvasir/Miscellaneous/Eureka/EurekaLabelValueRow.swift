@@ -58,7 +58,7 @@ final class EurekaLabelValueRow<creator: RealmCreator>: OptionsRow<PushSelectorC
     }
 }
 
-class CreatorCanidateListViewController<Creator: RealmCreator> : UIViewController, TypedRowControllerType, UITableViewDelegate, UITableViewDataSource {
+class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewController, TypedRowControllerType, UITableViewDelegate, UITableViewDataSource {
     
     public var row: RowOf<EurekaLabelValueModel>!
     public var onDismissCallback: ((UIViewController) -> ())?

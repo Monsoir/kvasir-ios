@@ -70,6 +70,8 @@ class PlainTextViewController: UIViewController {
     private func setupBackItem() {
         if presentedModally {
             navigationItem.leftBarButtonItem = itemClose
+        } else {
+            navigationItem.leftBarButtonItem = autoGenerateBackItem()
         }
     }
     
