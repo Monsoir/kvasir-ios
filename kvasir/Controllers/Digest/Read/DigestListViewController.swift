@@ -11,6 +11,9 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
+private let CellWithThumbnailIdentifier = "with-thumbnail"
+private let CellWithoutThumbnailIdentifier = "without-thumbnail"
+
 class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
 
     private var coordinator: DigestListCoordinator<Digest>!
@@ -25,7 +28,6 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         view.rowHeight = CGFloat(TextListTableViewCell.height)
         view.delegate = self
         view.dataSource = self
-        view.register(TextListTableViewCell.self, forCellReuseIdentifier: TextListTableViewCell.reuseIdentifier())
         view.tableFooterView = UIView()
         view.separatorStyle = .none
         return view
@@ -76,15 +78,29 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(), for: indexPath) as! TextListTableViewCell
         
+        var cell: TextListTableViewCell?
         let digest = results?[indexPath.row]
         
-        cell.title = digest?.title
-        cell.bookName = digest?.book?.name
-        cell.recordUpdatedDate = digest?.updateAtReadable
+        if let _ = digest?.book?.hasImage {
+            cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithThumbnailIdentifier)) as? TextListTableViewCell
+            if cell == nil {
+                cell = TextListTableViewCell(
+                    style: .default,
+                    reuseIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithThumbnailIdentifier),
+                    needThumbnail: true
+                )
+            }
+            cell?.thumbnail = digest?.book?.thumbnailImage ?? ""
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithoutThumbnailIdentifier)) as? TextListTableViewCell
+        }
         
-        return cell
+        cell?.title = digest?.title
+        cell?.bookName = digest?.book?.name
+        cell?.recordUpdatedDate = digest?.updateAtReadable
+        
+        return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

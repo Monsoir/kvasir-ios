@@ -68,9 +68,17 @@ private extension TopListTableViewCell {
         }()
         collectionView = {
             let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-            view.register(TopListCollectionViewCell.self, forCellWithReuseIdentifier: TopListCollectionViewCell.reuseIdentifier())
+            view.register(
+                TopListCollectionViewCellWithThumbnail.self,
+                forCellWithReuseIdentifier: TopListCollectionViewCellWithThumbnail.reuseIdentifier()
+            )
+            view.register(
+                TopListCollectionViewCellWithoutThumbnail.self,
+                forCellWithReuseIdentifier: TopListCollectionViewCellWithoutThumbnail.reuseIdentifier()
+            )
             view.backgroundColor = .white
             view.bounces = true
+            view.showsHorizontalScrollIndicator = false
             return view
         }()
         contentView.addSubview(collectionView)

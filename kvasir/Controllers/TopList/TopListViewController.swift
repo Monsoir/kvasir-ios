@@ -319,7 +319,8 @@ extension TopListViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCell.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
+        
+        var cell: TopListCollectionViewCell
         
         let digest: RealmWordDigest? = {
             guard let location = getLocationOfCollectionView(collectionView) else { return nil }
@@ -332,6 +333,12 @@ extension TopListViewController: UICollectionViewDataSource {
                 return nil
             }
         }()
+        if let _ = digest?.book?.hasImage {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
+            (cell as! TopListCollectionViewCellWithThumbnail).thumbnail = digest?.book?.thumbnailImage ?? ""
+        } else {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithoutThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
+        }
         cell.title = digest?.title
         cell.bookName = digest?.book?.name
         cell.recordUpdatedDate = digest?.updateAtReadable

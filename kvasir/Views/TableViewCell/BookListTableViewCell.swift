@@ -11,14 +11,14 @@ import SnapKit
 import SwifterSwift
 import Kingfisher
 
-private let BookThumbnailSize = (width: 66.0, height: 98.0)
-private let BookThumbnailZoomFactor = 1.5
 private let LeadingMargin = 10
 private let TrailingMargin = 10
 private let TopMargin = 10
 private let BottomMargin = 10
 
 class BookListTableViewCell: ShadowedTableViewCell {
+    static let BookThumbnailSize = CGSize(width: 66, height: 98)
+    static let BookThumbnailZoomFactor = 1.5 as CGFloat
     static let height = UITableView.automaticDimension
     
     private var needThumbnail: Bool
@@ -80,7 +80,7 @@ class BookListTableViewCell: ShadowedTableViewCell {
         .redirectHandler(MsrKingfisher()),
         
         // 使用 Kingfiser 的圆角处理
-        .processor(RoundCornerImageProcessor(cornerRadius: 10 as CGFloat, targetSize: CGSize(width: BookThumbnailSize.width * BookThumbnailZoomFactor, height: BookThumbnailSize.height * BookThumbnailZoomFactor), roundingCorners: .all, backgroundColor: nil))
+        .processor(RoundCornerImageProcessor(cornerRadius: 10 as CGFloat, targetSize: CGSize(width: BookListTableViewCell.BookThumbnailSize.width * BookListTableViewCell.BookThumbnailZoomFactor, height: BookListTableViewCell.BookThumbnailSize.height * BookListTableViewCell.BookThumbnailZoomFactor), roundingCorners: .all, backgroundColor: nil))
     ]
     
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, needThumbnail: Bool = false) {
@@ -103,7 +103,7 @@ class BookListTableViewCell: ShadowedTableViewCell {
             ivThumbnail.snp.makeConstraints { (make) in
                 make.leading.equalToSuperview().offset(LeadingMargin)
                 make.top.equalToSuperview().offset(TopMargin)
-                make.size.equalTo(CGSize(width: BookThumbnailSize.width * BookThumbnailZoomFactor, height: BookThumbnailSize.height * BookThumbnailZoomFactor))
+                make.size.equalTo(CGSize(width: BookListTableViewCell.BookThumbnailSize.width * BookListTableViewCell.BookThumbnailZoomFactor, height: BookListTableViewCell.BookThumbnailSize.height * BookListTableViewCell.BookThumbnailZoomFactor))
                 make.bottom.lessThanOrEqualToSuperview().offset(-BottomMargin)
             }
         }
