@@ -33,6 +33,7 @@ class BookListViewController: ResourceListViewController {
         view.estimatedRowHeight = 200
         view.delegate = self
         view.dataSource = self
+        view.separatorStyle = .none
         view.tableFooterView = UIView()
         return view
     }()

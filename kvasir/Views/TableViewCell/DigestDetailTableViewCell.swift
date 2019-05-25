@@ -91,12 +91,13 @@ class DigestDetailTableViewCell: UITableViewCell {
             make.leading.equalTo(lbLabel).offset(5)
             make.trailing.equalTo(lbLabel).offset(-5)
             make.height.greaterThanOrEqualTo(32)
+            make.bottom.equalToSuperview().offset(-10)
         }
         
-        contentView.snp.remakeConstraints { (make) in
-            make.edges.equalTo(self)
-            make.bottom.equalTo(lbValue).offset(10)
-        }
+//        contentView.snp.remakeConstraints { (make) in
+//            make.edges.equalTo(self)
+//            make.bottom.equalTo(lbValue).offset(10)
+//        }
         super.updateConstraints()
     }
     

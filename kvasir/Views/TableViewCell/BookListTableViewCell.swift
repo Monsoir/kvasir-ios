@@ -18,7 +18,7 @@ private let TrailingMargin = 10
 private let TopMargin = 10
 private let BottomMargin = 10
 
-class BookListTableViewCell: UITableViewCell {
+class BookListTableViewCell: ShadowedTableViewCell {
     static let height = UITableView.automaticDimension
     
     private var needThumbnail: Bool
@@ -98,14 +98,7 @@ class BookListTableViewCell: UITableViewCell {
         payload = nil
     }
     
-    override class var requiresConstraintBasedLayout: Bool {
-        get {
-            return true
-        }
-    }
-    
     override func updateConstraints() {
-        
         if needThumbnail {
             ivThumbnail.snp.makeConstraints { (make) in
                 make.leading.equalToSuperview().offset(LeadingMargin)
@@ -116,21 +109,21 @@ class BookListTableViewCell: UITableViewCell {
         }
         
         lbTitle.snp.makeConstraints { (make) in
-            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : contentView).offset(LeadingMargin)
+            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : realContentView).offset(LeadingMargin)
             make.trailing.equalToSuperview().offset(-TrailingMargin)
             make.top.equalToSuperview().offset(TopMargin)
             make.height.greaterThanOrEqualTo(30)
         }
         
         lbDetail.snp.makeConstraints { (make) in
-            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : contentView).offset(LeadingMargin)
+            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : realContentView).offset(LeadingMargin)
             make.trailing.equalToSuperview().offset(-TrailingMargin)
             make.top.equalTo(lbTitle.snp.bottom).offset(TopMargin)
             make.height.greaterThanOrEqualTo(30)
         }
         
         lbDigest.snp.makeConstraints { (make) in
-            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : contentView).offset(LeadingMargin)
+            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : realContentView).offset(LeadingMargin)
             make.trailing.equalToSuperview().offset(-TrailingMargin)
             make.top.equalTo(lbDetail.snp.bottom).offset(TopMargin)
             make.height.greaterThanOrEqualTo(30)
@@ -142,12 +135,14 @@ class BookListTableViewCell: UITableViewCell {
     
     private func setupSubviews() {
         if needThumbnail {
-            contentView.addSubview(ivThumbnail)
+            realContentView.addSubview(ivThumbnail)
         }
-        contentView.addSubviews([
+        contentViewBackgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
+        realContentView.addSubviews([
             lbTitle,
             lbDetail,
             lbDigest,
         ])
+        selectionStyle = .none
     }
 }

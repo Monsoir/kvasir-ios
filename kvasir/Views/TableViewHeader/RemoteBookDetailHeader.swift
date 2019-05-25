@@ -33,6 +33,9 @@ class RemoteBookDetailHeader: UITableViewHeaderFooterView, Reusable {
         }
     }
     
+    /// （使用自动布局）标记是否可以确定 frame 大小
+    private var frameConfirmed: Bool = false
+    
     private lazy var ivThumbnail: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .center
@@ -77,39 +80,46 @@ class RemoteBookDetailHeader: UITableViewHeaderFooterView, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        frameConfirmed = true
+        setNeedsUpdateConstraints()
+        updateConstraintsIfNeeded()
+    }
+    
     override func updateConstraints() {
-        
-        ivThumbnail.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(LeadingMargin)
-            make.top.equalToSuperview().offset(TopMargin)
-            make.size.equalTo(CGSize(width: BookThumbnailSize.width * BookThumbnailZoomFactor, height: BookThumbnailSize.height * BookThumbnailZoomFactor))
-            make.bottom.lessThanOrEqualToSuperview().offset(-BottomMargin)
-        }
-        
-        lbTitle.snp.makeConstraints { (make) in
-            make.leading.equalTo(ivThumbnail.snp.trailing).offset(LeadingMargin)
-            make.trailing.equalToSuperview().offset(-TrailingMargin)
-            make.top.equalToSuperview().offset(TopMargin)
-            make.height.greaterThanOrEqualTo(30)
-            make.height.lessThanOrEqualTo(90)
-        }
-        
-        lbDetail.snp.makeConstraints { (make) in
-            make.leading.equalTo(ivThumbnail.snp.trailing).offset(LeadingMargin)
-            make.trailing.equalToSuperview().offset(-TrailingMargin)
-            make.top.equalTo(lbTitle.snp.bottom).offset(TopMargin)
-            make.height.greaterThanOrEqualTo(30)
-            make.height.lessThanOrEqualTo(60)
-        }
-        
-        contentView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+        if frameConfirmed {
+            ivThumbnail.snp.makeConstraints { (make) in
+                make.leading.equalToSuperview().offset(LeadingMargin)
+                make.top.equalToSuperview().offset(TopMargin)
+                make.size.equalTo(CGSize(width: BookThumbnailSize.width * BookThumbnailZoomFactor, height: BookThumbnailSize.height * BookThumbnailZoomFactor))
+                make.bottom.lessThanOrEqualToSuperview().offset(-BottomMargin).priorityHigh()
+            }
+            
+            lbTitle.snp.makeConstraints { (make) in
+                make.leading.equalTo(ivThumbnail.snp.trailing).offset(LeadingMargin)
+                make.trailing.equalToSuperview().offset(-TrailingMargin)
+                make.top.equalToSuperview().offset(TopMargin)
+                make.height.greaterThanOrEqualTo(30)
+                make.height.lessThanOrEqualTo(90)
+            }
+            
+            lbDetail.snp.makeConstraints { (make) in
+                make.leading.equalTo(ivThumbnail.snp.trailing).offset(LeadingMargin)
+                make.trailing.equalToSuperview().offset(-TrailingMargin)
+                make.top.equalTo(lbTitle.snp.bottom).offset(TopMargin)
+                make.height.greaterThanOrEqualTo(30)
+                make.height.lessThanOrEqualTo(60)
+            }
+            
+            frameConfirmed = false
         }
         
         super.updateConstraints()
     }
     
     private func setupSubviews() {
+        contentView.backgroundColor = .white
         contentView.addSubview(ivThumbnail)
         contentView.addSubview(lbTitle)
         contentView.addSubview(lbDetail)

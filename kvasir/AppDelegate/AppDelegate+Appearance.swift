@@ -13,5 +13,7 @@ extension AppDelegate {
     func setAppTintColor() {
         UINavigationBar.appearance().tintColor = Color(hexString: ThemeConst.outlineColor)
         UIView.appearance().tintColor = Color(hexString: ThemeConst.outlineColor)
+        UITableView.appearance().backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
+        ShadowedTableViewCell.appearance().backgroundColor = .clear
     }
 }

@@ -108,7 +108,7 @@ private extension DigestListViewController {
     }
     
     func setupSubviews() {
-        view.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
+        view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)

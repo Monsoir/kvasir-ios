@@ -28,6 +28,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
         view.rowHeight = 50
         view.dataSource = self
         view.delegate = self
+        view.separatorStyle = .none
         view.tableFooterView = UIView()
         return view
     }()
@@ -154,7 +155,6 @@ private extension CreatorListViewController {
     }
     
     func setupSubviews() {
-        view.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
