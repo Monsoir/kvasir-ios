@@ -65,6 +65,8 @@ func allResourceControllerFactory(url: URLConvertible, values: [String: Any], co
         return AuthorListViewController(with: ["editable": true, "title": "已知\(RealmAuthor.toHuman())", "creatorType": "author"])
     case RouteConstants.Nouns.translator:
         return TranslatorListViewController(with: ["editable": true, "title": "已知\(RealmTranslator.toHuman())", "creatorType": "translator"])
+    case RouteConstants.Nouns.tag:
+        return TagListViewController(with: ["editable": true, "title": "已知\(RealmTag.toHuman())"])
     default:
         return nil
     }

@@ -26,6 +26,7 @@ class TopListTableViewCell: UITableViewCell {
             collectionView.dataSource = c.collectionViewDataSource
             collectionView.reloadData()
             collectionView.setContentOffset(CGPoint(x: c.lastOffsetX, y: 0), animated: false)
+            collectionView.alwaysBounceHorizontal = true
         }
     }
     

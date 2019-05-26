@@ -13,9 +13,10 @@ private struct NotificationTokens {
     var bookToken: NotificationToken? = nil
     var authorToken: NotificationToken? = nil
     var translatorToken: NotificationToken? = nil
+    var tagToken: NotificationToken? = nil
     
     func reclaim() {
-        [bookToken, authorToken, translatorToken].forEach { $0?.invalidate() }
+        [bookToken, authorToken, translatorToken, tagToken].forEach { $0?.invalidate() }
     }
 }
 
@@ -23,14 +24,16 @@ class TopListDeputyCoodinator {
     private lazy var bookRepository = RealmBookRepository()
     private lazy var authorRepository = RealmCreatorRepository<RealmAuthor>()
     private lazy var translatorRepository = RealmCreatorRepository<RealmTranslator>()
+    private lazy var tagRepository = RealmTagRepository()
     
     private(set) var bookResults: Results<RealmBook>?
     private(set) var authorResults: Results<RealmAuthor>?
     private(set) var translatorResults: Results<RealmTranslator>?
+    private(set) var tagResults: Results<RealmTag>?
     
     private lazy var notificationTokens = NotificationTokens()
     
-    var reload: ((_ bookCount: Int, _ authorCount: Int, _ translatorCount: Int) -> Void)?
+    var reload: ((_ bookCount: Int, _ authorCount: Int, _ translatorCount: Int, _ tagCount: Int) -> Void)?
     
     deinit {
         debugPrint("\(self) deinit")
@@ -54,7 +57,8 @@ class TopListDeputyCoodinator {
                     strongSelf.reload?(
                         strongSelf.bookResults?.count ?? 0,
                         strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0
+                        strongSelf.translatorResults?.count ?? 0,
+                        strongSelf.tagResults?.count ?? 0
                     )
                 default:
                     break
@@ -75,7 +79,8 @@ class TopListDeputyCoodinator {
                     strongSelf.reload?(
                         strongSelf.bookResults?.count ?? 0,
                         strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0
+                        strongSelf.translatorResults?.count ?? 0,
+                        strongSelf.tagResults?.count ?? 0
                     )
                 default:
                     break
@@ -96,7 +101,30 @@ class TopListDeputyCoodinator {
                     strongSelf.reload?(
                         strongSelf.bookResults?.count ?? 0,
                         strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0
+                        strongSelf.translatorResults?.count ?? 0,
+                        strongSelf.tagResults?.count ?? 0
+                    )
+                default:
+                    break
+                }
+            })
+        }
+        
+        tagRepository.queryAll { [weak self] (success, _results) in
+            guard success, let results = _results, let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.tagResults = results
+            strongSelf.notificationTokens.tagToken = results.observe({ (changes) in
+                switch changes {
+                case .initial: fallthrough
+                case .update:
+                    strongSelf.reload?(
+                        strongSelf.bookResults?.count ?? 0,
+                        strongSelf.authorResults?.count ?? 0,
+                        strongSelf.translatorResults?.count ?? 0,
+                        strongSelf.tagResults?.count ?? 0
                     )
                 default:
                     break

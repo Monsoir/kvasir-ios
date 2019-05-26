@@ -17,6 +17,7 @@ struct RouteConstants {
         static let author = "author"
         static let translator = "translator"
         static let resource = "resource"
+        static let tag = "tag"
     }
     
     struct Actions {

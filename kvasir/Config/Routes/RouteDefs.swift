@@ -15,7 +15,7 @@ protocol KvasirViewControllerRoutable {
     var controllerFactory: ((_ url: URLConvertible, _ values: [String: Any], _ context: Any?) -> UIViewController?) { get }
 }
 
-enum KvasirURL: KvasirViewControllerRoutable {
+enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
     // No need for args
     case newSentence
     case newParagraph
@@ -24,6 +24,7 @@ enum KvasirURL: KvasirViewControllerRoutable {
     case allBooks
     case allAuthors
     case allTranslators
+    case allTags
     case selectBooks
     case selectAuthors
     case selectTranslators
@@ -68,6 +69,9 @@ enum KvasirURL: KvasirViewControllerRoutable {
         case .allTranslators:
             // kvasir://resource/all/translator
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.translator)
+        case .allTags:
+            // kvasir://resource/all/tag
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.tag)
         case .booksOfATranslator:
             // kvasir://resource/translator/translator-id/books
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.translator).component("<string:id>").component(RouteConstants.Nouns.books)
@@ -123,7 +127,7 @@ enum KvasirURL: KvasirViewControllerRoutable {
             return allDigestControllerFactory(url:values:context:)
         case .detailSentence, .detailParagraph:
             return detailDigestControllerFactory(url:values:context:)
-        case .allBooks, .allAuthors, .allTranslators:
+        case .allBooks, .allAuthors, .allTranslators, .allTags:
             return allResourceControllerFactory(url:values:context:)
         case .booksOfAnAuthor, .booksOfATranslator:
             return booksOfCreatorControllerFactory(url:values:context:)

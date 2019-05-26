@@ -22,6 +22,7 @@ private let Resources: [(title: String, url: String)] = [
     ("书籍", KvasirURL.allBooks.url()),
     ("\(RealmAuthor.toHuman())们", KvasirURL.allAuthors.url()),
     ("\(RealmTranslator.toHuman())们", KvasirURL.allTranslators.url()),
+    ("\(RealmTag.toHuman())们", KvasirURL.allTags.url()),
 ]
 private let ResourceCellIdentifier = "resource"
 
@@ -64,7 +65,7 @@ class TopListViewController: UIViewController {
     }()
     private lazy var deputyCoodinator: TopListDeputyCoodinator = { [unowned self] in
         let coordinator = TopListDeputyCoodinator()
-        coordinator.reload = { (bookCount, authorCount, translatorCount) in
+        coordinator.reload = { (bookCount, authorCount, translatorCount, tagCount) in
             self.tableView.reloadSections(IndexSet(arrayLiteral: 2), with: .automatic)
         }
         return coordinator
@@ -97,6 +98,12 @@ class TopListViewController: UIViewController {
     private var translatorsData: Results<RealmTranslator>? {
         get {
             return deputyCoodinator.translatorResults
+        }
+    }
+    
+    private var tagData: Results<RealmTag>? {
+        get {
+            return deputyCoodinator.tagResults
         }
     }
     
@@ -269,6 +276,8 @@ extension TopListViewController: UITableViewDataSource {
             return "\(authorsData?.count ?? 0)"
         case 2:
             return "\(translatorsData?.count ?? 0)"
+        case 3:
+            return "\(tagData?.count ?? 0)"
         default:
             return ""
         }

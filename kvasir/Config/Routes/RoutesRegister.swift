@@ -14,27 +14,6 @@ struct URLNavigaionMap {
             navigator.register(url.template, url.controllerFactory)
         }
         
-        registerRoute(url: .newSentence)
-        registerRoute(url: .newParagraph)
-        
-        registerRoute(url: .allSentences)
-        registerRoute(url: .allParagraphs)
-        
-        registerRoute(url: .detailSentence)
-        registerRoute(url: .detailParagraph)
-        
-        registerRoute(url: .allBooks)
-        registerRoute(url: .allAuthors)
-        registerRoute(url: .allTranslators)
-        
-        registerRoute(url: .booksOfAnAuthor)
-        registerRoute(url: .booksOfATranslator)
-        
-        registerRoute(url: .selectBooks)
-        registerRoute(url: .selectAuthors)
-        registerRoute(url: .selectTranslators)
-        
-        registerRoute(url: .sentencesOfBook)
-        registerRoute(url: .paragraphsOfBook)
+        KvasirURL.allCases.forEach{ registerRoute(url: $0) }
     }
 }

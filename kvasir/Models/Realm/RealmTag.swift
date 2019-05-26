@@ -19,4 +19,12 @@ class RealmTag: RealmBasicObject {
     override static func indexedProperties() -> [String] {
         return ["name"]
     }
+    
+    class func toHuman() -> String {
+        return "标签"
+    }
+    
+    class func toMachine() -> String {
+        return "tag"
+    }
 }

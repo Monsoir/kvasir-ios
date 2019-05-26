@@ -1,19 +1,15 @@
 //
-//  ShadowedTableViewCell.swift
+//  ShadowedCollectionViewCell.swift
 //  kvasir
 //
-//  Created by Monsoir on 5/25/19.
+//  Created by Monsoir on 5/26/19.
 //  Copyright © 2019 monsoir. All rights reserved.
 //
 
 import UIKit
-import SwifterSwift
-import SnapKit
 
-private let ScaleFactor = 0.9 as CGFloat
-private let ScaleDuration = 0.25
-
-class ShadowedTableViewCell: UITableViewCell, ViewScalable {
+class ShadowedCollectionViewCell: UICollectionViewCell {
+    static let inset = 30 as CGFloat
     var contentViewBackgroundColor: UIColor? {
         get {
             return realContentView.backgroundColor
@@ -35,8 +31,9 @@ class ShadowedTableViewCell: UITableViewCell, ViewScalable {
         return view
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupSubviews()
     }
     
@@ -44,14 +41,15 @@ class ShadowedTableViewCell: UITableViewCell, ViewScalable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        highlighted ? shrinkSize(scaleX: ScaleFactor, scaleY: ScaleFactor, duration: ScaleDuration) : restoreSize(duration: ScaleDuration)
+    override class var requiresConstraintBasedLayout: Bool {
+        get {
+            return true
+        }
     }
     
     override func updateConstraints() {
         shadowedView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(horizontal: 30, vertical: 30))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(horizontal: type(of: self).inset, vertical: type(of: self).inset))
         }
         realContentView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -59,16 +57,8 @@ class ShadowedTableViewCell: UITableViewCell, ViewScalable {
         super.updateConstraints()
     }
     
-    private func setupSubviews() {
-        shadowedView.addSubview(realContentView)
+    func setupSubviews() {
         contentView.addSubview(shadowedView)
-    }
-}
-
-extension ShadowedTableViewCell {
-    override class var requiresConstraintBasedLayout: Bool {
-        get {
-            return true
-        }
+        shadowedView.addSubview(realContentView)
     }
 }
