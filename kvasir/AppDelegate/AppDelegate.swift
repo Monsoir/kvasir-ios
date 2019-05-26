@@ -25,9 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         setAppTintColor()
         setDefaultRealm()
-        
-        window?.makeKeyAndVisible()
-        
+        setupInitialTagsIfNeeded { (_, _) in
+        }
+        self.window?.makeKeyAndVisible()
         return true
     }
 

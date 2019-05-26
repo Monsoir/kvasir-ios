@@ -24,4 +24,17 @@ extension AppDelegate {
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
     }
+    
+    func setupInitialTagsIfNeeded(completion: @escaping RealmCreateCompletion) {
+        let tagsToBeAdded: [RealmTag] = FinderTagColor.allCases.map {
+            let tag = RealmTag()
+            tag.id = $0.initialId
+            tag.name = $0.initialName
+            tag.color = $0.hexColor
+            return tag
+        }
+        
+        let tagRepository = RealmTagRepository()
+        tagRepository.createMultiple(unmanagedModels: tagsToBeAdded, update: true, completion: completion)
+    }
 }

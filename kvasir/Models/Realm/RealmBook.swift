@@ -20,11 +20,33 @@ class RealmBook: RealmBasicObject {
     
     let sentences = List<RealmSentence>()
     let paragraphs = List<RealmParagraph>()
+    let tags = List<RealmTag>()
+    
     let authors = LinkingObjects(fromType: RealmAuthor.self, property: "books")
     let translators = LinkingObjects(fromType: RealmTranslator.self, property: "books")
     
     override static func indexedProperties() -> [String] {
         return ["isbn13", "isbn10", "name", "localeName"]
+    }
+    
+    override func preUpdate() {
+        super.preUpdate()
+        name.trim()
+        localeName.trim()
+        isbn13.trim()
+        isbn10.trim()
+        publisher.trim()
+        summary.trim()
+    }
+    
+    override func preCreate() {
+        super.preCreate()
+        name.trim()
+        localeName.trim()
+        isbn13.trim()
+        isbn10.trim()
+        publisher.trim()
+        summary.trim()
     }
 }
 
@@ -57,24 +79,5 @@ extension RealmBook {
         get{
             return imageLarge.isEmpty ? imageMedium : imageLarge
         }
-    }
-    
-    func preCreate() {
-        name.trim()
-        localeName.trim()
-        isbn13.trim()
-        isbn10.trim()
-        publisher.trim()
-        summary.trim()
-    }
-    
-    func preUpdate() {
-        name.trim()
-        localeName.trim()
-        isbn13.trim()
-        isbn10.trim()
-        publisher.trim()
-        updatedAt = Date()
-        summary.trim()
     }
 }

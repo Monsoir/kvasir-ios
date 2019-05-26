@@ -13,3 +13,57 @@ struct ThemeConst {
     static let mainBackgroundColor = "#FFFFFF"
     static let secondaryBackgroundColor = "#F4F3F4"
 }
+
+enum FinderTagColor: CaseIterable {
+    case red
+    case orange
+    case yellow
+    case green
+    case blue
+    case purple
+    case gray
+}
+
+extension FinderTagColor {
+    var initialId: String {
+        return "kvasir-\(hexColor)"
+    }
+    
+    var hexColor: String {
+        switch self {
+        case .red:
+            return "#F55C59"
+        case .orange:
+            return "#F5A250"
+        case .yellow:
+            return "#F6CD56"
+        case .green:
+            return "#56CE67"
+        case .blue:
+            return "#4290F4"
+        case .purple:
+            return "#B173D2"
+        case .gray:
+            return "#9D9DA0"
+        }
+    }
+    
+    var initialName: String {
+        switch self {
+        case .red:
+            return "red"
+        case .orange:
+            return "orange"
+        case .yellow:
+            return "yellow"
+        case .green:
+            return "green"
+        case .blue:
+            return "blue"
+        case .purple:
+            return "purple"
+        case .gray:
+            return "gray"
+        }
+    }
+}

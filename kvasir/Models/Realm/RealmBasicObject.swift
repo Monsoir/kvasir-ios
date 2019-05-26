@@ -23,6 +23,13 @@ class RealmBasicObject: Object {
     override static func primaryKey() -> String? {
         return "id"
     }
+    
+    func preCreate() {
+    }
+    
+    func preUpdate() {
+        updatedAt = Date()
+    }
 }
 
 // https://github.com/realm/realm-cocoa/issues/3381#issuecomment-256243390

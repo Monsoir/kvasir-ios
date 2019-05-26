@@ -27,14 +27,15 @@ class RealmCreator: RealmBasicObject, KvasirRealmReadable {
         return creator
     }
     
-    func preCreate() {
+    override func preCreate() {
+        super.preCreate()
         name.trim()
         localeName.trim()
     }
     
-    func preUpdate() {
+    override func preUpdate() {
+        super.preUpdate()
         name.trim()
         localeName.trim()
-        updatedAt = Date()
     }
 }

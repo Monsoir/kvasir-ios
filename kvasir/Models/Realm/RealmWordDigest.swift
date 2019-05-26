@@ -16,6 +16,8 @@ class RealmWordDigest: RealmBasicObject {
     
     @objc dynamic var book: RealmBook?
     
+    let tags = List<RealmTag>()
+    
     var title: String {
         get {
             var temp = content.replacingOccurrences(of: "\n", with: " ")
@@ -38,11 +40,13 @@ class RealmWordDigest: RealmBasicObject {
         return "word"
     }
     
-    func preCreate() {
+    override func preCreate() {
+        super.preCreate()
         content.trim()
     }
     
-    func preUpdate() {
+    override func preUpdate() {
+        super.preUpdate()
         content.trim()
     }
 }
