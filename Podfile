@@ -17,16 +17,16 @@ target 'kvasir' do
   pod 'Kingfisher', '~> 5.0'
   pod 'CropViewController'
   
-  target 'kvasir-with-tesseract' do
-    inherit! :search_paths
-    # https://stackoverflow.com/a/39930762/5211544
-    pod 'TesseractOCRiOS', :git => "https://github.com/gali8/Tesseract-OCR-iOS.git", :tag => '4.0.0'
-  end
+#  target 'kvasir-with-tesseract' do
+#    inherit! :search_paths
+#    # https://stackoverflow.com/a/39930762/5211544
+#    pod 'TesseractOCRiOS', :git => "https://github.com/gali8/Tesseract-OCR-iOS.git", :tag => '4.0.0'
+#  end
 
-  target 'kvasirTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#  target 'kvasirTests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
 
   target 'kvasirUITests' do
     inherit! :search_paths

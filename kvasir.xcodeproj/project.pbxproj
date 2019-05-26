@@ -118,7 +118,6 @@
 		44B2BFE922698BA400B584F5 /* TopListTableViewHeaderActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED272246A62300D1C402 /* TopListTableViewHeaderActionable.swift */; };
 		44B2BFEA22698BA400B584F5 /* RealmSentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760B226491F0004B9CD4 /* RealmSentence.swift */; };
 		44B2BFED22698BA400B584F5 /* TopListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */; };
-		44B2BFF022698BA400B584F5 /* Pods_kvasir.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF2AFB17A5EEB488ACCEC1F /* Pods_kvasir.framework */; };
 		44B2BFF222698BA400B584F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
 		44B2BFF322698BA400B584F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44B2BFF422698BA400B584F5 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ED552246AD2300D1C402 /* tessdata */; };
@@ -218,9 +217,8 @@
 		44ED682D22952DFC000B9B77 /* DateEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED682C22952DFC000B9B77 /* DateEx.swift */; };
 		44ED682E22952DFC000B9B77 /* DateEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED682C22952DFC000B9B77 /* DateEx.swift */; };
 		44ED6833229560AD000B9B77 /* StringExTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED6832229560AD000B9B77 /* StringExTests.swift */; };
+		7A12D36AE642A57ACFCE1548 /* Pods_kvasir.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF2AFB17A5EEB488ACCEC1F /* Pods_kvasir.framework */; };
 		7E473980D8AF351BC84D8DC1 /* Pods_kvasirUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */; };
-		D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */; };
-		DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */; };
 		E51C8D6FEAA1A3E33D257F0E /* Pods_kvasir.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF2AFB17A5EEB488ACCEC1F /* Pods_kvasir.framework */; };
 /* End PBXBuildFile section */
 
@@ -242,8 +240,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1F1282C45A61E36D3A6A6B70 /* Pods-kvasir-with-tesseract.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir-with-tesseract.release.xcconfig"; path = "Target Support Files/Pods-kvasir-with-tesseract/Pods-kvasir-with-tesseract.release.xcconfig"; sourceTree = "<group>"; };
-		376529B7B79EE921298D9C84 /* Pods-kvasirTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirTests.release.xcconfig"; path = "Target Support Files/Pods-kvasirTests/Pods-kvasirTests.release.xcconfig"; sourceTree = "<group>"; };
 		3C8C50EAFD86CD02063D1765 /* Pods-kvasirUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.release.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4404058B229A61CE00292D46 /* DigestMoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestMoreDetailViewController.swift; sourceTree = "<group>"; };
 		4408B4662279630800C5EF68 /* FieldEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldEditController.swift; sourceTree = "<group>"; };
@@ -370,12 +366,10 @@
 		86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.release.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.release.xcconfig"; sourceTree = "<group>"; };
 		B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		CB063CA95000001EF37C7873 /* Pods-kvasirTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirTests.debug.xcconfig"; path = "Target Support Files/Pods-kvasirTests/Pods-kvasirTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CCF2AFB17A5EEB488ACCEC1F /* Pods_kvasir.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasir.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasirUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4FDAA1EDEA0EE2C9C4CACF9 /* Pods_kvasir_with_tesseract.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvasir_with_tesseract.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD0C03333A3A3A25906A243C /* Pods-kvasir.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir.debug.xcconfig"; path = "Target Support Files/Pods-kvasir/Pods-kvasir.debug.xcconfig"; sourceTree = "<group>"; };
-		FAF96078EE39E765F0F4E791 /* Pods-kvasir-with-tesseract.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir-with-tesseract.debug.xcconfig"; path = "Target Support Files/Pods-kvasir-with-tesseract/Pods-kvasir-with-tesseract.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E51C8D6FEAA1A3E33D257F0E /* Pods_kvasir.framework in Frameworks */,
+				7A12D36AE642A57ACFCE1548 /* Pods_kvasir.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +386,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA3E2C6688749D9AED02CD98 /* Pods_kvasirTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,8 +401,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44B2BFF022698BA400B584F5 /* Pods_kvasir.framework in Frameworks */,
-				D417819707E5FAB4A58D510D /* Pods_kvasir_with_tesseract.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,12 +905,8 @@
 			children = (
 				DD0C03333A3A3A25906A243C /* Pods-kvasir.debug.xcconfig */,
 				86C6E6B49DDB1B6842752E25 /* Pods-kvasir.release.xcconfig */,
-				CB063CA95000001EF37C7873 /* Pods-kvasirTests.debug.xcconfig */,
-				376529B7B79EE921298D9C84 /* Pods-kvasirTests.release.xcconfig */,
 				BA3E2CBB0844DB83547613E4 /* Pods-kvasirUITests.debug.xcconfig */,
 				3C8C50EAFD86CD02063D1765 /* Pods-kvasirUITests.release.xcconfig */,
-				FAF96078EE39E765F0F4E791 /* Pods-kvasir-with-tesseract.debug.xcconfig */,
-				1F1282C45A61E36D3A6A6B70 /* Pods-kvasir-with-tesseract.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -949,7 +937,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 44A7ED0A2246A5DB00D1C402 /* Build configuration list for PBXNativeTarget "kvasirTests" */;
 			buildPhases = (
-				DFC9B3BA3BECB970C5CF6832 /* [CP] Check Pods Manifest.lock */,
 				44A7ECEF2246A5DB00D1C402 /* Sources */,
 				44A7ECF02246A5DB00D1C402 /* Frameworks */,
 				44A7ECF12246A5DB00D1C402 /* Resources */,
@@ -987,11 +974,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 44B2BFF722698BA400B584F5 /* Build configuration list for PBXNativeTarget "kvasir-with-tesseract" */;
 			buildPhases = (
-				44B2BFCA22698BA400B584F5 /* [CP] Check Pods Manifest.lock */,
 				44B2BFCB22698BA400B584F5 /* Sources */,
 				44B2BFEF22698BA400B584F5 /* Frameworks */,
 				44B2BFF122698BA400B584F5 /* Resources */,
-				44B2BFF622698BA400B584F5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1086,50 +1071,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		44B2BFCA22698BA400B584F5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-kvasir-with-tesseract-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		44B2BFF622698BA400B584F5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-kvasir-with-tesseract/Pods-kvasir-with-tesseract-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/TesseractOCRiOS/TesseractOCR.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TesseractOCR.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-kvasir-with-tesseract/Pods-kvasir-with-tesseract-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		557204B83AC88F908A576B68 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1210,28 +1151,6 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-kvasir-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DFC9B3BA3BECB970C5CF6832 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-kvasirTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1666,7 +1585,6 @@
 		};
 		44A7ED0B2246A5DB00D1C402 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CB063CA95000001EF37C7873 /* Pods-kvasirTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1688,7 +1606,6 @@
 		};
 		44A7ED0C2246A5DB00D1C402 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 376529B7B79EE921298D9C84 /* Pods-kvasirTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1752,7 +1669,6 @@
 		};
 		44B2BFF822698BA400B584F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FAF96078EE39E765F0F4E791 /* Pods-kvasir-with-tesseract.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -1772,7 +1688,6 @@
 		};
 		44B2BFF922698BA400B584F5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1F1282C45A61E36D3A6A6B70 /* Pods-kvasir-with-tesseract.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

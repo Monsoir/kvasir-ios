@@ -28,7 +28,6 @@ PODS:
   - SwifterSwift/SpriteKit (4.6.0)
   - SwifterSwift/SwiftStdlib (4.6.0)
   - SwifterSwift/UIKit (4.6.0)
-  - TesseractOCRiOS (3.4.0)
   - URLNavigator (2.1.0)
 
 DEPENDENCIES:
@@ -41,7 +40,6 @@ DEPENDENCIES:
   - RealmSwift
   - SnapKit (~> 4.0.0)
   - SwifterSwift
-  - TesseractOCRiOS (from `https://github.com/gali8/Tesseract-OCR-iOS.git`, tag `4.0.0`)
   - URLNavigator
 
 SPEC REPOS:
@@ -58,16 +56,6 @@ SPEC REPOS:
     - SwifterSwift
     - URLNavigator
 
-EXTERNAL SOURCES:
-  TesseractOCRiOS:
-    :git: https://github.com/gali8/Tesseract-OCR-iOS.git
-    :tag: 4.0.0
-
-CHECKOUT OPTIONS:
-  TesseractOCRiOS:
-    :git: https://github.com/gali8/Tesseract-OCR-iOS.git
-    :tag: 4.0.0
-
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
@@ -79,9 +67,8 @@ SPEC CHECKSUMS:
   RealmSwift: 8a1e6a02b7a08cd17a31e3115143fb69fe5f3fb9
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SwifterSwift: 812ffec6f301922f5430e75be3f2939ea3a80024
-  TesseractOCRiOS: 5be498d8fef7a37a38046a05670f9f34b9f042d2
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: 694a91af3740c375b9b6ff5decf040b60afe794b
+PODFILE CHECKSUM: a33ff4306ba684c801d0efb170aad5128bcb0ab0
 
 COCOAPODS: 1.6.1
