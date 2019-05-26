@@ -167,9 +167,7 @@ private extension TopListViewController {
         title = "最近"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        
-        let newItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionNew))
-        navigationItem.rightBarButtonItem = newItem
+        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionNew))
     }
     
     func setupSubviews() {

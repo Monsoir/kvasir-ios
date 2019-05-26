@@ -70,6 +70,12 @@ func makeBackButtonFromAwesomeFont() -> UIBarButtonItem {
     return btn
 }
 
+func makeBarButtonItem(_ font: FontAwesome, target: AnyObject, action: Selector) -> UIBarButtonItem {
+    let btn = simpleButtonWithButtonFromAwesomefont(name: font)
+    btn.addTarget(target, action: action, for: .touchUpInside)
+    return UIBarButtonItem(customView: btn)
+}
+
 func makeBackButton() -> UIBarButtonItem {
     let presentedController = UIApplication.shared.keyWindow?.rootViewController?.presentedViewController
     let (target, action): (UIViewController?, Selector?) = {

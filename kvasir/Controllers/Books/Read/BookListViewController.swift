@@ -11,7 +11,7 @@ import RealmSwift
 import SwifterSwift
 import PKHUD
 
-typealias BookSelectCompletion = (_ book: RealmBook) -> Void
+typealias BookSelectCompletion = (_ book: RealmBook, _ vc: UIViewController?) -> Void
 
 private let CellWithThumbnailIdentifier = BookListTableViewCell.reuseIdentifier(extra: "with-thumnbnail")
 private let CellWithoutThumbnailIdentifier = BookListTableViewCell.reuseIdentifier(extra: "without-thumnbnail")
@@ -67,7 +67,7 @@ class BookListViewController: ResourceListViewController {
 private extension BookListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
+        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
         title = configuration["title"] as? String ?? ""
     }
 
@@ -178,7 +178,7 @@ extension BookListViewController: UITableViewDelegate {
             navigationController?.pushViewController(vc, animated: true)
         } else {
             guard let book = results?[indexPath.row] else { return }
-            selectCompletion?(book)
+            selectCompletion?(book, self)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }

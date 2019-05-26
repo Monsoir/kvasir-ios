@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4404058C229A61CE00292D46 /* DigestMoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4404058B229A61CE00292D46 /* DigestMoreDetailViewController.swift */; };
 		4408B4672279630800C5EF68 /* FieldEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4662279630800C5EF68 /* FieldEditController.swift */; };
 		4408B4682279630800C5EF68 /* FieldEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4662279630800C5EF68 /* FieldEditController.swift */; };
 		4408B46A2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */; };
@@ -244,6 +245,7 @@
 		1F1282C45A61E36D3A6A6B70 /* Pods-kvasir-with-tesseract.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasir-with-tesseract.release.xcconfig"; path = "Target Support Files/Pods-kvasir-with-tesseract/Pods-kvasir-with-tesseract.release.xcconfig"; sourceTree = "<group>"; };
 		376529B7B79EE921298D9C84 /* Pods-kvasirTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirTests.release.xcconfig"; path = "Target Support Files/Pods-kvasirTests/Pods-kvasirTests.release.xcconfig"; sourceTree = "<group>"; };
 		3C8C50EAFD86CD02063D1765 /* Pods-kvasirUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvasirUITests.release.xcconfig"; path = "Target Support Files/Pods-kvasirUITests/Pods-kvasirUITests.release.xcconfig"; sourceTree = "<group>"; };
+		4404058B229A61CE00292D46 /* DigestMoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestMoreDetailViewController.swift; sourceTree = "<group>"; };
 		4408B4662279630800C5EF68 /* FieldEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldEditController.swift; sourceTree = "<group>"; };
 		4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitFieldEditViewController.swift; sourceTree = "<group>"; };
 		4408B46C2279794900C5EF68 /* AbstractFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractFieldEditViewController.swift; sourceTree = "<group>"; };
@@ -680,10 +682,10 @@
 		44A7ED302246A62300D1C402 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				44B2C01F226C45D600B584F5 /* TopList */,
 				44ECD9682277100000618576 /* Digest */,
 				44B2C0912272DCF900B584F5 /* Authors */,
 				44B2C07E2271B1D200B584F5 /* Books */,
-				44B2C01F226C45D600B584F5 /* TopList */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -870,6 +872,7 @@
 				44A7ED312246A62300D1C402 /* DigestListViewController.swift */,
 				44ECD94E2276F66000618576 /* DigestListCoordinator.swift */,
 				44A7ED332246A62300D1C402 /* DigestDetailViewController.swift */,
+				4404058B229A61CE00292D46 /* DigestMoreDetailViewController.swift */,
 				44B2C02C226C5B5C00B584F5 /* DigestDetailCoordinator.swift */,
 			);
 			path = Read;
@@ -1286,6 +1289,7 @@
 				44717C25229101E00049FEB6 /* RouteDefs.swift in Sources */,
 				44ECD95E2276FE7C00618576 /* RealmCreatorRepository.swift in Sources */,
 				44ECD975227720EB00618576 /* Validator.swift in Sources */,
+				4404058C229A61CE00292D46 /* DigestMoreDetailViewController.swift in Sources */,
 				44A7ED4F2246A62300D1C402 /* TopListViewController.swift in Sources */,
 				44B2C08F2272DC7600B584F5 /* RealmTranslator.swift in Sources */,
 				4408B46A2279649A00C5EF68 /* DigitFieldEditViewController.swift in Sources */,

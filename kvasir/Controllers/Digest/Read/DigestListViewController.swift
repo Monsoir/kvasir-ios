@@ -94,6 +94,12 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
             cell?.thumbnail = digest?.book?.thumbnailImage ?? ""
         } else {
             cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithoutThumbnailIdentifier)) as? TextListTableViewCell
+            if cell == nil {
+                cell = TextListTableViewCell(
+                    style: .default,
+                    reuseIdentifier: CellWithoutThumbnailIdentifier
+                )
+            }
         }
         
         cell?.title = digest?.title
@@ -119,7 +125,7 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
 private extension DigestListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
+        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
         title = coordinator.bookName.isEmpty ? Digest.toHuman() : "\(coordinator.bookName)的\(Digest.toHuman())"
     }
     

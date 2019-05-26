@@ -9,7 +9,7 @@
 import RealmSwift
 
 class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
-    private var digestId = ""
+    private(set) var digestId = ""
     private(set) var entity: Digest?
     private var repository = RealmWordRepository<Digest>()
     private var putInfo = PutInfo()

@@ -104,9 +104,9 @@ private extension CreateDigestInfoViewController {
         bookRelatedSection <<< ButtonRow() { (row: ButtonRow) in
             row.title = "关联一本书籍"
             }.onCellSelection({ [weak self] (cell, row) in
-                let vc = BookListViewController(with: ["editable": false, "title": "选择书籍"], selectCompletion: { [weak self] (book) in
+                let vc = BookListViewController(with: ["editable": false, "title": "选择书籍"], selectCompletion: { [weak self] (book, vc) in
                     self?.bookDidSelect(book: book)
-                    self?.navigationController?.popViewController()
+                    vc?.navigationController?.popViewController()
                 })
                 self?.navigationController?.pushViewController(vc, completion: nil)
             })

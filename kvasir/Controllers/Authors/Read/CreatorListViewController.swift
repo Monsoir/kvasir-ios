@@ -150,7 +150,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
 private extension CreatorListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
+        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
         title = configuration["title"] as? String ?? ""
     }
     

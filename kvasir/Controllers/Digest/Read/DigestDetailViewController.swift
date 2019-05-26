@@ -9,22 +9,10 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-import Eureka
-
-private let SectionTitles = [
-    "书名",
-    "作者",
-    "译者",
-    "出版社",
-    "摘录页码",
-    "上次修改时间",
-]
 
 private let ContainerHeight = 50
-private let CellIdentifierEditable = "editable"
-private let CellIdentifierUneditable = "uneditable"
 
-class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController {
     
     private var coordinator: DigestDetailCoordinator<Digest>!
     private var entity: Digest? {
@@ -33,18 +21,21 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
         }
     }
     
-    private var modifying = false {
-        didSet {
-            btnEdit.setTitle(modifying ? "完成修改" : "修改", for: .normal)
-            btnContentEdit.isHidden = !modifying
-            reloadData()
-        }
-    }
+    private lazy var scrollableContainer: UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
+        return view
+    }()
+    
+    private lazy var container: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
     
     private lazy var headerView: UIView = {
         let view = UIView()
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
-        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -61,6 +52,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
         view.numberOfLines = 0
         view.backgroundColor = .white
         view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(self.toCopyContentGesture)
         return view
     }()
     
@@ -71,17 +63,6 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
         btn.addTarget(self, action: #selector(actionEditContent), for: .touchUpInside)
         btn.isHidden = true
         return btn
-    }()
-    
-    private lazy var infoTableView: UITableView = { [unowned self] in
-        let view = UITableView(frame: CGRect.zero, style: .plain)
-        view.delegate = self
-        view.dataSource = self
-        view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
-        view.register(DigestDetailTableViewCell.self, forCellReuseIdentifier: DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable))
-        view.register(DigestDetailTableViewCell.self, forCellReuseIdentifier: DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable))
-        view.tableFooterView = UIView()
-        return view
     }()
     
     private lazy var scrollView: UIScrollView = {
@@ -104,7 +85,14 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
     }()
     
     private lazy var contentAttributes: StringAttributes = [
-        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue", size: 28)!
+        NSAttributedString.Key.font: UIFont(name: "PingFangSC-Light", size: 24)!,
+        NSAttributedString.Key.paragraphStyle: {
+            var paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = NSTextAlignment.justified
+            paragraphStyle.paragraphSpacing = 6.0
+            paragraphStyle.paragraphSpacingBefore = 6.0
+            return paragraphStyle
+        }(),
     ]
     
     override func viewDidLoad() {
@@ -121,15 +109,6 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
             }
             self?.reloadData()
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // 记得减去 superview 的左右间距
-        let headerHeight = lbContent.attributedText?.height(containerWidth: infoTableView.bounds.width - 40) ?? 0
-        headerView.height = headerHeight + 50
-        
-        infoTableView.tableHeaderView = headerView
     }
     
     init(digestId: String) {
@@ -149,57 +128,6 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
         coordinator.reclaim()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return SectionTitles.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        func configureCell(_ identifier: String, indexPath: IndexPath, label: String, value: String, modifying: Bool?) -> DigestDetailTableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! DigestDetailTableViewCell
-            cell.label = label
-            cell.value = value
-            if let m = modifying {
-                cell.modifying = m
-            }
-            cell.selectionStyle = .none
-            return cell
-        }
-        
-        guard let entity = entity else { return UITableViewCell() }
-        switch indexPath.row {
-        case 0:
-            let cell = configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.name ?? "", modifying: modifying)
-            cell.modifyHandler = { [weak self] cell in
-                guard let strongSelf = self else { return }
-                strongSelf.showBookList(cell)
-            }
-            return cell
-        case 1:
-            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createAuthorsReadable("\n") ?? "", modifying: nil)
-        case 2:
-            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.createTranslatorReadabel("\n") ?? "", modifying: nil)
-        case 3:
-            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.book?.publisher ?? "", modifying: nil)
-        case 4:
-            let cell = configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierEditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: "\(entity.pageIndex >= 0 ? "\(entity.pageIndex)" : "")", modifying: modifying)
-            cell.modifyHandler = { [weak self] cell in
-                guard let strongSelf = self else { return }
-                strongSelf.showPageIndexEdit(cell)
-            }
-            return cell
-        case 5:
-            return configureCell(DigestDetailTableViewCell.reuseIdentifier(extra: CellIdentifierUneditable), indexPath: indexPath, label: SectionTitles[indexPath.row], value: entity.updateAtReadable, modifying: nil)
-        default:
-            break
-        }
-        
-        return UITableViewCell()
-    }
-    
-    @objc func actionEdit() {
-        modifying.toggle()
-    }
-    
     @objc func actionDel() {
         deleteDigest()
     }
@@ -214,6 +142,11 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
             showMenuItems(on: theView)
         }
     }
+    
+    @objc private func actionFormore() {
+        let vc = DigestMoreDetailViewController<Digest>(digestId: coordinator.digestId)
+        navigationController?.pushViewController(vc)
+    }
 }
 
 private extension DigestDetailViewController {
@@ -221,38 +154,41 @@ private extension DigestDetailViewController {
         title = "\(Digest.toHuman()) - 正文"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = makeBarButtonItem(.ellipsisH, target: self, action: #selector(actionFormore))
     }
     
     func setupSubviews() {
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
         
-        headerView.addSubview(headerContentView)
-        
-        lbContent.addGestureRecognizer(toCopyContentGesture)
-        headerContentView.addSubview(lbContent)
-        headerContentView.addSubview(btnContentEdit)
-        headerContentView.snp.makeConstraints { (make) in
-            make.top.leading.equalToSuperview().offset(10)
-            make.bottom.trailing.equalToSuperview().offset(-10)
-            make.center.equalToSuperview()
-        }
-        lbContent.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
-            make.center.equalToSuperview()
-        }
-        btnContentEdit.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().offset(-10)
-            make.size.equalTo(CGSize(width: 22, height: 22))
-            make.bottom.equalToSuperview().offset(-10)
-        }
-        
-        view.addSubview(infoTableView)
-        view.addSubview(buttonsContainer)
-        
         buttonsContainer.addSubview(btnEdit)
         buttonsContainer.addSubview(btnDel)
-        btnEdit.addTarget(self, action: #selector(actionEdit), for: .touchUpInside)
+        btnEdit.addTarget(self, action: #selector(actionEditContent), for: .touchUpInside)
+        
+        view.addSubview(scrollableContainer)
+        view.addSubview(buttonsContainer)
+        scrollableContainer.addSubview(container)
+        container.addSubview(headerContentView)
+        headerContentView.addSubview(lbContent)
+        
+        scrollableContainer.snp.makeConstraints { (make) in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(buttonsContainer.snp.top)
+        }
+        
+        container.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        
+        headerContentView.snp.makeConstraints { (make) in
+            make.top.leading.equalTo(10)
+            make.bottom.trailing.equalTo(-10)
+        }
+        
+        lbContent.snp.makeConstraints { (make) in
+            make.top.leading.equalToSuperview().offset(10)
+            make.bottom.trailing.equalToSuperview().offset(-10)
+        }
         
         buttonsContainer.snp.makeConstraints { (make) in
             make.leading.trailing.bottom.equalToSuperview()
@@ -268,11 +204,6 @@ private extension DigestDetailViewController {
         btnDel.snp.makeConstraints { (make) in
             make.right.equalTo(btnEdit.snp.left).offset(-10)
             make.centerY.equalToSuperview()
-        }
-        
-        infoTableView.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
-            make.bottom.equalTo(buttonsContainer.snp.top)
         }
     }
     
@@ -344,72 +275,6 @@ private extension DigestDetailViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func showBookList(_ sender: DigestDetailTableViewCell) {
-        let vc = BookListViewController(with: ["editable": false]) { [weak self] (book) in
-            guard let strongSelf = self else { return }
-            strongSelf.coordinator?.updateBookRef(book: book, completion: { (success) in
-                DispatchQueue.main.async {
-                    guard success else {
-                        Bartendar.handleSorryAlert(message: "修改失败", on: self?.navigationController)
-                        return
-                    }
-                    
-                    self?.navigationController?.popViewController()
-                }
-            })
-        }
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func showPageIndexEdit(_ sender: DigestDetailTableViewCell) {
-        let completion: FieldEditCompletion = { [weak self] newValue in
-            guard let strongSelf = self else { return }
-            MainQueue.async {
-                let putInfo = [
-                    "pageIndex": newValue as? Int ?? -1
-                ]
-                do {
-                    try strongSelf.coordinator.put(info: putInfo)
-                } catch let e as ValidateError {
-                    Bartendar.handleTipAlert(message: e.message, on: strongSelf.navigationController)
-                    return
-                } catch {
-                    Bartendar.handleSorryAlert(on: strongSelf.navigationController)
-                    return
-                }
-                strongSelf.coordinator.update(completion: { (success) in
-                    guard success else {
-                        Bartendar.handleSorryAlert(message: "更新失败", on: strongSelf.navigationController)
-                        return
-                    }
-                    MainQueue.async {
-                        strongSelf.navigationController?.popViewController()
-                    }
-                })
-            }
-        }
-        
-        let validateErrorHandler: FieldEditValidatorHandler = { [weak self] messages in
-            guard let strongSelf = self else { return }
-            Bartendar.handleTipAlert(message: messages.first ?? "", on: strongSelf.navigationController)
-        }
-        
-        let info: [String: Any?] = [
-            FieldEditInfoPreDefineKeys.title: "摘录页码",
-            FieldEditInfoPreDefineKeys.oldValue: {
-                guard let pageIndex = entity?.pageIndex else {
-                    return ""
-                }
-                return pageIndex >= 0 ? "\(pageIndex)" : ""
-            }(),
-            FieldEditInfoPreDefineKeys.completion: completion,
-            FieldEditInfoPreDefineKeys.validateErrorHandler: validateErrorHandler,
-            "greaterOrEqualThan": 0,
-        ]
-        let vc = FieldEditFactory.createAFieldEditController(of: .digit, editInfo: info)
-        navigationController?.pushViewController(vc)
-    }
-    
     func showMenuItems(on theView: UIView) {
         guard let superView = theView.superview else { return }
         let menuController = UIMenuController.shared
@@ -426,7 +291,6 @@ private extension DigestDetailViewController {
             self.lbContent.attributedText = NSAttributedString(string: self.entity?.content ?? "", attributes: self.contentAttributes)
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
-            self.infoTableView.reloadData()
         }
     }
 }
