@@ -210,18 +210,7 @@ private extension BookListViewController {
     func showScanner() {
         func _showScanner() {
             let vc = CodeScannerViewController(codeType: .bar)
-            vc.completion = { [weak self] code, theVC in
-                guard let strongSelf = self else { return }
-                MainQueue.async {
-                    debugPrint(code)
-                    
-                    theVC.dismiss(animated: true, completion: {
-                        MainQueue.async {
-                            strongSelf.previewNewBook(code: code)
-                        }
-                    })
-                }
-            }
+            vc.delegate = self
             navigationController?.present(vc, animated: true, completion: nil)
         }
         CodeScanner.canCaptureVideo(authorizedHandler: {
@@ -245,5 +234,23 @@ private extension BookListViewController {
         let vc = BookDetailViewController(with: coordinator)
         let nc = UINavigationController(rootViewController: vc)
         navigationController?.present(nc, animated: true, completion: nil)
+    }
+}
+
+extension BookListViewController: CodeScannerViewControllerDelegate {
+    func codeScannerViewController(_ vc: CodeScannerViewController, didScanCode code: String) {
+        vc.stopScanning()
+        MainQueue.async {
+            if code.msr.isISBN {
+                vc.dismiss(animated: true, completion: {
+                    self.previewNewBook(code: code)
+                })
+            } else {
+                Bartendar.handleTipAlert(message: "不符合规范的 ISBN", on: nil, afterConfirm: { [weak vc] in
+                    guard let vc = vc else { return }
+                    vc.startScanning()
+                })
+            }
+        }
     }
 }

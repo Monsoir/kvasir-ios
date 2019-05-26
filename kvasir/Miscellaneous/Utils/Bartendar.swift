@@ -24,15 +24,25 @@ enum SystemDirectories {
         case .caches:
             return try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         case .tmp:
-            return try? FileManager.default.temporaryDirectory
+            return FileManager.default.temporaryDirectory
         }
     }
 }
 
 struct Bartendar {
-    static func handleSimpleAlert(title: String = "", message: String?, on viewController: UIViewController?) {
+    static func handleSimpleAlert(title: String = "", message: String?, on viewController: UIViewController?, afterConfirm: (() -> Void)? = nil) {
         MainQueue.async {
-            let alert = UIAlertController(title: title, message: message, defaultActionButtonTitle: "确定", tintColor: .black)
+            var alert: UIAlertController
+            if let afterConfirm = afterConfirm {
+                alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alert.view.tintColor = .black
+                let confirmAction = UIAlertAction(title: "确定", style: .cancel, handler: { (_) in
+                    afterConfirm()
+                })
+                alert.addAction(confirmAction)
+            } else {
+                alert = UIAlertController(title: title, message: message, defaultActionButtonTitle: "确定", tintColor: .black)
+            }
             let host = viewController ?? {
                 let rootVC = UIApplication.shared.keyWindow?.rootViewController
                 guard let presentedVC = rootVC?.presentedViewController else { return rootVC! }
@@ -42,12 +52,12 @@ struct Bartendar {
         }
     }
     
-    static func handleTipAlert(message: String, on viewController: UIViewController?) {
-        self.handleSimpleAlert(title: "提示", message: message, on: viewController)
+    static func handleTipAlert(message: String, on viewController: UIViewController?, afterConfirm: (() -> Void)? = nil) {
+        self.handleSimpleAlert(title: "提示", message: message, on: viewController, afterConfirm: afterConfirm)
     }
     
-    static func handleSorryAlert(message: String = "发生未知错误", on viewController: UIViewController?) {
-        self.handleSimpleAlert(title: "抱歉", message: message, on: viewController)
+    static func handleSorryAlert(message: String = "发生未知错误", on viewController: UIViewController?, afterConfirm: (() -> Void)? = nil) {
+        self.handleSimpleAlert(title: "抱歉", message: message, on: viewController, afterConfirm: afterConfirm)
     }
     
     static func debugPrint(_ items: Any..., separator: String = " ", terminator: String = "\n") {

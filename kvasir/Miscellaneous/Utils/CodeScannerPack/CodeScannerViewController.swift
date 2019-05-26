@@ -10,9 +10,13 @@ import UIKit
 import AVFoundation
 import SnapKit
 
+protocol CodeScannerViewControllerDelegate: class {
+    func codeScannerViewController(_ vc: CodeScannerViewController, didScanCode code: String) -> Void
+}
+
 typealias CodeScanCompletion = (_ code: String, _ controller: CodeScannerViewController) -> Void
 class CodeScannerViewController: UIViewController {
-    var completion: CodeScanCompletion?
+    weak var delegate: CodeScannerViewControllerDelegate?
     
     private var scanner: CodeScanner?
     private var interestRect = CGRect.zero
@@ -67,8 +71,8 @@ class CodeScannerViewController: UIViewController {
         interestRect = CGRect(x: x, y: y, width: width, height: width)
         
         scanner = CodeScanner(codeType: self.codeType, interestRect: interestRect) { [weak self] (success, code) in
-            guard success, let strongSelf = self, let completion = strongSelf.completion else { return }
-            completion(code, strongSelf)
+            guard success, let self = self else { return }
+            self.delegate?.codeScannerViewController(self, didScanCode: code)
         }
         
         let overlay = CodeScannerOverlay(frame: view.bounds, emptyRect: interestRect)
@@ -112,6 +116,14 @@ class CodeScannerViewController: UIViewController {
             CodeScanner.triggerFlashlight(on: !isFlashOn)
             isFlashOn.toggle()
         }
+    }
+    
+    func startScanning() {
+        scanner?.requestCaptureSessionStart(completion: nil)
+    }
+    
+    func stopScanning() {
+        scanner?.requestCaptureSessionStop(completion: nil)
     }
     
     @objc private func actionChooseFromLibrary() {

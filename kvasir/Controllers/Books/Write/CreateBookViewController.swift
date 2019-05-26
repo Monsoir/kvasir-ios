@@ -27,13 +27,6 @@ class CreateBookViewController: FormViewController {
         return view
     }()
     
-    private lazy var btnScanBarCode: UIButton = { [weak self] in
-        let btn = makeAFunctionalButtonFromAwesomeFont(name: .barcode, leadingInset: 100, topInset: 100, cornerRadius: 0)
-        btn.titleLabel?.font = UIFont.fontAwesome(ofSize: 30, style: .solid)
-        btn.addTarget(self, action: #selector(actionScanBarCode), for: .touchUpInside)
-        return btn
-    }()
-    
     private lazy var btnCreateSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionCreateSave))
     
     init(book: RealmBook) {
@@ -188,17 +181,6 @@ private extension CreateBookViewController {
 }
 
 private extension CreateBookViewController {
-    @objc func actionScanBarCode() {
-        let vc = CodeScannerViewController(codeType: .bar)
-        vc.completion = { code, theVC in
-            MainQueue.async {
-                theVC.dismiss(animated: true, completion: nil)
-                print(code)
-            }
-        }
-        navigationController?.present(vc, animated: true, completion: nil)
-    }
-    
     @objc func actionCreateSave() {
         view.endEditing(true)
         
