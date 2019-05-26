@@ -84,12 +84,15 @@ class CodeScannerViewController: UIViewController {
         let btnFlashLight = simpleButtonWithButtonFromAwesomefont(name: .lightbulb, fontSize: 30)
         btnFlashLight.addTarget(self, action: #selector(actionToggleLight), for: .touchUpInside)
         
-        let btnLibrary = simpleButtonWithButtonFromAwesomefont(name: .images, fontSize: 30)
-        btnLibrary.addTarget(self, action: #selector(actionChooseFromLibrary), for: .touchUpInside)
+        // read code from image, use CIDetector
+        // but CIDetector can only read qr code, but not bar code
+        // read bar code from image, we can use ZBar, but do not want to import another SDK.
+//        let btnLibrary = simpleButtonWithButtonFromAwesomefont(name: .images, fontSize: 30)
+//        btnLibrary.addTarget(self, action: #selector(actionChooseFromLibrary), for: .touchUpInside)
         
         let length = 40
         let margin = 10
-        [(btnClose, 0.3), (btnFlashLight, 1), (btnLibrary, 1.7)].forEach { (btn, factor) in
+        [(btnClose, 0.3), (btnFlashLight, 1)].forEach { (btn, factor) in
             view.addSubview(btn)
             btn.setTitleColor(.white, for: .normal)
             btn.snp.makeConstraints { (make) in
