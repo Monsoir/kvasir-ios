@@ -24,7 +24,7 @@ class RealmBook: RealmBasicObject {
     let translators = LinkingObjects(fromType: RealmTranslator.self, property: "books")
     
     override static func indexedProperties() -> [String] {
-        return ["isbn", "name", "localeName"]
+        return ["isbn13", "isbn10", "name", "localeName"]
     }
 }
 

@@ -331,7 +331,7 @@ extension TopListViewController: UICollectionViewDataSource {
                 return nil
             }
         }()
-        if let _ = digest?.book?.hasImage {
+        if let hasImage = digest?.book?.hasImage, hasImage {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
             (cell as! TopListCollectionViewCellWithThumbnail).thumbnail = digest?.book?.thumbnailImage ?? ""
         } else {

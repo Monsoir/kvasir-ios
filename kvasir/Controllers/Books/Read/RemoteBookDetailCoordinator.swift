@@ -89,7 +89,7 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
         }
         
         let bookToCreate = RealmBook()
-        bookToCreate.isbn13 = remoteData["isbn13"] as? String ?? ""
+        bookToCreate.isbn13 = remoteData["isbn"] as? String ?? ""
         bookToCreate.isbn10 = remoteData["isbn10"] as? String ?? ""
         bookToCreate.name = remoteData["title"] as? String ?? ""
         bookToCreate.localeName = remoteData["localeName"] as? String ?? ""

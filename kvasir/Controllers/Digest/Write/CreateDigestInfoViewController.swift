@@ -84,8 +84,17 @@ private extension CreateDigestInfoViewController {
             })
         }
         bookRelatedSection <<< TextRow() {
-            $0.title = "ISBN"
-            $0.tag = "isbn"
+            $0.title = "ISBN-13"
+            $0.tag = "isbn13"
+            $0.baseCell.isUserInteractionEnabled = false
+            $0.hidden = Condition.function(["bookId"], { (form) -> Bool in
+                let bookIdRow = form.rowBy(tag: "bookId") as? LabelRow
+                return bookIdRow?.value.isNilOrEmpty ?? true
+            })
+        }
+        bookRelatedSection <<< TextRow() {
+            $0.title = "ISBN-10"
+            $0.tag = "isbn10"
             $0.baseCell.isUserInteractionEnabled = false
             $0.hidden = Condition.function(["bookId"], { (form) -> Bool in
                 let bookIdRow = form.rowBy(tag: "bookId") as? LabelRow
