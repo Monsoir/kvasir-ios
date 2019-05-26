@@ -83,12 +83,6 @@ class BookListCoordinator {
         }
     }
     
-    func delete(a book: RealmBook, completion: RealmDeleteCompletion?) {
-        repository.deleteOne(managedModel: book) { (success) in
-            completion?(success)
-        }
-    }
-    
     func queryBookFromRemote(isbn: String?, completion: @escaping ((Bool, [String: Any]?, String?) -> Void)) {
         guard let isbn = isbn, isbn.msr.isISBN else {
             completion(false, nil, "ISBN 不符合规范")

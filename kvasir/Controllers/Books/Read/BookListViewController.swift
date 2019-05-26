@@ -149,24 +149,6 @@ extension BookListViewController: UITableViewDataSource {
         cell?.payload = payload
         return cell!
     }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return modifyable
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            guard let entity = results?[indexPath.row] else { return }
-            
-            let sheet = UIAlertController(title: "确定删除书籍？", message: entity.name, preferredStyle: .actionSheet)
-            sheet.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
-            sheet.addAction(title: "删除", style: .destructive, isEnabled: true) { [weak self] (_) in
-                guard let strongSelf = self else { return }
-                strongSelf.coordinator.delete(a: entity, completion: nil)
-            }
-            navigationController?.present(sheet, animated: true, completion: nil)
-        }
-    }
 }
 
 extension BookListViewController: UITableViewDelegate {
@@ -181,10 +163,6 @@ extension BookListViewController: UITableViewDelegate {
             selectCompletion?(book, self)
         }
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "删除"
     }
 }
 

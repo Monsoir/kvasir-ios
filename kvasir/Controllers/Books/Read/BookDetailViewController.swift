@@ -22,6 +22,8 @@ private let DisplayDigestTitles = [
     "句摘", "段摘",
 ]
 
+private let ContainerHeight = 50
+
 class BookDetailViewController: UnifiedViewController {
     
     private var coordinator: BookDetailCoordinable!
@@ -44,7 +46,28 @@ class BookDetailViewController: UnifiedViewController {
         return RemoteBookDetailHeader(frame: CGRect(x: 0.0, y: 0.0, width: Double(width), height: RemoteBookDetailHeader.height))
     }()
     
+    private lazy var buttonsContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
+        return view
+    }()
+    
+    private lazy var btnDel: UIButton = { [unowned self] in
+        let btn = makeAFunctionalButtonWith(title: "删除")
+        btn.setTitleColor(.red, for: .normal)
+        btn.addTarget(self, action: #selector(actionDel), for: .touchUpInside)
+        return btn
+    }()
+    
     private lazy var itemChooseIt: UIBarButtonItem = UIBarButtonItem(title: "选中", style: .done, target: self, action: #selector(actionChooseIt))
+    
+    private var isLocal: Bool {
+        return coordinator is LocalBookCoordinator
+    }
+    
+    private var isRemote: Bool {
+        return coordinator is RemoteBookDetailCoordinator
+    }
     
     init(with coordinator: BookDetailCoordinable) {
         super.init(nibName: nil, bundle: nil)
@@ -94,8 +117,30 @@ class BookDetailViewController: UnifiedViewController {
     
     private func setupSubviews() {
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+        
+        if isLocal {
+            view.addSubview(buttonsContainer)
+            buttonsContainer.addSubview(btnDel)
+            
+            tableView.snp.makeConstraints { (make) in
+                make.top.leading.trailing.equalToSuperview()
+                make.bottom.equalTo(buttonsContainer.snp.top)
+            }
+            
+            buttonsContainer.snp.makeConstraints { (make) in
+                make.leading.trailing.bottom.equalToSuperview()
+                make.height.equalTo(ContainerHeight)
+                make.trailing.equalTo(buttonsContainer.snp.trailing)
+            }
+            
+            btnDel.snp.makeConstraints { (make) in
+                make.trailing.equalToSuperview().offset(-20)
+                make.centerY.equalToSuperview()
+            }
+        } else {
+            tableView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+            }
         }
     }
     
@@ -130,7 +175,7 @@ class BookDetailViewController: UnifiedViewController {
     }
     
     private func setupCoordinator() {
-        if coordinator is LocalBookCoordinator {
+        if isLocal {
             let c = coordinator as! LocalBookCoordinator
             c.reload = { [weak self] _ in
                 guard let strongSelf = self else { return }
@@ -147,7 +192,7 @@ class BookDetailViewController: UnifiedViewController {
             }
             c.errorHandler = { msg in
                 MainQueue.async {
-                    HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
+                    self.navigationController?.popViewController()
                 }
             }
             c.query { [weak self] (success, entity, _) in
@@ -159,7 +204,7 @@ class BookDetailViewController: UnifiedViewController {
             }
         }
         
-        if coordinator is RemoteBookDetailCoordinator {
+        if isRemote {
             let c = coordinator as! RemoteBookDetailCoordinator
             c.reload = { [weak self] _ in
                 guard let strongSelf = self else { return }
@@ -218,6 +263,26 @@ class BookDetailViewController: UnifiedViewController {
                 }
                 strongSelf.dismiss(animated: true, completion: nil)
             }
+        }
+    }
+    
+    @objc private func actionDel() {
+        if isLocal {
+            let bookName = coordinator.title
+            
+            let alert = UIAlertController(title: "确定删除书籍？", message: bookName, preferredStyle: .alert)
+            alert.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
+            alert.addAction(title: "删除", style: .destructive, isEnabled: true) { [weak self] (_) in
+                guard let self = self else { return }
+                let c = self.coordinator as! LocalBookCoordinator
+                c.delete { (success) in
+                    guard success else { return }
+                    MainQueue.async {
+                        HUD.flash(.label("\(bookName)已删除"), onView: nil, delay: 1.5)
+                    }
+                }
+            }
+            present(alert, animated: true, completion: nil)
         }
     }
 }

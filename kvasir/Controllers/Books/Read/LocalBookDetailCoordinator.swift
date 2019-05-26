@@ -111,6 +111,13 @@ class LocalBookCoordinator: BookDetailCoordinator {
         }
     }
     
+    func delete(completion: RealmDeleteCompletion?) {
+        guard let entity = entity else { return }
+        repository.deleteOne(managedModel: entity) { (success) in
+            completion?(success)
+        }
+    }
+    
     override func reclaim() {
         [notificationToken].forEach { $0?.invalidate() }
     }
