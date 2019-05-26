@@ -56,7 +56,7 @@ class TextListTableViewCell: ShadowedTableViewCell {
     
     private lazy var lbTitle: TopAlignedLabel = {
         let label = TopAlignedLabel()
-        label.font = PingFangSCRegularFont?.withSize(25)
+        label.font = PingFangSCRegularFont?.withSize(22)
         label.numberOfLines = 0
         return label
     }()
@@ -102,7 +102,7 @@ class TextListTableViewCell: ShadowedTableViewCell {
             make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : realContentView.snp.leading).offset(10).priorityHigh()
             make.trailing.equalTo(realContentView.snp.trailing).offset(-10).priorityHigh()
             make.bottom.equalTo(lbBookName.snp.top).offset(-8)
-            make.height.equalTo(100)
+            make.height.equalTo(90)
         }
         
         lbBookName.snp.makeConstraints { (make) in
