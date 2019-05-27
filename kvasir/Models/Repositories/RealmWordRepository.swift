@@ -49,6 +49,7 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
                     try realm.write {
                         realm.add(unmanagedModel)
                         
+                        // 链接对应书籍
                         if let bookId = otherInfo?["bookId"] as? String, !bookId.isEmpty {
                             if let book = realm.object(ofType: RealmBook.self, forPrimaryKey: bookId) {
                                 switch unmanagedModel {
@@ -62,6 +63,30 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
                                 
                                 unmanagedModel.book = book
                             }
+                        }
+                        
+                        // 链接对应标签
+                        if let tagIds = otherInfo?["tagIds"] as? [String], !tagIds.isEmpty {
+                            // 找出要关联的标签
+                            let tagsToAssociate = realm.objects(RealmTag.self).filter({ (tag) -> Bool in
+                                return tagIds.contains(tag.id)
+                            })
+                            tagsToAssociate.forEach({ (ele) in
+                                switch unmanagedModel {
+                                case is RealmSentence:
+                                    let s = unmanagedModel as! RealmSentence
+                                    if !ele.sentences.contains(s) {
+                                        ele.sentences.append(s)
+                                    }
+                                case is RealmParagraph:
+                                    let p = unmanagedModel as! RealmParagraph
+                                    if !ele.paragraphs.contains(p) {
+                                        ele.paragraphs.append(p)
+                                    }
+                                default:
+                                    break
+                                }
+                            })
                         }
                     }
                     

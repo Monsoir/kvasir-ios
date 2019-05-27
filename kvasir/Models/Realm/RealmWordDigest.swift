@@ -16,8 +16,6 @@ class RealmWordDigest: RealmBasicObject {
     
     @objc dynamic var book: RealmBook?
     
-    let tags = List<RealmTag>()
-    
     var title: String {
         get {
             var temp = content.replacingOccurrences(of: "\n", with: " ")

@@ -48,8 +48,9 @@ class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
         entity.content = postInfo["content"] as? String ?? ""
         entity.pageIndex = postInfo["pageIndex"] as? Int ?? -1
         
-        let otherInfo = [
+        let otherInfo: [String: Any] = [
             "bookId": postInfo["bookId"] as? String ?? "",
+            "tagIds": postInfo["tags"] as? [String] ?? [],
         ]
         
         repository.createOne(unmanagedModel: entity, otherInfo: otherInfo) { (success, message) in

@@ -12,9 +12,9 @@ class RealmTag: RealmBasicObject {
     @objc dynamic var name = ""
     @objc dynamic var color = ""
     
-    let books = LinkingObjects(fromType: RealmBook.self, property: "tags")
-    let sentences = LinkingObjects(fromType: RealmSentence.self, property: "tags")
-    let paragraphs = LinkingObjects(fromType: RealmParagraph.self, property: "tags")
+    let books = List<RealmBook>()
+    let sentences = List<RealmSentence>()
+    let paragraphs = List<RealmParagraph>()
     
     override static func indexedProperties() -> [String] {
         return ["name"]

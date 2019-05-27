@@ -11,7 +11,7 @@ import SwifterSwift
 import Kingfisher
 
 class TextListTableViewCell: ShadowedTableViewCell {
-    static let height = 200
+    static let height = 200 as CGFloat
     static let cellWithThumbnailIdentifierAddon = "with-thumbnail"
     static let cellWithoutThumbnailIdentifierAddon = "without-thumbnail"
     

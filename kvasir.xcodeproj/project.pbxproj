@@ -80,6 +80,7 @@
 		44979C50229BCD8D00C217C2 /* TagDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C4F229BCD8D00C217C2 /* TagDetailHeader.swift */; };
 		44979C53229BF5BB00C217C2 /* PlainTextViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */; };
 		44979C54229BFB4D00C217C2 /* PlainTextViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */; };
+		44979C59229C374600C217C2 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C58229C374600C217C2 /* AppConstants.swift */; };
 		44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECE42246A5D800D1C402 /* ViewController.swift */; };
 		44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
@@ -295,6 +296,7 @@
 		44979C4D229BC7DA00C217C2 /* TagDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailCoordinator.swift; sourceTree = "<group>"; };
 		44979C4F229BCD8D00C217C2 /* TagDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailHeader.swift; sourceTree = "<group>"; };
 		44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTextViewFooter.swift; sourceTree = "<group>"; };
+		44979C58229C374600C217C2 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		44A7ECDF2246A5D800D1C402 /* kvasir.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvasir.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44A7ECE42246A5D800D1C402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44A7ECE72246A5D800D1C402 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -792,6 +794,7 @@
 			children = (
 				44B2C04D226EEBB400B584F5 /* Theme.swift */,
 				44ECD94122757EA200618576 /* Errors.swift */,
+				44979C58229C374600C217C2 /* AppConstants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -1234,6 +1237,7 @@
 				4408B46D2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
 				44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */,
 				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
+				44979C59229C374600C217C2 /* AppConstants.swift in Sources */,
 				44ECD96C227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
 				44B2C05E226EEE9100B584F5 /* RouteConstants.swift in Sources */,
 				44B2C01A226C2C2000B584F5 /* RoutesRegister.swift in Sources */,

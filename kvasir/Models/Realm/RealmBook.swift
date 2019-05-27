@@ -20,10 +20,10 @@ class RealmBook: RealmBasicObject, Namable {
     
     let sentences = List<RealmSentence>()
     let paragraphs = List<RealmParagraph>()
-    let tags = List<RealmTag>()
     
     let authors = LinkingObjects(fromType: RealmAuthor.self, property: "books")
     let translators = LinkingObjects(fromType: RealmTranslator.self, property: "books")
+    let tags = LinkingObjects(fromType: RealmTag.self, property: "books")
     
     override static func indexedProperties() -> [String] {
         return ["isbn13", "isbn10", "name", "localeName"]

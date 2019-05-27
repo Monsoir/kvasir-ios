@@ -9,6 +9,9 @@
 import RealmSwift
 
 class RealmSentence: RealmWordDigest, Namable {
+    
+    let tags = LinkingObjects(fromType: RealmTag.self, property: "sentences")
+    
     override static func toHuman() -> String {
         return "句摘"
     }

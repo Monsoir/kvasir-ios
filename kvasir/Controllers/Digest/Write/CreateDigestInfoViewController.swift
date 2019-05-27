@@ -16,6 +16,20 @@ class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewControlle
     
     private var digest: Digest?
     private var creating = true
+    private lazy var tagCoordinator: TagListCoordinator = { [unowned self] in
+        let coordinator = TagListCoordinator()
+        coordinator.initialHandler = { _ in
+            MainQueue.async {
+                self.reloadTagForm()
+            }
+        }
+        coordinator.updateHandler = { (_, _, _) in
+            MainQueue.async {
+                self.reloadTagForm()
+            }
+        }
+        return coordinator
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +37,7 @@ class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewControlle
         // Do any additional setup after loading the view.
         
         setupSubviews()
+        tagCoordinator.setupQuery()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -41,6 +56,7 @@ class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewControlle
     }
     
     deinit {
+        tagCoordinator.reclaim()
         #if DEBUG
         print("\(self) deinit")
         #endif
@@ -125,9 +141,30 @@ private extension CreateDigestInfoViewController {
         }
         form +++ bookRelatedSection
         
+        form +++ SelectableSection<ListCheckRow<String>>("标签", selectionType: .multipleSelection)
+        
         navigationOptions = RowNavigationOptions.Enabled.union(.StopDisabledRow)
         animateScroll = true
         rowKeyboardSpacing = 20
+    }
+    
+    func reloadTagForm() {
+        guard let tags = tagCoordinator.results else { return }
+        
+        form.last?.removeAll()
+        let options = tags.map { (ele) -> (id: String, name: String, hexColor: String) in
+            return (id: ele.id, name: ele.name, hexColor: ele.color)
+        }
+        for option in options {
+            form.last! <<< ListCheckRow<String>(option.id){ listRow in
+                listRow.title = option.name
+                listRow.selectableValue = option.id
+                listRow.value = nil
+                listRow.cellUpdate({ (cell, row) in
+                    cell.textLabel?.textColor = Color(hexString: option.hexColor)
+                })
+            }
+        }
     }
 }
 
@@ -136,9 +173,18 @@ extension CreateDigestInfoViewController {
         let values = form.values(includeHidden: true)
         let pageIndex = values["pageIndex"] as? Int ?? -1
         let bookId = values["bookId"] as? String ?? ""
+        let selectedTags: [String] = {
+            guard let tags = tagCoordinator.results else { return [] }
+            return tags.reduce(into: [String](), { (acc, cur) in
+                if let id = values[cur.id] as? String, !id.isEmpty {
+                    acc.append(id)
+                }
+            })
+        }()
         return [
             "pageIndex": pageIndex,
             "bookId": bookId,
+            "tags": selectedTags,
         ]
     }
 }

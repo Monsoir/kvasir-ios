@@ -9,6 +9,9 @@
 import RealmSwift
 
 class RealmParagraph: RealmWordDigest, Namable {
+    
+    let tags = LinkingObjects(fromType: RealmTag.self, property: "paragraphs")
+    
     override class func toHuman() -> String {
         return "段摘"
     }

@@ -32,6 +32,7 @@ class TagDetailViewController: UnifiedViewController {
         view.delegate = self
         view.dataSource = self
         view.tableFooterView = UIView()
+        view.separatorStyle = .none
         return view
     }()
     private lazy var tableHeader: TagDetailHeader = TagDetailHeader()
@@ -119,6 +120,17 @@ extension TagDetailViewController: UITableViewDataSource {
             count = 0
         }
         return count > SectionMaxRows ? SectionMaxRows : count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0, 1:
+            return TextListTableViewCell.height
+        case 2:
+            return BookListTableViewCell.height
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

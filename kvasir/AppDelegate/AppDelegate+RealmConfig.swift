@@ -26,6 +26,8 @@ extension AppDelegate {
     }
     
     func setupInitialTagsIfNeeded(completion: @escaping RealmCreateCompletion) {
+        guard !didTagData else { return }
+        
         let tagsToBeAdded: [RealmTag] = FinderTagColor.allCases.map {
             let tag = RealmTag()
             tag.id = $0.initialId
@@ -35,6 +37,17 @@ extension AppDelegate {
         }
         
         let tagRepository = RealmTagRepository()
-        tagRepository.createMultiple(unmanagedModels: tagsToBeAdded, update: true, completion: completion)
+        tagRepository.createMultiple(unmanagedModels: tagsToBeAdded, update: true, completion: { [weak self] success, _ in
+            guard let self = self, success else { return }
+            self.setDidInitTagData()
+        })
+    }
+    
+    private var didTagData: Bool {
+        return UserDefaults.standard.bool(forKey: AppConstants.tagInitiatedKey)
+    }
+    
+    private func setDidInitTagData() {
+        UserDefaults.standard.set(true, forKey: AppConstants.tagInitiatedKey)
     }
 }
