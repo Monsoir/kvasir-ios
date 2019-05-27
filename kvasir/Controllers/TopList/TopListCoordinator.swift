@@ -9,7 +9,10 @@
 import UIKit
 import RealmSwift
 
-class TopListCoordinator<Digest: RealmWordDigest> {
+class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
+    
+    typealias Model = Digest
+    
     var bookName: String {
         return bookResult?.name ?? ""
     }
@@ -21,11 +24,12 @@ class TopListCoordinator<Digest: RealmWordDigest> {
     private var realmNotificationToken: NotificationToken? = nil
     private var payload: [String: Any]!
     
-    var reload: ((_ results: Results<Digest>?) -> Void)?
+    var initialLoadHandler: ((Results<Digest>?) -> Void)?
+    var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    init(with payload: [String: Any]? = [:]) {
-        self.payload = payload
+    required init(with configuration: [String : Any]? = [:]) {
+        self.payload = configuration
     }
     
     deinit {
@@ -36,8 +40,9 @@ class TopListCoordinator<Digest: RealmWordDigest> {
         realmNotificationToken?.invalidate()
     }
     
-    func setupQuery() {
+    func setupQuery(for section: Int = 0) {
         if let bookId = payload["bookId"] as? String {
+            // Query digests are related to a specific book
             RealmBookRepository().queryBy(id: bookId) { [weak self] (success, result) in
                 guard success, let result = result, let strongSelf = self else {
                     return
@@ -52,15 +57,21 @@ class TopListCoordinator<Digest: RealmWordDigest> {
                 
                 strongSelf.realmNotificationToken = strongSelf.results?.observe({ (changes) in
                     switch changes {
-                    case .initial: fallthrough
-                    case .update:
-                        strongSelf.reload?(strongSelf.results)
+                    case .initial:
+                        strongSelf.initialLoadHandler?(strongSelf.results)
+                    case .update(_, let deletions, let insertions, let modifications):
+                        strongSelf.updateHandler?(
+                            deletions.map { IndexPath(row: $0, section: section) },
+                            insertions.map { IndexPath(row: $0, section: section) },
+                            modifications.map { IndexPath(row: $0, section: section) }
+                        )
                     case .error(let e):
                         strongSelf.errorHandler?(e)
                     }
                 })
             }
         } else {
+            // query all digests
             repository.queryAllSortingByUpdatedAtDesc { [weak self] (success, _results) in
                 guard success, let results = _results, let strongSelf = self else {
                     return
@@ -72,9 +83,14 @@ class TopListCoordinator<Digest: RealmWordDigest> {
                 // setup notification
                 strongSelf.realmNotificationToken = results.observe({ (changes) in
                     switch changes {
-                    case .initial: fallthrough
-                    case .update:
-                        strongSelf.reload?(results)
+                    case .initial:
+                        strongSelf.initialLoadHandler?(strongSelf.results)
+                    case .update(_, let deletions, let insertions, let modifications):
+                        strongSelf.updateHandler?(
+                            deletions.map { IndexPath(row: $0, section: section) },
+                            insertions.map { IndexPath(row: $0, section: section) },
+                            modifications.map { IndexPath(row: $0, section: section) }
+                        )
                     case .error(let e):
                         strongSelf.errorHandler?(e)
                     }

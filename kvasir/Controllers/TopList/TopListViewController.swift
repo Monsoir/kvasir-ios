@@ -45,21 +45,43 @@ class TopListViewController: UIViewController {
     
     private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmSentence>()
-        coordinator.reload = { data in
-            self.tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .automatic)
-            self.reloadSentenceView()
+        coordinator.initialLoadHandler = { _ in
+            MainQueue.async {
+                self.tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .automatic)
+                self.reloadSentenceView()
+            }
         }
-        coordinator.errorHandler = { e in
+        coordinator.updateHandler = { (_, _, _) in
+            MainQueue.async {
+                self.tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .automatic)
+                self.reloadSentenceView()
+            }
+        }
+        coordinator.errorHandler = { _ in
+            MainQueue.async {
+                Bartendar.handleSorryAlert(on: nil)
+            }
         }
         return coordinator
     }()
     private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmParagraph>()
-        coordinator.reload = { data in
-            self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
-            self.reloadParagraphView()
+        coordinator.initialLoadHandler = { _ in
+            MainQueue.async {
+                self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
+                self.reloadParagraphView()
+            }
         }
-        coordinator.errorHandler = { e in
+        coordinator.updateHandler = { (_, _, _) in
+            MainQueue.async {
+                self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
+                self.reloadParagraphView()
+            }
+        }
+        coordinator.errorHandler = { _ in
+            MainQueue.async {
+                Bartendar.handleSorryAlert(on: nil)
+            }
         }
         return coordinator
     }()
@@ -149,8 +171,8 @@ class TopListViewController: UIViewController {
         setupNavigationBar()
         setupSubviews()
         
-        sentenceViewModelCoordinator.setupQuery()
-        paragraphViewModelCoordinator.setupQuery()
+        sentenceViewModelCoordinator.setupQuery(for: 0)
+        paragraphViewModelCoordinator.setupQuery(for: 1)
         deputyCoodinator.setupQuery()
     }
     

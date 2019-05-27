@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 typealias PostInfoScript = [String: Any?]
 typealias PostInfo = [String: Any]
@@ -22,4 +23,16 @@ protocol CreateCoordinatorable {
 protocol UpdateCoordinatorable {
     func put(info: PutInfoScript) throws
     func update(completion: @escaping RealmUpdateCompletion)
+}
+
+protocol ListQueryCoordinatorable {
+    associatedtype Model: RealmBasicObject
+    
+    var initialLoadHandler: ((_ results: Results<Model>?) -> Void)? { get set }
+    var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)? { get set }
+    var errorHandler: ((_ error: Error) -> Void)? { get set }
+    
+    init(with configuration: [String: Any]?)
+    func reclaim()
+    func setupQuery(for section: Int)
 }

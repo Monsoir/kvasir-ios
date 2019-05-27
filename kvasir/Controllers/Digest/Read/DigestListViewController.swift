@@ -140,16 +140,34 @@ private extension DigestListViewController {
     }
     
     func configureCoordinator() {
-        coordinator.reload = { [weak self] _ in
-            self?.reload()
+        coordinator.initialLoadHandler = { [weak self] _ in
+            MainQueue.async {
+                guard let self = self else { return }
+                self.reload()
+            }
         }
-        coordinator.errorHandler = nil
+        coordinator.updateHandler = { [weak self] (deletions, insertions, modifictions) in
+            MainQueue.async {
+                guard let self = self else { return }
+                self.tableView.msr.updateRows(deletions: deletions, insertions: insertions, modifications: modifictions)
+                self.reloadBackgroundView()
+            }
+        }
+        coordinator.errorHandler = { _ in
+            MainQueue.async {
+                Bartendar.handleSorryAlert(on: nil)
+            }
+        }
         coordinator.setupQuery()
+    }
+    
+    func reloadBackgroundView() {
+        self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
     }
     
     func reload() {
         MainQueue.async {
-            self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
+            self.reloadBackgroundView()
             self.title = self.coordinator.bookName.isEmpty ? Digest.toHuman() : "\(self.coordinator.bookName) - \(Digest.toHuman())"
             self.tableView.reloadData()
         }

@@ -73,6 +73,7 @@
 		44717C2D229273560049FEB6 /* SessionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2B229273560049FEB6 /* SessionCamera.swift */; };
 		44717C2F229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
 		44717C30229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
+		44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C47229BBC1400C217C2 /* UITableViewEx.swift */; };
 		44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECE42246A5D800D1C402 /* ViewController.swift */; };
 		44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
@@ -282,6 +283,7 @@
 		44717C27229117140049FEB6 /* RouteControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteControllerFactory.swift; sourceTree = "<group>"; };
 		44717C2B229273560049FEB6 /* SessionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCamera.swift; sourceTree = "<group>"; };
 		44717C2E229281260049FEB6 /* SessionCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCameraViewController.swift; sourceTree = "<group>"; };
+		44979C47229BBC1400C217C2 /* UITableViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewEx.swift; sourceTree = "<group>"; };
 		44A7ECDF2246A5D800D1C402 /* kvasir.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvasir.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44A7ECE42246A5D800D1C402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44A7ECE72246A5D800D1C402 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -738,6 +740,7 @@
 				446DB7C7228B24CC00BE3DDF /* Kingfisher.swift */,
 				44190D41228D349900DB98E8 /* SessionManagerEx.swift */,
 				44ED682C22952DFC000B9B77 /* DateEx.swift */,
+				44979C47229BBC1400C217C2 /* UITableViewEx.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1287,6 +1290,7 @@
 				446DB7D1228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */,
 				446DB7D7228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */,
 				44CD98BB229AC469009C6976 /* TagListViewController.swift in Sources */,
+				44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */,
 				4408B4772279B0E600C5EF68 /* CodeScanner.swift in Sources */,
 				446DB7B322896AAE00BE3DDF /* Sensitive.swift in Sources */,
 				446DB7E3228C28D800BE3DDF /* PlainTextViewController.swift in Sources */,
