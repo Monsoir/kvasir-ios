@@ -9,17 +9,20 @@
 import Foundation
 import RealmSwift
 
-class BookListCoordinator {
+class BookListCoordinator: ListQueryCoordinatorable {
+    
+    typealias Model = RealmBook
+    
     private lazy var repository = RealmBookRepository()
     private(set) var results: Results<RealmBook>?
     private(set) var configuration: [String: Any]!
     private var realmNotificationToken: NotificationToken? = nil
     
-    var initialLoadHandler: ((_ results: Results<RealmBook>) -> Void)?
+    var initialHandler: ((Results<RealmBook>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    init(with configuration: [String: Any]) {
+    required init(with configuration: [String : Any]?) {
         self.configuration = configuration
     }
     
@@ -33,8 +36,7 @@ class BookListCoordinator {
         realmNotificationToken?.invalidate()
     }
     
-    func setupQuery() {
-        
+    func setupQuery(for section: Int = 0) {
         func setupResult(results: Results<RealmBook>) {
             // link to results
             self.results = results
@@ -43,12 +45,12 @@ class BookListCoordinator {
             realmNotificationToken = results.observe({ (changes) in
                 switch changes {
                 case .initial:
-                    self.initialLoadHandler?(results)
+                    self.initialHandler?(results)
                 case .update(_, let deletions, let insertions, let modifications):
                     self.updateHandler?(
-                        deletions.map { IndexPath(row: $0, section: 0) },
-                        insertions.map { IndexPath(row: $0, section: 0) },
-                        modifications.map { IndexPath(row: $0, section: 0) }
+                        deletions.map { IndexPath(row: $0, section: section) },
+                        insertions.map { IndexPath(row: $0, section: section) },
+                        modifications.map { IndexPath(row: $0, section: section) }
                     )
                 case .error(let e):
                     self.errorHandler?(e)

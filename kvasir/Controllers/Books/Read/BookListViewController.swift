@@ -81,7 +81,7 @@ private extension BookListViewController {
     }
     
     func configureCoordinator() {
-        coordinator.initialLoadHandler = { [weak self] _ in
+        coordinator.initialHandler = { [weak self] _ in
             MainQueue.async {
                 guard let strongSelf = self else { return }
                 strongSelf.tableView.reloadData()
@@ -91,11 +91,7 @@ private extension BookListViewController {
         coordinator.updateHandler = { [weak self] (deletions, insertions, modifications) in
             MainQueue.async {
                 guard let strongSelf = self else { return }
-                strongSelf.tableView.beginUpdates()
-                strongSelf.tableView.deleteRows(at: deletions, with: .fade)
-                strongSelf.tableView.insertRows(at: insertions, with: .fade)
-                strongSelf.tableView.reloadRows(at: modifications, with: .fade)
-                strongSelf.tableView.endUpdates()
+                strongSelf.tableView.msr.updateRows(deletions: deletions, insertions: insertions, modifications: modifications, with: .fade)
                 strongSelf.setupBackgroundIfNeeded()
             }
         }
