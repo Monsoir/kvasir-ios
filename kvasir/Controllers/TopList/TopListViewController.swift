@@ -45,7 +45,7 @@ class TopListViewController: UIViewController {
     
     private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmSentence>()
-        coordinator.initialLoadHandler = { _ in
+        coordinator.initialHandler = { _ in
             MainQueue.async {
                 self.tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .automatic)
                 self.reloadSentenceView()
@@ -66,7 +66,7 @@ class TopListViewController: UIViewController {
     }()
     private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [unowned self ] in
         let coordinator = TopListCoordinator<RealmParagraph>()
-        coordinator.initialLoadHandler = { _ in
+        coordinator.initialHandler = { _ in
             MainQueue.async {
                 self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
                 self.reloadParagraphView()

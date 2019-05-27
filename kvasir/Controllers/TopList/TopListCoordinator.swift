@@ -24,7 +24,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     private var realmNotificationToken: NotificationToken? = nil
     private var payload: [String: Any]!
     
-    var initialLoadHandler: ((Results<Digest>?) -> Void)?
+    var initialHandler: ((Results<Digest>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
@@ -58,7 +58,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                 strongSelf.realmNotificationToken = strongSelf.results?.observe({ (changes) in
                     switch changes {
                     case .initial:
-                        strongSelf.initialLoadHandler?(strongSelf.results)
+                        strongSelf.initialHandler?(strongSelf.results)
                     case .update(_, let deletions, let insertions, let modifications):
                         strongSelf.updateHandler?(
                             deletions.map { IndexPath(row: $0, section: section) },
@@ -84,7 +84,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                 strongSelf.realmNotificationToken = results.observe({ (changes) in
                     switch changes {
                     case .initial:
-                        strongSelf.initialLoadHandler?(strongSelf.results)
+                        strongSelf.initialHandler?(strongSelf.results)
                     case .update(_, let deletions, let insertions, let modifications):
                         strongSelf.updateHandler?(
                             deletions.map { IndexPath(row: $0, section: section) },

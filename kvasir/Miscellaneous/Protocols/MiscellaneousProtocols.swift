@@ -28,7 +28,7 @@ protocol UpdateCoordinatorable {
 protocol ListQueryCoordinatorable {
     associatedtype Model: RealmBasicObject
     
-    var initialLoadHandler: ((_ results: Results<Model>?) -> Void)? { get set }
+    var initialHandler: ((_ results: Results<Model>?) -> Void)? { get set }
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)? { get set }
     var errorHandler: ((_ error: Error) -> Void)? { get set }
     
