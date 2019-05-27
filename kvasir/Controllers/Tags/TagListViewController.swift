@@ -59,7 +59,7 @@ extension TagListViewController {
     }
     
     private func configureCoordinator() {
-        coordinator.initialLoadHandler = { [weak self] _ in
+        coordinator.initialHandler = { [weak self] _ in
             MainQueue.async {
                 guard let self = self else { return }
                 self.collectionView.reloadData()
