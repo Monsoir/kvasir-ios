@@ -213,27 +213,27 @@ private extension TopListViewController {
 // MARK: - UITableViewDelegate
 extension TopListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+        return TopListTableViewHeaderActionable.height
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return .leastNonzeroMagnitude
     }
     
-    private func headerAccessoryTitleForSection(_ section: Int) -> String {
-        switch section {
-        case 0:
-            return "查看全部 \(sentencesData?.count ?? 0)"
-        case 1:
-            return "查看全部 \(paragraphsData?.count ?? 0)"
-        case 2:
-            return "收集的资源"
-        default:
-            return ""
-        }
-    }
-    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        func headerAccessoryTitleForSection(_ section: Int) -> String {
+            switch section {
+            case 0:
+                return "查看全部 \(sentencesData?.count ?? 0)"
+            case 1:
+                return "查看全部 \(paragraphsData?.count ?? 0)"
+            case 2:
+                return "收集的资源"
+            default:
+                return ""
+            }
+        }
+        
         if section < FocusedSection.count {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier()) as? TopListTableViewHeaderActionable else { return nil }
             header.title = FocusedSection[section].title

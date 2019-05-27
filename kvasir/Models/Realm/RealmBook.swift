@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-class RealmBook: RealmBasicObject {
+class RealmBook: RealmBasicObject, Namable {
     @objc dynamic var isbn13 = ""
     @objc dynamic var isbn10 = ""
     @objc dynamic var name = ""
@@ -27,6 +27,14 @@ class RealmBook: RealmBasicObject {
     
     override static func indexedProperties() -> [String] {
         return ["isbn13", "isbn10", "name", "localeName"]
+    }
+    
+    static func toHuman() -> String {
+        return "书籍"
+    }
+    
+    static func toMachine() -> String {
+        return "book"
     }
     
     override func preUpdate() {

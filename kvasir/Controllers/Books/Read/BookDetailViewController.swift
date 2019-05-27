@@ -43,7 +43,7 @@ class BookDetailViewController: UnifiedViewController {
     
     private lazy var headerView: RemoteBookDetailHeader = { [unowned self] in
         let width = self.view.width
-        return RemoteBookDetailHeader(frame: CGRect(x: 0.0, y: 0.0, width: Double(width), height: RemoteBookDetailHeader.height))
+        return RemoteBookDetailHeader(frame: CGRect(x: 0, y: 0, width: width, height: RemoteBookDetailHeader.height))
     }()
     
     private lazy var buttonsContainer: UIView = {
@@ -241,8 +241,7 @@ class BookDetailViewController: UnifiedViewController {
     }
     
     private func reloadHeaderView() {
-        headerView.height = CGFloat(RemoteBookDetailHeader.height)
-        headerView.width = tableView.width
+        headerView.frame = CGRect(x: 0, y: 0, width: tableView.width, height: type(of: headerView).height)
         headerView.payload = coordinator.payloadForHeader
         tableView.tableHeaderView = headerView
     }

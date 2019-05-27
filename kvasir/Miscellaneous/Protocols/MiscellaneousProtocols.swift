@@ -25,14 +25,22 @@ protocol UpdateCoordinatorable {
     func update(completion: @escaping RealmUpdateCompletion)
 }
 
-protocol ListQueryCoordinatorable {
+protocol Configurable {
+    init(with configuration: [String: Any])
+}
+
+protocol ListQueryCoordinatorable: Configurable {
     associatedtype Model: RealmBasicObject
     
     var initialHandler: ((_ results: Results<Model>?) -> Void)? { get set }
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)? { get set }
     var errorHandler: ((_ error: Error) -> Void)? { get set }
     
-    init(with configuration: [String: Any]?)
     func reclaim()
     func setupQuery(for section: Int)
+}
+
+protocol Namable: class {
+    static func toHuman() -> String
+    static func toMachine() -> String
 }

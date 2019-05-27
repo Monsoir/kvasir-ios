@@ -12,6 +12,8 @@ import Kingfisher
 
 class TextListTableViewCell: ShadowedTableViewCell {
     static let height = 200
+    static let cellWithThumbnailIdentifierAddon = "with-thumbnail"
+    static let cellWithoutThumbnailIdentifierAddon = "without-thumbnail"
     
     var thumbnail = "" {
         didSet {

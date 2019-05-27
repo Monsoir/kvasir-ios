@@ -20,6 +20,8 @@ class BookListTableViewCell: ShadowedTableViewCell {
     static let BookThumbnailSize = CGSize(width: 66, height: 98)
     static let BookThumbnailZoomFactor = 1.5 as CGFloat
     static let height = UITableView.automaticDimension
+    static let cellWithThumbnailIdentifierAddon = "with-thumnbnail"
+    static let cellWithoutThumbnailIdentifierAddon = "without-thumnbnail"
     
     private var needThumbnail: Bool
     

@@ -23,6 +23,7 @@ struct RouteConstants {
     struct Actions {
         static let new = "new"
         static let all = "all"
+        static let detail = "detail"
         static let select = "select"
     }
 }

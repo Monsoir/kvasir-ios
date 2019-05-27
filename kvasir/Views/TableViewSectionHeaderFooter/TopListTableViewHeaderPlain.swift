@@ -9,9 +9,11 @@
 import UIKit
 
 class TopListTableViewHeaderPlain: UITableViewHeaderFooterView, Reusable {
+    var titleAttributes: StringAttributes?
+    
     var title: String = "" {
         didSet {
-            lbTitle.attributedText = NSAttributedString(string: title, attributes: titleAttributes)
+            lbTitle.attributedText = NSAttributedString(string: title, attributes: titleAttributes ?? _titleAttributes)
         }
     }
     
@@ -21,7 +23,7 @@ class TopListTableViewHeaderPlain: UITableViewHeaderFooterView, Reusable {
         return view
     }()
     
-    private lazy var titleAttributes: StringAttributes = [
+    private lazy var _titleAttributes: StringAttributes = [
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Medium", size: 28)!
     ]
     

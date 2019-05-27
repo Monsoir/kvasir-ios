@@ -75,6 +75,11 @@
 		44717C30229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
 		44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C47229BBC1400C217C2 /* UITableViewEx.swift */; };
 		44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */; };
+		44979C4C229BC7CB00C217C2 /* TagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C4B229BC7CB00C217C2 /* TagDetailViewController.swift */; };
+		44979C4E229BC7DA00C217C2 /* TagDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C4D229BC7DA00C217C2 /* TagDetailCoordinator.swift */; };
+		44979C50229BCD8D00C217C2 /* TagDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C4F229BCD8D00C217C2 /* TagDetailHeader.swift */; };
+		44979C53229BF5BB00C217C2 /* PlainTextViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */; };
+		44979C54229BFB4D00C217C2 /* PlainTextViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */; };
 		44A7ECE52246A5D800D1C402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ECE42246A5D800D1C402 /* ViewController.swift */; };
 		44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
 		44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
@@ -286,6 +291,10 @@
 		44717C2E229281260049FEB6 /* SessionCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCameraViewController.swift; sourceTree = "<group>"; };
 		44979C47229BBC1400C217C2 /* UITableViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewEx.swift; sourceTree = "<group>"; };
 		44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewEx.swift; sourceTree = "<group>"; };
+		44979C4B229BC7CB00C217C2 /* TagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailViewController.swift; sourceTree = "<group>"; };
+		44979C4D229BC7DA00C217C2 /* TagDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailCoordinator.swift; sourceTree = "<group>"; };
+		44979C4F229BCD8D00C217C2 /* TagDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailHeader.swift; sourceTree = "<group>"; };
+		44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTextViewFooter.swift; sourceTree = "<group>"; };
 		44A7ECDF2246A5D800D1C402 /* kvasir.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvasir.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44A7ECE42246A5D800D1C402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44A7ECE72246A5D800D1C402 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -439,10 +448,9 @@
 		4408B46222794C6700C5EF68 /* TableViewHeader */ = {
 			isa = PBXGroup;
 			children = (
-				44A7ED272246A62300D1C402 /* TopListTableViewHeaderActionable.swift */,
-				4408B480227C373100C5EF68 /* TopListTableViewHeaderPlain.swift */,
 				44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */,
 				446DB7D6228BE22700BE3DDF /* RemoteBookDetailHeader.swift */,
+				44979C4F229BCD8D00C217C2 /* TagDetailHeader.swift */,
 			);
 			path = TableViewHeader;
 			sourceTree = "<group>";
@@ -554,6 +562,16 @@
 				44717C2E229281260049FEB6 /* SessionCameraViewController.swift */,
 			);
 			path = CameraPack;
+			sourceTree = "<group>";
+		};
+		44979C51229BD26800C217C2 /* TableViewSectionHeaderFooter */ = {
+			isa = PBXGroup;
+			children = (
+				44A7ED272246A62300D1C402 /* TopListTableViewHeaderActionable.swift */,
+				4408B480227C373100C5EF68 /* TopListTableViewHeaderPlain.swift */,
+				44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */,
+			);
+			path = TableViewSectionHeaderFooter;
 			sourceTree = "<group>";
 		};
 		44A7ECD62246A5D800D1C402 = {
@@ -668,6 +686,7 @@
 		44A7ED262246A62300D1C402 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				44979C51229BD26800C217C2 /* TableViewSectionHeaderFooter */,
 				4408B46322794CB400C5EF68 /* Label */,
 				4408B46222794C6700C5EF68 /* TableViewHeader */,
 				44CD98C0229AC7C5009C6976 /* CollectionViewCell */,
@@ -822,6 +841,8 @@
 			children = (
 				44CD98BA229AC469009C6976 /* TagListViewController.swift */,
 				44CD98BC229AC482009C6976 /* TagListCoordinator.swift */,
+				44979C4B229BC7CB00C217C2 /* TagDetailViewController.swift */,
+				44979C4D229BC7DA00C217C2 /* TagDetailCoordinator.swift */,
 			);
 			path = Tags;
 			sourceTree = "<group>";
@@ -1219,6 +1240,7 @@
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44BB70372299960600754156 /* TopListCollectionViewCellWithoutThumbnail.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
+				44979C50229BCD8D00C217C2 /* TagDetailHeader.swift in Sources */,
 				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				4408B4742279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */,
 				44B2C056226EEDE100B584F5 /* ModelConstants.swift in Sources */,
@@ -1267,6 +1289,7 @@
 				44A7ED402246A62300D1C402 /* AppDelegate+Appearance.swift in Sources */,
 				444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */,
 				44B2C08C2272DC5800B584F5 /* RealmAuthor.swift in Sources */,
+				44979C4C229BC7CB00C217C2 /* TagDetailViewController.swift in Sources */,
 				4408B47A227ACC6500C5EF68 /* CodeScannerOverlay.swift in Sources */,
 				44190D42228D349900DB98E8 /* SessionManagerEx.swift in Sources */,
 				444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */,
@@ -1274,6 +1297,7 @@
 				44ECD9452275804F00618576 /* Bartendar.swift in Sources */,
 				44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */,
 				44BB7033229974C000754156 /* UnifiedViewController.swift in Sources */,
+				44979C4E229BC7DA00C217C2 /* TagDetailCoordinator.swift in Sources */,
 				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
@@ -1290,6 +1314,7 @@
 				44A7ED522246A62300D1C402 /* TopListCellCarrier.swift in Sources */,
 				44B2C046226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
+				44979C53229BF5BB00C217C2 /* PlainTextViewFooter.swift in Sources */,
 				44ECD9552276FB6B00618576 /* CreateListCoordinator.swift in Sources */,
 				446DB7D1228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */,
 				446DB7D7228BE22700BE3DDF /* RemoteBookDetailHeader.swift in Sources */,
@@ -1413,6 +1438,7 @@
 				44717C29229117140049FEB6 /* RouteControllerFactory.swift in Sources */,
 				44B2C054226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2BFE522698BA400B584F5 /* AppDelegate.swift in Sources */,
+				44979C54229BFB4D00C217C2 /* PlainTextViewFooter.swift in Sources */,
 				44B2BFE722698BA400B584F5 /* TopListCellCarrier.swift in Sources */,
 				44B2C02E226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */,
 				44B2BFE922698BA400B584F5 /* TopListTableViewHeaderActionable.swift in Sources */,

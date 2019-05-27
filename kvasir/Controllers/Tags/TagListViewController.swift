@@ -46,7 +46,7 @@ class TagListViewController: ResourceListViewController {
 extension TagListViewController {
     private func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+//        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
         title = configuration["title"] as? String ?? ""
     }
     
@@ -119,5 +119,10 @@ extension TagListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let tag = coordinator.results?[indexPath.row] else { return }
+        KvasirNavigator.push(KvasirURL.detailTag.url(with: ["id": tag.id]))
     }
 }

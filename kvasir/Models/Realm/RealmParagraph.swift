@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-class RealmParagraph: RealmWordDigest {
+class RealmParagraph: RealmWordDigest, Namable {
     override class func toHuman() -> String {
         return "段摘"
     }

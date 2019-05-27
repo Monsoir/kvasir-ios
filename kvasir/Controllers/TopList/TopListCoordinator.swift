@@ -28,7 +28,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    required init(with configuration: [String : Any]? = [:]) {
+    required init(with configuration: [String : Any] = [:]) {
         self.payload = configuration
     }
     

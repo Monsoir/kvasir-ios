@@ -23,7 +23,7 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    required init(with configuration: [String : Any]? = [:]) {
+    required init(with configuration: [String : Any] = [:]) {
     }
     
     deinit {

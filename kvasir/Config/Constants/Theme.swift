@@ -26,26 +26,30 @@ enum FinderTagColor: CaseIterable {
 
 extension FinderTagColor {
     var initialId: String {
-        return "kvasir-\(hexColor)"
+        return "kvasir-\(colorValue)"
+    }
+    
+    var colorValue: String {
+        switch self {
+        case .red:
+            return "F55C59"
+        case .orange:
+            return "F5A250"
+        case .yellow:
+            return "F6CD56"
+        case .green:
+            return "56CE67"
+        case .blue:
+            return "4290F4"
+        case .purple:
+            return "B173D2"
+        case .gray:
+            return "9D9DA0"
+        }
     }
     
     var hexColor: String {
-        switch self {
-        case .red:
-            return "#F55C59"
-        case .orange:
-            return "#F5A250"
-        case .yellow:
-            return "#F6CD56"
-        case .green:
-            return "#56CE67"
-        case .blue:
-            return "#4290F4"
-        case .purple:
-            return "#B173D2"
-        case .gray:
-            return "#9D9DA0"
-        }
+        return "#\(colorValue)"
     }
     
     var initialName: String {

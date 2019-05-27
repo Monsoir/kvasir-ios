@@ -11,6 +11,8 @@ import SnapKit
 import SwifterSwift
 
 class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
+    static let height = 50 as CGFloat
+    
     var title: String = "" {
         didSet {
             lbTitle.attributedText = NSAttributedString(string: title, attributes: titleAttributes)
@@ -38,7 +40,7 @@ class TopListTableViewHeaderActionable: UITableViewHeaderFooterView, Reusable {
     }()
     
     private lazy var titleAttributes: StringAttributes = [
-        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Medium", size: 28)!
+        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Light", size: 25)!
     ]
     
     private lazy var btnSeeAll: UIButton = {

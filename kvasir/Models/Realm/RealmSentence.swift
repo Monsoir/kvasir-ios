@@ -8,12 +8,12 @@
 
 import RealmSwift
 
-class RealmSentence: RealmWordDigest {
-    override class func toHuman() -> String {
+class RealmSentence: RealmWordDigest, Namable {
+    override static func toHuman() -> String {
         return "句摘"
     }
     
-    override class func toMachine() -> String {
+    override static func toMachine() -> String {
         return "sentence"
     }
 }

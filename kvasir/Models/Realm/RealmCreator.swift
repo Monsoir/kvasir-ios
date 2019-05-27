@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-class RealmCreator: RealmBasicObject, KvasirRealmReadable {
+class RealmCreator: RealmBasicObject {
     @objc dynamic var name = ""
     @objc dynamic var localeName = ""
     
@@ -18,6 +18,10 @@ class RealmCreator: RealmBasicObject, KvasirRealmReadable {
     
     class func toHuman() -> String {
         return "创意者"
+    }
+    
+    class func toMachine() -> String {
+        return "creator"
     }
     
     class func createAnUnmanagedOneFromPayload<T: RealmCreator>(_ payload: [String: Any]) -> T {

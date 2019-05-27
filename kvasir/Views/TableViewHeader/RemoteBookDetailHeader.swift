@@ -19,8 +19,8 @@ private let TopMargin = 10
 private let BottomMargin = 10
 
 
-class RemoteBookDetailHeader: UITableViewHeaderFooterView, Reusable {
-    static let height = 180.0
+class RemoteBookDetailHeader: UIView {
+    static let height = 180.0 as CGFloat
     var payload: [String: Any]? {
         didSet {
             let thumbnail = payload?["thumbnail"] as? String ?? ""
@@ -71,15 +71,6 @@ class RemoteBookDetailHeader: UITableViewHeaderFooterView, Reusable {
         }
     }
     
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        setupSubviews()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         frameConfirmed = true
@@ -119,9 +110,11 @@ class RemoteBookDetailHeader: UITableViewHeaderFooterView, Reusable {
     }
     
     private func setupSubviews() {
-        contentView.backgroundColor = .white
-        contentView.addSubview(ivThumbnail)
-        contentView.addSubview(lbTitle)
-        contentView.addSubview(lbDetail)
+        backgroundColor = .white
+        addSubviews([
+            ivThumbnail,
+            lbTitle,
+            lbDetail,
+        ])
     }
 }

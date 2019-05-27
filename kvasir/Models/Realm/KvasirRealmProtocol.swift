@@ -32,7 +32,3 @@ protocol KvasirRealmQuerable : class {
     static func allObjectsSortedByUpdatedAt<T: RealmBasicObject>() -> Results<T>?
     static func queryObjectWithPrimaryKey<T: RealmBasicObject>(_ key: String) -> T?
 }
-
-protocol KvasirRealmReadable {
-    static func toHuman() -> String
-}

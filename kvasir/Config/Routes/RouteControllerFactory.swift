@@ -72,14 +72,26 @@ func allResourceControllerFactory(url: URLConvertible, values: [String: Any], co
     }
 }
 
+func resourceDetailFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    guard let id = values["id"] else { return nil }
+    let resourceType = get(url: url, componentAt: 1) ?? RealmTag.toMachine()
+    
+    switch resourceType {
+    case RouteConstants.Nouns.tag:
+        return TagDetailViewController(with: [ "id": id ])
+    default:
+        return nil
+    }
+}
+
 func booksOfCreatorControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
     guard let id = values["id"] else { return nil }
-    let creatorType = get(url: url, componentAt: 1) ?? "author"
+    let creatorType = get(url: url, componentAt: 1) ?? RouteConstants.Nouns.author
     
     switch creatorType {
-    case "author":
+    case RouteConstants.Nouns.author:
         return BookListViewController(with: ["editable": true, "title": "TA 的书籍", "creatorType": "author", "creatorId": id])
-    case "translator":
+    case RouteConstants.Nouns.translator:
         return BookListViewController(with: ["editable": true, "title": "TA 的书籍", "creatorType": "translator", "creatorId": id])
     default:
         return nil

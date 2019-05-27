@@ -13,9 +13,6 @@ import PKHUD
 
 typealias BookSelectCompletion = (_ book: RealmBook, _ vc: UIViewController?) -> Void
 
-private let CellWithThumbnailIdentifier = BookListTableViewCell.reuseIdentifier(extra: "with-thumnbnail")
-private let CellWithoutThumbnailIdentifier = BookListTableViewCell.reuseIdentifier(extra: "without-thumnbnail")
-
 class BookListViewController: ResourceListViewController {
     
     private lazy var coordinator: BookListCoordinator = BookListCoordinator(with: self.configuration)
@@ -123,14 +120,14 @@ extension BookListViewController: UITableViewDataSource {
         
         var cell: BookListTableViewCell?
         if book.hasImage {
-            cell = tableView.dequeueReusableCell(withIdentifier: CellWithThumbnailIdentifier) as? BookListTableViewCell
+            cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithThumbnailIdentifierAddon)) as? BookListTableViewCell
             if cell == nil {
-                cell = BookListTableViewCell(style: .default, reuseIdentifier: CellWithThumbnailIdentifier, needThumbnail: true)
+                cell = BookListTableViewCell(style: .default, reuseIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithThumbnailIdentifierAddon), needThumbnail: true)
             }
         } else {
-            cell = tableView.dequeueReusableCell(withIdentifier: CellWithoutThumbnailIdentifier) as? BookListTableViewCell
+            cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithoutThumbnailIdentifierAddon)) as? BookListTableViewCell
             if cell == nil {
-                cell = BookListTableViewCell(style: .default, reuseIdentifier: CellWithoutThumbnailIdentifier, needThumbnail: false)
+                cell = BookListTableViewCell(style: .default, reuseIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithoutThumbnailIdentifierAddon), needThumbnail: false)
             }
         }
         

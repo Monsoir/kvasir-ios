@@ -11,9 +11,6 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
-private let CellWithThumbnailIdentifier = "with-thumbnail"
-private let CellWithoutThumbnailIdentifier = "without-thumbnail"
-
 class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
 
     private var coordinator: DigestListCoordinator<Digest>!
@@ -83,21 +80,21 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         let digest = results?[indexPath.row]
         
         if let _ = digest?.book?.hasImage {
-            cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithThumbnailIdentifier)) as? TextListTableViewCell
+            cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: TextListTableViewCell.cellWithThumbnailIdentifierAddon)) as? TextListTableViewCell
             if cell == nil {
                 cell = TextListTableViewCell(
                     style: .default,
-                    reuseIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithThumbnailIdentifier),
+                    reuseIdentifier: TextListTableViewCell.reuseIdentifier(extra: TextListTableViewCell.cellWithThumbnailIdentifierAddon),
                     needThumbnail: true
                 )
             }
             cell?.thumbnail = digest?.book?.thumbnailImage ?? ""
         } else {
-            cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: CellWithoutThumbnailIdentifier)) as? TextListTableViewCell
+            cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: TextListTableViewCell.cellWithoutThumbnailIdentifierAddon)) as? TextListTableViewCell
             if cell == nil {
                 cell = TextListTableViewCell(
                     style: .default,
-                    reuseIdentifier: CellWithoutThumbnailIdentifier
+                    reuseIdentifier: TextListTableViewCell.cellWithoutThumbnailIdentifierAddon
                 )
             }
         }

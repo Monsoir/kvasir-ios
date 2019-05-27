@@ -15,6 +15,10 @@ class RealmTranslator: RealmCreator {
         return "译者"
     }
     
+    override class func toMachine() -> String {
+        return "translator"
+    }
+    
     class func createAnUnmanagedOneFromPayload(_ payload: [String: Any]) -> RealmCreator {
         return super.createAnUnmanagedOneFromPayload(payload)
     }

@@ -32,6 +32,7 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
     // Need for args
     case detailSentence
     case detailParagraph
+    case detailTag
     case booksOfAnAuthor
     case booksOfATranslator
     case sentencesOfBook
@@ -56,7 +57,11 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             // kvasir://digest/sentence/an-id
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine()).component("<string:id>")
         case .detailParagraph:
+            // kvasir://digest/paragraph/an-id
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component("<string:id>")
+        case .detailTag:
+            // kvasir://resource/tag/an-id
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmTag.toMachine()).component("<string:id>")
         case .allBooks:
             // kvasir://resource/all/book
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.book)
@@ -105,6 +110,8 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine()).component(args.getValueOrFatalError(key: "id"))
         case .detailParagraph:
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine()).component(args.getValueOrFatalError(key: "id"))
+        case .detailTag:
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmTag.toMachine()).component(args.getValueOrFatalError(key: "id"))
         case .booksOfAnAuthor:
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.author).component(args.getValueOrFatalError(key: "id")).component(RouteConstants.Nouns.books)
         case .booksOfATranslator:
@@ -135,6 +142,8 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             return selectResourceControllerFactory(url:values:context:)
         case .sentencesOfBook, .paragraphsOfBook:
             return digestOfBookControllerFactory(url:values:context:)
+        case .detailTag:
+            return resourceDetailFactory(url:values:context:)
         }
     }
 }
