@@ -22,13 +22,13 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     private var bookResult: RealmBook?
     
     private var realmNotificationToken: NotificationToken? = nil
-    private var configuration: [String: Any]!
+    private let configuration: Configurable.Configuration
     
     var initialHandler: ((Results<Digest>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    required init(configuration: [String : Any] = [:]) {
+    required init(configuration: Configurable.Configuration = [:]) {
         self.configuration = configuration
     }
     

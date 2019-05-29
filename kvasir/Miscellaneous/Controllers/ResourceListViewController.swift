@@ -10,7 +10,7 @@ import UIKit
 
 class ResourceListViewController: UnifiedViewController, Configurable {
     
-    private(set) var configuration: [String: Any]
+    private(set) var configuration: Configurable.Configuration
     
     /// 是否可以新增，默认为 false
     var canAdd: Bool {
@@ -22,7 +22,7 @@ class ResourceListViewController: UnifiedViewController, Configurable {
         return configuration["editable"] as? Bool ?? false
     }
     
-    required init(configuration: [String: Any]) {
+    required init(configuration: Configurable.Configuration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
     }

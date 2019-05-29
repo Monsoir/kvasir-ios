@@ -14,14 +14,14 @@ class TagListCoordinator: ListQueryCoordinatorable {
     
     private lazy var repository = RealmTagRepository()
     private(set) var results: Results<RealmTag>?
-    private(set) var configuration: [String: Any]!
+    private(set) var configuration: Configurable.Configuration
     private var realmNotificationToken: NotificationToken? = nil
     
     var initialHandler: ((Results<RealmTag>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    required init(configuration: [String : Any] = [:]) {
+    required init(configuration: Configurable.Configuration = [:]) {
         self.configuration = configuration
     }
     

@@ -37,7 +37,7 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         return view
     }()
     
-    required init(configuration: [String: Any]) {
+    required init(configuration: Configurable.Configuration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
         coordinator = DigestListCoordinator<Digest>(configuration: configuration)
