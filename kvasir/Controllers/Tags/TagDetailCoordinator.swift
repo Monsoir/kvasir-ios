@@ -40,6 +40,10 @@ class TagDetailCoordinator: Configurable {
         self.configuration = configuration
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     func query(completion: @escaping RealmQueryAnEntityCompletion<RealmTag>) {
         guard !tagId.isEmpty else {
             completion(false, nil)
@@ -49,12 +53,13 @@ class TagDetailCoordinator: Configurable {
         tagRepository.queryBy(id: tagId) { [weak self] (success, tag) in
             guard let self = self else { return }
             guard let tag = tag else {
-                self.errorHandler?("没找到\(RealmTag.toHuman())")
+                self.errorHandler?("没找到\(RealmTag.toHuman)")
                 return
             }
             
             self.tagResult = tag
-            self.notificationToken = self.tagResult?.observe({ (changes) in
+            self.notificationToken = self.tagResult?.observe({ [weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .change:
                     self.reloadHandler?(self.tagResult)

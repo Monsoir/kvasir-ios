@@ -72,11 +72,11 @@ private extension CreateCreatorViewController {
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = btnCreateSave
-        title = "收集一个\(Creator.toHuman())"
+        title = "收集一个\(Creator.toHuman)"
     }
     
     func setupSubviews() {
-        let character = Creator.toHuman()
+        let character = Creator.toHuman
         
         form +++ Section()
             <<< TextRow() {

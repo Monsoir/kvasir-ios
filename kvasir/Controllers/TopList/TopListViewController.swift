@@ -20,9 +20,9 @@ private let FocusedSection: [(title: String, url: String)] = [
 ]
 private let Resources: [(title: String, url: String)] = [
     ("书籍", KvasirURL.allBooks.url()),
-    ("\(RealmAuthor.toHuman())们", KvasirURL.allAuthors.url()),
-    ("\(RealmTranslator.toHuman())们", KvasirURL.allTranslators.url()),
-    ("\(RealmTag.toHuman())们", KvasirURL.allTags.url()),
+    ("\(RealmAuthor.toHuman)们", KvasirURL.allAuthors.url()),
+    ("\(RealmTranslator.toHuman)们", KvasirURL.allTranslators.url()),
+    ("\(RealmTag.toHuman)们", KvasirURL.allTags.url()),
 ]
 private let ResourceCellIdentifier = "resource"
 
@@ -178,14 +178,14 @@ class TopListViewController: UIViewController {
     
     func reloadSentenceView() {
         MainQueue.async {
-            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmSentence.toHuman())吧") : nil
+            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmSentence.toHuman)吧") : nil
             self.sentencesCollectionView?.reloadData()
         }
     }
     
     func reloadParagraphView() {
         MainQueue.async {
-            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmParagraph.toHuman())吧") : nil
+            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmParagraph.toHuman)吧") : nil
             self.paragraphCollectionView?.reloadData()
         }
     }

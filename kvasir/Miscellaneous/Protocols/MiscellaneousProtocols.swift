@@ -41,6 +41,6 @@ protocol ListQueryCoordinatorable: Configurable {
 }
 
 protocol Namable: class {
-    static func toHuman() -> String
-    static func toMachine() -> String
+    static var toHuman: String { get }
+    static var toMachine: String { get }
 }

@@ -26,8 +26,6 @@ protocol KvasirRealmCRUDable : class {
 }
 
 protocol KvasirRealmQuerable : class {
-//    associatedtype ModelType: RealmCollectionValue
-    
     static func allObjects<T: RealmBasicObject>() -> Results<T>?
     static func allObjectsSortedByUpdatedAt<T: RealmBasicObject>() -> Results<T>?
     static func queryObjectWithPrimaryKey<T: RealmBasicObject>(_ key: String) -> T?

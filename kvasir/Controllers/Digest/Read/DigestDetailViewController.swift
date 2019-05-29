@@ -151,7 +151,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
 
 private extension DigestDetailViewController {
     func setupNavigationBar() {
-        title = "\(Digest.toHuman()) - 正文"
+        title = "\(Digest.toHuman) - 正文"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = makeBarButtonItem(.ellipsisH, target: self, action: #selector(actionFormore))

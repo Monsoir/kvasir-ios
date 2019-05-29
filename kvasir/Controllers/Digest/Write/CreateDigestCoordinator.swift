@@ -25,7 +25,7 @@ class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
-            "content": createNotEmptyStringValidator("\(Digest.toHuman())内容")
+            "content": createNotEmptyStringValidator("\(Digest.toHuman)内容")
         ]
         
         do {

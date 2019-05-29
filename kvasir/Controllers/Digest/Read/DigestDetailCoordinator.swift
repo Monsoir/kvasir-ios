@@ -36,7 +36,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
     
     func put(info: PutInfoScript) throws {
         let validators: [String: SimpleValidator] = [
-            "content": createNotEmptyStringValidator("\(Digest.toHuman())内容")
+            "content": createNotEmptyStringValidator("\(Digest.toHuman)内容")
         ]
         
         do {
@@ -64,7 +64,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         
         repository.queryBy(id: digestId) { [weak self] (success, entity) in
             guard success, let strongSelf = self else {
-                self?.errorHandler?("没找到\(Digest.toHuman())")
+                self?.errorHandler?("没找到\(Digest.toHuman)")
                 return
             }
             
@@ -102,11 +102,11 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         let newBook = book
         
         if Digest.self == RealmSentence.self {
-            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine())s", inverseKey: "book", elements: [model] as! [RealmSentence] ) { (success) in
+            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine)s", inverseKey: "book", elements: [model] as! [RealmSentence] ) { (success) in
                 completion(success)
             }
         } else if Digest.self == RealmParagraph.self {
-            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine())s", inverseKey: "book", elements: [model] as! [RealmParagraph] ) { (success) in
+            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine)s", inverseKey: "book", elements: [model] as! [RealmParagraph] ) { (success) in
                 completion(success)
             }
         }

@@ -102,7 +102,7 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewCont
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "选择\(Creator.toHuman())"
+        title = "选择\(Creator.toHuman)"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
         
         view.addSubview(tableView)

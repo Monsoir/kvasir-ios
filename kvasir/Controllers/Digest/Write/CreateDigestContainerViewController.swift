@@ -33,7 +33,7 @@ class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewC
     }
 
     private lazy var segement: UISegmentedControl = {
-        let view = UISegmentedControl(items: ["基本信息", "\(Digest.toHuman())内容"])
+        let view = UISegmentedControl(items: ["基本信息", "\(Digest.toHuman)内容"])
         view.addTarget(self, action: #selector(actionChangeSegement(sender:)), for: .valueChanged)
         view.selectedSegmentIndex = DefaultTab
         return view

@@ -8,15 +8,6 @@
 
 import RealmSwift
 
-class RealmSentence: RealmWordDigest, Namable {
-    
+class RealmSentence: RealmWordDigest {
     let tags = LinkingObjects(fromType: RealmTag.self, property: "sentences")
-    
-    override static func toHuman() -> String {
-        return "句摘"
-    }
-    
-    override static func toMachine() -> String {
-        return "sentence"
-    }
 }

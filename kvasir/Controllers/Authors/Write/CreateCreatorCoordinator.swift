@@ -25,7 +25,7 @@ class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
-            "name": createNotEmptyStringValidator("\(Creator.toHuman())名字")
+            "name": createNotEmptyStringValidator("\(Creator.toHuman)名字")
         ]
         
         do {

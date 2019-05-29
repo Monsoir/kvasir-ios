@@ -104,7 +104,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
         if editingStyle == .delete {
             guard let entity = results?[indexPath.row] else { return }
             
-            let sheet = UIAlertController(title: "确定删除\(Creator.toHuman())", message: entity.name, preferredStyle: .actionSheet)
+            let sheet = UIAlertController(title: "确定删除\(Creator.toHuman)", message: entity.name, preferredStyle: .actionSheet)
             sheet.addAction(title: "删除", style: .destructive, isEnabled: true) { [weak self] (_) in
                 guard let strongSelf = self else { return }
                 strongSelf.doDeleteAuthor(entity: entity)
@@ -166,7 +166,7 @@ private extension CreatorListViewController {
             tableView.backgroundView = nil
             return
         }
-        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(Creator.toHuman())吧", position: .upper)
+        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(Creator.toHuman)吧", position: .upper)
     }
 
     func configureCoordinator() {

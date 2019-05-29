@@ -46,6 +46,10 @@ class TagDetailViewController: UnifiedViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -98,7 +102,7 @@ class TagDetailViewController: UnifiedViewController {
     
     private func reloadView() {
         tableView.reloadData()
-        title = "\(RealmTag.toHuman())-\(coordinator.tagResult?.name ?? "")"
+        title = "\(RealmTag.toHuman)-\(coordinator.tagResult?.name ?? "")"
     }
 }
 
@@ -258,19 +262,19 @@ extension TagDetailViewController: UITableViewDelegate {
         case 0:
             return coordinator.hasSentences ? nil : {
                 let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
-                footer?.title = "没有找到该\(RealmTag.toHuman())下的\(RealmSentence.toHuman())"
+                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmSentence.toHuman)"
                 return footer
             }()
         case 1:
             return coordinator.hasParagraphs ? nil : {
                 let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
-                footer?.title = "没有找到该\(RealmTag.toHuman())下的\(RealmParagraph.toHuman())"
+                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmParagraph.toHuman)"
                 return footer
             }()
         case 2:
             return coordinator.hasBooks ? nil : {
                 let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
-                footer?.title = "没有找到该\(RealmTag.toHuman())下的\(RealmBook.toHuman())"
+                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmBook.toHuman)"
                 return footer
             }()
         default:

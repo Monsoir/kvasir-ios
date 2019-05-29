@@ -57,11 +57,11 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
     
     @objc func actionCreate() {
         let dict = [
-            RealmSentence.toMachine(): KvasirURL.newSentence.url(),
-            RealmParagraph.toMachine(): KvasirURL.newParagraph.url(),
+            RealmSentence.toMachine: KvasirURL.newSentence.url(),
+            RealmParagraph.toMachine: KvasirURL.newParagraph.url(),
         ]
         KvasirNavigator.present(
-            dict[Digest.toMachine()]!,
+            dict[Digest.toMachine]!,
             context: nil,
             wrap: UINavigationController.self,
             from: AppRootViewController,
@@ -123,7 +123,7 @@ private extension DigestListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
-        title = coordinator.bookName.isEmpty ? Digest.toHuman() : "\(coordinator.bookName)的\(Digest.toHuman())"
+        title = coordinator.bookName.isEmpty ? Digest.toHuman : "\(coordinator.bookName)的\(Digest.toHuman)"
     }
     
     func setupSubviews() {
@@ -159,13 +159,13 @@ private extension DigestListViewController {
     }
     
     func reloadBackgroundView() {
-        self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman())的摘录", position: .upper) : nil
+        self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman)的摘录", position: .upper) : nil
     }
     
     func reload() {
         MainQueue.async {
             self.reloadBackgroundView()
-            self.title = self.coordinator.bookName.isEmpty ? Digest.toHuman() : "\(self.coordinator.bookName) - \(Digest.toHuman())"
+            self.title = self.coordinator.bookName.isEmpty ? Digest.toHuman : "\(self.coordinator.bookName) - \(Digest.toHuman)"
             self.tableView.reloadData()
         }
     }

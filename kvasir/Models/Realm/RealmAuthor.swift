@@ -10,12 +10,4 @@ import RealmSwift
 
 class RealmAuthor: RealmCreator {
     let books = List<RealmBook>()
-    
-    override class func toHuman() -> String {
-        return "作者"
-    }
-    
-    class func createAnUnmanagedOneFromPayload(_ payload: [String: Any]) -> RealmCreator {
-        return super.createAnUnmanagedOneFromPayload(payload)
-    }
 }
