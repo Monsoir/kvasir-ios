@@ -15,7 +15,7 @@ typealias BookSelectCompletion = (_ book: RealmBook, _ vc: UIViewController?) ->
 
 class BookListViewController: ResourceListViewController {
     
-    private lazy var coordinator: BookListCoordinator = BookListCoordinator(with: self.configuration)
+    private lazy var coordinator: BookListCoordinator = BookListCoordinator(configuration: self.configuration)
     private var results: Results<RealmBook>? {
         get {
             return coordinator.results
@@ -36,12 +36,16 @@ class BookListViewController: ResourceListViewController {
     }()
     
     init(with configuration: [String: Any], selectCompletion: BookSelectCompletion? = nil) {
-        super.init(with: configuration)
+        super.init(configuration: configuration)
         self.selectCompletion = selectCompletion
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    required init(configuration: [String : Any]) {
+        super.init(configuration: configuration)
     }
     
     override func viewDidLoad() {
@@ -64,7 +68,9 @@ class BookListViewController: ResourceListViewController {
 private extension BookListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+        if canAdd {
+            navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+        }
         title = configuration["title"] as? String ?? ""
     }
 

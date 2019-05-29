@@ -26,7 +26,7 @@ protocol UpdateCoordinatorable {
 }
 
 protocol Configurable {
-    init(with configuration: [String: Any])
+    init(configuration: [String: Any])
 }
 
 protocol ListQueryCoordinatorable: Configurable {

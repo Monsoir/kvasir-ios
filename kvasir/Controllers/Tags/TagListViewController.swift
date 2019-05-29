@@ -29,7 +29,7 @@ class TagListViewController: ResourceListViewController {
         debugPrint("\(self) deinit")
     }
     
-    private lazy var coordinator: TagListCoordinator = TagListCoordinator(with: self.configuration)
+    private lazy var coordinator: TagListCoordinator = TagListCoordinator(configuration: self.configuration)
     
     override func viewDidLoad() {
         super.viewDidLoad()

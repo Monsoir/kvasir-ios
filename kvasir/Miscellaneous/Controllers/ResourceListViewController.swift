@@ -8,16 +8,23 @@
 
 import UIKit
 
-class ResourceListViewController: UnifiedViewController {
+class ResourceListViewController: UnifiedViewController, Configurable {
     
-    private(set) var configuration: [String: Any]!
+    private(set) var configuration: [String: Any]
+    
+    /// 是否可以新增，默认为 false
+    var canAdd: Bool {
+        return configuration["canAdd"] as? Bool ?? false
+    }
+    
+    /// 列表是否可编辑，默认为 false
     var modifyable: Bool {
         return configuration["editable"] as? Bool ?? false
     }
     
-    init(with configuration: [String: Any]) {
-        super.init(nibName: nil, bundle: nil)
+    required init(configuration: [String: Any]) {
         self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

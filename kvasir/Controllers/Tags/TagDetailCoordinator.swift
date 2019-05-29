@@ -36,7 +36,7 @@ class TagDetailCoordinator: Configurable {
         return configuration["id"] as? String ?? ""
     }
     
-    required init(with configuration: [String : Any] = [:]) {
+    required init(configuration: [String : Any] = [:]) {
         self.configuration = configuration
     }
     

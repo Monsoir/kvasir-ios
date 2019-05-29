@@ -241,7 +241,7 @@ extension TopListViewController: UITableViewDelegate {
             header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
             header.seeAllHandler = {
                 MainQueue.async {
-                    KvasirNavigator.push(FocusedSection[section].url)
+                    KvasirNavigator.push(FocusedSection[section].url, context: ["canAdd": true])
                 }
             }
             return header
@@ -261,7 +261,7 @@ extension TopListViewController: UITableViewDelegate {
         guard indexPath.section >= FocusedSection.count else { return }
         
         let resource = Resources[indexPath.row]
-        KvasirNavigator.push(resource.url)
+        KvasirNavigator.push(resource.url, context: ["canAdd": true])
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

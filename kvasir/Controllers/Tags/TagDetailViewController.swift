@@ -38,7 +38,7 @@ class TagDetailViewController: UnifiedViewController {
     private lazy var tableHeader: TagDetailHeader = TagDetailHeader()
     
     init(with configuration: [String : Any]) {
-        self.coordinator = TagDetailCoordinator(with: configuration)
+        self.coordinator = TagDetailCoordinator(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -237,8 +237,9 @@ extension TagDetailViewController: UITableViewDelegate {
         header.actionTitle = headerAccessoryTitleForSection(section)
         header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
         header.seeAllHandler = {
+            // MARK: 查看全部跳转
             MainQueue.async {
-                KvasirNavigator.push(SectionInfos[section].url)
+                KvasirNavigator.push(SectionInfos[section].url, context: ["canAdd": false])
             }
         }
         return header

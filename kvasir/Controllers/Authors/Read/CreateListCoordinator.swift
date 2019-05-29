@@ -16,6 +16,7 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
     
     private lazy var repository = RealmCreatorRepository<Creator>()
     private(set) var results: Results<Creator>?
+    private let configuration: [String: Any]
     
     private var realmNotificationToken: NotificationToken? = nil
     
@@ -23,7 +24,8 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    required init(with configuration: [String : Any] = [:]) {
+    required init(configuration: [String : Any] = [:]) {
+        self.configuration = configuration
     }
     
     deinit {

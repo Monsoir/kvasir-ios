@@ -22,14 +22,14 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     private var bookResult: RealmBook?
     
     private var realmNotificationToken: NotificationToken? = nil
-    private var payload: [String: Any]!
+    private var configuration: [String: Any]!
     
     var initialHandler: ((Results<Digest>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    required init(with configuration: [String : Any] = [:]) {
-        self.payload = configuration
+    required init(configuration: [String : Any] = [:]) {
+        self.configuration = configuration
     }
     
     deinit {
@@ -41,7 +41,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     }
     
     func setupQuery(for section: Int = 0) {
-        if let bookId = payload["bookId"] as? String {
+        if let bookId = configuration["bookId"] as? String {
             // Query digests are related to a specific book
             RealmBookRepository().queryBy(id: bookId) { [weak self] (success, result) in
                 guard success, let result = result, let strongSelf = self else {

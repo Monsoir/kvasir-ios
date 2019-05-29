@@ -11,6 +11,7 @@ import RealmSwift
 import SwifterSwift
 
 class CreatorListViewController<Creator: RealmCreator>: ResourceListViewController, UITableViewDataSource, UITableViewDelegate {
+    
     typealias SelectCompletion =  ((_ creators: [Creator]) -> Void)
     
     private lazy var coordinator = CreatorListCoordinator<Creator>()
@@ -34,7 +35,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     }()
     
     init(with configuration: [String: Any], selectCompletion completion: SelectCompletion? = nil, preSelections: [Creator]? = nil) {
-        super.init(with: configuration)
+        super.init(configuration: configuration)
         self.selectCompletion = completion
         if let selections = preSelections {
             self.preSelectionIds = selections.map({ (creator) -> String in
@@ -45,6 +46,10 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    required init(configuration: [String : Any]) {
+        super.init(configuration: configuration)
     }
     
     deinit {
@@ -150,7 +155,9 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
 private extension CreatorListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+        if canAdd {
+            navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+        }
         title = configuration["title"] as? String ?? ""
     }
     

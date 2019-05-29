@@ -11,13 +11,20 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
-class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate, Configurable {
 
     private var coordinator: DigestListCoordinator<Digest>!
     private var results: Results<Digest>? {
         get {
             return coordinator.results
         }
+    }
+    
+    private var configuration: [String: Any]
+    
+    /// 是否可以添加新的 Digest, 默认为 false
+    private var canAdd: Bool {
+        return configuration["canAdd"] as? Bool ?? false
     }
     
     private lazy var tableView: UITableView = { [unowned self] in
@@ -30,9 +37,10 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         return view
     }()
     
-    init(with payload: [String: Any]) {
+    required init(configuration: [String: Any]) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        coordinator = DigestListCoordinator<Digest>(with: payload)
+        coordinator = DigestListCoordinator<Digest>(configuration: configuration)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -122,7 +130,10 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
 private extension DigestListViewController {
     func setupNavigationBar() {
         setupImmersiveAppearance()
-        navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+        
+        if canAdd {
+            navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
+        }
         title = coordinator.bookName.isEmpty ? Digest.toHuman : "\(coordinator.bookName)的\(Digest.toHuman)"
     }
     
