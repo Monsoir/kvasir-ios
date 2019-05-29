@@ -9,7 +9,10 @@
 import RealmSwift
 
 class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
-    private(set) var digestId = ""
+    private let configuation: Configurable.Configuration
+    var digestId: String {
+        return configuation["id"] as? String ?? ""
+    }
     private(set) var entity: Digest?
     private var repository = RealmWordRepository<Digest>()
     private var putInfo = PutInfo()
@@ -20,8 +23,8 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
     var errorHandler: ((_ message: String) -> Void)?
     var entityDeleteHandler: (() -> Void)?
     
-    init(digestId: String) {
-        self.digestId = digestId
+    required init(configuration: Configurable.Configuration = [:]) {
+        self.configuation = configuration
     }
     
     deinit {
@@ -63,20 +66,21 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         }
         
         repository.queryBy(id: digestId) { [weak self] (success, entity) in
-            guard success, let strongSelf = self else {
-                self?.errorHandler?("没找到\(Digest.toHuman)")
+            guard let self = self else { return }
+            guard success else {
+                self.errorHandler?("没找到\(Digest.toHuman)")
                 return
             }
             
-            strongSelf.entity = entity
-            strongSelf.realmNotificationToken = strongSelf.entity?.observe({ (changes) in
+            self.entity = entity
+            self.realmNotificationToken = self.entity?.observe({ (changes) in
                 switch changes {
                 case .change:
-                    strongSelf.reload?(entity)
+                    self.reload?(entity)
                 case .error:
-                    strongSelf.errorHandler?("发生未知错误")
+                    self.errorHandler?("发生未知错误")
                 case .deleted:
-                    strongSelf.entityDeleteHandler?()
+                    self.entityDeleteHandler?()
                 }
             })
             completion(success, entity)

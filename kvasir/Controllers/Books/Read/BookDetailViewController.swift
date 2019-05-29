@@ -24,9 +24,20 @@ private let DisplayDigestTitles = [
 
 private let ContainerHeight = 50
 
-class BookDetailViewController: UnifiedViewController {
+class BookDetailViewController: UnifiedViewController, Configurable {
     
-    private var coordinator: BookDetailCoordinable!
+    private lazy var coordinator: BookDetailCoordinable = { [unowned self] in
+        let mode = self.configuration["mode"] as? String ?? "local"
+        if mode == "remote" {
+            return RemoteBookDetailCoordinator(configuration: self.configuration)
+        } else {
+            return LocalBookDetailCoordinator(configuration: self.configuration)
+        }
+    }()
+    private let configuration: Configuration
+    private var createCompleteHandler: ((_: UIViewController) -> Void)? {
+        return configuration["completion"] as? (_: UIViewController) -> Void
+    }
     private var dataToDisplay = [(label: String, value: Any)]()
     private var loaded = false
     
@@ -62,16 +73,16 @@ class BookDetailViewController: UnifiedViewController {
     private lazy var itemChooseIt: UIBarButtonItem = UIBarButtonItem(title: "选中", style: .done, target: self, action: #selector(actionChooseIt))
     
     private var isLocal: Bool {
-        return coordinator is LocalBookCoordinator
+        return coordinator is LocalBookDetailCoordinator
     }
     
     private var isRemote: Bool {
         return coordinator is RemoteBookDetailCoordinator
     }
     
-    init(with coordinator: BookDetailCoordinable) {
+    required init(configuration: Configuration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        self.coordinator = coordinator
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -93,18 +104,14 @@ class BookDetailViewController: UnifiedViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if !loaded {setupCoordinator()
+        if !loaded {
+            setupCoordinator()
             reloadData()
             if coordinator is RemoteBookDetailCoordinator {
                 HUD.show(.progress, onView: navigationController?.view)
             }
             loaded = true
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        reloadHeaderView()
     }
     
     private func setupNavigationBar() {
@@ -142,6 +149,8 @@ class BookDetailViewController: UnifiedViewController {
                 make.edges.equalToSuperview()
             }
         }
+        
+        reloadHeaderView()
     }
     
     private func reloadData() {
@@ -171,12 +180,13 @@ class BookDetailViewController: UnifiedViewController {
         }
         title = coordinator.title
         dataToDisplay = data
+        reloadHeaderView()
         tableView.reloadData()
     }
     
     private func setupCoordinator() {
         if isLocal {
-            let c = coordinator as! LocalBookCoordinator
+            let c = coordinator as! LocalBookDetailCoordinator
             c.reload = { [weak self] _ in
                 guard let strongSelf = self else { return }
                 MainQueue.async {
@@ -199,7 +209,6 @@ class BookDetailViewController: UnifiedViewController {
                 guard success, let strongSelf = self else { return }
                 MainQueue.async {
                     strongSelf.reloadData()
-                    strongSelf.reloadHeaderView()
                 }
             }
         }
@@ -214,7 +223,6 @@ class BookDetailViewController: UnifiedViewController {
             }
             c.errorHandler = { [weak self] msg in
                 MainQueue.async {
-//                    HUD.flash(.labeledError(title: "出错了", subtitle: msg), onView: nil, delay: 1.5, completion: nil)
                     // 弹出 HUD 已在请求完成后统一处理了
                     guard let strongSelf = self else { return }
                     strongSelf.dismiss(animated: true, completion: nil)
@@ -234,7 +242,6 @@ class BookDetailViewController: UnifiedViewController {
                 MainQueue.async {
                     HUD.hide(animated: true)
                     strongSelf.reloadData()
-                    strongSelf.reloadHeaderView()
                 }
             }
         }
@@ -249,18 +256,18 @@ class BookDetailViewController: UnifiedViewController {
     @objc private func actionChooseIt() {
         guard coordinator is RemoteBookDetailCoordinator else { return }
         HUD.show(.labeledProgress(title: "创建中", subtitle: nil))
-        (coordinator as! RemoteBookDetailCoordinator).batchCreate { (success, message) in
-            MainQueue.async { [weak self] in
-                guard let strongSelf = self else { return }
+        (coordinator as! RemoteBookDetailCoordinator).batchCreate { [weak self] (success, message) in
+            guard let self = self else { return }
+            MainQueue.async {
                 HUD.hide()
                 guard success else {
-                    Bartendar.handleSorryAlert(message: message ?? "", on: strongSelf.navigationController)
+                    Bartendar.handleSorryAlert(message: message ?? "", on: self.navigationController)
                     return
                 }
                 if message != nil {
                     HUD.flash(.label(message ?? ""), delay: 1.5)
                 }
-                strongSelf.dismiss(animated: true, completion: nil)
+                self.createCompleteHandler?(self)
             }
         }
     }
@@ -273,7 +280,7 @@ class BookDetailViewController: UnifiedViewController {
             alert.addAction(title: "取消", style: .cancel, isEnabled: true, handler: nil)
             alert.addAction(title: "删除", style: .destructive, isEnabled: true) { [weak self] (_) in
                 guard let self = self else { return }
-                let c = self.coordinator as! LocalBookCoordinator
+                let c = self.coordinator as! LocalBookDetailCoordinator
                 c.delete { (success) in
                     guard success else { return }
                     MainQueue.async {
@@ -291,7 +298,7 @@ extension BookDetailViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if coordinator is RemoteBookDetailCoordinator && indexPath.section == 0 && indexPath.row == 0 ||
-            coordinator is LocalBookCoordinator && indexPath.section == 1 && indexPath.row == 0 {
+            coordinator is LocalBookDetailCoordinator && indexPath.section == 1 && indexPath.row == 0 {
             guard !coordinator.mightAddedManully else { return }
             
             let vc = PlainTextViewController()
@@ -300,7 +307,7 @@ extension BookDetailViewController: UITableViewDelegate {
             navigationController?.pushViewController(vc, animated: true)
         }
         
-        if coordinator is LocalBookCoordinator && indexPath.section == 0 {
+        if coordinator is LocalBookDetailCoordinator && indexPath.section == 0 {
             switch indexPath.row {
             case 0:
                 KvasirNavigator.push(KvasirURL.sentencesOfBook.url(with: ["id": coordinator.id]))
@@ -320,7 +327,7 @@ extension BookDetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard coordinator is LocalBookCoordinator else { return nil }
+        guard coordinator is LocalBookDetailCoordinator else { return nil }
         var header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier())
         if header == nil {
             header = TopListTableViewHeaderActionable(reuseIdentifier: TopListTableViewHeaderActionable.reuseIdentifier(), actionable: false)
@@ -334,13 +341,13 @@ extension BookDetailViewController: UITableViewDelegate {
 
 extension BookDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        if coordinator is LocalBookCoordinator {
+        if coordinator is LocalBookDetailCoordinator {
             return 2
         }
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if coordinator is LocalBookCoordinator {
+        if coordinator is LocalBookDetailCoordinator {
             if section == 0 {
                 return DisplayDigestTitles.count
             }
@@ -349,7 +356,7 @@ extension BookDetailViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if coordinator is LocalBookCoordinator && indexPath.section == 0 {
+        if coordinator is LocalBookDetailCoordinator && indexPath.section == 0 {
             return cellForDigests(tableView: tableView, cellAtIndexPath: indexPath)
         }
         return cellForBookInfo(tableView: tableView, cellAtIndexPath: indexPath)
@@ -364,9 +371,9 @@ extension BookDetailViewController: UITableViewDataSource {
         cell?.detailTextLabel?.text = {
             switch indexPath.row {
             case 0:
-                return "\((coordinator as! LocalBookCoordinator).sentencesCount)"
+                return "\((coordinator as! LocalBookDetailCoordinator).sentencesCount)"
             case 1:
-                return "\((coordinator as! LocalBookCoordinator).paragraphsCount)"
+                return "\((coordinator as! LocalBookDetailCoordinator).paragraphsCount)"
             default:
                 return ""
             }
@@ -388,6 +395,7 @@ extension BookDetailViewController: UITableViewDataSource {
         } else {
             cell.accessoryType = .none
             cell.selectionStyle = .none
+            cell.maxLine = 1
         }
         
         return cell

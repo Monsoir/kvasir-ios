@@ -11,8 +11,6 @@ import RealmSwift
 import SwifterSwift
 import PKHUD
 
-typealias BookSelectCompletion = (_ book: RealmBook, _ vc: UIViewController?) -> Void
-
 class BookListViewController: ResourceListViewController {
     
     private lazy var coordinator: BookListCoordinator = BookListCoordinator(configuration: self.configuration)
@@ -21,8 +19,12 @@ class BookListViewController: ResourceListViewController {
             return coordinator.results
         }
     }
-
-    var selectCompletion: BookSelectCompletion?
+    private var selectCompletion: ((_: RealmBook, _: UIViewController) -> Void)? {
+        return configuration["completion"] as? (_: RealmBook, _: UIViewController) -> Void
+    }
+    private var noBooksPlaceholder: String {
+        return configuration["placeholder"] as? String ?? "没有搜索到收藏的书籍"
+    }
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
@@ -34,11 +36,6 @@ class BookListViewController: ResourceListViewController {
         view.tableFooterView = UIView()
         return view
     }()
-    
-    init(with configuration: [String: Any], selectCompletion: BookSelectCompletion? = nil) {
-        super.init(configuration: configuration)
-        self.selectCompletion = selectCompletion
-    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -112,7 +109,7 @@ private extension BookListViewController {
             tableView.backgroundView = nil
             return
         }
-        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一本书籍吧", position: .upper)
+        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: self.noBooksPlaceholder, position: .upper)
     }
 }
 
@@ -152,14 +149,12 @@ extension BookListViewController: UITableViewDataSource {
 
 extension BookListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if modifyable {
+        if let selectCompletion = selectCompletion {
             guard let book = results?[indexPath.row] else { return }
-            let coordinator = LocalBookCoordinator(with: ["id": book.id])
-            let vc = BookDetailViewController(with: coordinator)
-            navigationController?.pushViewController(vc, animated: true)
+            selectCompletion(book, self)
         } else {
             guard let book = results?[indexPath.row] else { return }
-            selectCompletion?(book, self)
+            KvasirNavigator.push(KvasirURL.detailBook.url(with: ["id": book.id]))
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -167,10 +162,13 @@ extension BookListViewController: UITableViewDelegate {
 
 private extension BookListViewController {
     @objc func actionCreate() {
-        let createManully = UIAlertAction(title: "手动添加", style: .default) { [weak self] (_) in
-            guard let strongSelf = self else { return }
-            let nc = UINavigationController(rootViewController: CreateBookViewController(book: RealmBook()))
-            strongSelf.navigationController?.present(nc, animated: true, completion: nil)
+        let createManully = UIAlertAction(title: "手动添加", style: .default) { (_) in
+            let config: Configuration = [
+                "completion": { (vc: UIViewController) in
+                    vc.dismiss(animated: true, completion: nil)
+                },
+            ]
+            KvasirNavigator.present(KvasirURL.newBookManully.url(), context: config, wrap: UINavigationController.self)
         }
         let createUsingScan = UIAlertAction(title: "识码添加", style: .default) { [weak self] (_) in
             guard let strongSelf = self else { return }
@@ -199,18 +197,14 @@ private extension BookListViewController {
         }
     }
     
-    func previewNewBook(data: [String: Any]?) {
-        let coordinator = RemoteBookDetailCoordinator(with: data ?? [:])
-        let vc = BookDetailViewController(with: coordinator)
-        let nc = UINavigationController(rootViewController: vc)
-        navigationController?.present(nc, animated: true, completion: nil)
-    }
-    
     func previewNewBook(code: String) {
-        let coordinator = RemoteBookDetailCoordinator(with: ["code": code])
-        let vc = BookDetailViewController(with: coordinator)
-        let nc = UINavigationController(rootViewController: vc)
-        navigationController?.present(nc, animated: true, completion: nil)
+        let config: Configurable.Configuration = [
+            "code": code,
+            "completion": { (vc: UIViewController) in
+                vc.dismiss(animated: true, completion: nil)
+            },
+        ]
+        KvasirNavigator.present(KvasirURL.newBookScanly.url(), context: config, wrap: UINavigationController.self)
     }
 }
 

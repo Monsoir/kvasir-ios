@@ -19,9 +19,10 @@ private let SectionTitles = [
     "上次修改时间",
 ]
 
-class DigestMoreDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate {
+class DigestMoreDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate, Configurable {
     
-    private var coordinator: DigestDetailCoordinator<Digest>!
+    private lazy var coordinator: DigestDetailCoordinator<Digest> = DigestDetailCoordinator<Digest>(configuration: self.configuration)
+    private let configuration: Configuration
     private var entity: Digest? {
         get {
             return coordinator.entity
@@ -41,8 +42,8 @@ class DigestMoreDetailViewController<Digest: RealmWordDigest>: UnifiedViewContro
         return view
     }()
     
-    init(digestId: String) {
-        self.coordinator = DigestDetailCoordinator(digestId: digestId)
+    required init(configuration: Configurable.Configuration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -66,11 +67,11 @@ class DigestMoreDetailViewController<Digest: RealmWordDigest>: UnifiedViewContro
         setupSubviews()
         configureCoordinator()
         coordinator.queryOne { [weak self] (success, entity) in
+            guard let self = self else { return }
             guard success else {
-                Bartendar.handleSimpleAlert(title: "提示", message: "没有找到数据", on: self?.navigationController)
+                Bartendar.handleSimpleAlert(title: "提示", message: "没有找到数据", on: self.navigationController)
                 return
             }
-            guard let self = self else { return }
             MainQueue.async {
                 self.infoTableView.reloadData()
             }
@@ -159,21 +160,24 @@ extension DigestMoreDetailViewController {
     
     private func showBookList() {
         MainQueue.async {
-            let vc = BookListViewController(with: ["editable": false]) { [weak self] (book, currentVC) in
-                guard let self = self else { return }
-                self.coordinator?.updateBookRef(book: book, completion: { (success) in
-                    DispatchQueue.main.async {
-                        guard success else {
-                            Bartendar.handleSorryAlert(message: "修改失败", on: self.navigationController)
-                            return
+            let config: Configurable.Configuration = [
+                "editable": false,
+                "completion": { [weak self] (book: RealmBook, vc: UIViewController) in
+                    guard let self = self else { return }
+                    self.coordinator.updateBookRef(book: book, completion: { [weak self] (success) in
+                        guard let self = self else { return }
+                        DispatchQueue.main.async {
+                            guard success else {
+                                Bartendar.handleSorryAlert(message: "修改失败", on: self.navigationController)
+                                return
+                            }
+                            
+                            vc.navigationController?.popViewController()
                         }
-                        
-                        currentVC?.dismiss(animated: true, completion: nil)
-                    }
-                })
-            }
-            let nc = UINavigationController(rootViewController: vc)
-            self.present(nc, animated: true, completion: nil)
+                    })
+                },
+            ]
+            KvasirNavigator.push(KvasirURL.selectBooks.url(), context: config)
         }
     }
     

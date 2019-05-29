@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class LocalBookCoordinator: BookDetailCoordinator {
+class LocalBookDetailCoordinator: BookDetailCoordinator {
     override var mightAddedManully: Bool {
         return thumbnail.isEmpty && summary.isEmpty
     }
@@ -90,7 +90,7 @@ class LocalBookCoordinator: BookDetailCoordinator {
     private var entity: RealmBook?
     
     override func query(_ completion: @escaping BookDetailQueryCompletion) {
-        guard let bookId = payload["id"] as? String else {
+        guard let bookId = configuraion["id"] as? String else {
             return
         }
         repository.queryBy(id: bookId) { [weak self] (success, entity) in

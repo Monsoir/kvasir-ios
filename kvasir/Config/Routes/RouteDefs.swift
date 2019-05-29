@@ -19,6 +19,10 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
     // No need for args
     case newSentence
     case newParagraph
+    case newAuthor
+    case newTranslator
+    case newBookManully
+    case newBookScanly
     case allSentences
     case allParagraphs
     case allBooks
@@ -32,6 +36,7 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
     // Need for args
     case detailSentence
     case detailParagraph
+    case detailBook
     case detailTag
     case booksOfAnAuthor
     case booksOfATranslator
@@ -48,6 +53,17 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
         case .newParagraph:
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.new
                 ).component(RealmParagraph.toMachine)
+        case .newAuthor:
+            // kvasir://resource/new/author
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmAuthor.toMachine)
+        case .newTranslator:
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmTranslator.toMachine)
+        case .newBookManully:
+            // kvasir://resource/new/book/manully
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmBook.toMachine).component(RouteConstants.Preps.manully)
+        case .newBookScanly:
+            // kvasir://resource/new/book/scanly
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmBook.toMachine).component(RouteConstants.Preps.scanly)
         case .allSentences:
             // kvasir://digest/all/sentence
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RealmSentence.toMachine)
@@ -59,6 +75,9 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
         case .detailParagraph:
             // kvasir://digest/paragraph/an-id
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine).component("<string:id>")
+        case .detailBook:
+            // kvasir://resource/book/an-id
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmBook.toMachine).component("<string:id>")
         case .detailTag:
             // kvasir://resource/tag/an-id
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmTag.toMachine).component("<string:id>")
@@ -110,6 +129,8 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine).component(args.getValueOrFatalError(key: "id"))
         case .detailParagraph:
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine).component(args.getValueOrFatalError(key: "id"))
+        case .detailBook:
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmBook.toMachine).component(args.getValueOrFatalError(key: "id"))
         case .detailTag:
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmTag.toMachine).component(args.getValueOrFatalError(key: "id"))
         case .booksOfAnAuthor:
@@ -130,6 +151,10 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
         switch self {
         case .newSentence, .newParagraph:
             return newDigestControllerFactory(url:values:context:)
+        case .newAuthor, .newTranslator:
+            return newCreatorControllerFactory(url:values:context:)
+        case .newBookManully, .newBookScanly:
+            return newBookControllerFactory(url:values:context:)
         case .allSentences, .allParagraphs:
             return allDigestControllerFactory(url:values:context:)
         case .detailSentence, .detailParagraph:
@@ -142,7 +167,7 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             return selectResourceControllerFactory(url:values:context:)
         case .sentencesOfBook, .paragraphsOfBook:
             return digestOfBookControllerFactory(url:values:context:)
-        case .detailTag:
+        case .detailTag, .detailBook:
             return resourceDetailFactory(url:values:context:)
         }
     }

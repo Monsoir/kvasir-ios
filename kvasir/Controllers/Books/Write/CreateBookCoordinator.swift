@@ -11,11 +11,14 @@ import RealmSwift
 
 class CreateBookCoordinator: CreateCoordinatorable {
     private lazy var repository = RealmBookRepository()
-    private(set) var entity: RealmBook!
+    private let configuration: Configuration
+    var entity: RealmBook {
+        return configuration["entity"] as! RealmBook
+    }
     private var postInfo = PostInfo()
     
-    init(entity: RealmBook) {
-        self.entity = entity
+    required init(configuration: Configuration) {
+        self.configuration = configuration
     }
     
     deinit {

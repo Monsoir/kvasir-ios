@@ -71,6 +71,15 @@ class RemoteBookDetailHeader: UIView {
         }
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSubviews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         frameConfirmed = true

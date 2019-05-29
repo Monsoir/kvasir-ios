@@ -12,14 +12,16 @@ import SwifterSwift
 
 private let ContainerHeight = 50
 
-class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController {
+class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, Configurable {
     
-    private var coordinator: DigestDetailCoordinator<Digest>!
+    private lazy var coordinator: DigestDetailCoordinator<Digest> = DigestDetailCoordinator<Digest>(configuration: self.configuration)
     private var entity: Digest? {
         get {
             return coordinator.entity
         }
     }
+    
+    private let configuration: Configurable.Configuration
     
     private lazy var scrollableContainer: UIScrollView = {
         let view = UIScrollView()
@@ -103,16 +105,17 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
         setupSubviews()
         configureCoordinator()
         coordinator.queryOne { [weak self] (success, entity) in
+            guard let self = self else { return }
             guard success else {
-                Bartendar.handleSimpleAlert(title: "提示", message: "没有找到数据", on: self?.navigationController)
+                Bartendar.handleSimpleAlert(title: "提示", message: "没有找到数据", on: self.navigationController)
                 return
             }
-            self?.reloadData()
+            self.reloadData()
         }
     }
     
-    init(digestId: String) {
-        self.coordinator = DigestDetailCoordinator(digestId: digestId)
+    required init(configuration: Configurable.Configuration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -144,7 +147,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
     }
     
     @objc private func actionFormore() {
-        let vc = DigestMoreDetailViewController<Digest>(digestId: coordinator.digestId)
+        let vc = DigestMoreDetailViewController<Digest>(configuration: configuration)
         navigationController?.pushViewController(vc)
     }
 }
@@ -233,7 +236,7 @@ private extension DigestDetailViewController {
         let alert = UIAlertController.init(title: "确定删除此条摘录吗？", message: nil, preferredStyle: .alert)
         alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
             guard let strongSelf = self else { return }
-            strongSelf.coordinator?.delete(completion: { (success) in
+            strongSelf.coordinator.delete(completion: { (success) in
                 DispatchQueue.main.async {
                     if !success {
                         Bartendar.handleSorryAlert(message: "删除失败", on: self?.navigationController)

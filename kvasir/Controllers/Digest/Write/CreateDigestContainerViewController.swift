@@ -13,14 +13,20 @@ import RealmSwift
 
 private let DefaultTab = 0
 
-class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewController {
+class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewController, Configurable {
     
+    private let configuration: Configuration
     private var digest: Digest {
         get {
             return coordinator.entity
         }
     }
-    private var coordinator: CreateDigestCoordinator<Digest>!
+    private lazy var coordinator: CreateDigestCoordinator<Digest> = CreateDigestCoordinator(configuration: self.configuration)
+    private var createCompletion: ((_: UIViewController) -> Void)? {
+        return configuration["completion"] as? (_: UIViewController) -> Void ?? { vc in
+            vc.dismiss(animated: true, completion: nil)
+        }
+    }
     
     private lazy var constraintDict = [String: Constraint]()
     private lazy var basicInfoVC = CreateDigestInfoViewController(digest: self.digest, creating: true)
@@ -39,8 +45,8 @@ class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewC
         return view
     }()
     
-    init(digest: Digest) {
-        self.coordinator = CreateDigestCoordinator(entity: digest)
+    required init(configuration: Configuration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -80,13 +86,14 @@ class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewC
             return
         }
         
-        coordinator.create { (success, message) in
+        coordinator.create { [weak self] (success, message) in
+            guard let self = self else { return }
             MainQueue.async {
                 guard success else {
                     Bartendar.handleTipAlert(message: "创建失败", on: self.navigationController)
                     return
                 }
-                self.dismiss(animated: true, completion: nil)
+                self.createCompletion?(self)
             }
         }
     }

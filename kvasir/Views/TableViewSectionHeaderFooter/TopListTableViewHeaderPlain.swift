@@ -24,7 +24,7 @@ class TopListTableViewHeaderPlain: UITableViewHeaderFooterView, Reusable {
     }()
     
     private lazy var _titleAttributes: StringAttributes = [
-        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Medium", size: 28)!
+        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Light", size: 25)!
     ]
     
     override class var requiresConstraintBasedLayout: Bool {

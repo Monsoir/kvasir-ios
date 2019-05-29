@@ -118,7 +118,7 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
     }
     
     override func query(_ completion: @escaping BookDetailQueryCompletion) {
-        guard let code = payload["code"] as? String else { return }
+        guard let code = configuraion["code"] as? String else { return }
         
         ProxySessionManager.shared
             .request(BookProxyEndpoint.search(isbn: code))

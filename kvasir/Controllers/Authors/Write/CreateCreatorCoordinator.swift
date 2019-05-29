@@ -11,11 +11,15 @@ import RealmSwift
 
 class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
     private lazy var repository = RealmCreatorRepository<Creator>()
-    private(set) var entity: Creator!
-    private var postInfo = PostInfo()
+    var entity: Creator {
+        return configuration["entity"] as! Creator
+    }
     
-    init(entity: Creator) {
-        self.entity = entity
+    private var postInfo = PostInfo()
+    private let configuration: Configurable.Configuration
+    
+    required init(configuration: Configurable.Configuration) {
+        self.configuration = configuration
     }
     
     deinit {

@@ -11,7 +11,7 @@ import RealmSwift
 
 typealias BookDetailQueryCompletion = (_ success: Bool, _ data: Any?, _ message: String?) -> Void
 
-protocol BookDetailCoordinable: RealmNotificationable {
+protocol BookDetailCoordinable: RealmNotificationable, Configurable {
     var mightAddedManully: Bool { get }
     var id: String { get }
     var thumbnail: String { get }
@@ -33,7 +33,6 @@ protocol BookDetailCoordinable: RealmNotificationable {
     var errorHandler: ((_ message: String) -> Void)? { get set }
     var entityDeleteHandler: (() -> Void)? { get set }
     
-    init(with payload: [String: Any])
     func query(_ completion: @escaping BookDetailQueryCompletion)
 }
 
@@ -111,9 +110,9 @@ class BookDetailCoordinator: BookDetailCoordinable {
     
     var entityDeleteHandler: (() -> Void)?
     
-    private(set) var payload: [String: Any]!
-    required init(with payload: [String: Any]) {
-        self.payload = payload
+    private(set) var configuraion: Configuration
+    required init(configuration: Configuration) {
+        self.configuraion = configuration
     }
     
     deinit {

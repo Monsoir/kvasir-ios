@@ -10,12 +10,15 @@ import Foundation
 import RealmSwift
 
 class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
+    private let configuration: Configuration
     private lazy var repository = RealmWordRepository<Digest>()
-    private(set) var entity: Digest!
+    var entity: Digest {
+        return configuration["entity"] as! Digest
+    }
     private var postInfo = PostInfo()
     
-    init(entity: Digest) {
-        self.entity = entity
+    required init(configuration: Configuration) {
+        self.configuration = configuration
     }
     
     deinit {

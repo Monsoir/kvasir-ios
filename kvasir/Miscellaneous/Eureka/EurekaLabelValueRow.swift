@@ -103,7 +103,6 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewCont
         super.viewDidLoad()
         
         title = "选择\(Creator.toHuman)"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(actionCreate))
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -169,10 +168,5 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewCont
         
         row.value = EurekaLabelValueModel(label: creator.name, value: creator.id, info: ["localeName": creator.localeName])
         onDismissCallback?(self)
-    }
-    
-    @objc func actionCreate() {
-        let nc = UINavigationController(rootViewController: CreateCreatorViewController<Creator>(model: Creator()))
-        navigationController?.present(nc, animated: true, completion: nil)
     }
 }

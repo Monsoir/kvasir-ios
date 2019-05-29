@@ -26,4 +26,9 @@ struct RouteConstants {
         static let detail = "detail"
         static let select = "select"
     }
+    
+    struct Preps {
+        static let manully = "manully"
+        static let scanly = "scanly"
+    }
 }

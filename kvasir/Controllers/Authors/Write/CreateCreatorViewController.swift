@@ -10,16 +10,22 @@ import UIKit
 import Eureka
 import SwifterSwift
 
-class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
+class CreateCreatorViewController<Creator: RealmCreator>: FormViewController, Configurable {
     
-    private var creating = true
+    private let configuration: Configurable.Configuration
+    private var creating: Bool {
+        return configuration["creating"] as? Bool ?? true
+    }
     private var coordinator: CreateCreatorCoordinator<Creator>
+    private var createCompletion: ((_: UIViewController) -> Void)? {
+        return configuration["completion"] as? (_: UIViewController) -> Void
+    }
     
     private lazy var btnCreateSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionCreateSave))
     
-    init(model: Creator, creating: Bool = true) {
-        self.coordinator = CreateCreatorCoordinator<Creator>(entity: model)
-        self.creating = creating
+    required init(configuration: Configurable.Configuration) {
+        self.configuration = configuration
+        self.coordinator = CreateCreatorCoordinator<Creator>(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,14 +60,15 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController {
             return
         }
         
-        coordinator.create { (success, message) in
+        coordinator.create { [weak self] (success, message) in
+            guard let self = self else { return }
             guard success else {
                 Bartendar.handleSorryAlert(message: "保存失败", on: self.navigationController)
                 return
             }
             
             DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
+                self.createCompletion?(self)
             }
         }
     }

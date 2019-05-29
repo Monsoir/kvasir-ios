@@ -15,19 +15,19 @@ typealias PostInfo = [String: Any]
 typealias PutInfoScript = [String: Any?]
 typealias PutInfo = [String: Any]
 
-protocol CreateCoordinatorable {
+protocol Configurable {
+    typealias Configuration = [String: Any]
+    init(configuration: Configuration)
+}
+
+protocol CreateCoordinatorable: Configurable {
     func post(info: PostInfoScript) throws
     func create(completion: @escaping RealmCreateCompletion)
 }
 
-protocol UpdateCoordinatorable {
+protocol UpdateCoordinatorable: Configurable {
     func put(info: PutInfoScript) throws
     func update(completion: @escaping RealmUpdateCompletion)
-}
-
-protocol Configurable {
-    typealias Configuration = [String: Any]
-    init(configuration: Configuration)
 }
 
 protocol ListQueryCoordinatorable: Configurable {

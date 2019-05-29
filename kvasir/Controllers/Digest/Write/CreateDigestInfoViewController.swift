@@ -129,11 +129,17 @@ private extension CreateDigestInfoViewController {
         bookRelatedSection <<< ButtonRow() { (row: ButtonRow) in
             row.title = "关联一本书籍"
             }.onCellSelection({ [weak self] (cell, row) in
-                let vc = BookListViewController(with: ["editable": false, "title": "选择书籍"], selectCompletion: { [weak self] (book, vc) in
-                    self?.bookDidSelect(book: book)
-                    vc?.navigationController?.popViewController()
-                })
-                self?.navigationController?.pushViewController(vc, completion: nil)
+                guard let self = self else { return }
+                let config: Configurable.Configuration = [
+                    "editable": false,
+                    "title": "选择书籍",
+                    "completion": { [weak self] (book: RealmBook, vc: UIViewController) in
+                        guard let self = self else { return }
+                        self.bookDidSelect(book: book)
+                        vc.navigationController?.popViewController()
+                    },
+                ]
+                KvasirNavigator.push(KvasirURL.allBooks.url(), context: config)
             })
         bookRelatedSection <<< LabelRow() {
             $0.hidden = true

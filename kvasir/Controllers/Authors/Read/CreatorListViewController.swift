@@ -146,9 +146,18 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     }
     
     @objc func actionCreate() {
-        let vc = CreateCreatorViewController<Creator>(model: Creator(), creating: true)
-        let nc = UINavigationController(rootViewController: vc)
-        navigationController?.present(nc, animated: true, completion: nil)
+        let configuration: Configuration = [
+            "entity": Creator(),
+        ]
+        
+        switch Creator.self {
+        case is RealmAuthor.Type:
+            KvasirNavigator.present(KvasirURL.newAuthor.url(), context: configuration, wrap: UINavigationController.self)
+        case is RealmTranslator.Type:
+            KvasirNavigator.present(KvasirURL.newTranslator.url(), context: configuration, wrap: UINavigationController.self)
+        default:
+            return
+        }
     }
 }
 

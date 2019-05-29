@@ -15,11 +15,19 @@ import PKHUD
 
 private let HeaderHeight = 150.0 as CGFloat
 
-class CreateBookViewController: FormViewController {
+class CreateBookViewController: FormViewController, Configurable {
     
-    private var creating = true
-    private var book: RealmBook
-    private lazy var coordinator = CreateBookCoordinator(entity: self.book)
+    private let configuration: Configuration
+    private var creating: Bool {
+        return configuration["creating"] as? Bool ?? false
+    }
+    private var createCompletionHandler: ((_: UIViewController) -> Void)? {
+        return configuration["completion"] as? ((_: UIViewController) -> Void)
+    }
+    private var book: RealmBook {
+        return coordinator.entity
+    }
+    private lazy var coordinator = CreateBookCoordinator(configuration: self.configuration)
     
     private lazy var headerView: UIView = {
         let view = UIView()
@@ -29,8 +37,8 @@ class CreateBookViewController: FormViewController {
     
     private lazy var btnCreateSave = UIBarButtonItem(title: "保存", style: .done, target: self, action: #selector(actionCreateSave))
     
-    init(book: RealmBook) {
-        self.book = book
+    required init(configuration: Configuration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -205,34 +213,15 @@ private extension CreateBookViewController {
             return
         }
         
-        coordinator.create { (success, message) in
+        coordinator.create {[weak self] (success, message) in
+            guard let self = self else { return }
             guard success else {
                 Bartendar.handleSorryAlert(message: "保存失败", on: self.navigationController)
                 return
             }
             
             MainQueue.async {
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
-    }
-    
-    @objc private func actionSearch(_ isbn: String?) {
-        HUD.show(.progress)
-        coordinator.queryFromRemote(isbn: isbn) { (success, data, errorMsg) in
-            guard success else {
-                MainQueue.async {
-                    HUD.flash(.labeledError(title: errorMsg, subtitle: nil), onView: self.view, delay: 1.5, completion: nil)
-                }
-                return
-            }
-            MainQueue.async {
-                let remoteCoordinator = RemoteBookDetailCoordinator(with: data ?? [:])
-                let vc = BookDetailViewController(with: remoteCoordinator)
-                let nc = UINavigationController(rootViewController: vc)
-                self.navigationController?.present(nc, animated: true, completion: {
-                    HUD.hide()
-                })
+                self.createCompletionHandler?(self)
             }
         }
     }
