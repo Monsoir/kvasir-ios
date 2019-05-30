@@ -16,14 +16,14 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
     private lazy var repository = RealmTagRepository()
     private var putInfo = PutInfo()
     
-    private var realmNotificationToken: NotificationToken?
+    private(set) var realmNotificationTokens = [NotificationToken]()
     
     var initialHandler: ((Results<RealmTag>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((Error) -> Void)?
     
     func reclaim() {
-        realmNotificationToken?.invalidate()
+        realmNotificationTokens.forEach{ $0.invalidate() }
     }
     
     func setupQuery(for section: Int) {
@@ -31,7 +31,7 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
             guard let self = self, success, let results = results else { return }
             
             self.results = results
-            self.realmNotificationToken = results.observe({[weak self] (changes) in
+            if let token = self.results?.observe({[weak self] (changes) in
                 guard let self = self else { return }
                 switch changes {
                 case .initial:
@@ -45,7 +45,9 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
                 case .error(let e):
                     self.errorHandler?(e)
                 }
-            })
+            }) {
+                self.realmNotificationTokens.append(token)
+            }
         }
     }
     

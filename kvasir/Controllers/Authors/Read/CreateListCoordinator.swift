@@ -18,7 +18,7 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
     private(set) var results: Results<Creator>?
     private let configuration: [String: Any]
     
-    private var realmNotificationToken: NotificationToken? = nil
+    private(set) var realmNotificationTokens = [NotificationToken]()
     
     var initialHandler: ((_ results: Results<Creator>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
@@ -33,33 +33,37 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
     }
     
     func reclaim() {
-        realmNotificationToken?.invalidate()
+        realmNotificationTokens.forEach{ $0.invalidate() }
     }
     
     func setupQuery(for section: Int = 0) {
         repository.queryAllSortingByUpdatedAtDesc { [weak self] (success, _results) in
-            guard success, let results = _results, let strongSelf = self else {
+            guard success, let results = _results, let self = self else {
                 return
             }
             
             // link to results
-            strongSelf.results = results
+            self.results = results
             
             // setup notification
-            strongSelf.realmNotificationToken = results.observe({ (changes) in
+            if let token = self.results?.observe({ [weak self] (changes) in
+                guard let self = self else { return }
+                
                 switch changes {
                 case .initial:
-                    strongSelf.initialLoadHandler?(results)
+                    self.initialLoadHandler?(self.results)
                 case .update(_, deletions: let deletions, let insertions, let modifications):
-                    strongSelf.updateHandler?(
+                    self.updateHandler?(
                         deletions.map { IndexPath(row: $0, section: section) },
                         insertions.map { IndexPath(row: $0, section: section) },
                         modifications.map { IndexPath(row: $0, section: section) }
                     )
                 case .error(let e):
-                    strongSelf.errorHandler?(e)
+                    self.errorHandler?(e)
                 }
-            })
+            }) {
+                self.realmNotificationTokens.append(token)
+            }
         }
     }
     

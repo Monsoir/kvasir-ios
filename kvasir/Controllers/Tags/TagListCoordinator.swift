@@ -15,7 +15,7 @@ class TagListCoordinator: ListQueryCoordinatorable {
     private lazy var repository = RealmTagRepository()
     private(set) var results: Results<RealmTag>?
     private(set) var configuration: Configurable.Configuration
-    private var realmNotificationToken: NotificationToken? = nil
+    private(set) var realmNotificationTokens = [NotificationToken]()
     
     var initialHandler: ((Results<RealmTag>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
@@ -32,7 +32,7 @@ class TagListCoordinator: ListQueryCoordinatorable {
     }
     
     func reclaim() {
-        realmNotificationToken?.invalidate()
+        realmNotificationTokens.forEach{ $0.invalidate() }
     }
     
     func setupQuery(for section: Int = 0) {
@@ -40,7 +40,8 @@ class TagListCoordinator: ListQueryCoordinatorable {
             guard let self = self, success, let results = results else { return }
             
             self.results = results
-            self.realmNotificationToken = results.observe({ (changes) in
+            if let token = self.results?.observe({ [weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .initial:
                     self.initialHandler?(results)
@@ -53,7 +54,9 @@ class TagListCoordinator: ListQueryCoordinatorable {
                 case .error(let e):
                     self.errorHandler?(e)
                 }
-            })
+            }) {
+                self.realmNotificationTokens.append(token)
+            }
         }
     }
 }

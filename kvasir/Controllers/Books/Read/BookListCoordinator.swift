@@ -10,13 +10,12 @@ import Foundation
 import RealmSwift
 
 class BookListCoordinator: ListQueryCoordinatorable {
-    
     typealias Model = RealmBook
     
     private lazy var repository = RealmBookRepository()
     private(set) var results: Results<RealmBook>?
     private(set) var configuration: [String: Any]!
-    private var realmNotificationToken: NotificationToken? = nil
+    private(set) var realmNotificationTokens = [NotificationToken]()
     
     var initialHandler: ((Results<RealmBook>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
@@ -33,7 +32,7 @@ class BookListCoordinator: ListQueryCoordinatorable {
     }
     
     func reclaim() {
-        realmNotificationToken?.invalidate()
+        realmNotificationTokens.forEach{ $0.invalidate() }
     }
     
     func setupQuery(for section: Int = 0) {
@@ -42,7 +41,7 @@ class BookListCoordinator: ListQueryCoordinatorable {
             self.results = results
             
             // setup notification
-            realmNotificationToken = results.observe({ (changes) in
+            if let token = self.results?.observe({ (changes) in
                 switch changes {
                 case .initial:
                     self.initialHandler?(results)
@@ -55,7 +54,9 @@ class BookListCoordinator: ListQueryCoordinatorable {
                 case .error(let e):
                     self.errorHandler?(e)
                 }
-            })
+            }) {
+                realmNotificationTokens.append(token)
+            }
         }
         
         if let creatorId = configuration["creatorId"] as? String, !creatorId.isEmpty {

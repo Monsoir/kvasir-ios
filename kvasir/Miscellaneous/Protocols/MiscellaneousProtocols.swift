@@ -20,6 +20,11 @@ protocol Configurable {
     init(configuration: Configuration)
 }
 
+protocol RealmNotificationable {
+    var realmNotificationTokens: [NotificationToken] { get }
+    func reclaim()
+}
+
 protocol CreateCoordinatorable: Configurable {
     func post(info: PostInfoScript) throws
     func create(completion: @escaping RealmCreateCompletion)
@@ -30,14 +35,13 @@ protocol UpdateCoordinatorable: Configurable {
     func update(completion: @escaping RealmUpdateCompletion)
 }
 
-protocol ListQueryCoordinatorable: Configurable {
+protocol ListQueryCoordinatorable: Configurable, RealmNotificationable {
     associatedtype Model: RealmBasicObject
     
     var initialHandler: ((_ results: Results<Model>?) -> Void)? { get set }
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)? { get set }
     var errorHandler: ((_ error: Error) -> Void)? { get set }
     
-    func reclaim()
     func setupQuery(for section: Int)
 }
 

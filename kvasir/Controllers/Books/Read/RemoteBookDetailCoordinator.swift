@@ -132,7 +132,4 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
                 completion(true, nil, nil)
             })
     }
-    
-    override func reclaim() {
-    }
 }

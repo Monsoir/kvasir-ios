@@ -94,19 +94,23 @@ class LocalBookDetailCoordinator: BookDetailCoordinator {
             return
         }
         repository.queryBy(id: bookId) { [weak self] (success, entity) in
-            guard let strongSelf = self else { return }
+            guard let self = self else { return }
             
-            strongSelf.entity = entity
-            strongSelf.notificationToken = strongSelf.entity?.observe({ (changes) in
+            self.entity = entity
+            if let token = self.entity?.observe({ [weak self] (changes) in
+                guard let self = self else { return }
+                
                 switch changes {
                 case .change:
-                    strongSelf.reload?(entity)
+                    self.reload?(entity)
                 case .error:
-                    strongSelf.errorHandler?("未找到该书籍信息")
+                    self.errorHandler?("未找到该书籍信息")
                 case .deleted:
-                    strongSelf.entityDeleteHandler?()
+                    self.entityDeleteHandler?()
                 }
-            })
+            }) {
+                self.appendNotificationFromSubClass(token: token)
+            }
             completion(true, entity, nil)
         }
     }
@@ -116,9 +120,5 @@ class LocalBookDetailCoordinator: BookDetailCoordinator {
         repository.deleteOne(managedModel: entity) { (success) in
             completion?(success)
         }
-    }
-    
-    override func reclaim() {
-        [notificationToken].forEach { $0?.invalidate() }
     }
 }

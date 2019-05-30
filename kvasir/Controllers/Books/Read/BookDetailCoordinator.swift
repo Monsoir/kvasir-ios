@@ -102,17 +102,19 @@ class BookDetailCoordinator: BookDetailCoordinable {
         return [:]
     }
     
-    var notificationToken: NotificationToken?
+    private(set) var realmNotificationTokens = [NotificationToken]()
     
     var reload: ((RealmBook?) -> Void)?
-    
     var errorHandler: ((String) -> Void)?
-    
     var entityDeleteHandler: (() -> Void)?
     
     private(set) var configuraion: Configuration
     required init(configuration: Configuration) {
         self.configuraion = configuration
+    }
+    
+    func appendNotificationFromSubClass(token: NotificationToken) {
+        realmNotificationTokens.append(token)
     }
     
     deinit {
@@ -124,6 +126,6 @@ class BookDetailCoordinator: BookDetailCoordinable {
     }
     
     func reclaim() {
-        fatalError("subclass must override `reclaim` method")
+        realmNotificationTokens.forEach{ $0.invalidate() }
     }
 }
