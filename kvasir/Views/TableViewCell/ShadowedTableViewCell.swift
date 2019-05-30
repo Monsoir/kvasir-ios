@@ -14,6 +14,11 @@ private let ScaleFactor = 0.9 as CGFloat
 private let ScaleDuration = 0.25
 
 class ShadowedTableViewCell: UITableViewCell, ViewScalable {
+    
+    class var realContentCornerRadius: CGFloat {
+        return 0
+    }
+    
     var contentViewBackgroundColor: UIColor? {
         get {
             return realContentView.backgroundColor
@@ -25,7 +30,7 @@ class ShadowedTableViewCell: UITableViewCell, ViewScalable {
     
     private(set) var realContentView: UIView = {
         let view = UIView()
-        view.cornerRadius = 10
+        view.cornerRadius = ShadowedTableViewCell.realContentCornerRadius
         return view
     }()
     

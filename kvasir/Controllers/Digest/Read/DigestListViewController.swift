@@ -85,9 +85,9 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var cell: TextListTableViewCell?
-        let digest = results?[indexPath.row]
+        guard let digest = results?[indexPath.row] else { return UITableViewCell() }
         
-        if let _ = digest?.book?.hasImage {
+        if let _ = digest.book?.hasImage {
             cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: TextListTableViewCell.cellWithThumbnailIdentifierAddon)) as? TextListTableViewCell
             if cell == nil {
                 cell = TextListTableViewCell(
@@ -96,7 +96,7 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
                     needThumbnail: true
                 )
             }
-            cell?.thumbnail = digest?.book?.thumbnailImage ?? ""
+            cell?.thumbnail = digest.book?.thumbnailImage ?? ""
         } else {
             cell = tableView.dequeueReusableCell(withIdentifier: TextListTableViewCell.reuseIdentifier(extra: TextListTableViewCell.cellWithoutThumbnailIdentifierAddon)) as? TextListTableViewCell
             if cell == nil {
@@ -107,9 +107,17 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
             }
         }
         
-        cell?.title = digest?.title
-        cell?.bookName = digest?.book?.name
-        cell?.recordUpdatedDate = digest?.updateAtReadable
+        cell?.title = digest.title
+        cell?.bookName = digest.book?.name
+        cell?.recordUpdatedDate = digest.updateAtReadable
+        switch digest {
+        case is RealmSentence:
+            cell?.tagColors = (digest as! RealmSentence).tags.map { $0.color }
+        case is RealmParagraph:
+            cell?.tagColors = (digest as! RealmParagraph).tags.map { $0.color }
+        default:
+            cell?.tagColors = []
+        }
         
         return cell!
     }

@@ -12,6 +12,7 @@ import Kingfisher
 
 class TextListTableViewCell: ShadowedTableViewCell {
     static let height = 200 as CGFloat
+    static let gradientHeight = 5 as CGFloat
     static let cellWithThumbnailIdentifierAddon = "with-thumbnail"
     static let cellWithoutThumbnailIdentifierAddon = "without-thumbnail"
     
@@ -36,6 +37,18 @@ class TextListTableViewCell: ShadowedTableViewCell {
     var recordUpdatedDate: String? = nil {
         didSet {
             lbRecordUpdatedDate.text = recordUpdatedDate
+        }
+    }
+    
+    var tagColors: [String] {
+        get {
+            return gradientTagView.gradientColors
+        }
+        set {
+            gradientTagView.gradientColors = newValue
+            
+            gradientTagView.setNeedsLayout()
+            gradientTagView.layoutIfNeeded()
         }
     }
     
@@ -74,6 +87,16 @@ class TextListTableViewCell: ShadowedTableViewCell {
         label.font = PingFangSCLightFont?.withSize(12)
         return label
     }()
+    
+    private(set) lazy var gradientTagView: GradientView = {
+        let view = GradientView()
+        view.roundCornerInfo = ([UIRectCorner.bottomLeft, UIRectCorner.bottomRight], type(of: self).realContentCornerRadius)
+        return view
+    }()
+    
+    override class var realContentCornerRadius: CGFloat {
+        return 10
+    }
     
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, needThumbnail: Bool = false) {
         self.needThumbnail = needThumbnail
@@ -119,6 +142,12 @@ class TextListTableViewCell: ShadowedTableViewCell {
             make.trailing.equalTo(lbTitle)
             make.height.equalTo(20)
         }
+        
+        gradientTagView.snp.makeConstraints { (make) in
+            make.height.equalTo(type(of: self).gradientHeight)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         super.updateConstraints()
     }
 }
@@ -136,6 +165,7 @@ private extension TextListTableViewCell {
             lbTitle,
             lbBookName,
             lbRecordUpdatedDate,
+            gradientTagView,
         ])
     }
 }

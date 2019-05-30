@@ -75,17 +75,24 @@ class TopListCollectionViewCellWithThumbnail: TopListCollectionViewCell {
             make.trailing.equalTo(lbTitle)
             make.height.equalTo(25)
         }
+        
+        gradientTagView.snp.makeConstraints { (make) in
+            make.height.equalTo(type(of: self).gradientHeight)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         super.updateConstraints()
     }
     
     func setupSubviews() {
         backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
-        layer.cornerRadius = 10
+        layer.cornerRadius = type(of: self).cornerRadius
         contentView.addSubviews([
             ivThumbnail,
             lbTitle,
             lbBookName,
             lbRecordUpdatedDate,
+            gradientTagView,
         ])
     }
 }

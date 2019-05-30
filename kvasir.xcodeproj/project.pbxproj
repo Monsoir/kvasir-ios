@@ -196,6 +196,7 @@
 		44CD98BF229AC794009C6976 /* ShadowedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98BE229AC794009C6976 /* ShadowedView.swift */; };
 		44CD98C2229AC839009C6976 /* TagListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */; };
 		44CD98C4229ADD60009C6976 /* ShadowedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */; };
+		44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED06229FDC04003B7BFA /* GradientView.swift */; };
 		44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */; };
 		44ECD94222757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
 		44ECD94322757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
@@ -378,6 +379,7 @@
 		44CD98BE229AC794009C6976 /* ShadowedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedView.swift; sourceTree = "<group>"; };
 		44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListCollectionViewCell.swift; sourceTree = "<group>"; };
 		44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedCollectionViewCell.swift; sourceTree = "<group>"; };
+		44E4ED06229FDC04003B7BFA /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestContainerViewController.swift; sourceTree = "<group>"; };
 		44ECD94122757EA200618576 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		44ECD9442275804F00618576 /* Bartendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bartendar.swift; sourceTree = "<group>"; };
@@ -454,8 +456,6 @@
 				44B2C0802271B2B500B584F5 /* BookListTableViewCell.swift */,
 				44B2C035226CB38900B584F5 /* DigestDetailTableViewCell.swift */,
 				44A7ED282246A62300D1C402 /* TopListTableViewCell.swift */,
-				44BB7034229995FA00754156 /* TopListCollectionViewCellWithThumbnail.swift */,
-				44BB70362299960600754156 /* TopListCollectionViewCellWithoutThumbnail.swift */,
 				44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */,
 				44BB703022991C6F00754156 /* ShadowedTableViewCell.swift */,
 			);
@@ -711,6 +711,7 @@
 				44B2C064226EFD3D00B584F5 /* CollectionTypeEmptyBackgroundView.swift */,
 				44B2C06A226F12F500B584F5 /* KvasirEditor.swift */,
 				44CD98BE229AC794009C6976 /* ShadowedView.swift */,
+				44E4ED06229FDC04003B7BFA /* GradientView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -868,9 +869,11 @@
 		44CD98C0229AC7C5009C6976 /* CollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */,
 				44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */,
 				44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */,
+				44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */,
+				44BB7034229995FA00754156 /* TopListCollectionViewCellWithThumbnail.swift */,
+				44BB70362299960600754156 /* TopListCollectionViewCellWithoutThumbnail.swift */,
 			);
 			path = CollectionViewCell;
 			sourceTree = "<group>";
@@ -1340,6 +1343,7 @@
 				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
+				44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */,
 				44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				4408B484227C76FD00C5EF68 /* ResourceListViewController.swift in Sources */,

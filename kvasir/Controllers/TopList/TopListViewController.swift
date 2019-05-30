@@ -363,14 +363,22 @@ extension TopListViewController: UICollectionViewDataSource {
             }
         }()
         if let hasImage = digest?.book?.hasImage, hasImage {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCellWithThumbnail
             (cell as! TopListCollectionViewCellWithThumbnail).thumbnail = digest?.book?.thumbnailImage ?? ""
         } else {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithoutThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopListCollectionViewCellWithoutThumbnail.reuseIdentifier(), for: indexPath) as! TopListCollectionViewCellWithoutThumbnail
         }
         cell.title = digest?.title
         cell.bookName = digest?.book?.name
         cell.recordUpdatedDate = digest?.updateAtReadable
+        switch digest {
+        case is RealmSentence:
+            cell.tagColors = (digest as! RealmSentence).tags.map { $0.color }
+        case is RealmParagraph:
+            cell.tagColors = (digest as! RealmParagraph).tags.map { $0.color }
+        default:
+            cell.tagColors = []
+        }
         return cell
     }
 }
