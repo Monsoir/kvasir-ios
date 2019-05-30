@@ -14,7 +14,7 @@ import PKHUD
 private let SectionInfos: [(title: String, url: String)] = [
     (title: "句摘", url: KvasirURL.allSentences.url()),
     (title: "段摘", url: KvasirURL.allParagraphs.url()),
-    (title: "书籍", url: KvasirURL.allBooks.url()),
+//    (title: "书籍", url: KvasirURL.allBooks.url()),
 ]
 
 private let SectionMaxRows = 3
