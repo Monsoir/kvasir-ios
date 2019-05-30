@@ -80,4 +80,52 @@ class RealmTagRepository: Repositorable {
             })
         }
     }
+    
+    func updateTagToDigestRelation<Digest: RealmWordDigest>(tagId: String, digestType: Digest.Type, digestIds: [String], completion: @escaping RealmUpdateCompletion) {
+        RealmWritingQueue.async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    
+                    // find the tag
+                    let _tag = realm.object(ofType: RealmTag.self, forPrimaryKey: tagId)
+                    guard let tag = _tag else {
+                        completion(false)
+                        return
+                    }
+                    
+                    // find digest operating
+                    let digestOperating = realm.objects(Digest.self).filter("\(RealmWordDigest.primaryKey()!) IN %@", digestIds)
+                    
+                    try realm.write {
+                        for digest in digestOperating {
+                            // Remove digest if exists in tag before
+                            // Add digest if not exists in tag before
+                            switch digestType {
+                            case is RealmSentence.Type:
+                                if let index = tag.sentences.index(of: digest as! RealmSentence) {
+                                    tag.sentences.remove(at: index)
+                                } else {
+                                    tag.sentences.append(digest as! RealmSentence)
+                                }
+                            case is RealmParagraph.Type:
+                                if let index = tag.paragraphs.index(of: digest as! RealmParagraph) {
+                                    tag.paragraphs.remove(at: index)
+                                } else {
+                                    tag.paragraphs.append(digest as! RealmParagraph)
+                                }
+                            default:
+                                continue
+                            }
+                        }
+                    }
+                    
+                    completion(true)
+                    
+                } catch {
+                    completion(false)
+                }
+            })
+        }
+    }
 }

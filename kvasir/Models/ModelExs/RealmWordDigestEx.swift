@@ -41,3 +41,16 @@ extension RealmWordDigest {
         return "word"
     }
 }
+
+extension RealmWordDigest {
+    var tagIdSet: Set<String> {
+        switch self {
+        case is RealmSentence:
+            return Set((self as! RealmSentence).tags.map{ $0.id })
+        case is RealmParagraph:
+            return Set((self as! RealmParagraph).tags.map{ $0.id })
+        default:
+            return Set()
+        }
+    }
+}

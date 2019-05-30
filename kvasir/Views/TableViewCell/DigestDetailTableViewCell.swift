@@ -76,7 +76,7 @@ class DigestDetailTableViewCell: UITableViewCell {
             make.top.equalTo(lbLabel.snp.bottom)
             make.leading.equalTo(lbLabel).offset(5)
             make.trailing.equalTo(lbLabel).offset(-5)
-            make.height.greaterThanOrEqualTo(32)
+            make.height.greaterThanOrEqualTo(32).priorityHigh()
             make.bottom.equalToSuperview().offset(-10)
         }
         

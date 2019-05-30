@@ -14,14 +14,24 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         return configuation["id"] as? String ?? ""
     }
     private(set) var entity: Digest?
+    /// Digest 对应标签的集合
+    private(set) var tagIdSet: Set<String>?
     private var repository = RealmWordRepository<Digest>()
     private var putInfo = PutInfo()
     
     private var realmNotificationToken: NotificationToken?
+    private var reverseRelationNotificationToken: NotificationToken?
+    
+    private var tagSection: Int {
+        return configuation["tagSection"] as? Int ?? 0
+    }
     
     var reload: ((_ entity: Digest?) -> Void)?
     var errorHandler: ((_ message: String) -> Void)?
     var entityDeleteHandler: (() -> Void)?
+    
+    var tagRelationInitialHandler: ((Results<Digest>?) -> Void)?
+    var tagRelationUpdateHandler: (() -> Void)?
     
     required init(configuration: Configurable.Configuration = [:]) {
         self.configuation = configuration
@@ -35,6 +45,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
     
     func reclaim() {
         self.realmNotificationToken?.invalidate()
+        self.reverseRelationNotificationToken?.invalidate()
     }
     
     func put(info: PutInfoScript) throws {
@@ -59,6 +70,14 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         putInfo = info as PutInfo
     }
     
+    
+    /// 此方法应在查询出结果所在的后台线程中调用，避免主线程计算非 UI 事务
+    private func assembleTagIds() {
+        // 在这个后台线程中，将当前 Digest 的标签组成一个集合（避免在主线程中执行）
+        // 方便列表展示(列表只需进行即场对比)
+        self.tagIdSet = entity?.tagIdSet
+    }
+    
     func queryOne(completion: @escaping RealmQueryAnEntityCompletion<Digest>) {
         guard !digestId.isEmpty else {
             completion(false, nil)
@@ -73,9 +92,11 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
             }
             
             self.entity = entity
-            self.realmNotificationToken = self.entity?.observe({ (changes) in
+            self.realmNotificationToken = self.entity?.observe({[weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .change:
+                    self.assembleTagIds()
                     self.reload?(entity)
                 case .error:
                     self.errorHandler?("发生未知错误")
@@ -83,6 +104,38 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
                     self.entityDeleteHandler?()
                 }
             })
+            switch Digest.self {
+            case is RealmSentence.Type:
+                self.reverseRelationNotificationToken = (self.entity as? RealmSentence)?.tags.observe({ (changes) in
+                    switch changes {
+                    case .initial:
+                        self.assembleTagIds()
+                        self.tagRelationInitialHandler?(nil)
+                    case .update:
+                        self.assembleTagIds()
+                        self.tagRelationUpdateHandler?()
+                    case .error:
+                        self.errorHandler?("发生未知错误")
+                    }
+                })
+            case is RealmParagraph.Type:
+                self.reverseRelationNotificationToken = (self.entity as? RealmParagraph)?.tags.observe({ (changes) in
+                    switch changes {
+                    case .initial:
+                        self.assembleTagIds()
+                        self.tagRelationInitialHandler?(nil)
+                    case .update:
+                        self.assembleTagIds()
+                        self.tagRelationUpdateHandler?()
+                    case .error:
+                        self.errorHandler?("发生未知错误")
+                    }
+                })
+            default:
+                break
+            }
+            
+            self.assembleTagIds()
             completion(success, entity)
         }
     }

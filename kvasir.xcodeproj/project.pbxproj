@@ -197,6 +197,8 @@
 		44CD98C2229AC839009C6976 /* TagListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */; };
 		44CD98C4229ADD60009C6976 /* ShadowedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */; };
 		44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED06229FDC04003B7BFA /* GradientView.swift */; };
+		44E4ED0922A00F4B003B7BFA /* DigestDetailTagCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */; };
+		44E4ED0B22A01C5F003B7BFA /* PlainHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */; };
 		44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */; };
 		44ECD94222757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
 		44ECD94322757EA200618576 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECD94122757EA200618576 /* Errors.swift */; };
@@ -380,6 +382,8 @@
 		44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListCollectionViewCell.swift; sourceTree = "<group>"; };
 		44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedCollectionViewCell.swift; sourceTree = "<group>"; };
 		44E4ED06229FDC04003B7BFA /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailTagCoordinator.swift; sourceTree = "<group>"; };
+		44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainHeaderFooterView.swift; sourceTree = "<group>"; };
 		44ECD93F22746A7600618576 /* CreateDigestContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestContainerViewController.swift; sourceTree = "<group>"; };
 		44ECD94122757EA200618576 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		44ECD9442275804F00618576 /* Bartendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bartendar.swift; sourceTree = "<group>"; };
@@ -587,6 +591,7 @@
 				44A7ED272246A62300D1C402 /* TopListTableViewHeaderActionable.swift */,
 				4408B480227C373100C5EF68 /* TopListTableViewHeaderPlain.swift */,
 				44979C52229BF5BB00C217C2 /* PlainTextViewFooter.swift */,
+				44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */,
 			);
 			path = TableViewSectionHeaderFooter;
 			sourceTree = "<group>";
@@ -947,6 +952,7 @@
 				44A7ED332246A62300D1C402 /* DigestDetailViewController.swift */,
 				4404058B229A61CE00292D46 /* DigestMoreDetailViewController.swift */,
 				44B2C02C226C5B5C00B584F5 /* DigestDetailCoordinator.swift */,
+				44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */,
 			);
 			path = Read;
 			sourceTree = "<group>";
@@ -1322,6 +1328,7 @@
 				44CD98B6229AAFD3009C6976 /* RealmTag.swift in Sources */,
 				4424768122957FA6005430CE /* Guard.swift in Sources */,
 				44ECD9632277031100618576 /* BookListCoordinator.swift in Sources */,
+				44E4ED0B22A01C5F003B7BFA /* PlainHeaderFooterView.swift in Sources */,
 				44BB703122991C6F00754156 /* ShadowedTableViewCell.swift in Sources */,
 				44F51068229E6C8900130D64 /* RealmTranslatorEx.swift in Sources */,
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,
@@ -1340,6 +1347,7 @@
 				44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */,
 				44BB7033229974C000754156 /* UnifiedViewController.swift in Sources */,
 				44979C4E229BC7DA00C217C2 /* TagDetailCoordinator.swift in Sources */,
+				44E4ED0922A00F4B003B7BFA /* DigestDetailTagCoordinator.swift in Sources */,
 				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
