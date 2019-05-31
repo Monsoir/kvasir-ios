@@ -73,6 +73,7 @@
 		44717C2D229273560049FEB6 /* SessionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2B229273560049FEB6 /* SessionCamera.swift */; };
 		44717C2F229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
 		44717C30229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
+		4493BE9222A1697A00EEE65C /* ShortTextFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */; };
 		44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C47229BBC1400C217C2 /* UITableViewEx.swift */; };
 		44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */; };
 		44979C4C229BC7CB00C217C2 /* TagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C4B229BC7CB00C217C2 /* TagDetailViewController.swift */; };
@@ -300,6 +301,7 @@
 		44717C27229117140049FEB6 /* RouteControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteControllerFactory.swift; sourceTree = "<group>"; };
 		44717C2B229273560049FEB6 /* SessionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCamera.swift; sourceTree = "<group>"; };
 		44717C2E229281260049FEB6 /* SessionCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCameraViewController.swift; sourceTree = "<group>"; };
+		4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortTextFieldEditViewController.swift; sourceTree = "<group>"; };
 		44979C47229BBC1400C217C2 /* UITableViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewEx.swift; sourceTree = "<group>"; };
 		44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewEx.swift; sourceTree = "<group>"; };
 		44979C4B229BC7CB00C217C2 /* TagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailViewController.swift; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 				4408B4662279630800C5EF68 /* FieldEditController.swift */,
 				4408B46C2279794900C5EF68 /* AbstractFieldEditViewController.swift */,
 				4408B4692279649A00C5EF68 /* DigitFieldEditViewController.swift */,
+				4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */,
 			);
 			path = FieldEditController;
 			sourceTree = "<group>";
@@ -571,7 +574,6 @@
 			isa = PBXGroup;
 			children = (
 				446DB7B222896AAE00BE3DDF /* Sensitive.swift */,
-				4408B465227962EA00C5EF68 /* FieldEditController */,
 			);
 			path = Sensitive;
 			sourceTree = "<group>";
@@ -762,6 +764,7 @@
 		44B2C03C226EE96500B584F5 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
+				4408B465227962EA00C5EF68 /* FieldEditController */,
 				446DB7B122896AA200BE3DDF /* Sensitive */,
 				446DB7A62289630400BE3DDF /* SessionManagers */,
 				4408B4642279625C00C5EF68 /* Controllers */,
@@ -1334,6 +1337,7 @@
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,
 				44A7ED4E2246A62300D1C402 /* DigestListViewController.swift in Sources */,
 				44ECD9662277032700618576 /* RealmBookRepository.swift in Sources */,
+				4493BE9222A1697A00EEE65C /* ShortTextFieldEditViewController.swift in Sources */,
 				44ECD94F2276F66000618576 /* DigestListCoordinator.swift in Sources */,
 				44A7ED402246A62300D1C402 /* AppDelegate+Appearance.swift in Sources */,
 				444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */,

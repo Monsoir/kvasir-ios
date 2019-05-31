@@ -68,9 +68,11 @@ extension TagListViewController {
         coordinator.updateHandler = { [weak self] (deletions, insertions, modifications) in
             MainQueue.async {
                 guard let self = self else { return }
-                self.collectionView.deleteItems(at: deletions)
-                self.collectionView.insertItems(at: insertions)
-                self.collectionView.reloadItems(at: modifications)
+                self.collectionView.performBatchUpdates({
+                    self.collectionView.deleteItems(at: deletions)
+                    self.collectionView.insertItems(at: insertions)
+                    self.collectionView.reloadItems(at: modifications)
+                }, completion: nil)
                 self.setupBackgroundIfNeeded()
             }
         }

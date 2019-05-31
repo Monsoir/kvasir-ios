@@ -35,7 +35,11 @@ class TagDetailViewController: UnifiedViewController {
         view.separatorStyle = .none
         return view
     }()
-    private lazy var tableHeader: TagDetailHeader = TagDetailHeader()
+    private lazy var tableHeader: TagDetailHeader = { [unowned self] in
+        let view = TagDetailHeader()
+        view.delegate = self
+        return view
+    }()
     
     init(with configuration: [String : Any]) {
         self.coordinator = TagDetailCoordinator(configuration: configuration)
@@ -165,6 +169,14 @@ extension TagDetailViewController: UITableViewDataSource {
             cell?.title = digest.title
             cell?.bookName = digest.book?.name
             cell?.recordUpdatedDate = digest.updateAtReadable
+            switch digest {
+            case is RealmSentence:
+                cell?.tagColors = (digest as! RealmSentence).tags.map { $0.color }
+            case is RealmParagraph:
+                cell?.tagColors = (digest as! RealmParagraph).tags.map { $0.color }
+            default:
+                break
+            }
             return cell!
         }
         
@@ -281,5 +293,74 @@ extension TagDetailViewController: UITableViewDelegate {
         default:
             return nil
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            guard let digest = coordinator.tagResult?.sentences[indexPath.row] else { break }
+            let id = digest.id
+            KvasirNavigator.push(KvasirURL.detailSentence.url(with: ["id": id]))
+        case 1:
+            guard let digest = coordinator.tagResult?.paragraphs[indexPath.row] else { break }
+            let id = digest.id
+            KvasirNavigator.push(KvasirURL.detailParagraph.url(with: ["id": id]))
+        default:
+            break
+        }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+private extension TagDetailViewController {
+    func showEditTagName() {
+        let validateErrorHandler: FieldEditValidatorHandler = { messages in
+            Bartendar.handleTipAlert(message: messages.first ?? "", on: nil)
+            return
+        }
+        let completion: FieldEditCompletion = { [weak self] (newValue, vc) in
+            guard let self = self else { return }
+            let putInfo = [
+                "name": newValue as? String ?? "",
+            ]
+            do {
+                try self.coordinator.put(info: putInfo)
+            } catch let e as ValidateError {
+                Bartendar.handleTipAlert(message: e.message, on: nil)
+                return
+            } catch {
+                Bartendar.handleSorryAlert(on: nil)
+                return
+            }
+            
+            self.coordinator.update(completion: { (success) in
+                guard success else {
+                    Bartendar.handleSorryAlert(message: "更新失败", on: nil)
+                    return
+                }
+                MainQueue.async {
+                    vc?.dismiss(animated: true, completion: nil)
+                }
+            })
+        }
+        let info: [String: Any?] = [
+            FieldEditInfoPreDefineKeys.title: "标签名称",
+            FieldEditInfoPreDefineKeys.oldValue: self.coordinator.tagResult?.name,
+            FieldEditInfoPreDefineKeys.completion: completion,
+            FieldEditInfoPreDefineKeys.validateErrorHandler: validateErrorHandler,
+            FieldEditInfoPreDefineKeys.startEditingAsShown: true,
+        ]
+        MainQueue.async {
+            let vc = FieldEditFactory.createAFieldEditController(of: .shortText, editInfo: info)
+            let nc = UINavigationController(rootViewController: vc)
+            self.present(nc, animated: true, completion: nil)
+        }
+    }
+}
+
+extension TagDetailViewController: TagDetailHeaderDelegate {
+    func tagDetailHeaderDidTouch(_: TagDetailHeader) {
+        showEditTagName()
     }
 }

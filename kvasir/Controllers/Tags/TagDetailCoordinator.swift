@@ -9,8 +9,7 @@
 import Foundation
 import RealmSwift
 
-class TagDetailCoordinator: Configurable {
-    
+class TagDetailCoordinator: Configurable, UpdateCoordinatorable {
     private(set) var tagResult: RealmTag?
     var reloadHandler: ((_ entity: RealmTag?) -> Void)?
     var errorHandler: ((_ message: String) -> Void)?
@@ -31,6 +30,7 @@ class TagDetailCoordinator: Configurable {
     private lazy var tagRepository = RealmTagRepository()
     private var notificationToken: NotificationToken?
     private var configuration: [String: Any]
+    private var putInfo = PutInfo()
     
     private var tagId: String {
         return configuration["id"] as? String ?? ""
@@ -72,5 +72,31 @@ class TagDetailCoordinator: Configurable {
             
             completion(true, tag)
         }
+    }
+    
+    func put(info: PutInfoScript) throws {
+        let validators: [String: SimpleValidator] = [
+            "name": createNotEmptyStringValidator("\(RealmTag.toHuman)名字"),
+        ]
+        
+        for key in validators.keys {
+            if let validator = validators[key] {
+                do {
+                    try validator(info[key] as Any)
+                } catch let e {
+                    throw e
+                }
+            }
+        }
+        
+        putInfo = info as PutInfo
+    }
+    
+    func update(completion: @escaping RealmUpdateCompletion) {
+        guard let entity = tagResult else {
+            completion(false)
+            return
+        }
+        tagRepository.updateOne(managedModel: entity, propertiesExcludingRelations: putInfo, completion: completion)
     }
 }

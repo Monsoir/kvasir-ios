@@ -289,7 +289,8 @@ extension DigestMoreDetailViewController {
                 }(),
                 FieldEditInfoPreDefineKeys.completion: completion,
                 FieldEditInfoPreDefineKeys.validateErrorHandler: validateErrorHandler,
-                "greaterOrEqualThan": 0,
+                FieldEditInfoPreDefineKeys.greaterOrEqualThan: 0,
+                FieldEditInfoPreDefineKeys.startEditingAsShown: true,
             ]
             let vc = FieldEditFactory.createAFieldEditController(of: .digit, editInfo: info)
             let nc = UINavigationController(rootViewController: vc)

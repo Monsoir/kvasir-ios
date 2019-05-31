@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 
+protocol TagDetailHeaderDelegate: class {
+    func tagDetailHeaderDidTouch(_: TagDetailHeader)
+}
+
 class TagDetailHeader: UIView {
     static let height = 100 as CGFloat
     
@@ -29,6 +33,8 @@ class TagDetailHeader: UIView {
         }
     }
     
+    weak var delegate: TagDetailHeaderDelegate?
+    
     private lazy var lbTitle: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
@@ -38,6 +44,13 @@ class TagDetailHeader: UIView {
         let view = UIView()
         view.layer.cornerRadius = type(of: self).height / 3 / 2
         return view
+    }()
+    private lazy var lbChevron: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.fontAwesome(ofSize: 25, style: .solid)
+        label.text = String.fontAwesomeIcon(name: .chevronRight)
+        return label
     }()
     private lazy var _contentView: ShadowedView = {
         let view = ShadowedView()
@@ -53,6 +66,8 @@ class TagDetailHeader: UIView {
     private lazy var titleAttributes: StringAttributes = [
         NSAttributedString.Key.font: UIFont(name: "Helvetica-Light", size: 22)!,
     ]
+    
+    private lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
     
     override class var requiresConstraintBasedLayout: Bool {
         get {
@@ -85,10 +100,16 @@ class TagDetailHeader: UIView {
         lbTitle.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.leading.equalTo(colorView.snp.trailing).offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.trailing.equalTo(lbChevron.snp.leading).offset(-10)
             make.height.equalTo(30)
         }
-
+        
+        lbChevron.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-10)
+            make.size.equalTo(CGSize(width: 30, height: 30))
+        }
+        
         super.updateConstraints()
     }
     
@@ -99,6 +120,14 @@ class TagDetailHeader: UIView {
             contentView,
             colorView,
             lbTitle,
+            lbChevron,
         ])
+        addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func handleTap(_ sender: UIGestureRecognizer) {
+        if sender == tapGesture {
+            delegate?.tagDetailHeaderDidTouch(self)
+        }
     }
 }
