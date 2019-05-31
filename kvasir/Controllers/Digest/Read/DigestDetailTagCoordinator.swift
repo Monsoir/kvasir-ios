@@ -37,6 +37,13 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
                 case .initial:
                     self.initialHandler?(results)
                 case .update(_, let deletions, let insertions, let modifications):
+                    GlobalDefaultDispatchQueue.async {
+                        NotificationCenter.default.post(
+                            name: NSNotification.Name(rawValue: AppNotification.Name.relationBetweenDigestAndTagDidChange),
+                            object: nil,
+                            userInfo: nil
+                        )
+                    }
                     self.updateHandler?(
                         deletions.map { IndexPath(row: $0, section: section) },
                         insertions.map { IndexPath(row: $0, section: section) },
@@ -60,7 +67,22 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
             completion(false)
             return
         }
-        repository.updateTagToDigestRelation(tagId: tagId, digestType: Digest.self, digestIds: digestIds, completion: completion)
+        
+        repository.updateTagToDigestRelation(tagId: tagId, digestType: Digest.self, digestIds: digestIds, completion: { success in
+            GlobalDefaultDispatchQueue.async {
+                NotificationCenter.default.post(
+                    name: NSNotification.Name(rawValue: AppNotification.Name.relationBetweenDigestAndTagWillChange),
+                    object: nil,
+                    userInfo: [
+                        "changeSuccess": success,
+                        "tagId": tagId,
+                        "digestType": "\(Digest.toMachine)",
+                        "digestIdSet": Set<String>(digestIds),
+                    ]
+                )
+            }
+            completion(success)
+        })
     }
     
     required init(configuration: Configurable.Configuration) {

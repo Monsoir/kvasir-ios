@@ -119,7 +119,6 @@ class RealmTagRepository: Repositorable {
                             }
                         }
                     }
-                    
                     completion(true)
                     
                 } catch {

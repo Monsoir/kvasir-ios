@@ -21,19 +21,22 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     private var bookResult: RealmBook?
     
     private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var appNotificationTokens = [NSObjectProtocol]()
     private let configuration: Configurable.Configuration
     
     var initialHandler: ((Results<Digest>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    var tagUpdateHandler: (() -> Void)?
+    var tagUpdateHandler: ((_: Set<String>, _: String) -> Void)?
+    private var tagUpdateUserInfo: [AnyHashable: Any]?
     
     required init(configuration: Configurable.Configuration = [:]) {
         self.configuration = configuration
     }
     
     deinit {
+        appNotificationTokens.forEach{ NotificationCenter.default.removeObserver($0) }
         debugPrint("\(self) deinit")
     }
     
@@ -49,6 +52,34 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
             // query all digests
             setupQueryForAll(updatingSection: section)
         }
+        
+        // 注册 Digest 与 Tag 关系变化通知
+        let willChangeToken = NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(rawValue: AppNotification.Name.relationBetweenDigestAndTagWillChange),
+            object: nil,
+            queue: nil,
+            using: { [weak self] (notif) in
+                guard let changeSuccess = notif.userInfo?["changeSuccess"] as? Bool, changeSuccess else { return }
+                guard let self = self else { return }
+                
+                self.tagUpdateUserInfo = notif.userInfo
+        })
+        appNotificationTokens.append(willChangeToken)
+            
+        let didChangeToken = NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(rawValue: AppNotification.Name.relationBetweenDigestAndTagDidChange),
+            object: nil,
+            queue: nil) { [weak self] (notif) in
+                guard let self = self else { return }
+                guard
+                    let userInfo = self.tagUpdateUserInfo,
+                    let digestIds = userInfo["digestIdSet"] as? Set<String>,
+                    let digestType = userInfo["digestType"] as? String
+                else { return }
+                
+                self.tagUpdateHandler?(digestIds, digestType)
+        }
+        appNotificationTokens.append(didChangeToken)
     }
     
     private func setupQueryForSpecificBook(bookId: String, updatingSection section: Int) {

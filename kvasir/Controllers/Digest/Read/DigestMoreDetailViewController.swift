@@ -185,18 +185,6 @@ extension DigestMoreDetailViewController {
                 self.tableView.reloadData()
             }
         }
-        coordinator.tagRelationInitialHandler = { [weak self] _ in
-            guard let self = self else { return }
-            MainQueue.async(execute: {
-                self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
-            })
-        }
-        coordinator.tagRelationUpdateHandler = { [weak self] in
-            guard let self = self else { return }
-            MainQueue.async {
-                self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
-            }
-        }
         coordinator.errorHandler = { [weak self] msg in
             guard let strongSelf = self else { return }
             MainQueue.async {
@@ -212,14 +200,16 @@ extension DigestMoreDetailViewController {
         }
         
         tagCoordinator.initialHandler = { [weak self] _ in
+            guard let self = self else { return }
+            self.coordinator.assembleTagIds()
             MainQueue.async {
-                guard let self = self else { return }
                 self.tableView.reloadData()
             }
         }
         tagCoordinator.updateHandler = { [weak self] (deletions, insertions, modifications) in
+            guard let self = self else { return }
+            self.coordinator.assembleTagIds()
             MainQueue.async {
-                guard let self = self else { return }
                 self.tableView.msr.updateRows(deletions: deletions, insertions: insertions, modifications: modifications, with: .automatic)
             }
         }

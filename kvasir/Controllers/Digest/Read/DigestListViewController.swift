@@ -174,6 +174,10 @@ private extension DigestListViewController {
                 Bartendar.handleSorryAlert(on: nil)
             }
         }
+        coordinator.tagUpdateHandler = { [weak self] (updatedDigestIds, digestType) in
+            guard let self = self else { return }
+            self.updateVisibleCellsInTableView(self.tableView, accordingTo: updatedDigestIds)
+        }
         coordinator.setupQuery()
     }
     
@@ -186,6 +190,19 @@ private extension DigestListViewController {
             self.reloadBackgroundView()
             self.title = self.coordinator.bookName.isEmpty ? Digest.toHuman : "\(self.coordinator.bookName) - \(Digest.toHuman)"
             self.tableView.reloadData()
+        }
+    }
+    
+    func updateVisibleCellsInTableView(_ tableView: UITableView, accordingTo digestIds: Set<String>) {
+        MainQueue.async {
+            // 只更新可见的 cell
+            guard let visibleCellIndexes = tableView.indexPathsForVisibleRows else { return }
+            let updatingIndexes = visibleCellIndexes.filter { (ele) -> Bool in
+                return digestIds.contains((self.results?[ele.row].id ?? ""))
+            }
+            tableView.beginUpdates()
+            tableView.reloadRows(at: updatingIndexes, with: .none)
+            tableView.endUpdates()
         }
     }
 }

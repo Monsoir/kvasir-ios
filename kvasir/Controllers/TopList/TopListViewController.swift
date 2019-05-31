@@ -62,6 +62,10 @@ class TopListViewController: UIViewController {
                 Bartendar.handleSorryAlert(on: nil)
             }
         }
+        coordinator.tagUpdateHandler = { (updatedDigestIds, digestType) in
+            guard digestType == "\(RealmSentence.toMachine)", let collectionView = self.sentencesCollectionView else { return }
+            self.updateVisibleCellsInCollectionView(collectionView, accordingTo: updatedDigestIds, digestType: RealmSentence.self)
+        }
         return coordinator
     }()
     private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [unowned self ] in
@@ -82,6 +86,10 @@ class TopListViewController: UIViewController {
             MainQueue.async {
                 Bartendar.handleSorryAlert(on: nil)
             }
+        }
+        coordinator.tagUpdateHandler = { (updatedDigestIds, digestType) in
+            guard digestType == "\(RealmParagraph.toMachine)", let collectionView = self.paragraphCollectionView else { return }
+            self.updateVisibleCellsInCollectionView(collectionView, accordingTo: updatedDigestIds, digestType: RealmParagraph.self)
         }
         return coordinator
     }()
@@ -423,6 +431,24 @@ private extension TopListViewController {
         
         // 使用下面这个方法是应对刚创建 view 时候的 workaround
         return theTableView.indexPathForRow(at: theTableViewCell.center)
+    }
+    
+    func updateVisibleCellsInCollectionView(_ collectionView: UICollectionView, accordingTo digestIds: Set<String>, digestType: RealmWordDigest.Type) {
+        MainQueue.async {
+            // 只更新可见的 cell
+            let visibleCellIndexes = collectionView.indexPathsForVisibleItems
+            let updatingIndexes = visibleCellIndexes.filter { (ele) -> Bool in
+                switch digestType {
+                case is RealmSentence.Type:
+                    return digestIds.contains((self.sentencesData?[ele.row].id ?? ""))
+                case is RealmParagraph.Type:
+                    return digestIds.contains((self.paragraphsData?[ele.row].id ?? ""))
+                default:
+                    return false
+                }
+            }
+            collectionView.reloadItems(at: updatingIndexes)
+        }
     }
 }
 
