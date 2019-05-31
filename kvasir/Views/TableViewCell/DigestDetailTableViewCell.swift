@@ -9,6 +9,15 @@
 import UIKit
 
 class DigestDetailTableViewCell: UITableViewCell {
+    private static let TopMargin = 10 as CGFloat
+    private static let BottomMargin = 10 as CGFloat
+    private static let LabelMinHeight = 22 as CGFloat
+    private static let ValueMinHeight = 32 as CGFloat
+    
+    static var minHeight: CGFloat {
+        return TopMargin + BottomMargin + LabelMinHeight + ValueMinHeight
+    }
+    
     var label: String? {
         didSet {
             lbLabel.text = label
@@ -66,18 +75,18 @@ class DigestDetailTableViewCell: UITableViewCell {
     override func updateConstraints() {
         let margin = 10
         lbLabel.snp.remakeConstraints { (make) in
-            make.top.equalToSuperview().offset(margin)
+            make.top.equalToSuperview().offset(type(of: self).TopMargin)
             make.leading.equalToSuperview().offset(margin)
             make.trailing.equalToSuperview().offset(-margin)
-            make.height.greaterThanOrEqualTo(22).priorityLow()
+            make.height.greaterThanOrEqualTo(type(of: self).LabelMinHeight).priorityLow()
         }
         
         lbValue.snp.remakeConstraints { (make) in
             make.top.equalTo(lbLabel.snp.bottom)
             make.leading.equalTo(lbLabel).offset(5)
             make.trailing.equalTo(lbLabel).offset(-5)
-            make.height.greaterThanOrEqualTo(32).priorityHigh()
-            make.bottom.equalToSuperview().offset(-10)
+            make.height.greaterThanOrEqualTo(type(of: self).ValueMinHeight).priorityHigh()
+            make.bottom.equalToSuperview().offset(-type(of: self).BottomMargin)
         }
         
         super.updateConstraints()

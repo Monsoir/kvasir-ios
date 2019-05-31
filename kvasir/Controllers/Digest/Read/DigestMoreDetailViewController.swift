@@ -41,6 +41,7 @@ class DigestMoreDetailViewController<Digest: RealmWordDigest>: UnifiedViewContro
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .grouped)
+        view.estimatedRowHeight = DigestDetailTableViewCell.minHeight
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = Color(hexString: ThemeConst.secondaryBackgroundColor)
