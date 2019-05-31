@@ -22,6 +22,7 @@ private let SectionMaxRows = 3
 class TagDetailViewController: UnifiedViewController {
     
     private var coordinator: TagDetailCoordinator!
+    private var needsUpdateHeader = true
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .grouped)
@@ -68,10 +69,9 @@ class TagDetailViewController: UnifiedViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableHeader.color = Color(hexString: coordinator.tagResult?.color ?? "")
-        tableHeader.title = coordinator.tagResult?.name ?? ""
-        tableHeader.frame = CGRect(x: 0, y: 0, width: tableView.width, height: TagDetailHeader.height)
-        tableView.tableHeaderView = tableHeader
+        if needsUpdateHeader {
+            reloadHeader()
+        }
     }
     
     private func setupSubviews() {
@@ -85,7 +85,7 @@ class TagDetailViewController: UnifiedViewController {
         coordinator.reloadHandler = { [weak self] _ in
             guard let self = self else { return }
             MainQueue.async {
-                self.tableView.reloadData()
+                self.reloadView()
             }
         }
         coordinator.errorHandler = { [weak self] msg in
@@ -104,9 +104,28 @@ class TagDetailViewController: UnifiedViewController {
         }
     }
     
+    private func reloadHeader() {
+        tableHeader.color = Color(hexString: coordinator.tagResult?.color ?? "")
+        tableHeader.title = coordinator.tagResult?.name ?? ""
+        tableHeader.frame = CGRect(x: 0, y: 0, width: tableView.width, height: TagDetailHeader.height)
+        tableView.tableHeaderView = tableHeader
+        needsUpdateHeader = false
+    }
+    
     private func reloadView() {
+        reloadHeader()
         tableView.reloadData()
         title = "\(RealmTag.toHuman)-\(coordinator.tagResult?.name ?? "")"
+    }
+    
+    private func setNeedsUpdateHeader() {
+        needsUpdateHeader = true
+    }
+    
+    private func updateHeaderIfNeeded() {
+        if needsUpdateHeader {
+            reloadHeader()
+        }
     }
 }
 
