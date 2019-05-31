@@ -102,7 +102,7 @@ class BookDetailCoordinator: BookDetailCoordinable {
         return [:]
     }
     
-    private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var realmNotificationTokens = Set<NotificationToken>()
     
     var reload: ((RealmBook?) -> Void)?
     var errorHandler: ((String) -> Void)?
@@ -114,7 +114,7 @@ class BookDetailCoordinator: BookDetailCoordinable {
     }
     
     func appendNotificationFromSubClass(token: NotificationToken) {
-        realmNotificationTokens.append(token)
+        realmNotificationTokens.insert(token)
     }
     
     deinit {

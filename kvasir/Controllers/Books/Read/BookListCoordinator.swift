@@ -15,7 +15,7 @@ class BookListCoordinator: ListQueryCoordinatorable {
     private lazy var repository = RealmBookRepository()
     private(set) var results: Results<RealmBook>?
     private(set) var configuration: [String: Any]!
-    private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var realmNotificationTokens = Set<NotificationToken>()
     
     var initialHandler: ((Results<RealmBook>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
@@ -55,7 +55,7 @@ class BookListCoordinator: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                realmNotificationTokens.append(token)
+                realmNotificationTokens.insert(token)
             }
         }
         

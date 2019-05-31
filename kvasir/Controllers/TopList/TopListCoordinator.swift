@@ -20,7 +20,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     private(set) var results: Results<Digest>?
     private var bookResult: RealmBook?
     
-    private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var realmNotificationTokens = Set<NotificationToken>()
     private(set) var appNotificationTokens = [NSObjectProtocol]()
     private let configuration: Configurable.Configuration
     
@@ -110,7 +110,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.append(token)
+                self.realmNotificationTokens.insert(token)
             }
         }
     }
@@ -140,7 +140,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.append(token)
+                self.realmNotificationTokens.insert(token)
             }
         }
     }

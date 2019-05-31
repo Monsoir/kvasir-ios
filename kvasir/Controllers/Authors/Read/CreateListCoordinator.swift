@@ -18,7 +18,7 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
     private(set) var results: Results<Creator>?
     private let configuration: [String: Any]
     
-    private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var realmNotificationTokens = Set<NotificationToken>()
     
     var initialHandler: ((_ results: Results<Creator>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
@@ -62,7 +62,7 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.append(token)
+                self.realmNotificationTokens.insert(token)
             }
         }
     }

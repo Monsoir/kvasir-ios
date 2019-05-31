@@ -15,7 +15,7 @@ class TagListCoordinator: ListQueryCoordinatorable {
     private lazy var repository = RealmTagRepository()
     private(set) var results: Results<RealmTag>?
     private(set) var configuration: Configurable.Configuration
-    private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var realmNotificationTokens = Set<NotificationToken>()
     
     var initialHandler: ((Results<RealmTag>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
@@ -55,7 +55,7 @@ class TagListCoordinator: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.append(token)
+                self.realmNotificationTokens.insert(token)
             }
         }
     }

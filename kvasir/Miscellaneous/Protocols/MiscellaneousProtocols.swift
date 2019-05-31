@@ -21,7 +21,7 @@ protocol Configurable {
 }
 
 protocol RealmNotificationable {
-    var realmNotificationTokens: [NotificationToken] { get }
+    var realmNotificationTokens: Set<NotificationToken> { get }
     func reclaim()
 }
 

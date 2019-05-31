@@ -16,7 +16,7 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
     private lazy var repository = RealmTagRepository()
     private var putInfo = PutInfo()
     
-    private(set) var realmNotificationTokens = [NotificationToken]()
+    private(set) var realmNotificationTokens = Set<NotificationToken>()
     
     var initialHandler: ((Results<RealmTag>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
@@ -53,7 +53,7 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.append(token)
+                self.realmNotificationTokens.insert(token)
             }
         }
     }
