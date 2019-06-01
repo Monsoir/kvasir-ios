@@ -10,6 +10,10 @@ import Foundation
 
 struct AppConstants {
     static let tagInitiatedKey = "tag-data-initiated"
+    
+    struct WebServer {
+        static let port = 8080
+    }
 }
 
 struct AppNotification {

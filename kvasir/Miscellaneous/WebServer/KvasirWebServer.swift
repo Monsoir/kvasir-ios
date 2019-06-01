@@ -17,8 +17,6 @@ protocol KvasirWebServerPathable {
     var path: String { get }
 }
 
-private let Port = 8080
-
 class KvasirWebServer {
     private(set) lazy var engine = GCDWebServer()
 }
@@ -28,8 +26,18 @@ extension KvasirWebServer {
     func startServer(completion: (_: Bool, _: URL?) -> Void) {
         setupHandlers()
         
-        let opened = engine.start(withPort: UInt(Port), bonjourName: nil)
-        completion(opened , engine.serverURL)
+        let opened = engine.start(withPort: UInt(AppConstants.WebServer.port), bonjourName: nil)
+        completion(opened, {
+            var url: URL?
+            
+            url = engine.serverURL
+            
+            #if targetEnvironment(simulator)
+            url = URL(string: "http://localhost:\(AppConstants.WebServer.port)")
+            #endif
+            
+            return url
+        }())
     }
     
     func stopServer() {

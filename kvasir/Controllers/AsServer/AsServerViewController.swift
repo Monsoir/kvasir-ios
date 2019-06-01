@@ -46,11 +46,13 @@ class AsServerViewController: UIViewController, Configurable {
             guard let self = self else { return }
             
             MainQueue.async {
-                if success, let url = url {
-                    self.lbPrompt.text = "请在浏览器上访问：\n\(url.absoluteString)"
-                } else {
-                    self.lbPrompt.text = "开启服务器失败，请稍后再试"
+                if success {
+                    if let url = url {
+                        self.lbPrompt.text = "请在浏览器上访问：\n\(url.absoluteString)"
+                        return
+                    }
                 }
+                self.lbPrompt.text = "开启服务器失败，请稍后再试"
             }
         }
     }
