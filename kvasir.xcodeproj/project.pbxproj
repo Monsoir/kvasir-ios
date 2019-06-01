@@ -115,6 +115,11 @@
 		44CD98BF229AC794009C6976 /* ShadowedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98BE229AC794009C6976 /* ShadowedView.swift */; };
 		44CD98C2229AC839009C6976 /* TagListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */; };
 		44CD98C4229ADD60009C6976 /* ShadowedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */; };
+		44D33B8122A27D8A00984295 /* AsServerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B8022A27D8A00984295 /* AsServerViewController.swift */; };
+		44D33B8422A28AA100984295 /* UIDeviceEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B8322A28AA100984295 /* UIDeviceEx.swift */; };
+		44D33B8722A2954F00984295 /* KvasirWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B8622A2954F00984295 /* KvasirWebServer.swift */; };
+		44D33B8922A29B9E00984295 /* KvasirWebServerRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B8822A29B9E00984295 /* KvasirWebServerRoutes.swift */; };
+		44D33B8B22A29C1C00984295 /* KvasirWebServerHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B8A22A29C1C00984295 /* KvasirWebServerHandlers.swift */; };
 		44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED06229FDC04003B7BFA /* GradientView.swift */; };
 		44E4ED0922A00F4B003B7BFA /* DigestDetailTagCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */; };
 		44E4ED0B22A01C5F003B7BFA /* PlainHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */; };
@@ -283,6 +288,12 @@
 		44CD98BE229AC794009C6976 /* ShadowedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedView.swift; sourceTree = "<group>"; };
 		44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListCollectionViewCell.swift; sourceTree = "<group>"; };
 		44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedCollectionViewCell.swift; sourceTree = "<group>"; };
+		44D33B8022A27D8A00984295 /* AsServerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsServerViewController.swift; sourceTree = "<group>"; };
+		44D33B8222A2840800984295 /* kvasir-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kvasir-Bridging-Header.h"; sourceTree = "<group>"; };
+		44D33B8322A28AA100984295 /* UIDeviceEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceEx.swift; sourceTree = "<group>"; };
+		44D33B8622A2954F00984295 /* KvasirWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirWebServer.swift; sourceTree = "<group>"; };
+		44D33B8822A29B9E00984295 /* KvasirWebServerRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirWebServerRoutes.swift; sourceTree = "<group>"; };
+		44D33B8A22A29C1C00984295 /* KvasirWebServerHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirWebServerHandlers.swift; sourceTree = "<group>"; };
 		44E4ED06229FDC04003B7BFA /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailTagCoordinator.swift; sourceTree = "<group>"; };
 		44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainHeaderFooterView.swift; sourceTree = "<group>"; };
@@ -617,6 +628,7 @@
 		44A7ED2C2246A62300D1C402 /* Supportings */ = {
 			isa = PBXGroup;
 			children = (
+				44D33B8222A2840800984295 /* kvasir-Bridging-Header.h */,
 			);
 			path = Supportings;
 			sourceTree = "<group>";
@@ -629,6 +641,7 @@
 				44B2C0912272DCF900B584F5 /* Authors */,
 				44B2C07E2271B1D200B584F5 /* Books */,
 				44CD98B9229AC450009C6976 /* Tags */,
+				44D33B7F22A27D7600984295 /* AsServer */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -654,6 +667,7 @@
 		44B2C03C226EE96500B584F5 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
+				44D33B8522A2953F00984295 /* WebServer */,
 				4408B465227962EA00C5EF68 /* FieldEditController */,
 				446DB7B122896AA200BE3DDF /* Sensitive */,
 				446DB7A62289630400BE3DDF /* SessionManagers */,
@@ -679,6 +693,7 @@
 				44ED682C22952DFC000B9B77 /* DateEx.swift */,
 				44979C47229BBC1400C217C2 /* UITableViewEx.swift */,
 				44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */,
+				44D33B8322A28AA100984295 /* UIDeviceEx.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -774,6 +789,24 @@
 				44BB70362299960600754156 /* TopListCollectionViewCellWithoutThumbnail.swift */,
 			);
 			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
+		44D33B7F22A27D7600984295 /* AsServer */ = {
+			isa = PBXGroup;
+			children = (
+				44D33B8022A27D8A00984295 /* AsServerViewController.swift */,
+			);
+			path = AsServer;
+			sourceTree = "<group>";
+		};
+		44D33B8522A2953F00984295 /* WebServer */ = {
+			isa = PBXGroup;
+			children = (
+				44D33B8622A2954F00984295 /* KvasirWebServer.swift */,
+				44D33B8822A29B9E00984295 /* KvasirWebServerRoutes.swift */,
+				44D33B8A22A29C1C00984295 /* KvasirWebServerHandlers.swift */,
+			);
+			path = WebServer;
 			sourceTree = "<group>";
 		};
 		44ECD9472276D82D00618576 /* Repositories */ = {
@@ -1050,6 +1083,7 @@
 				"${BUILT_PRODUCTS_DIR}/CropViewController/CropViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
 				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
+				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
@@ -1066,6 +1100,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CropViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
@@ -1130,6 +1165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44D33B8B22A29C1C00984295 /* KvasirWebServerHandlers.swift in Sources */,
 				446DB7DD228BE8CC00BE3DDF /* MsrCompatible.swift in Sources */,
 				44B2C06B226F12F500B584F5 /* KvasirEditor.swift in Sources */,
 				44A7ED412246A62300D1C402 /* AppDelegate+SetupControllers.swift in Sources */,
@@ -1147,6 +1183,7 @@
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44BB70372299960600754156 /* TopListCollectionViewCellWithoutThumbnail.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
+				44D33B8722A2954F00984295 /* KvasirWebServer.swift in Sources */,
 				44979C50229BCD8D00C217C2 /* TagDetailHeader.swift in Sources */,
 				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				4408B4742279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */,
@@ -1213,6 +1250,7 @@
 				44979C4E229BC7DA00C217C2 /* TagDetailCoordinator.swift in Sources */,
 				44E4ED0922A00F4B003B7BFA /* DigestDetailTagCoordinator.swift in Sources */,
 				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
+				44D33B8122A27D8A00984295 /* AsServerViewController.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
 				44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */,
@@ -1247,10 +1285,12 @@
 				44ECD9722277201000618576 /* MiscellaneousProtocols.swift in Sources */,
 				444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */,
 				44B2C02D226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */,
+				44D33B8922A29B9E00984295 /* KvasirWebServerRoutes.swift in Sources */,
 				44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */,
 				44F51062229E6BCD00130D64 /* RealmParagraphEx.swift in Sources */,
 				44B2C0762271A93500B584F5 /* RealmCreator.swift in Sources */,
 				44CD98BF229AC794009C6976 /* ShadowedView.swift in Sources */,
+				44D33B8422A28AA100984295 /* UIDeviceEx.swift in Sources */,
 				44A7ED4A2246A62300D1C402 /* TopListCollectionViewCell.swift in Sources */,
 				44B2C053226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
@@ -1373,6 +1413,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "kvasir/Resources/Supportings/kvasir-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1427,6 +1468,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "kvasir/Resources/Supportings/kvasir-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};

@@ -210,6 +210,10 @@ func digestOfBookControllerFactory(url: URLConvertible, values: [String: Any], c
     }
 }
 
+func serverControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    return AsServerViewController(configuration: [:])
+}
+
 // MARK: Helpers
 
 /// 合并配置项，并以最后的配置为准

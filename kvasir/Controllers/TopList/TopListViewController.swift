@@ -204,6 +204,7 @@ private extension TopListViewController {
         title = "最近"
         setupImmersiveAppearance()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.leftBarButtonItem = makeBarButtonItem(.wifi, target: self, action: #selector(actionStartAsServer))
         navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionNew))
     }
     
@@ -484,5 +485,9 @@ private extension TopListViewController {
         sheet.addAction(actionCancel)
         
         present(sheet, animated: true, completion: nil)
+    }
+    
+    @objc func actionStartAsServer() {
+        KvasirNavigator.present(KvasirURL.asServer.url(), wrap: UINavigationController.self)
     }
 }

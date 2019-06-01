@@ -3,6 +3,9 @@ PODS:
   - CropViewController (2.4.0)
   - Eureka (4.3.1)
   - FontAwesome.swift (1.6.0)
+  - GCDWebServer (3.5.2):
+    - GCDWebServer/Core (= 3.5.2)
+  - GCDWebServer/Core (3.5.2)
   - Kingfisher (5.2.0)
   - PKHUD (5.2.1)
   - Realm (3.13.1):
@@ -35,6 +38,7 @@ DEPENDENCIES:
   - CropViewController
   - Eureka
   - FontAwesome.swift
+  - GCDWebServer (~> 3.0)
   - Kingfisher (~> 5.0)
   - PKHUD (~> 5.0)
   - RealmSwift
@@ -48,6 +52,7 @@ SPEC REPOS:
     - CropViewController
     - Eureka
     - FontAwesome.swift
+    - GCDWebServer
     - Kingfisher
     - PKHUD
     - Realm
@@ -61,6 +66,7 @@ SPEC CHECKSUMS:
   CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
   Eureka: 28ea296f06710f6745266b71f17862048941a32d
   FontAwesome.swift: 71a422e7b209ee940c7c21a5d13964ecf2897ca4
+  GCDWebServer: ead88cd14596dd4eae4f5830b8877c87c8728990
   Kingfisher: 07067cfacf371117330dceb4b4b8f5c4b691ab42
   PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
   Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
@@ -69,6 +75,6 @@ SPEC CHECKSUMS:
   SwifterSwift: 812ffec6f301922f5430e75be3f2939ea3a80024
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: a33ff4306ba684c801d0efb170aad5128bcb0ab0
+PODFILE CHECKSUM: 1ce5b4ab8b9bcee9608d53860fa18331cbaa4ccc
 
 COCOAPODS: 1.6.1
