@@ -102,7 +102,6 @@
 		44A7ED512246A62300D1C402 /* DigestEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED342246A62300D1C402 /* DigestEditViewController.swift */; };
 		44A7ED522246A62300D1C402 /* TopListCellCarrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED362246A62300D1C402 /* TopListCellCarrier.swift */; };
 		44A7ED532246A62300D1C402 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED382246A62300D1C402 /* Reusable.swift */; };
-		44A7ED562246AD2300D1C402 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ED552246AD2300D1C402 /* tessdata */; };
 		44B2BFBA2268686300B584F5 /* Font Awesome 5 Free-Solid-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = 44B2BFB92268686200B584F5 /* Font Awesome 5 Free-Solid-900.otf */; };
 		44B2BFBE2268996A00B584F5 /* AppDelegate+RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2BFBD2268996A00B584F5 /* AppDelegate+RealmConfig.swift */; };
 		44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2BFBF2268A1A600B584F5 /* RealmParagraph.swift */; };
@@ -127,7 +126,6 @@
 		44B2BFED22698BA400B584F5 /* TopListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A7ED2A2246A62300D1C402 /* TopListCollectionViewCell.swift */; };
 		44B2BFF222698BA400B584F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECEB2246A5DA00D1C402 /* LaunchScreen.storyboard */; };
 		44B2BFF322698BA400B584F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ECE92246A5DA00D1C402 /* Assets.xcassets */; };
-		44B2BFF422698BA400B584F5 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 44A7ED552246AD2300D1C402 /* tessdata */; };
 		44B2BFF522698BA400B584F5 /* Font Awesome 5 Free-Solid-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = 44B2BFB92268686200B584F5 /* Font Awesome 5 Free-Solid-900.otf */; };
 		44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */; };
 		44B2C012226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B2C010226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift */; };
@@ -336,7 +334,6 @@
 		44A7ED342246A62300D1C402 /* DigestEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestEditViewController.swift; sourceTree = "<group>"; };
 		44A7ED362246A62300D1C402 /* TopListCellCarrier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopListCellCarrier.swift; sourceTree = "<group>"; };
 		44A7ED382246A62300D1C402 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
-		44A7ED552246AD2300D1C402 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
 		44B2BFB92268686200B584F5 /* Font Awesome 5 Free-Solid-900.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Font Awesome 5 Free-Solid-900.otf"; sourceTree = "<group>"; };
 		44B2BFBD2268996A00B584F5 /* AppDelegate+RealmConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+RealmConfig.swift"; sourceTree = "<group>"; };
 		44B2BFBF2268A1A600B584F5 /* RealmParagraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmParagraph.swift; sourceTree = "<group>"; };
@@ -726,7 +723,6 @@
 		44A7ED2C2246A62300D1C402 /* Supportings */ = {
 			isa = PBXGroup;
 			children = (
-				44A7ED552246AD2300D1C402 /* tessdata */,
 			);
 			path = Supportings;
 			sourceTree = "<group>";
@@ -1144,7 +1140,6 @@
 			files = (
 				44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */,
 				44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */,
-				44A7ED562246AD2300D1C402 /* tessdata in Resources */,
 				44B2BFBA2268686300B584F5 /* Font Awesome 5 Free-Solid-900.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1169,7 +1164,6 @@
 			files = (
 				44B2BFF222698BA400B584F5 /* LaunchScreen.storyboard in Resources */,
 				44B2BFF322698BA400B584F5 /* Assets.xcassets in Resources */,
-				44B2BFF422698BA400B584F5 /* tessdata in Resources */,
 				44B2BFF522698BA400B584F5 /* Font Awesome 5 Free-Solid-900.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

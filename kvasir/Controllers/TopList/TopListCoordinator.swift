@@ -19,6 +19,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     
     private(set) var results: Results<Digest>?
     private var bookResult: RealmBook?
+    private var tagResult: RealmTag?
     
     private(set) var realmNotificationTokens = Set<NotificationToken>()
     private(set) var appNotificationTokens = [NSObjectProtocol]()
@@ -48,6 +49,9 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
         if let bookId = configuration["bookId"] as? String {
             // Query digests are related to a specific book
             setupQueryForSpecificBook(bookId: bookId, updatingSection: section)
+        } else if let tagId = configuration["tagId"] as? String {
+            // Query digests are related to a specific tag
+            setupQueryForSpecificTag(tagId: tagId, updatingSection: section)
         } else {
             // query all digests
             setupQueryForAll(updatingSection: section)
@@ -110,7 +114,42 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.insert(token)
+                self.addRealmNotificationTokens(token)
+            }
+        }
+    }
+    
+    private func setupQueryForSpecificTag(tagId: String, updatingSection section: Int) {
+        RealmTagRepository().queryBy(id: tagId) { [weak self] (success, result) in
+            guard let self = self else { return }
+            guard success, let result = result else { return }
+            
+            self.tagResult = result
+            switch Digest.self {
+            case is RealmSentence.Type:
+                self.results = result.sentences.sorted(byKeyPath: "updatedAt", ascending: false) as? Results<Digest>
+            case is RealmParagraph.Type:
+                self.results = result.paragraphs.sorted(byKeyPath: "updatedAt", ascending: false) as? Results<Digest>
+            default:
+                return
+            }
+            
+            if let token = self.results?.observe({ [weak self] (changes) in
+                guard let self = self else { return }
+                switch changes {
+                case .initial:
+                    self.initialHandler?(self.results)
+                case .update(_, let deletions, let insertions, let modifications):
+                    self.updateHandler?(
+                        deletions.map { IndexPath(row: $0, section: section) },
+                        insertions.map { IndexPath(row: $0, section: section) },
+                        modifications.map { IndexPath(row: $0, section: section) }
+                    )
+                case .error(let e):
+                    self.errorHandler?(e)
+                }
+            }) {
+                self.addRealmNotificationTokens(token)
             }
         }
     }
@@ -140,8 +179,12 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                     self.errorHandler?(e)
                 }
             }) {
-                self.realmNotificationTokens.insert(token)
+                self.addRealmNotificationTokens(token)
             }
         }
+    }
+    
+    func addRealmNotificationTokens(_ token: NotificationToken) {
+        realmNotificationTokens.insert(token)
     }
 }

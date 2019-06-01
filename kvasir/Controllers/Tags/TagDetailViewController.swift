@@ -129,6 +129,7 @@ class TagDetailViewController: UnifiedViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
 extension TagDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return SectionInfos.count
@@ -225,16 +226,15 @@ extension TagDetailViewController: UITableViewDataSource {
             cell?.payload = payload
             return cell!
         }
-        
         switch indexPath.section {
         case 0:
-            let digest = coordinator.tagResult?.sentences[indexPath.row]
+            let digest = coordinator.tagResult?.sentences.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
             return cellForDigestAtIndexPath(indexPath, digest: digest)
         case 1:
-            let digest = coordinator.tagResult?.paragraphs[indexPath.row]
+            let digest = coordinator.tagResult?.paragraphs.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
             return cellForDigestAtIndexPath(indexPath, digest: digest)
         case 2:
-            let book = coordinator.tagResult?.books[indexPath.row]
+            let book = coordinator.tagResult?.books.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
             return cellForBookAtIndexPath(indexPath, book: book)
         default:
             return UITableViewCell()
@@ -242,6 +242,7 @@ extension TagDetailViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension TagDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return TopListTableViewHeaderActionable.height
@@ -250,27 +251,30 @@ extension TagDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier()) as? TopListTableViewHeaderActionable else { return nil }
         
-        func headerAccessoryTitleForSection(_ section: Int) -> String {
+        func headerAccessoryTitleForSection(_ section: Int) -> (tip: String, title: String) {
             let tag = coordinator.tagResult
             switch section {
             case 0:
-                return "查看全部 \(tag?.sentences.count ?? 0)"
+                return ("查看全部 \(tag?.sentences.count ?? 0)", RealmSentence.toHuman)
             case 1:
-                return "查看全部 \(tag?.paragraphs.count ?? 0)"
+                return ("查看全部 \(tag?.paragraphs.count ?? 0)", RealmParagraph.toHuman)
             case 2:
-                return "查看全部 \(tag?.books.count ?? 0)"
+                return ("查看全部 \(tag?.books.count ?? 0)", RealmBook.toHuman)
             default:
-                return ""
+                return ("", "")
             }
         }
         
+        let tagId = coordinator.tagResult?.id;
+        let tagName = coordinator.tagResult?.name
+        let displayTitles = headerAccessoryTitleForSection(section)
         header.title = SectionInfos[section].title
-        header.actionTitle = headerAccessoryTitleForSection(section)
+        header.actionTitle = displayTitles.tip
         header.contentView.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
         header.seeAllHandler = {
             // MARK: 查看全部跳转
             MainQueue.async {
-                KvasirNavigator.push(SectionInfos[section].url, context: ["canAdd": false])
+                KvasirNavigator.push(SectionInfos[section].url, context: ["canAdd": false, "tagId": tagId ?? "", "title": "\(tagName ?? "") 的\(displayTitles.title)"])
             }
         }
         return header

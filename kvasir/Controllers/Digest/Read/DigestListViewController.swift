@@ -37,6 +37,13 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         return view
     }()
     
+    private var navigationTitle: String {
+        if let t = configuration["title"] as? String {
+            return t
+        }
+        return coordinator.bookName.isEmpty ? Digest.toHuman : "\(coordinator.bookName)的\(Digest.toHuman)"
+    }
+    
     required init(configuration: Configurable.Configuration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
@@ -142,7 +149,7 @@ private extension DigestListViewController {
         if canAdd {
             navigationItem.rightBarButtonItem = makeBarButtonItem(.plus, target: self, action: #selector(actionCreate))
         }
-        title = coordinator.bookName.isEmpty ? Digest.toHuman : "\(coordinator.bookName)的\(Digest.toHuman)"
+        title = navigationTitle
     }
     
     func setupSubviews() {
@@ -188,7 +195,7 @@ private extension DigestListViewController {
     func reload() {
         MainQueue.async {
             self.reloadBackgroundView()
-            self.title = self.coordinator.bookName.isEmpty ? Digest.toHuman : "\(self.coordinator.bookName) - \(Digest.toHuman)"
+            self.title = self.navigationTitle
             self.tableView.reloadData()
         }
     }
