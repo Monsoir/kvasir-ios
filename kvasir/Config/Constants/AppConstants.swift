@@ -15,6 +15,9 @@ struct AppConstants {
                     .appendingPathComponent("kvasir.realm")
     struct WebServer {
         static let port = 8080
+        static let websiteLocation = SystemDirectories.document.url?
+            .appendingPathComponent("website", isDirectory: true)
+            .appendingPathComponent("build", isDirectory: true)
     }
 }
 

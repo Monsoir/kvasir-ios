@@ -47,6 +47,12 @@ extension KvasirWebServer {
 
 // MARK: - 私有方法
 private extension KvasirWebServer {
+    func setupHandlers() {
+//        setupDefaultHandlers()
+        setupStaticSiteHandler()
+        setupDynamicResourceHandlers()
+    }
+    
     func setupDefaultHandlers() {
         engine.addDefaultHandler(forMethod: KvasirWebServerVerb.get.verb, request: GCDWebServerRequest.self) { (request, completionBlock) in
             GlobalDefaultDispatchQueue.async {
@@ -56,9 +62,17 @@ private extension KvasirWebServer {
         }
     }
     
-    func setupHandlers() {
-        setupDefaultHandlers()
-        
+    func setupStaticSiteHandler() {
+        engine.addGETHandler(
+            forBasePath: "/",
+            directoryPath: AppConstants.WebServer.websiteLocation?.droppedScheme()?.absoluteString ?? "",
+            indexFilename: "index.html",
+            cacheAge: 3600,
+            allowRangeRequests: true
+        )
+    }
+    
+    func setupDynamicResourceHandlers() {
         let restApis: [(KvasirWebServerVerbable, KvasirWebServerPathable, GCDWebServerAsyncProcessBlock)] = [
             (KvasirWebServerVerb.get, KvasirWebServerPath.test, KvasirWebServerHandlers.test)
         ]
