@@ -13,6 +13,9 @@ struct AppConstants {
     static let dataBaseFile = SystemDirectories.document.url?
                     .appendingPathComponent("data", isDirectory: true)
                     .appendingPathComponent("kvasir.realm")
+    struct WebServer {
+        static let port = 8080
+    }
 }
 
 struct AppNotification {

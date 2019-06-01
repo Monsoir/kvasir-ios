@@ -116,6 +116,11 @@
 		44CD98C2229AC839009C6976 /* TagListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */; };
 		44CD98C4229ADD60009C6976 /* ShadowedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */; };
 		44D33B8F22A2CA5B00984295 /* FileManagerEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B8E22A2CA5B00984295 /* FileManagerEx.swift */; };
+		44D33B9122A2D6A100984295 /* AsServerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B9022A2D6A100984295 /* AsServerViewController.swift */; };
+		44D33B9322A2D6B100984295 /* UIDeviceEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B9222A2D6B100984295 /* UIDeviceEx.swift */; };
+		44D33B9722A2D6C000984295 /* KvasirWebServerRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B9422A2D6BF00984295 /* KvasirWebServerRoutes.swift */; };
+		44D33B9822A2D6C000984295 /* KvasirWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B9522A2D6C000984295 /* KvasirWebServer.swift */; };
+		44D33B9922A2D6C000984295 /* KvasirWebServerHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D33B9622A2D6C000984295 /* KvasirWebServerHandlers.swift */; };
 		44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED06229FDC04003B7BFA /* GradientView.swift */; };
 		44E4ED0922A00F4B003B7BFA /* DigestDetailTagCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */; };
 		44E4ED0B22A01C5F003B7BFA /* PlainHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */; };
@@ -285,6 +290,11 @@
 		44CD98C1229AC839009C6976 /* TagListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListCollectionViewCell.swift; sourceTree = "<group>"; };
 		44CD98C3229ADD60009C6976 /* ShadowedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedCollectionViewCell.swift; sourceTree = "<group>"; };
 		44D33B8E22A2CA5B00984295 /* FileManagerEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerEx.swift; sourceTree = "<group>"; };
+		44D33B9022A2D6A100984295 /* AsServerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsServerViewController.swift; sourceTree = "<group>"; };
+		44D33B9222A2D6B100984295 /* UIDeviceEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceEx.swift; sourceTree = "<group>"; };
+		44D33B9422A2D6BF00984295 /* KvasirWebServerRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KvasirWebServerRoutes.swift; sourceTree = "<group>"; };
+		44D33B9522A2D6C000984295 /* KvasirWebServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KvasirWebServer.swift; sourceTree = "<group>"; };
+		44D33B9622A2D6C000984295 /* KvasirWebServerHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KvasirWebServerHandlers.swift; sourceTree = "<group>"; };
 		44E4ED06229FDC04003B7BFA /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		44E4ED0822A00F4B003B7BFA /* DigestDetailTagCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestDetailTagCoordinator.swift; sourceTree = "<group>"; };
 		44E4ED0A22A01C5F003B7BFA /* PlainHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainHeaderFooterView.swift; sourceTree = "<group>"; };
@@ -619,7 +629,6 @@
 		44A7ED2C2246A62300D1C402 /* Supportings */ = {
 			isa = PBXGroup;
 			children = (
-				44D33B8222A2840800984295 /* kvasir-Bridging-Header.h */,
 			);
 			path = Supportings;
 			sourceTree = "<group>";
@@ -675,6 +684,7 @@
 		44B2C041226EE9C900B584F5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				44D33B9222A2D6B100984295 /* UIDeviceEx.swift */,
 				44B2C042226EE9DA00B584F5 /* NSAttributedStringEx.swift */,
 				446DB7D9228BE6C200BE3DDF /* StringEx.swift */,
 				44B2C045226EE9F400B584F5 /* UIViewControllerEx.swift */,
@@ -785,7 +795,7 @@
 		44D33B7F22A27D7600984295 /* AsServer */ = {
 			isa = PBXGroup;
 			children = (
-				44D33B8022A27D8A00984295 /* AsServerViewController.swift */,
+				44D33B9022A2D6A100984295 /* AsServerViewController.swift */,
 			);
 			path = AsServer;
 			sourceTree = "<group>";
@@ -793,9 +803,9 @@
 		44D33B8522A2953F00984295 /* WebServer */ = {
 			isa = PBXGroup;
 			children = (
-				44D33B8622A2954F00984295 /* KvasirWebServer.swift */,
-				44D33B8822A29B9E00984295 /* KvasirWebServerRoutes.swift */,
-				44D33B8A22A29C1C00984295 /* KvasirWebServerHandlers.swift */,
+				44D33B9522A2D6C000984295 /* KvasirWebServer.swift */,
+				44D33B9622A2D6C000984295 /* KvasirWebServerHandlers.swift */,
+				44D33B9422A2D6BF00984295 /* KvasirWebServerRoutes.swift */,
 			);
 			path = WebServer;
 			sourceTree = "<group>";
@@ -1174,7 +1184,6 @@
 				44A7ED3F2246A62300D1C402 /* ButtonBaker.swift in Sources */,
 				44BB70372299960600754156 /* TopListCollectionViewCellWithoutThumbnail.swift in Sources */,
 				44A7ED492246A62300D1C402 /* TopAlignedLabel.swift in Sources */,
-				44D33B8722A2954F00984295 /* KvasirWebServer.swift in Sources */,
 				44979C50229BCD8D00C217C2 /* TagDetailHeader.swift in Sources */,
 				44B2C07322719AC100B584F5 /* UIViewAbilities.swift in Sources */,
 				4408B4742279B0D200C5EF68 /* CodeScannerViewController.swift in Sources */,
@@ -1216,10 +1225,12 @@
 				44B2C049226EEA1F00B584F5 /* UIImageEx.swift in Sources */,
 				446DB7BD228ABB2900BE3DDF /* CustomEurekaModel.swift in Sources */,
 				44A7ED4B2246A62300D1C402 /* TextListTableViewCell.swift in Sources */,
+				44D33B9922A2D6C000984295 /* KvasirWebServerHandlers.swift in Sources */,
 				44CD98B6229AAFD3009C6976 /* RealmTag.swift in Sources */,
 				4424768122957FA6005430CE /* Guard.swift in Sources */,
 				44ECD9632277031100618576 /* BookListCoordinator.swift in Sources */,
 				44E4ED0B22A01C5F003B7BFA /* PlainHeaderFooterView.swift in Sources */,
+				44D33B9122A2D6A100984295 /* AsServerViewController.swift in Sources */,
 				44BB703122991C6F00754156 /* ShadowedTableViewCell.swift in Sources */,
 				44F51068229E6C8900130D64 /* RealmTranslatorEx.swift in Sources */,
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,
@@ -1241,7 +1252,6 @@
 				44979C4E229BC7DA00C217C2 /* TagDetailCoordinator.swift in Sources */,
 				44E4ED0922A00F4B003B7BFA /* DigestDetailTagCoordinator.swift in Sources */,
 				44717C22228FE2C40049FEB6 /* BookDetailCoordinator.swift in Sources */,
-				44D33B8122A27D8A00984295 /* AsServerViewController.swift in Sources */,
 				44ECD94022746A7600618576 /* CreateDigestContainerViewController.swift in Sources */,
 				44ECD96F22771A4300618576 /* CreateCreatorCoordinator.swift in Sources */,
 				44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */,
@@ -1251,6 +1261,7 @@
 				44F5106C229E6E6F00130D64 /* RealmBasicObjectEx.swift in Sources */,
 				446DB7C8228B24CC00BE3DDF /* Kingfisher.swift in Sources */,
 				44B2C0792271AA5500B584F5 /* RealmBook.swift in Sources */,
+				44D33B9322A2D6B100984295 /* UIDeviceEx.swift in Sources */,
 				44B2C07C2271B1C800B584F5 /* BookListViewController.swift in Sources */,
 				44A7ED422246A62300D1C402 /* AppDelegate.swift in Sources */,
 				44CD98BD229AC482009C6976 /* TagListCoordinator.swift in Sources */,
@@ -1273,15 +1284,15 @@
 				44B2C0882271EEDE00B584F5 /* CreateBookViewController.swift in Sources */,
 				44A7ED472246A62300D1C402 /* TopListTableViewHeaderActionable.swift in Sources */,
 				44CD98B8229AB49B009C6976 /* RealmTagRepository.swift in Sources */,
+				44D33B9822A2D6C000984295 /* KvasirWebServer.swift in Sources */,
 				44ECD9722277201000618576 /* MiscellaneousProtocols.swift in Sources */,
 				444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */,
+				44D33B9722A2D6C000984295 /* KvasirWebServerRoutes.swift in Sources */,
 				44B2C02D226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */,
-				44D33B8922A29B9E00984295 /* KvasirWebServerRoutes.swift in Sources */,
 				44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */,
 				44F51062229E6BCD00130D64 /* RealmParagraphEx.swift in Sources */,
 				44B2C0762271A93500B584F5 /* RealmCreator.swift in Sources */,
 				44CD98BF229AC794009C6976 /* ShadowedView.swift in Sources */,
-				44D33B8422A28AA100984295 /* UIDeviceEx.swift in Sources */,
 				44A7ED4A2246A62300D1C402 /* TopListCollectionViewCell.swift in Sources */,
 				44B2C053226EEBFE00B584F5 /* Shortcuts.swift in Sources */,
 				44B2C011226B1FEE00B584F5 /* DigestDetailTableHeaderView.swift in Sources */,
