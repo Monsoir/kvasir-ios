@@ -24,9 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = setupControllers()
         
         setAppTintColor()
-        setDefaultRealm()
-        setupInitialTagsIfNeeded { (_, _) in
+        if setDefaultRealm() {
+            setupInitialTagsIfNeeded { (_, _) in }
         }
+        
         self.window?.makeKeyAndVisible()
         return true
     }
