@@ -10,10 +10,9 @@ import Foundation
 
 struct AppConstants {
     static let tagInitiatedKey = "tag-data-initiated"
-    
-    struct WebServer {
-        static let port = 8080
-    }
+    static let dataBaseFile = SystemDirectories.document.url?
+                    .appendingPathComponent("data", isDirectory: true)
+                    .appendingPathComponent("kvasir.realm")
 }
 
 struct AppNotification {

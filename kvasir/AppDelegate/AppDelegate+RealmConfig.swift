@@ -9,20 +9,23 @@
 import Foundation
 import RealmSwift
 
+let RealmConfig = Realm.Configuration(fileURL: AppConstants.dataBaseFile)
+
 extension AppDelegate {
-    func setDefaultRealm() {
+    func setDefaultRealm() -> Bool {
+        guard FileManager.default.msr.createDirectoryIfNotExist(AppConstants.dataBaseFile!.deletingLastPathComponent()) else {
+            return false
+        }
+        
 //        var config = Realm.Configuration(
 //            schemaVersion: 0,
 //            migrationBlock: { (migration, oldSchemaVersion) in
 //                if (oldSchemaVersion < 1) {}
 //            }
 //        )
-        var config = Realm.Configuration()
-        // Use the default directory, but replace the filename with the username
-        config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent("kvasir.realm")
-        
-        // Set this as the configuration used for the default Realm
-        Realm.Configuration.defaultConfiguration = config
+
+        Realm.Configuration.defaultConfiguration = RealmConfig
+        return true
     }
     
     func setupInitialTagsIfNeeded(completion: @escaping RealmCreateCompletion) {
