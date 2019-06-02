@@ -74,7 +74,7 @@ private extension KvasirWebServer {
     
     func setupDynamicResourceHandlers() {
         let restApis: [(KvasirWebServerVerbable, KvasirWebServerPathable, GCDWebServerAsyncProcessBlock)] = [
-            (KvasirWebServerVerb.get, KvasirWebServerPath.test, KvasirWebServerHandlers.test)
+            (KvasirWebServerVerb.get, KvasirWebServerPath.test, KvasirWebServerHandlers.test2)
         ]
         
         restApis.forEach {
