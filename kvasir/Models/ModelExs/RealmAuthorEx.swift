@@ -23,3 +23,14 @@ extension RealmAuthor {
         return "author"
     }
 }
+
+extension RealmAuthor: RealmDataBackupable {
+    static var backupPath: URL? {
+        return SystemDirectories.tmp.url?.appendingPathComponent("authors.json")
+    }
+    
+    static func createBackupOperation() -> BackupOperation? {
+        guard let backupPath = self.backupPath else { return nil }
+        return RealmCreatorBackupOperation<RealmAuthor>(path: backupPath)
+    }
+}

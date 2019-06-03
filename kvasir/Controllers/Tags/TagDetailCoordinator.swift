@@ -23,10 +23,6 @@ class TagDetailCoordinator: Configurable, UpdateCoordinatorable {
         return (tagResult?.paragraphs.count ?? 0) > 0
     }
     
-    var hasBooks: Bool {
-        return (tagResult?.books.count ?? 0) > 0
-    }
-    
     private lazy var tagRepository = RealmTagRepository()
     private var notificationToken: NotificationToken?
     private var configuration: [String: Any]

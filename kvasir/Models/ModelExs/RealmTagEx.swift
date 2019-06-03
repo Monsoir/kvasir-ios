@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 extension RealmTag {
     override class var toHuman: String {
@@ -15,5 +16,18 @@ extension RealmTag {
     
     override class var toMachine: String {
         return "tag"
+    }
+}
+
+extension RealmTag: RealmDataBackupable {
+    static var backupPath: URL? {
+        return SystemDirectories.tmp.url?.appendingPathComponent("tags.json")
+    }
+    
+    static func createBackupOperation() -> BackupOperation? {
+        guard let backupPath = self.backupPath else {
+            return nil
+        }
+        return RealmTagBackupOperation(path: backupPath)
     }
 }

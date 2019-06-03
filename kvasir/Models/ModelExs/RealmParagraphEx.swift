@@ -17,3 +17,14 @@ extension RealmParagraph {
         return "paragraph"
     }
 }
+
+extension RealmParagraph: RealmDataBackupable {
+    static var backupPath: URL? {
+        return SystemDirectories.tmp.url?.appendingPathComponent("paragraphs.json")
+    }
+    
+    static func createBackupOperation() -> BackupOperation? {
+        guard let backupPath = self.backupPath else { return nil }
+        return RealmDigestBackupOperation<RealmParagraph>(path: backupPath)
+    }
+}

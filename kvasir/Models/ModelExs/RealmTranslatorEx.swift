@@ -23,3 +23,14 @@ extension RealmTranslator {
         return "translator"
     }
 }
+
+extension RealmTranslator: RealmDataBackupable {
+    static var backupPath: URL? {
+        return SystemDirectories.tmp.url?.appendingPathComponent("translators.json")
+    }
+    
+    static func createBackupOperation() -> BackupOperation? {
+        guard let backupPath = self.backupPath else { return nil }
+        return RealmCreatorBackupOperation<RealmTranslator>(path: backupPath)
+    }
+}

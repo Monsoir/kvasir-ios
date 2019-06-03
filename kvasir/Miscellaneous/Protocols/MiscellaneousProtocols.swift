@@ -49,3 +49,8 @@ protocol Namable: class {
     static var toHuman: String { get }
     static var toMachine: String { get }
 }
+
+protocol RealmDataBackupable {
+    static var backupPath: URL? { get }
+    static func createBackupOperation() -> BackupOperation?
+}

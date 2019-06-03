@@ -17,3 +17,14 @@ extension RealmSentence {
         return "sentence"
     }
 }
+
+extension RealmSentence: RealmDataBackupable {
+    static var backupPath: URL? {
+        return SystemDirectories.tmp.url?.appendingPathComponent("sentences.json")
+    }
+    
+    static func createBackupOperation() -> BackupOperation? {
+        guard let backupPath = self.backupPath else { return nil }
+        return RealmDigestBackupOperation<RealmSentence>(path: backupPath)
+    }
+}

@@ -142,8 +142,6 @@ extension TagDetailViewController: UITableViewDataSource {
             count = coordinator.tagResult?.sentences.count ?? 0
         case 1:
             count = coordinator.tagResult?.paragraphs.count ?? 0
-        case 2:
-            count = coordinator.tagResult?.books.count ?? 0
         default:
             count = 0
         }
@@ -233,9 +231,6 @@ extension TagDetailViewController: UITableViewDataSource {
         case 1:
             let digest = coordinator.tagResult?.paragraphs.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
             return cellForDigestAtIndexPath(indexPath, digest: digest)
-        case 2:
-            let book = coordinator.tagResult?.books.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
-            return cellForBookAtIndexPath(indexPath, book: book)
         default:
             return UITableViewCell()
         }
@@ -258,8 +253,6 @@ extension TagDetailViewController: UITableViewDelegate {
                 return ("查看全部 \(tag?.sentences.count ?? 0)", RealmSentence.toHuman)
             case 1:
                 return ("查看全部 \(tag?.paragraphs.count ?? 0)", RealmParagraph.toHuman)
-            case 2:
-                return ("查看全部 \(tag?.books.count ?? 0)", RealmBook.toHuman)
             default:
                 return ("", "")
             }
@@ -286,8 +279,6 @@ extension TagDetailViewController: UITableViewDelegate {
             return coordinator.hasSentences ? 0 : PlainTextViewFooter.height
         case 1:
             return coordinator.hasParagraphs ? 0 : PlainTextViewFooter.height
-        case 2:
-            return coordinator.hasBooks ? 0 : PlainTextViewFooter.height
         default:
             return 0
         }
@@ -305,12 +296,6 @@ extension TagDetailViewController: UITableViewDelegate {
             return coordinator.hasParagraphs ? nil : {
                 let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
                 footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmParagraph.toHuman)"
-                return footer
-            }()
-        case 2:
-            return coordinator.hasBooks ? nil : {
-                let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
-                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmBook.toHuman)"
                 return footer
             }()
         default:

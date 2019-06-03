@@ -43,6 +43,16 @@
 		44717C28229117140049FEB6 /* RouteControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C27229117140049FEB6 /* RouteControllerFactory.swift */; };
 		44717C2C229273560049FEB6 /* SessionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2B229273560049FEB6 /* SessionCamera.swift */; };
 		44717C2F229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
+		447724C922A4EAA900E8AE56 /* DataMaintainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724C822A4EAA900E8AE56 /* DataMaintainer.swift */; };
+		447724CE22A5127600E8AE56 /* BackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724CD22A5127600E8AE56 /* BackupOperation.swift */; };
+		447724D122A5241800E8AE56 /* PlainTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D022A5241800E8AE56 /* PlainTag.swift */; };
+		447724D522A5461000E8AE56 /* RealmTagBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */; };
+		447724D722A5464500E8AE56 /* RealmBookBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */; };
+		447724D922A5473100E8AE56 /* PlainBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D822A5473100E8AE56 /* PlainBook.swift */; };
+		447724DB22A54C6A00E8AE56 /* PlainWordDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DA22A54C6A00E8AE56 /* PlainWordDigest.swift */; };
+		447724DD22A5535000E8AE56 /* RealmDigestBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DC22A5535000E8AE56 /* RealmDigestBackupOperation.swift */; };
+		447724DF22A559FA00E8AE56 /* PlainCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DE22A559FA00E8AE56 /* PlainCreator.swift */; };
+		447724E122A55B7300E8AE56 /* RealmCreatorBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724E022A55B7300E8AE56 /* RealmCreatorBackupOperation.swift */; };
 		4493BE9222A1697A00EEE65C /* ShortTextFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */; };
 		44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C47229BBC1400C217C2 /* UITableViewEx.swift */; };
 		44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */; };
@@ -210,6 +220,16 @@
 		44717C27229117140049FEB6 /* RouteControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteControllerFactory.swift; sourceTree = "<group>"; };
 		44717C2B229273560049FEB6 /* SessionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCamera.swift; sourceTree = "<group>"; };
 		44717C2E229281260049FEB6 /* SessionCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCameraViewController.swift; sourceTree = "<group>"; };
+		447724C822A4EAA900E8AE56 /* DataMaintainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMaintainer.swift; sourceTree = "<group>"; };
+		447724CD22A5127600E8AE56 /* BackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupOperation.swift; sourceTree = "<group>"; };
+		447724D022A5241800E8AE56 /* PlainTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTag.swift; sourceTree = "<group>"; };
+		447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTagBackupOperation.swift; sourceTree = "<group>"; };
+		447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBookBackupOperation.swift; sourceTree = "<group>"; };
+		447724D822A5473100E8AE56 /* PlainBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainBook.swift; sourceTree = "<group>"; };
+		447724DA22A54C6A00E8AE56 /* PlainWordDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainWordDigest.swift; sourceTree = "<group>"; };
+		447724DC22A5535000E8AE56 /* RealmDigestBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDigestBackupOperation.swift; sourceTree = "<group>"; };
+		447724DE22A559FA00E8AE56 /* PlainCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainCreator.swift; sourceTree = "<group>"; };
+		447724E022A55B7300E8AE56 /* RealmCreatorBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCreatorBackupOperation.swift; sourceTree = "<group>"; };
 		4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortTextFieldEditViewController.swift; sourceTree = "<group>"; };
 		44979C47229BBC1400C217C2 /* UITableViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewEx.swift; sourceTree = "<group>"; };
 		44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewEx.swift; sourceTree = "<group>"; };
@@ -492,6 +512,46 @@
 			path = CameraPack;
 			sourceTree = "<group>";
 		};
+		447724CA22A4F6BA00E8AE56 /* DataMaintainer */ = {
+			isa = PBXGroup;
+			children = (
+				447724C822A4EAA900E8AE56 /* DataMaintainer.swift */,
+				447724CD22A5127600E8AE56 /* BackupOperation.swift */,
+			);
+			path = DataMaintainer;
+			sourceTree = "<group>";
+		};
+		447724CF22A5240100E8AE56 /* Backup */ = {
+			isa = PBXGroup;
+			children = (
+				447724D322A545F900E8AE56 /* Operations */,
+				447724D222A545E800E8AE56 /* Models */,
+			);
+			path = Backup;
+			sourceTree = "<group>";
+		};
+		447724D222A545E800E8AE56 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				447724D022A5241800E8AE56 /* PlainTag.swift */,
+				447724D822A5473100E8AE56 /* PlainBook.swift */,
+				447724DA22A54C6A00E8AE56 /* PlainWordDigest.swift */,
+				447724DE22A559FA00E8AE56 /* PlainCreator.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		447724D322A545F900E8AE56 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */,
+				447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */,
+				447724DC22A5535000E8AE56 /* RealmDigestBackupOperation.swift */,
+				447724E022A55B7300E8AE56 /* RealmCreatorBackupOperation.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
 		44979C51229BD26800C217C2 /* TableViewSectionHeaderFooter */ = {
 			isa = PBXGroup;
 			children = (
@@ -584,6 +644,7 @@
 				44ECD9442275804F00618576 /* Bartendar.swift */,
 				44ECD974227720EB00618576 /* Validator.swift */,
 				4424768022957FA6005430CE /* Guard.swift */,
+				447724CA22A4F6BA00E8AE56 /* DataMaintainer */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -603,6 +664,7 @@
 		44A7ED232246A62300D1C402 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				447724CF22A5240100E8AE56 /* Backup */,
 				44ECD9472276D82D00618576 /* Repositories */,
 				444B760A226491D0004B9CD4 /* Realm */,
 				44F5105A229E682800130D64 /* ModelExs */,
@@ -1167,6 +1229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				44D33B8F22A2CA5B00984295 /* FileManagerEx.swift in Sources */,
+				447724DF22A559FA00E8AE56 /* PlainCreator.swift in Sources */,
 				446DB7DD228BE8CC00BE3DDF /* MsrCompatible.swift in Sources */,
 				44B2C06B226F12F500B584F5 /* KvasirEditor.swift in Sources */,
 				44A7ED412246A62300D1C402 /* AppDelegate+SetupControllers.swift in Sources */,
@@ -1175,6 +1238,7 @@
 				44190D45228D5A6F00DB98E8 /* TopListDeputyCoordinator.swift in Sources */,
 				44A7ED532246A62300D1C402 /* Reusable.swift in Sources */,
 				4408B46D2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
+				447724E122A55B7300E8AE56 /* RealmCreatorBackupOperation.swift in Sources */,
 				44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */,
 				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
 				44979C59229C374600C217C2 /* AppConstants.swift in Sources */,
@@ -1209,6 +1273,7 @@
 				44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				446DB7DA228BE6C200BE3DDF /* StringEx.swift in Sources */,
+				447724D522A5461000E8AE56 /* RealmTagBackupOperation.swift in Sources */,
 				44ECD94222757EA200618576 /* Errors.swift in Sources */,
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
@@ -1233,6 +1298,8 @@
 				44D33B9122A2D6A100984295 /* AsServerViewController.swift in Sources */,
 				44BB703122991C6F00754156 /* ShadowedTableViewCell.swift in Sources */,
 				44F51068229E6C8900130D64 /* RealmTranslatorEx.swift in Sources */,
+				447724D922A5473100E8AE56 /* PlainBook.swift in Sources */,
+				447724D722A5464500E8AE56 /* RealmBookBackupOperation.swift in Sources */,
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,
 				44A7ED4E2246A62300D1C402 /* DigestListViewController.swift in Sources */,
 				44ECD9662277032700618576 /* RealmBookRepository.swift in Sources */,
@@ -1257,12 +1324,14 @@
 				44E4ED07229FDC04003B7BFA /* GradientView.swift in Sources */,
 				44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
+				447724DB22A54C6A00E8AE56 /* PlainWordDigest.swift in Sources */,
 				4408B484227C76FD00C5EF68 /* ResourceListViewController.swift in Sources */,
 				44F5106C229E6E6F00130D64 /* RealmBasicObjectEx.swift in Sources */,
 				446DB7C8228B24CC00BE3DDF /* Kingfisher.swift in Sources */,
 				44B2C0792271AA5500B584F5 /* RealmBook.swift in Sources */,
 				44D33B9322A2D6B100984295 /* UIDeviceEx.swift in Sources */,
 				44B2C07C2271B1C800B584F5 /* BookListViewController.swift in Sources */,
+				447724C922A4EAA900E8AE56 /* DataMaintainer.swift in Sources */,
 				44A7ED422246A62300D1C402 /* AppDelegate.swift in Sources */,
 				44CD98BD229AC482009C6976 /* TagListCoordinator.swift in Sources */,
 				44B2C05B226EEE5000B584F5 /* SchemaBuilder.swift in Sources */,
@@ -1271,6 +1340,7 @@
 				44B2C046226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44F51066229E6C5200130D64 /* RealmAuthorEx.swift in Sources */,
 				44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
+				447724DD22A5535000E8AE56 /* RealmDigestBackupOperation.swift in Sources */,
 				44979C53229BF5BB00C217C2 /* PlainTextViewFooter.swift in Sources */,
 				44ECD9552276FB6B00618576 /* CreateListCoordinator.swift in Sources */,
 				446DB7D1228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */,
@@ -1288,6 +1358,7 @@
 				44ECD9722277201000618576 /* MiscellaneousProtocols.swift in Sources */,
 				444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */,
 				44D33B9722A2D6C000984295 /* KvasirWebServerRoutes.swift in Sources */,
+				447724D122A5241800E8AE56 /* PlainTag.swift in Sources */,
 				44B2C02D226C5B5C00B584F5 /* DigestDetailCoordinator.swift in Sources */,
 				44B2C018226C2BF100B584F5 /* AppDelegate+Navigator.swift in Sources */,
 				44F51062229E6BCD00130D64 /* RealmParagraphEx.swift in Sources */,
@@ -1299,6 +1370,7 @@
 				44ECD9492276D84600618576 /* Repositorable.swift in Sources */,
 				446DB7AF22896A0100BE3DDF /* BookProxyEndpoint.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
+				447724CE22A5127600E8AE56 /* BackupOperation.swift in Sources */,
 				4408B4672279630800C5EF68 /* FieldEditController.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
 			);

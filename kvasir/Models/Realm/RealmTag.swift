@@ -12,7 +12,6 @@ class RealmTag: RealmBasicObject {
     @objc dynamic var name = ""
     @objc dynamic var color = ""
     
-    let books = List<RealmBook>()
     let sentences = List<RealmSentence>()
     let paragraphs = List<RealmParagraph>()
     
