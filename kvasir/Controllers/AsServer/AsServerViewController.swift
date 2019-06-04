@@ -30,6 +30,10 @@ class AsServerViewController: UIViewController, Configurable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -85,6 +89,19 @@ class AsServerViewController: UIViewController, Configurable {
             make.centerY.equalToSuperview().multipliedBy(0.75)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
+        }
+    }
+    
+    override func _actionDismiss() {
+        if webServer.engine.isRunning {
+            let alert = UIAlertController(title: "提示", message: "服务正在运行，确定要退出吗？", preferredStyle: .alert)
+            alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
+                guard let self = self else { return }
+                self.dismiss(animated: true, completion: nil)
+            }
+            alert.addAction(title: "不退出", style: .cancel, isEnabled: true, handler: nil)
+            
+            present(alert, animated: true, completion: nil)
         }
     }
 }

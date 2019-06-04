@@ -14,12 +14,12 @@ extension UIViewController {
         var action: Selector
         if let navigationController = self.navigationController {
             if navigationController.viewControllers.count <= 1 {
-                action = #selector(actionDismiss)
+                action = #selector(_actionDismiss)
             } else {
-                action = #selector(actionPop)
+                action = #selector(_actionPop)
             }
         } else {
-            action = #selector(actionDismiss)
+            action = #selector(_actionDismiss)
         }
         
         if let btn = backItem.customView as? UIButton {
@@ -34,11 +34,11 @@ extension UIViewController {
         return backItem
     }
     
-    @objc private func actionPop() {
+    @objc func _actionPop() {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func actionDismiss() {
+    @objc func _actionDismiss() {
         dismiss(animated: true, completion: nil)
     }
 }
