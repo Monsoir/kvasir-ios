@@ -64,19 +64,29 @@ struct KvasirWebServerHandlers {
         }
     }
     
-    static let test3: GCDWebServerAsyncProcessBlock = { request, completionBlock in
+    static let export: GCDWebServerAsyncProcessBlock = { request, completionBlock in
         let maintainer = DataMaintainer.shared
-        if maintainer.canExport {
-            let _ = maintainer.export(completion: {
-                let response = GCDWebServerFileResponse(file: (RealmTag.backupPath?.droppedScheme()!.absoluteString)!, isAttachment: true)
+        maintainer.export(completion: { (exportingURL) in
+            guard let url = exportingURL else {
+                let response = GCDWebServerErrorResponse(statusCode: 500)
+                
                 #if DEBUG
                 // solve opaque response
-                response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+                response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
                 #endif
                 
                 completionBlock(response)
-                print("here")
-            })
-        }
+                return
+            }
+            
+            let response = GCDWebServerFileResponse(file: url.droppedScheme()!.absoluteString, isAttachment: true)
+            
+            #if DEBUG
+            // solve opaque response
+            response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+            #endif
+            
+            completionBlock(response)
+        })
     }
 }

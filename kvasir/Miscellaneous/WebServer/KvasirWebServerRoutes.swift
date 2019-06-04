@@ -21,11 +21,14 @@ enum KvasirWebServerVerb: KvasirWebServerVerbable {
 
 enum KvasirWebServerPath: KvasirWebServerPathable {
     case test
+    case export
     
     var path: String {
         switch self {
         case .test:
             return "/test"
+        case .export:
+            return "/export"
         }
     }
 }
