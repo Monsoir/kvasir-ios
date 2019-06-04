@@ -17,6 +17,7 @@ target 'kvasir' do
   pod 'Kingfisher', '~> 5.0'
   pod 'CropViewController'
   pod "GCDWebServer", "~> 3.0"
+  pod 'SSZipArchive'
   
 #  target 'kvasir-with-tesseract' do
 #    inherit! :search_paths

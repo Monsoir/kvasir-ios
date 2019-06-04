@@ -72,10 +72,10 @@ extension RealmBook {
 
 extension RealmBook: RealmDataBackupable {
     static var backupPath: URL? {
-        return SystemDirectories.tmp.url?.appendingPathComponent("books.json")
+        return AppConstants.Paths.exportingFileDirectory?.appendingPathComponent("books.json")
     }
     
-    static func createBackupOperation() -> BackupOperation? {
+    static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else { return nil }
         return RealmBookBackupOperation(path: backupPath)
     }

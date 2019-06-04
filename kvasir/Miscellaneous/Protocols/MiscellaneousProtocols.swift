@@ -52,5 +52,5 @@ protocol Namable: class {
 
 protocol RealmDataBackupable {
     static var backupPath: URL? { get }
-    static func createBackupOperation() -> BackupOperation?
+    static func createBackupOperation() -> ExportOperation?
 }

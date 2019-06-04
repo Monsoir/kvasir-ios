@@ -21,10 +21,10 @@ extension RealmTag {
 
 extension RealmTag: RealmDataBackupable {
     static var backupPath: URL? {
-        return SystemDirectories.tmp.url?.appendingPathComponent("tags.json")
+        return AppConstants.Paths.exportingFileDirectory?.appendingPathComponent("tags.json")
     }
     
-    static func createBackupOperation() -> BackupOperation? {
+    static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else {
             return nil
         }

@@ -8,26 +8,7 @@
 
 import UIKit
 import SwifterSwift
-
-enum SystemDirectories {
-    case document
-    case caches
-    case library
-    case tmp
-    
-    var url: URL? {
-        switch self {
-        case .document:
-            return try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        case .library:
-            return try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        case .caches:
-            return try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        case .tmp:
-            return FileManager.default.temporaryDirectory
-        }
-    }
-}
+import AVFoundation
 
 struct Bartendar {
     static func handleSimpleAlert(title: String = "", message: String?, on viewController: UIViewController?, afterConfirm: (() -> Void)? = nil) {
@@ -65,4 +46,41 @@ struct Bartendar {
         print(items, separator, terminator)
         #endif
     }
+    
+    struct Guard {
+        static func AVCaptureDeviceAuthorized(authorizedHandler: @escaping (() -> Void), notEnoughAuthorizationHandler: (() -> Void)?) {
+            // https://developer.apple.com/documentation/avfoundation/cameras_and_media_capture/requesting_authorization_for_media_capture_on_ios
+            switch AVCaptureDevice.authorizationStatus(for: .video) {
+            case .authorized: // The user has previously granted access to the camera.
+                authorizedHandler()
+                
+            case .notDetermined: // The user has not yet been asked for camera access.
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    if granted {
+                        authorizedHandler()
+                    } else {
+                        guard let rejectHandler = notEnoughAuthorizationHandler else {
+                            Bartendar.handleTipAlert(message: "没有足够的权限使用相机", on: nil)
+                            return
+                        }
+                        rejectHandler()
+                    }
+                }
+            case .denied: // The user has previously denied access.
+                fallthrough
+            case .restricted: // The user can't grant access due to restrictions.
+                guard let rejectHandler = notEnoughAuthorizationHandler else {
+                    Bartendar.handleTipAlert(message: "没有足够的权限使用相机", on: nil)
+                    return
+                }
+                rejectHandler()
+            }
+        }
+        
+        static func directoryExists(directory: URL?) -> Bool {
+            guard let directory = directory else { return false }
+            return FileManager.default.msr.createDirectoryIfNotExist(directory)
+        }
+    }
+
 }

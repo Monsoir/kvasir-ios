@@ -26,10 +26,10 @@ extension RealmTranslator {
 
 extension RealmTranslator: RealmDataBackupable {
     static var backupPath: URL? {
-        return SystemDirectories.tmp.url?.appendingPathComponent("translators.json")
+        return AppConstants.Paths.exportingFileDirectory?.appendingPathComponent("translators.json")
     }
     
-    static func createBackupOperation() -> BackupOperation? {
+    static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else { return nil }
         return RealmCreatorBackupOperation<RealmTranslator>(path: backupPath)
     }

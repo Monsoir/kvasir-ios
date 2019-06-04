@@ -9,11 +9,11 @@
 import Foundation
 import RealmSwift
 
-let RealmConfig = Realm.Configuration(fileURL: AppConstants.dataBaseFile)
+let RealmConfig = Realm.Configuration(fileURL: AppConstants.Paths.databaseFile)
 
 extension AppDelegate {
-    func setDefaultRealm() -> Bool {
-        guard FileManager.default.msr.createDirectoryIfNotExist(AppConstants.dataBaseFile!.deletingLastPathComponent()) else {
+    func setDefaultRealm() -> Bool {        
+        guard Bartendar.Guard.directoryExists(directory: AppConstants.Paths.databaseFile?.deletingLastPathComponent()) else {
             return false
         }
         

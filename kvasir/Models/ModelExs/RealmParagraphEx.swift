@@ -20,10 +20,10 @@ extension RealmParagraph {
 
 extension RealmParagraph: RealmDataBackupable {
     static var backupPath: URL? {
-        return SystemDirectories.tmp.url?.appendingPathComponent("paragraphs.json")
+        return AppConstants.Paths.exportingFileDirectory?.appendingPathComponent("paragraphs.json")
     }
     
-    static func createBackupOperation() -> BackupOperation? {
+    static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else { return nil }
         return RealmDigestBackupOperation<RealmParagraph>(path: backupPath)
     }

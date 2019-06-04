@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class RealmCreatorBackupOperation<Creator: RealmCreator>: BackupOperation {
+class RealmCreatorBackupOperation<Creator: RealmCreator>: ExportOperation {
     override func provideData() -> Data? {
         return autoreleasepool(invoking: { () -> Data? in
             do {

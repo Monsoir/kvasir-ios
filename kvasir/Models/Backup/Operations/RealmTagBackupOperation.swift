@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class RealmTagBackupOperation: BackupOperation {
+class RealmTagBackupOperation: ExportOperation {
     override func provideData() -> Data? {
         return autoreleasepool { () -> Data? in
             do {

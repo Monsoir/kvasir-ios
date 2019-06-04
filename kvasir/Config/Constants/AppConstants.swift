@@ -10,11 +10,20 @@ import Foundation
 
 struct AppConstants {
     static let tagInitiatedKey = "tag-data-initiated"
-    static let dataBaseFile = SystemDirectories.document.url?
-                    .appendingPathComponent("data", isDirectory: true)
-                    .appendingPathComponent("kvasir.realm")
+    struct Paths {
+        /// 数据库文件路径
+        static let databaseFile = SystemDirectories.document.url?
+            .appendingPathComponent("data", isDirectory: true)
+            .appendingPathComponent("kvasir.realm")
+        
+        /// 导出数据文件夹路径
+        static let exportingFileDirectory = SystemDirectories.tmp.url?.appendingPathComponent("export", isDirectory: true)
+    }
     struct WebServer {
+        /// 服务监听端口
         static let port = 8080
+        
+        /// 网页静态文件存放路径
         static let websiteLocation = SystemDirectories.document.url?
             .appendingPathComponent("website", isDirectory: true)
             .appendingPathComponent("build", isDirectory: true)

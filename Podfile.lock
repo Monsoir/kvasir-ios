@@ -14,6 +14,7 @@ PODS:
   - RealmSwift (3.13.1):
     - Realm (= 3.13.1)
   - SnapKit (4.0.1)
+  - SSZipArchive (2.1.4)
   - SwifterSwift (4.6.0):
     - SwifterSwift/AppKit (= 4.6.0)
     - SwifterSwift/CoreGraphics (= 4.6.0)
@@ -43,6 +44,7 @@ DEPENDENCIES:
   - PKHUD (~> 5.0)
   - RealmSwift
   - SnapKit (~> 4.0.0)
+  - SSZipArchive
   - SwifterSwift
   - URLNavigator
 
@@ -58,6 +60,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - SnapKit
+    - SSZipArchive
     - SwifterSwift
     - URLNavigator
 
@@ -72,9 +75,10 @@ SPEC CHECKSUMS:
   Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
   RealmSwift: 8a1e6a02b7a08cd17a31e3115143fb69fe5f3fb9
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   SwifterSwift: 812ffec6f301922f5430e75be3f2939ea3a80024
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: 1ce5b4ab8b9bcee9608d53860fa18331cbaa4ccc
+PODFILE CHECKSUM: db1c495109e8be09470fb55ebbd159c0e9a2ad1a
 
 COCOAPODS: 1.6.1

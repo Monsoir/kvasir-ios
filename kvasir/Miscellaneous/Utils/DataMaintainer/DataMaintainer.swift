@@ -8,9 +8,6 @@
 
 import Foundation
 
-//let ExportingQueue = DispatchQueue(label: "kvasir.exporting.queue", qos: DispatchQoS.utility)
-//let ImportingQueue = DispatchQueue(label: "kvasir.importing.queue", qos: DispatchQoS.utility)
-
 class DataMaintainer {
     enum Status {
         case normal
@@ -38,6 +35,9 @@ extension DataMaintainer {
     
     func export(completion: @escaping () -> Void) -> Bool {
         guard canExport else { return false }
+        
+        // 保证备份文件夹存在
+        guard Bartendar.Guard.directoryExists(directory: AppConstants.Paths.exportingFileDirectory) else { return false }
         
         /*
          导出逻辑：

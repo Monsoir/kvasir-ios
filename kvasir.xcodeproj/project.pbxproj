@@ -19,7 +19,6 @@
 		4408B484227C76FD00C5EF68 /* ResourceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B483227C76FD00C5EF68 /* ResourceListViewController.swift */; };
 		44190D42228D349900DB98E8 /* SessionManagerEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44190D41228D349900DB98E8 /* SessionManagerEx.swift */; };
 		44190D45228D5A6F00DB98E8 /* TopListDeputyCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44190D44228D5A6F00DB98E8 /* TopListDeputyCoordinator.swift */; };
-		4424768122957FA6005430CE /* Guard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4424768022957FA6005430CE /* Guard.swift */; };
 		444B760C226491F0004B9CD4 /* RealmSentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760B226491F0004B9CD4 /* RealmSentence.swift */; };
 		444B760E22649558004B9CD4 /* RealmWordDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B760D22649558004B9CD4 /* RealmWordDigest.swift */; };
 		444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */; };
@@ -44,7 +43,7 @@
 		44717C2C229273560049FEB6 /* SessionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2B229273560049FEB6 /* SessionCamera.swift */; };
 		44717C2F229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
 		447724C922A4EAA900E8AE56 /* DataMaintainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724C822A4EAA900E8AE56 /* DataMaintainer.swift */; };
-		447724CE22A5127600E8AE56 /* BackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724CD22A5127600E8AE56 /* BackupOperation.swift */; };
+		447724CE22A5127600E8AE56 /* ExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724CD22A5127600E8AE56 /* ExportOperation.swift */; };
 		447724D122A5241800E8AE56 /* PlainTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D022A5241800E8AE56 /* PlainTag.swift */; };
 		447724D522A5461000E8AE56 /* RealmTagBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */; };
 		447724D722A5464500E8AE56 /* RealmBookBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */; };
@@ -196,7 +195,6 @@
 		4408B483227C76FD00C5EF68 /* ResourceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceListViewController.swift; sourceTree = "<group>"; };
 		44190D41228D349900DB98E8 /* SessionManagerEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerEx.swift; sourceTree = "<group>"; };
 		44190D44228D5A6F00DB98E8 /* TopListDeputyCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListDeputyCoordinator.swift; sourceTree = "<group>"; };
-		4424768022957FA6005430CE /* Guard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guard.swift; sourceTree = "<group>"; };
 		444B760B226491F0004B9CD4 /* RealmSentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSentence.swift; sourceTree = "<group>"; };
 		444B760D22649558004B9CD4 /* RealmWordDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmWordDigest.swift; sourceTree = "<group>"; };
 		444B761C2265F74C004B9CD4 /* CreateDigestInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDigestInfoViewController.swift; sourceTree = "<group>"; };
@@ -221,7 +219,7 @@
 		44717C2B229273560049FEB6 /* SessionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCamera.swift; sourceTree = "<group>"; };
 		44717C2E229281260049FEB6 /* SessionCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCameraViewController.swift; sourceTree = "<group>"; };
 		447724C822A4EAA900E8AE56 /* DataMaintainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMaintainer.swift; sourceTree = "<group>"; };
-		447724CD22A5127600E8AE56 /* BackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupOperation.swift; sourceTree = "<group>"; };
+		447724CD22A5127600E8AE56 /* ExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOperation.swift; sourceTree = "<group>"; };
 		447724D022A5241800E8AE56 /* PlainTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTag.swift; sourceTree = "<group>"; };
 		447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTagBackupOperation.swift; sourceTree = "<group>"; };
 		447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBookBackupOperation.swift; sourceTree = "<group>"; };
@@ -516,7 +514,7 @@
 			isa = PBXGroup;
 			children = (
 				447724C822A4EAA900E8AE56 /* DataMaintainer.swift */,
-				447724CD22A5127600E8AE56 /* BackupOperation.swift */,
+				447724CD22A5127600E8AE56 /* ExportOperation.swift */,
 			);
 			path = DataMaintainer;
 			sourceTree = "<group>";
@@ -643,7 +641,6 @@
 				44A7ED1A2246A62300D1C402 /* ButtonBaker.swift */,
 				44ECD9442275804F00618576 /* Bartendar.swift */,
 				44ECD974227720EB00618576 /* Validator.swift */,
-				4424768022957FA6005430CE /* Guard.swift */,
 				447724CA22A4F6BA00E8AE56 /* DataMaintainer */,
 			);
 			path = Utils;
@@ -1151,6 +1148,7 @@
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
@@ -1168,6 +1166,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
@@ -1292,7 +1291,6 @@
 				44A7ED4B2246A62300D1C402 /* TextListTableViewCell.swift in Sources */,
 				44D33B9922A2D6C000984295 /* KvasirWebServerHandlers.swift in Sources */,
 				44CD98B6229AAFD3009C6976 /* RealmTag.swift in Sources */,
-				4424768122957FA6005430CE /* Guard.swift in Sources */,
 				44ECD9632277031100618576 /* BookListCoordinator.swift in Sources */,
 				44E4ED0B22A01C5F003B7BFA /* PlainHeaderFooterView.swift in Sources */,
 				44D33B9122A2D6A100984295 /* AsServerViewController.swift in Sources */,
@@ -1370,7 +1368,7 @@
 				44ECD9492276D84600618576 /* Repositorable.swift in Sources */,
 				446DB7AF22896A0100BE3DDF /* BookProxyEndpoint.swift in Sources */,
 				44B2C03F226EE99700B584F5 /* TypeAlias.swift in Sources */,
-				447724CE22A5127600E8AE56 /* BackupOperation.swift in Sources */,
+				447724CE22A5127600E8AE56 /* ExportOperation.swift in Sources */,
 				4408B4672279630800C5EF68 /* FieldEditController.swift in Sources */,
 				44B2C01C226C310E00B584F5 /* KvasirRealmProtocol.swift in Sources */,
 			);

@@ -151,7 +151,7 @@ class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINav
     }
     
     @objc func actionTakePhoto() {
-        Guard.guardAVCaptureDeviceAuthorized(authorizedHandler: { [weak self] in
+        Bartendar.Guard.AVCaptureDeviceAuthorized(authorizedHandler: { [weak self] in
             guard let self = self else { return }
             let vc = SessionCameraViewController()
             vc.delegate = self

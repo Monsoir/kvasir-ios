@@ -13,7 +13,7 @@ private struct ObservingKeys {
     static let isExecuting = "isExecuting"
 }
 
-class BackupOperation: Operation {
+class ExportOperation: Operation {
     
     /// 备份文件路径
     /// - 以 file: 协议开头的
