@@ -28,6 +28,6 @@ extension RealmTag: RealmDataBackupable {
         guard let backupPath = self.backupPath else {
             return nil
         }
-        return RealmTagBackupOperation(path: backupPath)
+        return RealmTagExportOperation(path: backupPath)
     }
 }

@@ -45,13 +45,13 @@
 		447724C922A4EAA900E8AE56 /* DataMaintainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724C822A4EAA900E8AE56 /* DataMaintainer.swift */; };
 		447724CE22A5127600E8AE56 /* ExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724CD22A5127600E8AE56 /* ExportOperation.swift */; };
 		447724D122A5241800E8AE56 /* PlainTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D022A5241800E8AE56 /* PlainTag.swift */; };
-		447724D522A5461000E8AE56 /* RealmTagBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */; };
-		447724D722A5464500E8AE56 /* RealmBookBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */; };
+		447724D522A5461000E8AE56 /* RealmTagExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D422A5461000E8AE56 /* RealmTagExportOperation.swift */; };
+		447724D722A5464500E8AE56 /* RealmBookExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D622A5464500E8AE56 /* RealmBookExportOperation.swift */; };
 		447724D922A5473100E8AE56 /* PlainBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D822A5473100E8AE56 /* PlainBook.swift */; };
 		447724DB22A54C6A00E8AE56 /* PlainWordDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DA22A54C6A00E8AE56 /* PlainWordDigest.swift */; };
-		447724DD22A5535000E8AE56 /* RealmDigestBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DC22A5535000E8AE56 /* RealmDigestBackupOperation.swift */; };
+		447724DD22A5535000E8AE56 /* RealmDigestExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DC22A5535000E8AE56 /* RealmDigestExportOperation.swift */; };
 		447724DF22A559FA00E8AE56 /* PlainCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DE22A559FA00E8AE56 /* PlainCreator.swift */; };
-		447724E122A55B7300E8AE56 /* RealmCreatorBackupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724E022A55B7300E8AE56 /* RealmCreatorBackupOperation.swift */; };
+		447724E122A55B7300E8AE56 /* RealmCreatorExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724E022A55B7300E8AE56 /* RealmCreatorExportOperation.swift */; };
 		4493BE9222A1697A00EEE65C /* ShortTextFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */; };
 		44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C47229BBC1400C217C2 /* UITableViewEx.swift */; };
 		44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */; };
@@ -221,13 +221,13 @@
 		447724C822A4EAA900E8AE56 /* DataMaintainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMaintainer.swift; sourceTree = "<group>"; };
 		447724CD22A5127600E8AE56 /* ExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOperation.swift; sourceTree = "<group>"; };
 		447724D022A5241800E8AE56 /* PlainTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTag.swift; sourceTree = "<group>"; };
-		447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTagBackupOperation.swift; sourceTree = "<group>"; };
-		447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBookBackupOperation.swift; sourceTree = "<group>"; };
+		447724D422A5461000E8AE56 /* RealmTagExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTagExportOperation.swift; sourceTree = "<group>"; };
+		447724D622A5464500E8AE56 /* RealmBookExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmBookExportOperation.swift; sourceTree = "<group>"; };
 		447724D822A5473100E8AE56 /* PlainBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainBook.swift; sourceTree = "<group>"; };
 		447724DA22A54C6A00E8AE56 /* PlainWordDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainWordDigest.swift; sourceTree = "<group>"; };
-		447724DC22A5535000E8AE56 /* RealmDigestBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDigestBackupOperation.swift; sourceTree = "<group>"; };
+		447724DC22A5535000E8AE56 /* RealmDigestExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDigestExportOperation.swift; sourceTree = "<group>"; };
 		447724DE22A559FA00E8AE56 /* PlainCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainCreator.swift; sourceTree = "<group>"; };
-		447724E022A55B7300E8AE56 /* RealmCreatorBackupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCreatorBackupOperation.swift; sourceTree = "<group>"; };
+		447724E022A55B7300E8AE56 /* RealmCreatorExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCreatorExportOperation.swift; sourceTree = "<group>"; };
 		4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortTextFieldEditViewController.swift; sourceTree = "<group>"; };
 		44979C47229BBC1400C217C2 /* UITableViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewEx.swift; sourceTree = "<group>"; };
 		44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewEx.swift; sourceTree = "<group>"; };
@@ -519,13 +519,13 @@
 			path = DataMaintainer;
 			sourceTree = "<group>";
 		};
-		447724CF22A5240100E8AE56 /* Backup */ = {
+		447724CF22A5240100E8AE56 /* Export */ = {
 			isa = PBXGroup;
 			children = (
 				447724D322A545F900E8AE56 /* Operations */,
 				447724D222A545E800E8AE56 /* Models */,
 			);
-			path = Backup;
+			path = Export;
 			sourceTree = "<group>";
 		};
 		447724D222A545E800E8AE56 /* Models */ = {
@@ -542,10 +542,10 @@
 		447724D322A545F900E8AE56 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
-				447724D422A5461000E8AE56 /* RealmTagBackupOperation.swift */,
-				447724D622A5464500E8AE56 /* RealmBookBackupOperation.swift */,
-				447724DC22A5535000E8AE56 /* RealmDigestBackupOperation.swift */,
-				447724E022A55B7300E8AE56 /* RealmCreatorBackupOperation.swift */,
+				447724D422A5461000E8AE56 /* RealmTagExportOperation.swift */,
+				447724D622A5464500E8AE56 /* RealmBookExportOperation.swift */,
+				447724DC22A5535000E8AE56 /* RealmDigestExportOperation.swift */,
+				447724E022A55B7300E8AE56 /* RealmCreatorExportOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -661,7 +661,7 @@
 		44A7ED232246A62300D1C402 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				447724CF22A5240100E8AE56 /* Backup */,
+				447724CF22A5240100E8AE56 /* Export */,
 				44ECD9472276D82D00618576 /* Repositories */,
 				444B760A226491D0004B9CD4 /* Realm */,
 				44F5105A229E682800130D64 /* ModelExs */,
@@ -1237,7 +1237,7 @@
 				44190D45228D5A6F00DB98E8 /* TopListDeputyCoordinator.swift in Sources */,
 				44A7ED532246A62300D1C402 /* Reusable.swift in Sources */,
 				4408B46D2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
-				447724E122A55B7300E8AE56 /* RealmCreatorBackupOperation.swift in Sources */,
+				447724E122A55B7300E8AE56 /* RealmCreatorExportOperation.swift in Sources */,
 				44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */,
 				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
 				44979C59229C374600C217C2 /* AppConstants.swift in Sources */,
@@ -1272,7 +1272,7 @@
 				44717C19228FE19E0049FEB6 /* LocalBookDetailCoordinator.swift in Sources */,
 				44B2C043226EE9DA00B584F5 /* NSAttributedStringEx.swift in Sources */,
 				446DB7DA228BE6C200BE3DDF /* StringEx.swift in Sources */,
-				447724D522A5461000E8AE56 /* RealmTagBackupOperation.swift in Sources */,
+				447724D522A5461000E8AE56 /* RealmTagExportOperation.swift in Sources */,
 				44ECD94222757EA200618576 /* Errors.swift in Sources */,
 				44B2C04E226EEBB400B584F5 /* Theme.swift in Sources */,
 				44B2C09B2273416000B584F5 /* EurekaLabelValueRow.swift in Sources */,
@@ -1297,7 +1297,7 @@
 				44BB703122991C6F00754156 /* ShadowedTableViewCell.swift in Sources */,
 				44F51068229E6C8900130D64 /* RealmTranslatorEx.swift in Sources */,
 				447724D922A5473100E8AE56 /* PlainBook.swift in Sources */,
-				447724D722A5464500E8AE56 /* RealmBookBackupOperation.swift in Sources */,
+				447724D722A5464500E8AE56 /* RealmBookExportOperation.swift in Sources */,
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,
 				44A7ED4E2246A62300D1C402 /* DigestListViewController.swift in Sources */,
 				44ECD9662277032700618576 /* RealmBookRepository.swift in Sources */,
@@ -1338,7 +1338,7 @@
 				44B2C046226EE9F400B584F5 /* UIViewControllerEx.swift in Sources */,
 				44F51066229E6C5200130D64 /* RealmAuthorEx.swift in Sources */,
 				44B2C0812271B2B500B584F5 /* BookListTableViewCell.swift in Sources */,
-				447724DD22A5535000E8AE56 /* RealmDigestBackupOperation.swift in Sources */,
+				447724DD22A5535000E8AE56 /* RealmDigestExportOperation.swift in Sources */,
 				44979C53229BF5BB00C217C2 /* PlainTextViewFooter.swift in Sources */,
 				44ECD9552276FB6B00618576 /* CreateListCoordinator.swift in Sources */,
 				446DB7D1228BE1C700BE3DDF /* BookDetailViewController.swift in Sources */,

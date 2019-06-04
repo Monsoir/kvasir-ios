@@ -25,6 +25,6 @@ extension RealmParagraph: RealmDataBackupable {
     
     static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else { return nil }
-        return RealmDigestBackupOperation<RealmParagraph>(path: backupPath)
+        return RealmDigestExportOperation<RealmParagraph>(path: backupPath)
     }
 }

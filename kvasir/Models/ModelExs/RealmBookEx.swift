@@ -77,6 +77,6 @@ extension RealmBook: RealmDataBackupable {
     
     static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else { return nil }
-        return RealmBookBackupOperation(path: backupPath)
+        return RealmBookExportOperation(path: backupPath)
     }
 }

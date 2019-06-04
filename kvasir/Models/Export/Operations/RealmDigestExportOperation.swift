@@ -1,5 +1,5 @@
 //
-//  RealmCreatorBackupOperation.swift
+//  RealmDigestBackupOperation.swift
 //  kvasir
 //
 //  Created by Monsoir on 6/3/19.
@@ -9,36 +9,36 @@
 import Foundation
 import RealmSwift
 
-class RealmCreatorBackupOperation<Creator: RealmCreator>: ExportOperation {
+class RealmDigestExportOperation<Digest: RealmWordDigest>: ExportOperation {
     override func provideData() -> Data? {
         return autoreleasepool(invoking: { () -> Data? in
             do {
                 let realm = try Realm()
-                let objects = realm.objects(Creator.self)
+                let objects = realm.objects(Digest.self)
                 
                 // 将 Realm 数据转换为基本数据
-                var plainObjects = [PlainCreator<Creator>]()
+                var plainObjects = [PlainWordDigest<Digest>]()
                 for data in objects {
                     guard !isCancelled else { return nil }
-                    let object = PlainCreator<Creator>(object: data)
+                    let object = PlainWordDigest<Digest>(object: data)
                     plainObjects.append(object)
                 }
                 
                 guard !isCancelled else { return nil }
                 
                 // 将「基本数据」转换为 JSON 二进制数据
-                switch Creator.self {
-                case is RealmAuthor.Type:
-                    let authors = PlainCreator<Creator>.Collection.Authors(authors: plainObjects as! [PlainCreator<RealmAuthor>])
+                switch Digest.self {
+                case is RealmSentence.Type:
+                    let digests = PlainWordDigest<Digest>.Collection.Sentences(sentences: plainObjects as! [PlainWordDigest<RealmSentence>])
                     var jsonData: Data
                     do {
-                        jsonData = try JSONEncoder().encode(authors)
+                        jsonData = try JSONEncoder().encode(digests)
                         return jsonData
                     } catch {
                         cancel()
                     }
-                case is RealmTranslator.Type:
-                    let digests = PlainCreator<Creator>.Collection.Translators(translators: plainObjects as! [PlainCreator<RealmTranslator>])
+                case is RealmParagraph.Type:
+                    let digests = PlainWordDigest<Digest>.Collection.Paragraphs(paragraphs: plainObjects as! [PlainWordDigest<RealmParagraph>])
                     var jsonData: Data
                     do {
                         jsonData = try JSONEncoder().encode(digests)

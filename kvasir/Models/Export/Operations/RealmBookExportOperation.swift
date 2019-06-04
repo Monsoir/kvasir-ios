@@ -1,5 +1,5 @@
 //
-//  RealmTagBackupOperation.swift
+//  RealmBookBackupOperation.swift
 //  kvasir
 //
 //  Created by Monsoir on 6/3/19.
@@ -9,39 +9,39 @@
 import Foundation
 import RealmSwift
 
-class RealmTagBackupOperation: ExportOperation {
+class RealmBookExportOperation: ExportOperation {
     override func provideData() -> Data? {
-        return autoreleasepool { () -> Data? in
+        return autoreleasepool(invoking: { () -> Data? in
             do {
                 let realm = try Realm()
-                let objects = realm.objects(RealmTag.self)
+                let objects = realm.objects(RealmBook.self)
                 
                 // 将 Realm 数据转换为基本数据
-                var plainTags = [PlainTag]()
-                for data in objects {
-                    guard !isCancelled else { return nil }
-                    
-                    let tag = PlainTag(object: data)
-                    plainTags.append(tag)
+                var plainBooks = [PlainBook]()
+                for ele in objects {
+                    if !isCancelled {
+                        guard !isCancelled else { return nil }
+                        let book = PlainBook(object: ele)
+                        plainBooks.append(book)
+                    }
                 }
                 
                 guard !isCancelled else { return nil }
                 
                 // 将「基本数据」转换为 JSON 二进制数据
-                let tags = PlainTag.Collection(tags: plainTags)
+                let books = PlainBook.Collection(books: plainBooks)
                 var jsonData: Data
                 do {
-                    jsonData = try JSONEncoder().encode(tags)
+                    jsonData = try JSONEncoder().encode(books)
                     return jsonData
                 } catch {
                     cancel()
                 }
-                
             } catch {
                 cancel()
             }
             
             return nil
-        }
+        })
     }
 }

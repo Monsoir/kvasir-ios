@@ -31,6 +31,6 @@ extension RealmAuthor: RealmDataBackupable {
     
     static func createBackupOperation() -> ExportOperation? {
         guard let backupPath = self.backupPath else { return nil }
-        return RealmCreatorBackupOperation<RealmAuthor>(path: backupPath)
+        return RealmCreatorExportOperation<RealmAuthor>(path: backupPath)
     }
 }
