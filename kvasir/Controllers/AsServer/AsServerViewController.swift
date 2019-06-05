@@ -55,8 +55,10 @@ class AsServerViewController: UIViewController, Configurable {
                         self.lbPrompt.text = """
                         开启服务器成功，访问步骤：
                         
-                        1. 电脑或其他要访问资源的设备（「访问设备」），与手机连接同一个网络\n
-                        2. 在「访问设备」的浏览器上，输入以下地址进行访问\n
+                        1. 电脑和 iPhone 连接同一个网络
+                        
+                        2. 在电脑上通过浏览器（如 Safari, Chrome）访问以下地址
+                        
                         \(url.absoluteString)
                         """
                         return
