@@ -48,6 +48,7 @@
 		44717C28229117140049FEB6 /* RouteControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C27229117140049FEB6 /* RouteControllerFactory.swift */; };
 		44717C2C229273560049FEB6 /* SessionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2B229273560049FEB6 /* SessionCamera.swift */; };
 		44717C2F229281260049FEB6 /* SessionCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44717C2E229281260049FEB6 /* SessionCameraViewController.swift */; };
+		4472DF3322A7CE4800EEF731 /* ConcurrentableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472DF3222A7CE4800EEF731 /* ConcurrentableOperation.swift */; };
 		447724C922A4EAA900E8AE56 /* DataMaintainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724C822A4EAA900E8AE56 /* DataMaintainer.swift */; };
 		447724CE22A5127600E8AE56 /* ExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724CD22A5127600E8AE56 /* ExportOperation.swift */; };
 		447724D122A5241800E8AE56 /* PlainTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724D022A5241800E8AE56 /* PlainTag.swift */; };
@@ -230,6 +231,7 @@
 		44717C27229117140049FEB6 /* RouteControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteControllerFactory.swift; sourceTree = "<group>"; };
 		44717C2B229273560049FEB6 /* SessionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCamera.swift; sourceTree = "<group>"; };
 		44717C2E229281260049FEB6 /* SessionCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCameraViewController.swift; sourceTree = "<group>"; };
+		4472DF3222A7CE4800EEF731 /* ConcurrentableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentableOperation.swift; sourceTree = "<group>"; };
 		447724C822A4EAA900E8AE56 /* DataMaintainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMaintainer.swift; sourceTree = "<group>"; };
 		447724CD22A5127600E8AE56 /* ExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOperation.swift; sourceTree = "<group>"; };
 		447724D022A5241800E8AE56 /* PlainTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTag.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 			children = (
 				447724C822A4EAA900E8AE56 /* DataMaintainer.swift */,
 				44296ABD22A666C500F9F63F /* DataOperation.swift */,
+				4472DF3222A7CE4800EEF731 /* ConcurrentableOperation.swift */,
 				447724CD22A5127600E8AE56 /* ExportOperation.swift */,
 				44296ABB22A665D400F9F63F /* ImportOperation.swift */,
 			);
@@ -1333,6 +1336,7 @@
 				44D33B9122A2D6A100984295 /* AsServerViewController.swift in Sources */,
 				44BB703122991C6F00754156 /* ShadowedTableViewCell.swift in Sources */,
 				44F51068229E6C8900130D64 /* RealmTranslatorEx.swift in Sources */,
+				4472DF3322A7CE4800EEF731 /* ConcurrentableOperation.swift in Sources */,
 				447724D922A5473100E8AE56 /* PlainBook.swift in Sources */,
 				447724D722A5464500E8AE56 /* RealmBookExportOperation.swift in Sources */,
 				44B2BFC02268A1A600B584F5 /* RealmParagraph.swift in Sources */,

@@ -13,7 +13,7 @@ private struct ObservingKeys {
     static let isExecuting = "isExecuting"
 }
 
-protocol ImportOperationDeleagte {
+protocol ImportOperationDeleagte: class {
     /// 任务完成回调
     ///
     /// - Parameters:
@@ -27,7 +27,7 @@ protocol ImportOperationDeleagte {
 
 class ImportOperation: DataOperation {
     
-    var delegate: ImportOperationDeleagte?
+    weak var delegate: ImportOperationDeleagte?
     
     /// 导入文件路径
     /// - 以 file: 协议开头的

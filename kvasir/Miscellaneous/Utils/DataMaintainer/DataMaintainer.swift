@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SSZipArchive
 import RealmSwift
+import SSZipArchive
 
 // 对 DataMainter 状态的所有读写操作，都在 DataMaintainerSerialQueue 中串行进行
 let DataMaintainerSerialQueue = DispatchQueue(label: "kvasir.dataMaintainer.serial.queue")
@@ -21,7 +21,7 @@ class DataMaintainer {
     }
     
     private var status: Status = .normal
-    private var caches = [String: (ros: [RealmBasicObject], pos: [Codable])]()
+    private lazy var importCaches = [String: (ros: [RealmBasicObject], pos: [Codable])]()
     
     deinit {
         debugPrint("\(self) deinit")
@@ -125,6 +125,13 @@ extension DataMaintainer {
                     4. 数据转换工作完成后，同一线程对数据的关系进行整理，之后写入数据库
                  */
                 
+                // 还原导入数据文件夹
+                guard let importingDirectory = AppConstants.Paths.importingUnzipDirectory,
+                    FileManager.default.msr.restoreDirectory(directory: importingDirectory) else {
+                        completion(false, "创建导入文件夹失败")
+                        return
+                }
+                
                 // 保证还原文件夹存在
                 guard Bartendar.Guard.directoryExists(directory: AppConstants.Paths.importingUnzipDirectory) else {
                     completion(false, "创建导入文件失败 - 0")
@@ -150,8 +157,10 @@ extension DataMaintainer {
                 let savingDispatchOperation = BlockOperation {
                     DataMaintainerSerialQueue.async {
                         guard let relationsRestoredObjects = self.restoreRelations() else {
-                            self.caches.removeAll()
+                            // 不能继续恢复数据之间的关系任务
+                            self.importCaches.removeAll()
                             self.status = .normal // 恢复完成后，恢复状态
+                            completion(false, "导入失败")
                             return
                         }
                         
@@ -161,7 +170,7 @@ extension DataMaintainer {
                             
                             DataMaintainerSerialQueue.async {
                                 // 切换回 DataMainter 数据修改专用队列
-                                self.caches.removeAll()
+                                self.importCaches.removeAll()
                                 self.status = .normal // 恢复完成后，恢复状态
                                 
                                 GlobalDefaultDispatchQueue.async {
@@ -271,12 +280,12 @@ extension DataMaintainer {
     
     private func restoreRelations() -> [[RealmBasicObject]]? {
         return autoreleasepool { () -> [[RealmBasicObject]]? in
-            guard let (_authorRos, _authorPos) = self.caches[RealmAuthor.toMachine] else { return nil }
-            guard let (_translatorRos, _translatorPos) = self.caches[RealmTranslator.toMachine] else { return nil }
-            guard let (_bookRos, _bookPos) = self.caches[RealmBook.toMachine] else { return nil }
-            guard let (_tagRos, _tagPos) = self.caches[RealmTag.toMachine] else { return nil }
-            guard let (_sentenceRos, _) = self.caches[RealmSentence.toMachine] else { return nil }
-            guard let (_paragraphRos, _) = self.caches[RealmParagraph.toMachine] else { return nil }
+            guard let (_authorRos, _authorPos) = self.importCaches[RealmAuthor.toMachine] else { return nil }
+            guard let (_translatorRos, _translatorPos) = self.importCaches[RealmTranslator.toMachine] else { return nil }
+            guard let (_bookRos, _bookPos) = self.importCaches[RealmBook.toMachine] else { return nil }
+            guard let (_tagRos, _tagPos) = self.importCaches[RealmTag.toMachine] else { return nil }
+            guard let (_sentenceRos, _) = self.importCaches[RealmSentence.toMachine] else { return nil }
+            guard let (_paragraphRos, _) = self.importCaches[RealmParagraph.toMachine] else { return nil }
             
             guard let authorRos = _authorRos as? [RealmAuthor], let authorPos = _authorPos as? [PlainCreator<RealmAuthor>] else { return nil }
             
@@ -387,7 +396,7 @@ extension DataMaintainer: ImportOperationDeleagte {
             guard let self = self else { return }
             guard let r = ros, let p = pos else { return }
             
-            self.caches[type(of: operation).restoreKey] = (r, p)
+            self.importCaches[type(of: operation).restoreKey] = (r, p)
         }
     }
 }

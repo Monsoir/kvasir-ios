@@ -104,7 +104,12 @@ struct KvasirWebServerHandlers {
         
         let url = URL(fileURLWithPath: multipartRequest.temporaryPath)
         do {
-            // 需要立刻移动文件，否则 GCDWebServerFileRequest 对象释放后，自动删除文件
+            // 有与用户上传的文件同名的文件存在，先删除，否则抛异常
+            if FileManager.default.fileExists(atPath: AppConstants.Paths.importingFilePath!.droppedScheme()!.absoluteString) {
+                try FileManager.default.removeItem(at: AppConstants.Paths.importingFilePath!)
+            }
+            
+            // 若需要上传的文件，则需要立刻移动文件，否则 GCDWebServerFileRequest 对象释放后，自动删除文件
             try FileManager.default.moveItem(at: url, to: AppConstants.Paths.importingFilePath!)
         } catch {
             let response = GCDWebServerErrorResponse(statusCode: 500)
@@ -116,6 +121,7 @@ struct KvasirWebServerHandlers {
             return
         }
         
+        // 通知 webserver 任务状态为「导入」
         NotificationCenter.default.post(
             name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
             object: nil,
@@ -127,18 +133,19 @@ struct KvasirWebServerHandlers {
         }
         
         DataMaintainer().import(completion: { (success, message) in
+            // 通知 webserver 的任务状态变化为正常
             NotificationCenter.default.post(
                 name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
                 object: nil,
                 userInfo: ["status": KvasirWebServer.TaskStatus.normal]
             )
             
+            // 删除导入文件，防止下次接收时出错
+            // 创建同名文件抛异常
             if FileManager.default.fileExists(atPath: (AppConstants.Paths.importingFilePath?.droppedScheme()!.absoluteString)!) {
                 do {
                     try FileManager.default.removeItem(at: AppConstants.Paths.importingFilePath!)
-                } catch {
-                    
-                }
+                } catch {}
             }
             
             guard success else {
