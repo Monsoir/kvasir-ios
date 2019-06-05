@@ -231,11 +231,11 @@ class BookDetailViewController: UnifiedViewController, Configurable {
             c.query { [weak self] (success, data, message) in
                 guard success, let strongSelf = self else {
                     MainQueue.async { [weak self] in
-                        HUD.flash(.labeledError(title: "出错了", subtitle: message ?? ""), onView: nil, delay: 1.5, completion: nil)
-                        guard let innerStrongSelf = self else {
+//                        HUD.flash(.labeledError(title: "出错了", subtitle: message ?? ""), onView: nil, delay: 1.5, completion: nil)
+                        guard let self = self else {
                             return
                         }
-                        innerStrongSelf.dismiss(animated: true, completion: nil)
+                        self.dismiss(animated: true, completion: nil)
                     }
                     return
                 }
