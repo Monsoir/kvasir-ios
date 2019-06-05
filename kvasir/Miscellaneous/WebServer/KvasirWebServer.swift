@@ -113,6 +113,7 @@ private extension KvasirWebServer {
     func setupDynamicResourceHandlers() {
         let restApis: [(KvasirWebServerVerbable, KvasirWebServerPathable, AnyObject.Type, GCDWebServerAsyncProcessBlock)] = [
             (KvasirWebServerVerb.get, KvasirWebServerPath.export, GCDWebServerRequest.self, KvasirWebServerHandlers.export),
+//            (KvasirWebServerVerb.get, KvasirWebServerPath.test, GCDWebServerRequest.self, KvasirWebServerHandlers.test),
             (KvasirWebServerVerb.options, KvasirWebServerPath.import, GCDWebServerRequest.self, KvasirWebServerHandlers.option),
             (KvasirWebServerVerb.post, KvasirWebServerPath.import, GCDWebServerFileRequest.self, KvasirWebServerHandlers.import),
         ]

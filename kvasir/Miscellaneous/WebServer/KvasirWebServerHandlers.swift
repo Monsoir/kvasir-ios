@@ -8,12 +8,14 @@
 
 import Foundation
 import GCDWebServer
+import PKHUD
 
 struct KvasirWebServerHandlers {
     static let test: GCDWebServerAsyncProcessBlock = { request, completionBlock in
         GlobalDefaultDispatchQueue.async {
             // get data
             let response = GCDWebServerDataResponse(jsonObject: ["hello": "world again"])
+            response?.statusCode = 500
             
             #if DEBUG
             // solve opaque response
@@ -30,25 +32,33 @@ struct KvasirWebServerHandlers {
             object: nil,
             userInfo: ["status": KvasirWebServer.TaskStatus.exporting]
         )
-        let maintainer = DataMaintainer()
-        maintainer.export(completion: { (exportingURL) in
-            guard let url = exportingURL else {
-                let response = GCDWebServerErrorResponse(statusCode: 500)
-                
-                #if DEBUG
-                // solve opaque response
-                response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
-                #endif
-                
-                completionBlock(response)
-                return
-            }
-            
+        
+        MainQueue.async {
+            HUD.show(.labeledProgress(title: "正在导出", subtitle: nil))
+        }
+        
+        DataMaintainer().export(completion: { (exportingURL, message) in
             NotificationCenter.default.post(
                 name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
                 object: nil,
                 userInfo: ["status": KvasirWebServer.TaskStatus.normal]
             )
+            
+            guard let url = exportingURL else {
+                let response = GCDWebServerDataResponse(jsonObject: ["message": message ?? "未知错误"])
+                response?.statusCode = 500
+                #if DEBUG
+                // solve opaque response
+                response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+                #endif
+                completionBlock(response)
+                
+                MainQueue.async {
+                    HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), delay: 1.5)
+                }
+                
+                return
+            }
             
             let response = GCDWebServerFileResponse(file: url.droppedScheme()!.absoluteString, isAttachment: true)
             
@@ -56,6 +66,10 @@ struct KvasirWebServerHandlers {
             // solve opaque response
             response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
             #endif
+            
+            MainQueue.async {
+                HUD.flash(.labeledSuccess(title: "导出成功", subtitle: "请在网页上接收文件"), delay: 1.5)
+            }
             
             completionBlock(response)
         })
@@ -108,7 +122,17 @@ struct KvasirWebServerHandlers {
             userInfo: ["status": KvasirWebServer.TaskStatus.importing]
         )
         
-        DataMaintainer().import(completion: { (success) in
+        MainQueue.async {
+            HUD.show(.labeledProgress(title: "正在导入", subtitle: nil))
+        }
+        
+        DataMaintainer().import(completion: { (success, message) in
+            NotificationCenter.default.post(
+                name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
+                object: nil,
+                userInfo: ["status": KvasirWebServer.TaskStatus.normal]
+            )
+            
             if FileManager.default.fileExists(atPath: (AppConstants.Paths.importingFilePath?.droppedScheme()!.absoluteString)!) {
                 do {
                     try FileManager.default.removeItem(at: AppConstants.Paths.importingFilePath!)
@@ -117,17 +141,30 @@ struct KvasirWebServerHandlers {
                 }
             }
             
-            NotificationCenter.default.post(
-                name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
-                object: nil,
-                userInfo: ["status": KvasirWebServer.TaskStatus.normal]
-            )
+            guard success else {
+                let response = GCDWebServerDataResponse(jsonObject: ["message": message ?? "未知错误"])
+                response?.statusCode = 500
+                #if DEBUG
+                // solve opaque response
+                response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+                #endif
+                completionBlock(response)
+                
+                MainQueue.async {
+                    HUD.flash(.labeledError(title: message ?? "未知错误", subtitle: nil), delay: 1.5)
+                }
+                return
+            }
             
             let response = GCDWebServerDataResponse(jsonObject: ["ok": true])
             #if DEBUG
             // solve opaque response
             response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
             #endif
+            
+            MainQueue.async {
+                HUD.flash(.labeledSuccess(title: "导入成功", subtitle: nil), delay: 1.5)
+            }
             
             completionBlock(response)
         })

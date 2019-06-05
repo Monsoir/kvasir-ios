@@ -37,10 +37,10 @@ extension DataMaintainer {
         return status == .normal
     }
     
-    func export(completion: @escaping (_: URL?) -> Void) -> Void {
+    func export(completion: @escaping (_: URL?, _: String?) -> Void) -> Void {
         DataMaintainerSerialQueue.async {
             guard self.canExport else {
-                completion(nil)
+                completion(nil, "暂时不能处理导出工作")
                 return
             }
             
@@ -49,7 +49,7 @@ extension DataMaintainer {
             GlobalDefaultDispatchQueue.async {
                 // 保证备份文件夹存在
                 guard Bartendar.Guard.directoryExists(directory: AppConstants.Paths.exportingFileDirectory) else {
-                    completion(nil)
+                    completion(nil, "创建导出文件失败 - 0")
                     return
                 }
                 
@@ -60,7 +60,7 @@ extension DataMaintainer {
                 
                 // 全部备份任务，但暂时不包括结束任务
                 guard var operations = self.createExportOperations() else {
-                    completion(nil)
+                    completion(nil, "创建导出任务失败")
                     return
                 }
                 
@@ -68,7 +68,7 @@ extension DataMaintainer {
                 dateFormatter.dateFormat = "yyyy-MM-dd_HH:mm:ss"
                 let dateString = dateFormatter.string(from: Date())
                 guard let zipPath = SystemDirectories.tmp.url?.appendingPathComponent("backup_\(dateString).zip") else {
-                    completion(nil)
+                    completion(nil, "创建导出文件失败 - 1")
                     return
                 }
                 
@@ -88,7 +88,7 @@ extension DataMaintainer {
                     DataMaintainerSerialQueue.async {
                         self.status = .normal
                         GlobalDefaultDispatchQueue.async {
-                            completion(zipPath)
+                            completion(zipPath, nil)
                         }
                     }
                 }
@@ -107,10 +107,10 @@ extension DataMaintainer {
         }
     }
     
-    func `import`(completion: @escaping ((_: Bool) -> Void)) -> Void {
+    func `import`(completion: @escaping ((_: Bool, _: String?) -> Void)) -> Void {
         DataMaintainerSerialQueue.async {
             guard self.canImport else {
-                completion(false)
+                completion(false, "暂时无法处理导入工作")
                 return
             }
             
@@ -127,7 +127,7 @@ extension DataMaintainer {
                 
                 // 保证还原文件夹存在
                 guard Bartendar.Guard.directoryExists(directory: AppConstants.Paths.importingUnzipDirectory) else {
-                    completion(false)
+                    completion(false, "创建导入文件失败 - 0")
                     return
                 }
                 
@@ -138,7 +138,7 @@ extension DataMaintainer {
                 
                 // 还原任务
                 guard let restoreOperations = self.createRestoreOperations() else {
-                    completion(false)
+                    completion(false, "创建导入任务失败")
                     return
                 }
                 
@@ -166,7 +166,7 @@ extension DataMaintainer {
                                 
                                 GlobalDefaultDispatchQueue.async {
                                     // 结束任务由于要等到存储任务结束后才执行，因此不能封装为 Operation, 这是由于队列不同，无法同步
-                                    completion(savingResult)
+                                    completion(savingResult, nil)
                                 }
                             }
                         }
