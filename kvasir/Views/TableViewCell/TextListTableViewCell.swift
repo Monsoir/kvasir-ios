@@ -78,13 +78,16 @@ class TextListTableViewCell: ShadowedTableViewCell {
     
     private lazy var lbBookName: UILabel = {
         let label = UILabel()
-        label.font = PingFangSCLightFont?.withSize(18)
+        label.font = PingFangSCLightFont?.withSize(16)
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
     private lazy var lbRecordUpdatedDate: UILabel = {
         let label = UILabel()
         label.font = PingFangSCLightFont?.withSize(12)
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -113,7 +116,7 @@ class TextListTableViewCell: ShadowedTableViewCell {
         if needThumbnail {
             ivThumbnail.snp.makeConstraints { (make) in
                 make.top.equalTo(realContentView.snp.top).offset(8)
-                make.leading.equalTo(realContentView.snp.leading).offset(10).priorityHigh()
+                make.leading.equalTo(realContentView.snp.leading).offset(10)
                 make.size.equalTo(
                     CGSize(
                         width: BookListTableViewCell.BookThumbnailSize.width * BookListTableViewCell.BookThumbnailZoomFactor,
@@ -124,8 +127,8 @@ class TextListTableViewCell: ShadowedTableViewCell {
         
         lbTitle.snp.makeConstraints { (make) in
             make.top.equalTo(realContentView.snp.top).offset(8)
-            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : realContentView.snp.leading).offset(10).priorityHigh()
-            make.trailing.equalTo(realContentView.snp.trailing).offset(-10).priorityHigh()
+            make.leading.equalTo(needThumbnail ? ivThumbnail.snp.trailing : realContentView.snp.leading).offset(10)
+            make.trailing.equalTo(realContentView.snp.trailing).offset(-10)
             make.bottom.equalTo(lbBookName.snp.top).offset(-8)
             make.height.equalTo(90)
         }
