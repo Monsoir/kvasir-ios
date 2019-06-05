@@ -30,7 +30,6 @@ class ShadowedTableViewCell: UITableViewCell, ViewScalable {
     
     private(set) var realContentView: UIView = {
         let view = UIView()
-        view.cornerRadius = ShadowedTableViewCell.realContentCornerRadius
         return view
     }()
     
@@ -65,6 +64,7 @@ class ShadowedTableViewCell: UITableViewCell, ViewScalable {
     }
     
     private func setupSubviews() {
+        realContentView.cornerRadius = type(of: self).realContentCornerRadius
         shadowedView.addSubview(realContentView)
         contentView.addSubview(shadowedView)
     }
