@@ -25,6 +25,11 @@ struct KvasirWebServerHandlers {
     }
     
     static let export: GCDWebServerAsyncProcessBlock = { request, completionBlock in
+        NotificationCenter.default.post(
+            name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
+            object: nil,
+            userInfo: ["status": KvasirWebServer.TaskStatus.exporting]
+        )
         let maintainer = DataMaintainer()
         maintainer.export(completion: { (exportingURL) in
             guard let url = exportingURL else {
@@ -38,6 +43,12 @@ struct KvasirWebServerHandlers {
                 completionBlock(response)
                 return
             }
+            
+            NotificationCenter.default.post(
+                name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
+                object: nil,
+                userInfo: ["status": KvasirWebServer.TaskStatus.normal]
+            )
             
             let response = GCDWebServerFileResponse(file: url.droppedScheme()!.absoluteString, isAttachment: true)
             
@@ -91,6 +102,12 @@ struct KvasirWebServerHandlers {
             return
         }
         
+        NotificationCenter.default.post(
+            name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
+            object: nil,
+            userInfo: ["status": KvasirWebServer.TaskStatus.importing]
+        )
+        
         DataMaintainer().import(completion: { (success) in
             if FileManager.default.fileExists(atPath: (AppConstants.Paths.importingFilePath?.droppedScheme()!.absoluteString)!) {
                 do {
@@ -99,6 +116,12 @@ struct KvasirWebServerHandlers {
                     
                 }
             }
+            
+            NotificationCenter.default.post(
+                name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange),
+                object: nil,
+                userInfo: ["status": KvasirWebServer.TaskStatus.normal]
+            )
             
             let response = GCDWebServerDataResponse(jsonObject: ["ok": true])
             #if DEBUG

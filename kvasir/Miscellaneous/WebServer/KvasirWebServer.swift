@@ -19,6 +19,44 @@ protocol KvasirWebServerPathable {
 
 class KvasirWebServer {
     private(set) lazy var engine = GCDWebServer()
+    
+    enum TaskStatus {
+        case normal
+        case importing
+        case exporting
+        
+        var toHuman: String {
+            switch self {
+            case .importing:
+                return "导入"
+            case .exporting:
+                return "导出"
+            default:
+                return "正常"
+            }
+        }
+    }
+    
+    private var _status = TaskStatus.normal
+    var status: TaskStatus {
+        return _status
+    }
+    
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(changeStatus(notif:)), name: NSNotification.Name(rawValue: AppNotification.Name.serverTaskStatusDidChange), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        debugPrint("\(self) deinit")
+    }
+    
+    @objc private func changeStatus(notif: Notification) {
+        guard let status = notif.userInfo?["status"] as? TaskStatus else { return }
+        MainQueue.async {
+            self._status = status
+        }
+    }
 }
 
 // MARK: - 公开方法

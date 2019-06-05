@@ -94,7 +94,13 @@ class AsServerViewController: UIViewController, Configurable {
     
     override func _actionDismiss() {
         if webServer.engine.isRunning {
-            let alert = UIAlertController(title: "提示", message: "服务正在运行，正在导出或导入的数据会丢失的。确定要退出吗？", preferredStyle: .alert)
+            guard webServer.status != .normal else {
+                self.dismiss(animated: true, completion: nil)
+                return
+            }
+            
+            
+            let alert = UIAlertController(title: "提示", message: "正在\(webServer.status.toHuman)数据，退出会导致数据丢失。\n确定要退出吗？", preferredStyle: .alert)
             alert.addAction(title: "确定", style: .destructive, isEnabled: true) { [weak self] (_) in
                 guard let self = self else { return }
                 self.dismiss(animated: true, completion: nil)

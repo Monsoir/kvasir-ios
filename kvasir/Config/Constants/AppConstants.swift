@@ -46,5 +46,10 @@ struct AppNotification {
         /// - 发生变化后，发送一次通知，让订阅方处理
         /// - 在全局派发 default 队列进行派发
         static let relationBetweenDigestAndTagDidChange = "relationBetweenDigestAndTagDidChange"
+        
+        /// 本地服务器任务状态发生变化时触发
+        /// - 如 normal -> importing, normal -> exporting
+        /// - userInfo: (status: KvasirWebServer.TaskStatus)
+        static let serverTaskStatusDidChange = "serverTaskStatusDidChange"
     }
 }
