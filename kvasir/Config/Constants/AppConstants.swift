@@ -31,6 +31,7 @@ struct AppConstants {
         static let websiteLocation = SystemDirectories.document.url?
             .appendingPathComponent("website", isDirectory: true)
             .appendingPathComponent("build", isDirectory: true)
+        static let websiteBuiltitLocaltion = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "website/build")
     }
 }
 

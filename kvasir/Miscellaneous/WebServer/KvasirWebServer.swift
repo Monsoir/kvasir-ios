@@ -103,7 +103,8 @@ private extension KvasirWebServer {
     func setupStaticSiteHandler() {
         engine.addGETHandler(
             forBasePath: "/",
-            directoryPath: AppConstants.WebServer.websiteLocation?.droppedScheme()?.absoluteString ?? "",
+//            directoryPath: AppConstants.WebServer.websiteLocation?.droppedScheme()?.absoluteString ?? "",
+            directoryPath: AppConstants.WebServer.websiteBuiltitLocaltion?.deletingLastPathComponent().droppedScheme()?.absoluteString ?? "",
             indexFilename: "index.html",
             cacheAge: 3600,
             allowRangeRequests: true
