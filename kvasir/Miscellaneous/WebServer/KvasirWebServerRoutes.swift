@@ -10,11 +10,17 @@ import Foundation
 
 enum KvasirWebServerVerb: KvasirWebServerVerbable {
     case get
+    case post
+    case options
     
     var verb: String {
         switch self {
         case .get:
             return "GET"
+        case .post:
+            return "POST"
+        case .options:
+            return "OPTIONS"
         }
     }
 }
@@ -22,6 +28,7 @@ enum KvasirWebServerVerb: KvasirWebServerVerbable {
 enum KvasirWebServerPath: KvasirWebServerPathable {
     case test
     case export
+    case `import`
     
     var path: String {
         switch self {
@@ -29,6 +36,8 @@ enum KvasirWebServerPath: KvasirWebServerPathable {
             return "/test"
         case .export:
             return "/export"
+        case .import:
+            return "/import"
         }
     }
 }

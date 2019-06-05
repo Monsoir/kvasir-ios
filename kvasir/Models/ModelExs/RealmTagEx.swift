@@ -31,3 +31,14 @@ extension RealmTag: RealmDataBackupable {
         return RealmTagExportOperation(path: backupPath)
     }
 }
+
+extension RealmTag: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("tags.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmTagImportOperation(path: recoverPath)
+    }
+}

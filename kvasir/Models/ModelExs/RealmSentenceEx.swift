@@ -28,3 +28,14 @@ extension RealmSentence: RealmDataBackupable {
         return RealmDigestExportOperation<RealmSentence>(path: backupPath)
     }
 }
+
+extension RealmSentence: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("sentences.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmDigestImportOperation<RealmSentence>(path: recoverPath)
+    }
+}

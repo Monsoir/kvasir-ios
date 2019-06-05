@@ -62,3 +62,18 @@ struct PlainWordDigest<Digest: RealmWordDigest>: Codable {
         }
     }
 }
+
+extension PlainWordDigest {
+    var realmObject: Digest {
+        let object = Digest()
+        object.id = id
+        object.serverId = serverId
+        object.createdAt = Date(iso8601String: createdAt) ?? Date()
+        object.updatedAt = Date(iso8601String: updatedAt) ?? Date()
+        
+        object.content = content
+        object.pageIndex = pageIndex
+        
+        return object
+    }
+}

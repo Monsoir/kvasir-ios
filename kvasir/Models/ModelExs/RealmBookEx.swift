@@ -80,3 +80,14 @@ extension RealmBook: RealmDataBackupable {
         return RealmBookExportOperation(path: backupPath)
     }
 }
+
+extension RealmBook: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("books.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmBookImportOperation(path: recoverPath)
+    }
+}

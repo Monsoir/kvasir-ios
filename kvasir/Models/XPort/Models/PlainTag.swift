@@ -16,6 +16,9 @@ struct PlainTag: Codable {
     var createdAt: String
     var updatedAt: String
     
+    var sentenceIds: [String]
+    var paragraphIds: [String]
+    
     init(object: RealmTag) {
         self.id = object.id
         self.serverId = object.serverId
@@ -23,6 +26,9 @@ struct PlainTag: Codable {
         self.color = object.color
         self.createdAt = object.createdAt.iso8601String
         self.updatedAt = object.updatedAt.iso8601String
+        
+        self.sentenceIds = object.sentences.map { $0.id }
+        self.paragraphIds = object.paragraphs.map { $0.id }
     }
     
     struct Collection: Codable {
@@ -43,5 +49,20 @@ struct PlainTag: Codable {
         struct Collection: Codable {
             var tags: [PlainTag.Tiny]
         }
+    }
+}
+
+extension PlainTag {
+    var realmObject: RealmTag {
+        let object = RealmTag()
+        object.id = id
+        object.serverId = serverId
+        
+        object.name = name
+        object.color = color
+        object.createdAt = Date(iso8601String: createdAt) ?? Date()
+        object.updatedAt = Date(iso8601String: updatedAt) ?? Date()
+        
+        return object
     }
 }

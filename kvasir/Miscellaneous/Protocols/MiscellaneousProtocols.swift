@@ -54,3 +54,8 @@ protocol RealmDataBackupable {
     static var backupPath: URL? { get }
     static func createBackupOperation() -> ExportOperation?
 }
+
+protocol RealmDataRecoverable {
+    static var recoverPath: URL? { get }
+    static func createRecoverOperation() -> ImportOperation?
+}

@@ -34,3 +34,14 @@ extension RealmTranslator: RealmDataBackupable {
         return RealmCreatorExportOperation<RealmTranslator>(path: backupPath)
     }
 }
+
+extension RealmTranslator: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("translators.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmCreatorImportOperation<RealmTranslator>(path: recoverPath)
+    }
+}

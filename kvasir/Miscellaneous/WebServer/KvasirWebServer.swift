@@ -73,20 +73,21 @@ private extension KvasirWebServer {
     }
     
     func setupDynamicResourceHandlers() {
-        let restApis: [(KvasirWebServerVerbable, KvasirWebServerPathable, GCDWebServerAsyncProcessBlock)] = [
-//            (KvasirWebServerVerb.get, KvasirWebServerPath.test, KvasirWebServerHandlers.test3),
-            (KvasirWebServerVerb.get, KvasirWebServerPath.export, KvasirWebServerHandlers.export),
+        let restApis: [(KvasirWebServerVerbable, KvasirWebServerPathable, AnyObject.Type, GCDWebServerAsyncProcessBlock)] = [
+            (KvasirWebServerVerb.get, KvasirWebServerPath.export, GCDWebServerRequest.self, KvasirWebServerHandlers.export),
+            (KvasirWebServerVerb.options, KvasirWebServerPath.import, GCDWebServerRequest.self, KvasirWebServerHandlers.option),
+            (KvasirWebServerVerb.post, KvasirWebServerPath.import, GCDWebServerFileRequest.self, KvasirWebServerHandlers.import),
         ]
         
         restApis.forEach {
-            engine.bindVerb($0.0, to: $0.1, with: $0.2)
+            engine.bindVerb($0.0, path: $0.1, requestClass: $0.2, handler: $0.3)
         }
     }
 }
 
 private extension GCDWebServer {
-    func bindVerb(_ verb: KvasirWebServerVerbable, to path: KvasirWebServerPathable, with handler: @escaping GCDWebServerAsyncProcessBlock) {
+    func bindVerb(_ verb: KvasirWebServerVerbable, path: KvasirWebServerPathable, requestClass: AnyObject.Type, handler: @escaping GCDWebServerAsyncProcessBlock) {
         assert(path.path.hasPrefix("/"), "path should start with `/`")
-        addHandler(forMethod: verb.verb, path: path.path, request: GCDWebServerRequest.self, asyncProcessBlock: handler)
+        addHandler(forMethod: verb.verb, path: path.path, request: requestClass.self, asyncProcessBlock: handler)
     }
 }

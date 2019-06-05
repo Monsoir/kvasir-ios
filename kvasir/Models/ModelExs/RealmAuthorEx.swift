@@ -34,3 +34,14 @@ extension RealmAuthor: RealmDataBackupable {
         return RealmCreatorExportOperation<RealmAuthor>(path: backupPath)
     }
 }
+
+extension RealmAuthor: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("authors.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmCreatorImportOperation<RealmAuthor>(path: recoverPath)
+    }
+}

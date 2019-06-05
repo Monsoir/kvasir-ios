@@ -24,48 +24,8 @@ struct KvasirWebServerHandlers {
         }
     }
     
-    static let test2: GCDWebServerAsyncProcessBlock = { request, completionBlock in
-        GlobalDefaultDispatchQueue.async {
-            // write file
-            let filename = "backup.json"
-            
-            guard let path = SystemDirectories.tmp.url?.appendingPathComponent(filename) else {
-                completionBlock(GCDWebServerErrorResponse(statusCode: 500))
-                return
-            }
-            
-            let data = ["hello": "world"]
-            guard let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []) else {
-                completionBlock(GCDWebServerErrorResponse(statusCode: 500))
-                return
-            }
-            
-            guard let jsonStringified = String(data: jsonData, encoding: .utf8) else {
-                completionBlock(GCDWebServerErrorResponse(statusCode: 500))
-                return
-            }
-            
-            do {
-                try jsonStringified.write(to: path, atomically: false, encoding: .utf8)
-            } catch {
-                completionBlock(GCDWebServerErrorResponse(statusCode: 500))
-                return
-            }
-            
-            // get data
-            let response = GCDWebServerFileResponse(file: path.droppedScheme()!.absoluteString, isAttachment: true)
-
-            #if DEBUG
-            // solve opaque response
-            response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
-            #endif
-
-            completionBlock(response)
-        }
-    }
-    
     static let export: GCDWebServerAsyncProcessBlock = { request, completionBlock in
-        let maintainer = DataMaintainer.shared
+        let maintainer = DataMaintainer()
         maintainer.export(completion: { (exportingURL) in
             guard let url = exportingURL else {
                 let response = GCDWebServerErrorResponse(statusCode: 500)
@@ -81,6 +41,66 @@ struct KvasirWebServerHandlers {
             
             let response = GCDWebServerFileResponse(file: url.droppedScheme()!.absoluteString, isAttachment: true)
             
+            #if DEBUG
+            // solve opaque response
+            response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+            #endif
+            
+            completionBlock(response)
+        })
+    }
+    
+    
+    /// Solving preflight OPTIONS response 501
+    static let option: GCDWebServerAsyncProcessBlock = { request, completionBlock in
+        let response = GCDWebServerResponse(statusCode: 200)
+        
+        #if DEBUG
+        // solve opaque response
+        response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+        
+        // solve `Request header field content-type is not allowed by Access-Control-Allow-Headers in preflight response.`
+        response.setValue("Content-Type", forAdditionalHeader: "Access-Control-Allow-Headers")
+        #endif
+        
+        completionBlock(response)
+    }
+    
+    static let `import`: GCDWebServerAsyncProcessBlock = { request, completionBlock in
+        guard let multipartRequest = request as? GCDWebServerFileRequest else {
+            let response = GCDWebServerErrorResponse(statusCode: 500)
+            #if DEBUG
+            // solve opaque response
+            response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+            #endif
+            completionBlock(response)
+            return
+        }
+        
+        let url = URL(fileURLWithPath: multipartRequest.temporaryPath)
+        do {
+            // 需要立刻移动文件，否则 GCDWebServerFileRequest 对象释放后，自动删除文件
+            try FileManager.default.moveItem(at: url, to: AppConstants.Paths.importingFilePath!)
+        } catch {
+            let response = GCDWebServerErrorResponse(statusCode: 500)
+            #if DEBUG
+            // solve opaque response
+            response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+            #endif
+            completionBlock(response)
+            return
+        }
+        
+        DataMaintainer().import(completion: { (success) in
+            if FileManager.default.fileExists(atPath: (AppConstants.Paths.importingFilePath?.droppedScheme()!.absoluteString)!) {
+                do {
+                    try FileManager.default.removeItem(at: AppConstants.Paths.importingFilePath!)
+                } catch {
+                    
+                }
+            }
+            
+            let response = GCDWebServerDataResponse(jsonObject: ["ok": true])
             #if DEBUG
             // solve opaque response
             response?.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")

@@ -18,6 +18,10 @@ struct AppConstants {
         
         /// 导出数据文件夹路径
         static let exportingFileDirectory = SystemDirectories.tmp.url?.appendingPathComponent("export", isDirectory: true)
+        /// 导入数据压缩文件路径
+        static let importingFilePath = SystemDirectories.tmp.url?.appendingPathComponent("imported_backup.zip")
+        /// 导入数据解压文件夹路径
+        static let importingUnzipDirectory = SystemDirectories.tmp.url?.appendingPathComponent("import", isDirectory: true)
     }
     struct WebServer {
         /// 服务监听端口

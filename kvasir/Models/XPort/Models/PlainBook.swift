@@ -26,6 +26,9 @@ struct PlainBook: Codable {
     var authors: [String]
     var translators: [String]
     
+    var sentenceIds: [String]
+    var paragraphIds: [String]
+    
     init(object: RealmBook) {
         self.id = object.id
         self.serverId = object.serverId
@@ -56,6 +59,9 @@ struct PlainBook: Codable {
             }
             return results
         }()
+        
+        self.sentenceIds = object.sentences.map { $0.id }
+        self.paragraphIds = object.paragraphs.map { $0.id }
     }
     
     struct Collection: Codable {
@@ -63,14 +69,37 @@ struct PlainBook: Codable {
     }
     
     struct Tiny: Codable {
+        var id: String
         var isbn13: String
         var isbn10: String
         var bookName: String
         
         init(object: RealmBook) {
+            self.id = object.id
             self.isbn13 = object.isbn13
             self.isbn10 = object.isbn10
             self.bookName = object.name
         }
+    }
+}
+
+extension PlainBook {
+    var realmObject: RealmBook {
+        let object = RealmBook()
+        object.id = id
+        object.serverId = serverId
+        object.createdAt = Date(iso8601String: createdAt) ?? Date()
+        object.updatedAt = Date(iso8601String: updatedAt) ?? Date()
+        
+        object.isbn13 = isbn13
+        object.isbn10 = isbn10
+        object.name = name
+        object.localeName = localeName
+        object.summary = summary
+        object.publisher = publisher
+        object.imageLarge = imageLarge
+        object.imageMedium = imageMedium
+        
+        return object
     }
 }
