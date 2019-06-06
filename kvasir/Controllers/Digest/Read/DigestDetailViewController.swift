@@ -86,16 +86,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
         return btn
     }()
     
-    private lazy var contentAttributes: StringAttributes = [
-        NSAttributedString.Key.font: UIFont(name: "PingFangSC-Light", size: 24)!,
-        NSAttributedString.Key.paragraphStyle: {
-            var paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = NSTextAlignment.justified
-            paragraphStyle.paragraphSpacing = 6.0
-            paragraphStyle.paragraphSpacingBefore = 6.0
-            return paragraphStyle
-        }(),
-    ]
+    private let contentAttributes = AppConstants.FontAttributes.reader
     
     override func viewDidLoad() {
         super.viewDidLoad()

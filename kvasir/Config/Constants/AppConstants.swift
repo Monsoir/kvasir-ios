@@ -6,7 +6,7 @@
 //  Copyright © 2019 monsoir. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct AppConstants {
     static let tagInitiatedKey = "tag-data-initiated"
@@ -32,6 +32,31 @@ struct AppConstants {
             .appendingPathComponent("website", isDirectory: true)
             .appendingPathComponent("build", isDirectory: true)
         static let websiteBuiltitLocaltion = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "website/build")
+    }
+    
+    struct FontAttributes {
+        static let editor: StringAttributes = [
+            NSAttributedString.Key.font: UIFont(name: "PingFangSC-Light", size: 24)!,
+            NSAttributedString.Key.paragraphStyle: {
+                var paragraphStyle = NSMutableParagraphStyle()
+                // 段落间距
+                paragraphStyle.paragraphSpacing = 6.0
+                paragraphStyle.paragraphSpacingBefore = 6.0
+                return paragraphStyle
+            }(),
+            NSAttributedString.Key.kern: 1.2 as NSObject, // 字与字之间的间距
+        ]
+        
+        static let reader: StringAttributes = [
+            NSAttributedString.Key.font: UIFont(name: "PingFangSC-Light", size: 24)!,
+            NSAttributedString.Key.paragraphStyle: {
+                var paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.paragraphSpacing = 6.0
+                paragraphStyle.paragraphSpacingBefore = 6.0
+                return paragraphStyle
+            }(),
+            NSAttributedString.Key.kern: 1.2 as NSObject, // 字与字之间的间距
+        ]
     }
 }
 

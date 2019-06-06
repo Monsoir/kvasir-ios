@@ -14,7 +14,7 @@ class KvasirEditor: UIView {
     
     var text: String {
         set {
-            editor.text = newValue
+            editor.attributedText = NSAttributedString(string: newValue, attributes: self.contentAttributes)
         }
         get {
             return editor.text
@@ -40,9 +40,12 @@ class KvasirEditor: UIView {
             view.delegate = self
             view.returnKeyType = .done
         }
+        view.typingAttributes = self.contentAttributes
         
         return view
     }()
+    
+    private let contentAttributes = AppConstants.FontAttributes.editor
     
     init(noCarriageReturn: Bool = false) {
         super.init(frame: .zero)
