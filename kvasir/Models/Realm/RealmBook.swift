@@ -8,7 +8,18 @@
 
 import RealmSwift
 
-class RealmBook: RealmBasicObject {
+protocol IBook: IBaicObject {
+    var isbn13: String { get set }
+    var isbn10: String { get set }
+    var name: String { get set }
+    var localeName: String { get set }
+    var summary: String { get set }
+    var publisher: String { get set }
+    var imageLarge: String { get set }
+    var imageMedium: String { get set }
+}
+
+class RealmBook: RealmBasicObject, IBook {
     @objc dynamic var isbn13 = ""
     @objc dynamic var isbn10 = ""
     @objc dynamic var name = ""

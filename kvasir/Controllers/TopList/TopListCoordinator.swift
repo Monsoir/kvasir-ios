@@ -15,7 +15,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     var bookName: String {
         return bookResult?.name ?? ""
     }
-    private lazy var repository = RealmWordRepository<Digest>()
+//    private lazy var repository = RealmWordRepository<Digest>()
     
     private(set) var results: Results<Digest>?
     private var bookResult: RealmBook?
@@ -155,7 +155,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     }
     
     private func setupQueryForAll(updatingSection section: Int) {
-        repository.queryAllSortingByUpdatedAtDesc { [weak self] (success, _results) in
+        RealmWordRepository<Digest>().queryAllSortingByUpdatedAtDesc { [weak self] (success, _results) in
             guard success, let results = _results, let self = self else {
                 return
             }
@@ -186,5 +186,13 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     
     func addRealmNotificationTokens(_ token: NotificationToken) {
         realmNotificationTokens.insert(token)
+    }
+    
+    func replace(digestResults: Results<Digest>?) {
+        results = digestResults
+    }
+    
+    func clearResults() {
+        results = nil
     }
 }

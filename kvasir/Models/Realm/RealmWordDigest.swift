@@ -8,7 +8,12 @@
 
 import RealmSwift
 
-class RealmWordDigest: RealmBasicObject {
+protocol IWordDigest: IBaicObject {
+    var content: String { get set }
+    var pageIndex: Int { get set }
+}
+
+class RealmWordDigest: RealmBasicObject, IWordDigest {
     @objc dynamic var content = ""
     @objc dynamic var pageIndex = -1
     

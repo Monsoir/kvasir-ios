@@ -8,6 +8,9 @@
 
 import RealmSwift
 
-class RealmSentence: RealmWordDigest {
+protocol ISentence: IWordDigest {
+}
+
+class RealmSentence: RealmWordDigest, ISentence {
     let tags = LinkingObjects(fromType: RealmTag.self, property: "sentences")
 }

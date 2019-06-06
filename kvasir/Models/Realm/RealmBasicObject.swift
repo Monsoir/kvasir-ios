@@ -8,7 +8,14 @@
 
 import RealmSwift
 
-class RealmBasicObject: Object {
+protocol IBaicObject {
+    var id: String { get set }
+    var serverId: String { get set }
+    var createdAt: Date { get  set }
+    var updatedAt: Date { get set }
+}
+
+class RealmBasicObject: Object, IBaicObject {
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var serverId  = ""
     @objc dynamic var createdAt = Date()

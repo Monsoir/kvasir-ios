@@ -40,6 +40,10 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
         unmanagedModel.preCreate()
     }
     
+    func preUpdate(managedModel: Model) {
+        managedModel.preUpdate()
+    }
+    
     func createOne(unmanagedModel: T, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
         preCreate(unmanagedModel: unmanagedModel)
         RealmWritingQueue.async {
@@ -98,7 +102,22 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
         }
     }
     
-    func preUpdate(managedModel: Model) {
-        managedModel.preUpdate()
+    func queryBy(content: String, sortedByUpdated: Bool = true, completion: @escaping RealmQueryResultsCompletion<Model>) {
+        RealmReadingQueue.async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    let filteringPredicate = "content CONTAINS '\(content)'"
+                    let objects = realm.objects(Model.self).filter(filteringPredicate).sorted(byKeyPath: "updatedAt", ascending: !sortedByUpdated)
+                    type(of: self).switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
+                        completion(true, objectsDeref)
+                    }, notOkHandler: {
+                        completion(false, nil)
+                    })
+                } catch {
+                    completion(false, nil)
+                }
+            })
+        }
     }
 }

@@ -8,6 +8,10 @@
 
 import RealmSwift
 
-class RealmParagraph: RealmWordDigest {
+protocol IParagraph: IWordDigest {
+    
+}
+
+class RealmParagraph: RealmWordDigest, IParagraph {
     let tags = LinkingObjects(fromType: RealmTag.self, property: "paragraphs")
 }

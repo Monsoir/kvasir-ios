@@ -40,6 +40,8 @@ class TopListViewController: UIViewController {
         return view
     }()
     
+    private lazy var searchControllerWrapper = KvasirSearchControllerWrapper(configuration: ["navigationController": self.navigationController ?? false])
+    
     private weak var sentencesCollectionView: UICollectionView? = nil
     private weak var paragraphCollectionView: UICollectionView? = nil
     
@@ -209,9 +211,11 @@ private extension TopListViewController {
     }
     
     func setupSubviews() {
+        definesPresentationContext = true
         view.backgroundColor = Color(hexString: ThemeConst.mainBackgroundColor)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableHeaderView = searchControllerWrapper.searchController.searchBar
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(view.safeAreaLayoutGuide)

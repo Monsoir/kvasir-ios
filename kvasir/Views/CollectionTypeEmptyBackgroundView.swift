@@ -28,11 +28,13 @@ class CollectionTypeEmptyBackgroundView: UIView {
         label.cornerRadius = 10
         return label
     }()
+    private var customFactor: CGFloat?
     
-    init(title: String = "A Placeholder", position: CollectionTypeEmptyBackgroundViewPosition = .middle) {
+    init(title: String = "A Placeholder", position: CollectionTypeEmptyBackgroundViewPosition = .middle, customFactor: CGFloat? = nil) {
         super.init(frame: .zero)
         self.title = title
         self.position = position
+        self.customFactor = customFactor
         setupSubviews()
     }
     
@@ -50,11 +52,11 @@ class CollectionTypeEmptyBackgroundView: UIView {
             make.centerX.equalToSuperview()
             switch position {
             case .upper:
-                make.centerY.equalToSuperview().dividedBy(3)
+                make.centerY.equalToSuperview().multipliedBy(customFactor ?? 0.3)
             case .middle:
-                make.centerY.equalToSuperview()
+                make.centerY.equalToSuperview().multipliedBy(customFactor ?? 1)
             case .lower:
-                make.centerY.equalToSuperview().multipliedBy(1.5)
+                make.centerY.equalToSuperview().multipliedBy(customFactor ?? 1.5)
             }
         }
         super.updateConstraints()
