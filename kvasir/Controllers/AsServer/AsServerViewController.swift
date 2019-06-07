@@ -41,7 +41,7 @@ class AsServerViewController: UIViewController, Configurable {
         setupNavigationBar()
         setupSubviews()
         
-        lbPrompt.text = "开启服务器中..."
+        lbPrompt.text = "正在准备中..."
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -53,7 +53,7 @@ class AsServerViewController: UIViewController, Configurable {
                 if success {
                     if let url = url {
                         self.lbPrompt.text = """
-                        开启服务器成功，访问步骤：
+                        准备工作完成，操作步骤：
                         
                         1. 电脑和 iPhone 连接同一个网络
                         
@@ -64,7 +64,7 @@ class AsServerViewController: UIViewController, Configurable {
                         return
                     }
                 }
-                self.lbPrompt.text = "开启服务器失败，请稍后再试"
+                self.lbPrompt.text = "准备过程出现问题，请稍后再试"
             }
         }
     }
@@ -77,7 +77,7 @@ class AsServerViewController: UIViewController, Configurable {
     private func setupNavigationBar() {
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
-        title = "As Server"
+        title = "数据备份与恢复"
     }
     
     private func setupSubviews() {
