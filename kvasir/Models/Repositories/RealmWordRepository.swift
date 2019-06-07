@@ -107,7 +107,7 @@ class RealmWordRepository<T: RealmWordDigest>: Repositorable {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
-                    let filteringPredicate = "content CONTAINS '\(content)'"
+                    let filteringPredicate = "content CONTAINS[c] '\(content)'"
                     let objects = realm.objects(Model.self).filter(filteringPredicate).sorted(byKeyPath: "updatedAt", ascending: !sortedByUpdated)
                     type(of: self).switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
                         completion(true, objectsDeref)
