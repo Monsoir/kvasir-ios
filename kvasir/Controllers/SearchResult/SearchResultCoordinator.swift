@@ -106,14 +106,14 @@ class DigestSearchResultCoordinator: NSObject, Configurable {
                 switch searchType {
                 case .sentence:
                     self.results = realm.objects(RealmWordDigest.self)
-                                        .filter("\(filteringPredicate) AND \(#keyPath(RealmWordDigest.category)) = \(RealmWordDigest.Category.sentence)")
+                                        .filter("\(filteringPredicate) AND \(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.sentence.rawValue)
                                         .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
                     if self.results?.count ?? 0 <= 0 {
                         noMore = true
                     }
                 case .paragraph:
                     self.results = realm.objects(RealmWordDigest.self)
-                                        .filter("\(filteringPredicate) AND \(#keyPath(RealmWordDigest.category)) = \(RealmWordDigest.Category.paragraph)")
+                                        .filter("\(filteringPredicate) AND \(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.paragraph.rawValue)
                                         .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
                     if self.results?.count ?? 0 <= 0 {
                         noMore = true
@@ -143,7 +143,7 @@ class DigestSearchResultCoordinator: NSObject, Configurable {
                 let steps = 10
                 let lowestIndex = ele.content.index(range.lowerBound, offsetBy: -steps, limitedBy: ele.content.startIndex)
                 let uppestIndex = ele.content.index(range.lowerBound, offsetBy: steps, limitedBy: ele.content.endIndex)
-                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? range.upperBound)])
+                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? range.upperBound)]).replacingOccurrences(of: "\n", with: " ")
                 let bookName: String
                 bookName = ele.book?.name ?? ""
                 let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, range: content.range(of: keyword, options: .caseInsensitive)!)
@@ -157,16 +157,24 @@ class DigestSearchResultCoordinator: NSObject, Configurable {
     private func sameConditions(searchingType: SearchType, keyword: String) -> Bool {
         return searchingType == self.searchType && keyword == self.keyword
     }
+    
+    
+    private func sameSearchInput(keyword: String, type: SearchType) -> Bool {
+        return self.keyword == keyword && self.searchType == type
+    }
 }
 
 // MARK: - 公开方法
 extension DigestSearchResultCoordinator {
-    func setupQuery(by content: String, completion: @escaping ((_: Bool) -> Void)) {
-        guard !content.isEmpty else { return }
-        guard content != keyword else { return }
+    func setupQuery(by content: String, of type: SearchType, completion: @escaping ((_: Bool) -> Void)) {
+//        guard !content.isEmpty else {
+//            return
+//        }
+        guard !sameSearchInput(keyword: content, type: type) else { return }
         
         cleanupForNext()
         keyword = content
+        searchType = type
         let infos: [String: Any] = [
             "completion": completion,
         ]

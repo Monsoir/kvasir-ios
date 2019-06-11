@@ -31,16 +31,10 @@ class DigestSearchResultViewController: UIViewController, Configurable {
         return view
     }()
     
-    private lazy var sentenceCoordinator = DigestSearchResultCoordinator()
-    private lazy var paragraphCoordinator = DigestSearchResultCoordinator()
+    private lazy var coordinator = DigestSearchResultCoordinator()
     
     private var results: [DigestSearchResult] {
-        switch searchType {
-        case .sentence:
-            return sentenceCoordinator.searchResults
-        case .paragraph:
-            return paragraphCoordinator.searchResults
-        }
+        return coordinator.searchResults
     }
     private var searchType = SearchType.sentence
     
@@ -123,30 +117,16 @@ private extension DigestSearchResultViewController {
 extension DigestSearchResultViewController {
     func reloadData(of type: SearchType, keyword: String) {
         searchType = type
-        guard !keyword.isEmpty else { return }
-        switch type {
-        case .sentence:
-            sentenceCoordinator.setupQuery(by: keyword) { [weak self] (success) in
+        coordinator.setupQuery(by: keyword, of: type) { [weak self] (success) in
+            guard let self = self else { return }
+            guard success else { return }
+            
+            self.coordinator.requestData(completion: { [weak self] (results) in
                 guard let self = self else { return }
-                guard success else { return }
-                
-                self.sentenceCoordinator.requestData(completion: { (results) in
-                    MainQueue.async {
-                        self.tableView.reloadData()
-                    }
-                })
-            }
-        case .paragraph:
-            paragraphCoordinator.setupQuery(by: keyword) { [weak self] (success) in
-                guard let self = self else { return }
-                guard success else { return }
-                
-                self.paragraphCoordinator.requestData(completion: { (results) in
-                    MainQueue.async {
-                        self.tableView.reloadData()
-                    }
-                })
-            }
+                MainQueue.async {
+                    self.tableView.reloadData()
+                }
+            })
         }
         self.didSearchSomething = true
         
@@ -154,14 +134,11 @@ extension DigestSearchResultViewController {
     
     func restore(exit: Bool = false) {
         guard didSearchSomething else  { return }
-        sentenceCoordinator.cleanupForNext()
-        paragraphCoordinator.cleanupForNext()
+        coordinator.cleanupForNext()
         
         reloadView()
-        
         if exit {
-            sentenceCoordinator.reclaimThread()
-            paragraphCoordinator.reclaimThread()
+            coordinator.reclaimThread()
         }
     }
 }
