@@ -17,6 +17,8 @@
 		4408B47E227C0BF000C5EF68 /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B47D227C0BF000C5EF68 /* SelectableLabel.swift */; };
 		4408B481227C373100C5EF68 /* TopListTableViewHeaderPlain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B480227C373100C5EF68 /* TopListTableViewHeaderPlain.swift */; };
 		4408B484227C76FD00C5EF68 /* ResourceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408B483227C76FD00C5EF68 /* ResourceListViewController.swift */; };
+		440CC4EB22AE315400FCF61F /* DigestSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440CC4EA22AE315400FCF61F /* DigestSearchResult.swift */; };
+		440CC4ED22AE855C00FCF61F /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440CC4EC22AE855C00FCF61F /* SearchResultTableViewCell.swift */; };
 		4418D50722A8DCAA007DDB96 /* DigestSearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4418D50622A8DCAA007DDB96 /* DigestSearchResultViewController.swift */; };
 		4418D50B22A8EB22007DDB96 /* SearchResultCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4418D50A22A8EB22007DDB96 /* SearchResultCoordinator.swift */; };
 		4418D50D22A8EF67007DDB96 /* UIColorEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4418D50C22A8EF67007DDB96 /* UIColorEx.swift */; };
@@ -205,6 +207,8 @@
 		4408B47D227C0BF000C5EF68 /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
 		4408B480227C373100C5EF68 /* TopListTableViewHeaderPlain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListTableViewHeaderPlain.swift; sourceTree = "<group>"; };
 		4408B483227C76FD00C5EF68 /* ResourceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceListViewController.swift; sourceTree = "<group>"; };
+		440CC4EA22AE315400FCF61F /* DigestSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestSearchResult.swift; sourceTree = "<group>"; };
+		440CC4EC22AE855C00FCF61F /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		4418D50622A8DCAA007DDB96 /* DigestSearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestSearchResultViewController.swift; sourceTree = "<group>"; };
 		4418D50A22A8EB22007DDB96 /* SearchResultCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCoordinator.swift; sourceTree = "<group>"; };
 		4418D50C22A8EF67007DDB96 /* UIColorEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorEx.swift; sourceTree = "<group>"; };
@@ -411,6 +415,7 @@
 				44A7ED282246A62300D1C402 /* TopListTableViewCell.swift */,
 				44A7ED2B2246A62300D1C402 /* TextListTableViewCell.swift */,
 				44BB703022991C6F00754156 /* ShadowedTableViewCell.swift */,
+				440CC4EC22AE855C00FCF61F /* SearchResultTableViewCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -464,6 +469,14 @@
 				4408B479227ACC6500C5EF68 /* CodeScannerOverlay.swift */,
 			);
 			path = CodeScannerPack;
+			sourceTree = "<group>";
+		};
+		440CC4E922AE313C00FCF61F /* SearchResult */ = {
+			isa = PBXGroup;
+			children = (
+				440CC4EA22AE315400FCF61F /* DigestSearchResult.swift */,
+			);
+			path = SearchResult;
 			sourceTree = "<group>";
 		};
 		4418D50522A8DC87007DDB96 /* SearchResult */ = {
@@ -718,6 +731,7 @@
 		44A7ED232246A62300D1C402 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				440CC4E922AE313C00FCF61F /* SearchResult */,
 				447724CF22A5240100E8AE56 /* XPort */,
 				44ECD9472276D82D00618576 /* Repositories */,
 				444B760A226491D0004B9CD4 /* Realm */,
@@ -1300,6 +1314,7 @@
 				4408B46D2279794A00C5EF68 /* AbstractFieldEditViewController.swift in Sources */,
 				447724E122A55B7300E8AE56 /* RealmCreatorExportOperation.swift in Sources */,
 				44ECD97822782CC700618576 /* CreateBookCoordinator.swift in Sources */,
+				440CC4ED22AE855C00FCF61F /* SearchResultTableViewCell.swift in Sources */,
 				44A7ED502246A62300D1C402 /* DigestDetailViewController.swift in Sources */,
 				44979C59229C374600C217C2 /* AppConstants.swift in Sources */,
 				44ECD96C227711B900618576 /* CreateDigestCoordinator.swift in Sources */,
@@ -1388,6 +1403,7 @@
 				44B2C0962272DFDC00B584F5 /* CreateCreatorViewController.swift in Sources */,
 				44B2C027226C47C100B584F5 /* TopListCoordinator.swift in Sources */,
 				447724DB22A54C6A00E8AE56 /* PlainWordDigest.swift in Sources */,
+				440CC4EB22AE315400FCF61F /* DigestSearchResult.swift in Sources */,
 				4408B484227C76FD00C5EF68 /* ResourceListViewController.swift in Sources */,
 				44F5106C229E6E6F00130D64 /* RealmBasicObjectEx.swift in Sources */,
 				446DB7C8228B24CC00BE3DDF /* Kingfisher.swift in Sources */,

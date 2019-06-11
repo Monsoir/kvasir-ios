@@ -68,10 +68,11 @@ extension KvasirSearchControllerWrapper: UISearchBarDelegate {
 extension KvasirSearchControllerWrapper: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
         searchController.searchResultsController?.view.isHidden = false
+        (searchController.searchResultsController as? DigestSearchResultViewController)?.restore()
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
-        (searchController.searchResultsController as? DigestSearchResultViewController)?.restore()
+        (searchController.searchResultsController as? DigestSearchResultViewController)?.restore(exit: true)
     }
 }
 
