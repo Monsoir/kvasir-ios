@@ -156,7 +156,7 @@ class TopListCoordinator: ListQueryCoordinatorable {
             }
             
             // link to results
-            self.results = results
+            self.results = results.sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
             
             // setup notification
             if let token = self.results?.observe({ [weak self] (changes) in

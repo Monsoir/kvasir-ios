@@ -9,23 +9,23 @@
 import Foundation
 import RealmSwift
 
-private let PageSize = 5
 class DigestSearchResultCoordinator: NSObject, Configurable {
     
+    static let PageSize = 5
+    
     private var results: Results<RealmWordDigest>?
-//    private var paragraphResults: Results<RealmParagraph>?
-    private var pageIndex = 0
+    private(set) var pageIndex = 0
     private(set) var searchResults = [DigestSearchResult]()
     private var searchType = SearchType.sentence
     private var keyword = ""
     private var noMore = false
     
     private var startIndex: Int {
-        return pageIndex * PageSize
+        return pageIndex * DigestSearchResultCoordinator.PageSize
     }
     private var endIndex: Int {
         // inclusive
-        return startIndex + PageSize - 1
+        return startIndex + DigestSearchResultCoordinator.PageSize - 1
     }
     
     private var configuration: Configurable.Configuration
@@ -136,16 +136,33 @@ class DigestSearchResultCoordinator: NSObject, Configurable {
         
         let startIndex = self.startIndex
         let endIndex = (results.count - 1) > (self.endIndex) ? self.endIndex : results.count - 1
+        guard startIndex <= endIndex else {
+            noMore = true
+            return
+        }
         
         for ele in results[startIndex...endIndex] {
             let ranges = ele.content.ranges(of: keyword, options: .caseInsensitive)
-            for range in ranges {
-                let steps = 10
+            
+            let steps = 10 // 前后最多拿多 10 个字符
+            
+            // 对同一条记录，查找所有的匹配项
+//            for range in ranges {
+//                let lowestIndex = ele.content.index(range.lowerBound, offsetBy: -steps, limitedBy: ele.content.startIndex)
+//                let uppestIndex = ele.content.index(range.upperBound, offsetBy: steps, limitedBy: ele.content.endIndex)
+//                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? range.upperBound)]).replacingOccurrences(of: "\n", with: " ")
+//                let bookName: String
+//                bookName = ele.book?.name ?? ""
+//                let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, range: content.range(of: keyword, options: .caseInsensitive)!)
+//                searchResults.append(result)
+//            }
+            
+            // 对同一条记录，只获取第一个匹配项
+            if let range = ranges.first {
                 let lowestIndex = ele.content.index(range.lowerBound, offsetBy: -steps, limitedBy: ele.content.startIndex)
-                let uppestIndex = ele.content.index(range.lowerBound, offsetBy: steps, limitedBy: ele.content.endIndex)
-                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? range.upperBound)]).replacingOccurrences(of: "\n", with: " ")
-                let bookName: String
-                bookName = ele.book?.name ?? ""
+                let uppestIndex = ele.content.index(range.upperBound, offsetBy: steps, limitedBy: ele.content.endIndex)
+                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? ele.content.endIndex)]).replacingOccurrences(of: "\n", with: " ")
+                let bookName = ele.book?.name ?? ""
                 let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, range: content.range(of: keyword, options: .caseInsensitive)!)
                 searchResults.append(result)
             }
@@ -182,6 +199,7 @@ extension DigestSearchResultCoordinator {
     }
     
     func requestData(completion:  @escaping ((_: [DigestSearchResult]) -> Void)) {
+        guard !noMore else { return }
         let infos: [String: Any] = [
             "completion": completion,
         ]

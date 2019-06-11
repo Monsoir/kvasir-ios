@@ -190,6 +190,22 @@ extension DigestSearchResultViewController: UITableViewDelegate {
             KvasirNavigator.push(KvasirURL.detailParagraph.url(with: ["id": model.id]), context: nil, from: realNavigationController, animated: true)
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let threshold = 0.96 as CGFloat
+        let currentBottomY = scrollView.contentOffset.y + scrollView.frame.size.height
+        let total = scrollView.contentSize.height
+        let ratio = currentBottomY / total
+        
+        if ratio >= threshold {
+            self.coordinator.requestData(completion: { [weak self] (results) in
+                guard let self = self else { return }
+                MainQueue.async {
+                    self.tableView.reloadData()
+                }
+            })
+        }
+    }
 }
 
 private extension UITableView {
