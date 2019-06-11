@@ -15,14 +15,14 @@ private let ScaleFactor = 0.9 as CGFloat
 private let ScaleDuration = 0.1
 
 private let FocusedSection: [(title: String, url: String)] = [
-    ("句摘", KvasirURL.allSentences.url()),
-    ("段摘", KvasirURL.allParagraphs.url()),
+    ("\(RealmWordDigest.Category.sentence.toHuman)", KvasirURL.allSentences.url()),
+    ("\(RealmWordDigest.Category.paragraph.toHuman)", KvasirURL.allParagraphs.url()),
 ]
 private let Resources: [(title: String, url: String)] = [
     ("书籍", KvasirURL.allBooks.url()),
-    ("\(RealmAuthor.toHuman)们", KvasirURL.allAuthors.url()),
-    ("\(RealmTranslator.toHuman)们", KvasirURL.allTranslators.url()),
-    ("\(RealmTag.toHuman)们", KvasirURL.allTags.url()),
+    ("\(RealmCreator.Category.author.toHuman)", KvasirURL.allAuthors.url()),
+    ("\(RealmCreator.Category.translator.toHuman)", KvasirURL.allTranslators.url()),
+    ("\(RealmTag.toHuman)", KvasirURL.allTags.url()),
 ]
 private let ResourceCellIdentifier = "resource"
 
@@ -45,8 +45,10 @@ class TopListViewController: UIViewController {
     private weak var sentencesCollectionView: UICollectionView? = nil
     private weak var paragraphCollectionView: UICollectionView? = nil
     
-    private lazy var sentenceViewModelCoordinator: TopListCoordinator<RealmSentence> = { [unowned self ] in
-        let coordinator = TopListCoordinator<RealmSentence>()
+    private lazy var sentenceViewModelCoordinator: TopListCoordinator = { [unowned self ] in
+        let coordinator = TopListCoordinator(
+            configuration: [#keyPath(RealmWordDigest.category): RealmWordDigest.Category.sentence]
+        )
         coordinator.initialHandler = { _ in
             MainQueue.async {
                 self.tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .automatic)
@@ -64,14 +66,16 @@ class TopListViewController: UIViewController {
                 Bartendar.handleSorryAlert(on: nil)
             }
         }
-        coordinator.tagUpdateHandler = { (updatedDigestIds, digestType) in
-            guard digestType == "\(RealmSentence.toMachine)", let collectionView = self.sentencesCollectionView else { return }
-            self.updateVisibleCellsInCollectionView(collectionView, accordingTo: updatedDigestIds, digestType: RealmSentence.self)
+        coordinator.tagUpdateHandler = { (updatedDigestIds, category) in
+            guard category == RealmWordDigest.Category.sentence, let collectionView = self.sentencesCollectionView else { return }
+            self.updateVisibleCellsInCollectionView(collectionView, accordingTo: updatedDigestIds, category: RealmWordDigest.Category.sentence)
         }
         return coordinator
     }()
-    private lazy var paragraphViewModelCoordinator: TopListCoordinator<RealmParagraph> = { [unowned self ] in
-        let coordinator = TopListCoordinator<RealmParagraph>()
+    private lazy var paragraphViewModelCoordinator: TopListCoordinator = { [unowned self ] in
+        let coordinator = TopListCoordinator(
+            configuration: [#keyPath(RealmWordDigest.category): RealmWordDigest.Category.paragraph]
+        )
         coordinator.initialHandler = { _ in
             MainQueue.async {
                 self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .automatic)
@@ -89,9 +93,9 @@ class TopListViewController: UIViewController {
                 Bartendar.handleSorryAlert(on: nil)
             }
         }
-        coordinator.tagUpdateHandler = { (updatedDigestIds, digestType) in
-            guard digestType == "\(RealmParagraph.toMachine)", let collectionView = self.paragraphCollectionView else { return }
-            self.updateVisibleCellsInCollectionView(collectionView, accordingTo: updatedDigestIds, digestType: RealmParagraph.self)
+        coordinator.tagUpdateHandler = { (updatedDigestIds, category) in
+            guard category == RealmWordDigest.Category.paragraph, let collectionView = self.paragraphCollectionView else { return }
+            self.updateVisibleCellsInCollectionView(collectionView, accordingTo: updatedDigestIds, category: RealmWordDigest.Category.paragraph)
         }
         return coordinator
     }()
@@ -103,13 +107,13 @@ class TopListViewController: UIViewController {
         return coordinator
     }()
     
-    private var sentencesData: Results<RealmSentence>? {
+    private var sentencesData: Results<RealmWordDigest>? {
         get {
             return sentenceViewModelCoordinator.results
         }
     }
     
-    private var paragraphsData: Results<RealmParagraph>? {
+    private var paragraphsData: Results<RealmWordDigest>? {
         get {
             return paragraphViewModelCoordinator.results
         }
@@ -121,13 +125,13 @@ class TopListViewController: UIViewController {
         }
     }
     
-    private var authorsData: Results<RealmAuthor>? {
+    private var authorsData: Results<RealmCreator>? {
         get {
             return deputyCoodinator.authorResults
         }
     }
     
-    private var translatorsData: Results<RealmTranslator>? {
+    private var translatorsData: Results<RealmCreator>? {
         get {
             return deputyCoodinator.translatorResults
         }
@@ -188,14 +192,14 @@ class TopListViewController: UIViewController {
     
     func reloadSentenceView() {
         MainQueue.async {
-            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmSentence.toHuman)吧") : nil
+            self.sentencesCollectionView?.backgroundView = (self.sentencesData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmWordDigest.Category.sentence.toHuman)吧") : nil
             self.sentencesCollectionView?.reloadData()
         }
     }
     
     func reloadParagraphView() {
         MainQueue.async {
-            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmParagraph.toHuman)吧") : nil
+            self.paragraphCollectionView?.backgroundView = (self.paragraphsData?.count ?? 0 <= 0) ? CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(RealmWordDigest.Category.paragraph.toHuman)吧") : nil
             self.paragraphCollectionView?.reloadData()
         }
     }
@@ -384,14 +388,7 @@ extension TopListViewController: UICollectionViewDataSource {
         cell.title = digest?.title
         cell.bookName = digest?.book?.name
         cell.recordUpdatedDate = digest?.updateAtReadable
-        switch digest {
-        case is RealmSentence:
-            cell.tagColors = (digest as! RealmSentence).tags.map { $0.color }
-        case is RealmParagraph:
-            cell.tagColors = (digest as! RealmParagraph).tags.map { $0.color }
-        default:
-            cell.tagColors = []
-        }
+        cell.tagColors = digest?.tags.map { $0.color } ?? []
         return cell
     }
 }
@@ -438,15 +435,15 @@ private extension TopListViewController {
         return theTableView.indexPathForRow(at: theTableViewCell.center)
     }
     
-    func updateVisibleCellsInCollectionView(_ collectionView: UICollectionView, accordingTo digestIds: Set<String>, digestType: RealmWordDigest.Type) {
+    func updateVisibleCellsInCollectionView(_ collectionView: UICollectionView, accordingTo digestIds: Set<String>, category: RealmWordDigest.Category) {
         MainQueue.async {
             // 只更新可见的 cell
             let visibleCellIndexes = collectionView.indexPathsForVisibleItems
             let updatingIndexes = visibleCellIndexes.filter { (ele) -> Bool in
-                switch digestType {
-                case is RealmSentence.Type:
+                switch category {
+                case .sentence:
                     return digestIds.contains((self.sentencesData?[ele.row].id ?? ""))
-                case is RealmParagraph.Type:
+                case .paragraph:
                     return digestIds.contains((self.paragraphsData?[ele.row].id ?? ""))
                 default:
                     return false

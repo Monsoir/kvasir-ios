@@ -120,6 +120,26 @@ extension Repositorable {
         }
     }
     
+    func queryAll(by category: Int, completion: @escaping RealmQueryResultsCompletion<Model>) {
+        RealmReadingQueue.async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    let filteredCondition = "category = \(category)"
+                    let objects = realm.objects(Model.self).filter(filteredCondition)
+                    
+                    type(of: self).switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
+                        completion(true, objectsDeref)
+                    }, notOkHandler: {
+                        completion(false, nil)
+                    })
+                } catch {
+                    completion(false, nil)
+                }
+            })
+        }
+    }
+    
     func queryAllSortingByUpdatedAtDesc(completion: @escaping RealmQueryResultsCompletion<Model>) {
         RealmReadingQueue.async {
             autoreleasepool(invoking: { () -> Void in
@@ -127,6 +147,27 @@ extension Repositorable {
                     let realm = try Realm()
                     let objects = realm.objects(Model.self).sorted(byKeyPath: "updatedAt", ascending: false)
                     Self.switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
+                        completion(true, objectsDeref)
+                    }, notOkHandler: {
+                        completion(false, nil)
+                    })
+                } catch {
+                    completion(false, nil)
+                }
+            })
+        }
+    }
+    
+    func queryAllSortingByUpdatedAtDesc(by category: Int, completion: @escaping RealmQueryResultsCompletion<Model>) {
+        RealmReadingQueue.async {
+            autoreleasepool(invoking: { () -> Void in
+                do {
+                    let realm = try Realm()
+                    let filteredCondition = "category = '\(category)'"
+                    let objects = realm.objects(Model.self)
+                        .filter(filteredCondition)
+                        .sorted(byKeyPath: "updatedAt", ascending: false)
+                    type(of: self).switchBackToMainQueue(objects: objects, okHandler: { (objectsDeref) in
                         completion(true, objectsDeref)
                     }, notOkHandler: {
                         completion(false, nil)

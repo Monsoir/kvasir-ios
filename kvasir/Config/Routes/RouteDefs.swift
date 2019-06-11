@@ -50,15 +50,15 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
         switch self {
         case .newSentence:
             // kvasir://digest/new/sentence
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.new).component(RealmSentence.toMachine)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.new).component(RouteConstants.Nouns.sentence)
         case .newParagraph:
             schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.new
-                ).component(RealmParagraph.toMachine)
+                ).component(RouteConstants.Nouns.paragraph)
         case .newAuthor:
             // kvasir://resource/new/author
-            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmAuthor.toMachine)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RouteConstants.Nouns.author)
         case .newTranslator:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmTranslator.toMachine)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RouteConstants.Nouns.translator)
         case .newBookManully:
             // kvasir://resource/new/book/manully
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmBook.toMachine).component(RouteConstants.Preps.manully)
@@ -67,15 +67,15 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.new).component(RealmBook.toMachine).component(RouteConstants.Preps.scanly)
         case .allSentences:
             // kvasir://digest/all/sentence
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RealmSentence.toMachine)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.sentence)
         case .allParagraphs:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RealmParagraph.toMachine)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Actions.all).component(RouteConstants.Nouns.paragraph)
         case .detailSentence:
             // kvasir://digest/sentence/an-id
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine).component("<string:id>")
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.sentence).component("<string:id>")
         case .detailParagraph:
             // kvasir://digest/paragraph/an-id
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine).component("<string:id>")
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.paragraph).component("<string:id>")
         case .detailBook:
             // kvasir://resource/book/an-id
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmBook.toMachine).component("<string:id>")
@@ -111,10 +111,10 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Actions.select).component(RouteConstants.Nouns.translator)
         case .sentencesOfBook:
             // kvasir://resource/book/<book-id>/digest/sentence/all
-            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.book).component("<string:id>").component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine).component(RouteConstants.Actions.all)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.book).component("<string:id>").component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.sentence).component(RouteConstants.Actions.all)
         case .paragraphsOfBook:
             // kvasir://resource/book/<book-id>/digest/paragraph/all
-            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component("<string:id>").component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine).component(RouteConstants.Actions.all)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component("<string:id>").component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.paragraph).component(RouteConstants.Actions.all)
         case .asServer:
             schema = SchemaBuilder().component(RouteConstants.Nouns.server)
         }
@@ -129,9 +129,9 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
         var schema: SchemaBuilder
         switch self {
         case .detailSentence:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine).component(args.getValueOrFatalError(key: "id"))
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.sentence).component(args.getValueOrFatalError(key: "id"))
         case .detailParagraph:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine).component(args.getValueOrFatalError(key: "id"))
+            schema = SchemaBuilder().component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.paragraph).component(args.getValueOrFatalError(key: "id"))
         case .detailBook:
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RealmBook.toMachine).component(args.getValueOrFatalError(key: "id"))
         case .detailTag:
@@ -141,9 +141,9 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
         case .booksOfATranslator:
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.translator).component(args.getValueOrFatalError(key: "id")).component(RouteConstants.Nouns.books)
         case .sentencesOfBook:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.book).component(args.getValueOrFatalError(key: "id")).component(RouteConstants.Nouns.digest).component(RealmSentence.toMachine).component(RouteConstants.Actions.all)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.book).component(args.getValueOrFatalError(key: "id")).component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.sentence).component(RouteConstants.Actions.all)
         case .paragraphsOfBook:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component(args.getValueOrFatalError(key: "id")).component(RouteConstants.Nouns.digest).component(RealmParagraph.toMachine).component(RouteConstants.Actions.all)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component(args.getValueOrFatalError(key: "id")).component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.paragraph).component(RouteConstants.Actions.all)
         default:
             return template
         }

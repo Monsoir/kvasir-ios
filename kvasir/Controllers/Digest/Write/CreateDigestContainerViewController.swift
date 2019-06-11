@@ -13,15 +13,15 @@ import RealmSwift
 
 private let DefaultTab = 0
 
-class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewController, Configurable {
+class CreateDigestContainerViewController: UnifiedViewController, Configurable {
     
     private let configuration: Configuration
-    private var digest: Digest {
+    private var digest: RealmWordDigest {
         get {
             return coordinator.entity
         }
     }
-    private lazy var coordinator: CreateDigestCoordinator<Digest> = CreateDigestCoordinator(configuration: self.configuration)
+    private lazy var coordinator = CreateDigestCoordinator(configuration: self.configuration)
     private var createCompletion: ((_: UIViewController) -> Void)? {
         return configuration["completion"] as? (_: UIViewController) -> Void ?? { vc in
             vc.dismiss(animated: true, completion: nil)
@@ -38,8 +38,8 @@ class CreateDigestContainerViewController<Digest: RealmWordDigest>: UnifiedViewC
         }
     }
 
-    private lazy var segement: UISegmentedControl = {
-        let view = UISegmentedControl(items: ["基本信息", "\(Digest.toHuman)内容"])
+    private lazy var segement: UISegmentedControl = { [unowned self] in
+        let view = UISegmentedControl(items: ["基本信息", "\(self.digest.category.toHuman)内容"])
         view.addTarget(self, action: #selector(actionChangeSegement(sender:)), for: .valueChanged)
         view.selectedSegmentIndex = DefaultTab
         return view

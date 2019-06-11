@@ -14,8 +14,8 @@ private let ContainerHeight = 50
 
 class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, Configurable {
     
-    private lazy var coordinator: DigestDetailCoordinator<Digest> = DigestDetailCoordinator<Digest>(configuration: self.configuration)
-    private var entity: Digest? {
+    private lazy var coordinator = DigestDetailCoordinator(configuration: self.configuration)
+    private var entity: RealmWordDigest? {
         get {
             return coordinator.entity
         }
@@ -138,7 +138,7 @@ class DigestDetailViewController<Digest: RealmWordDigest>: UnifiedViewController
     }
     
     @objc private func actionFormore() {
-        let vc = DigestMoreDetailViewController<Digest>(configuration: configuration)
+        let vc = DigestMoreDetailViewController(configuration: configuration)
         navigationController?.pushViewController(vc)
     }
 }
@@ -242,7 +242,7 @@ private extension DigestDetailViewController {
     
     func showContentEdit() {
         guard let editingData = entity else { return }
-        let vc = DigestEditViewController(text: editingData.content, singleLine: Digest.self === RealmSentence.self) { [weak self] (text) in
+        let vc = DigestEditViewController(text: editingData.content, singleLine: editingData.category == RealmWordDigest.Category.sentence) { [weak self] (text) in
             do {
                 let putInfo = ["content": text]
                 try self?.coordinator.put(info: putInfo)

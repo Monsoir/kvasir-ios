@@ -12,9 +12,9 @@ import FontAwesome_swift
 import RealmSwift
 import SwifterSwift
 
-class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewController {
+class CreateDigestInfoViewController: FormViewController {
     
-    private var digest: Digest?
+    private var digest: RealmWordDigest?
     private var creating = true
     private lazy var tagCoordinator: TagListCoordinator = { [unowned self] in
         let coordinator = TagListCoordinator()
@@ -45,7 +45,7 @@ class CreateDigestInfoViewController<Digest: RealmWordDigest>: FormViewControlle
         view.endEditing(true)
     }
     
-    init(digest: Digest, creating: Bool = true) {
+    init(digest: RealmWordDigest, creating: Bool = true) {
         self.creating = creating
         self.digest = digest
         super.init(nibName: nil, bundle: nil)

@@ -10,8 +10,14 @@ import Foundation
 import RealmSwift
 import SwifterSwift
 
-class RealmCreatorRepository<T: RealmCreator>: Repositorable {
-    typealias Model = T
+class RealmCreatorRepository: Repositorable {
+    typealias Model = RealmCreator
+    
+    static let shared: RealmCreatorRepository = {
+        let repo = RealmCreatorRepository()
+        return repo
+    }()
+    private init() {}
     
     deinit {
         #if DEBUG
@@ -19,11 +25,11 @@ class RealmCreatorRepository<T: RealmCreator>: Repositorable {
         #endif
     }
     
-    func preCreate(unmanagedModel: T) {
+    func preCreate(unmanagedModel: Model) {
         unmanagedModel.preCreate()
     }
     
-    func createOne(unmanagedModel: T, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
+    func createOne(unmanagedModel: Model, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
         preCreate(unmanagedModel: unmanagedModel)
         RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
@@ -40,7 +46,7 @@ class RealmCreatorRepository<T: RealmCreator>: Repositorable {
         }
     }
     
-    func preUpdate(managedModel: T) {
+    func preUpdate(managedModel: Model) {
         managedModel.preUpdate()
     }
 }

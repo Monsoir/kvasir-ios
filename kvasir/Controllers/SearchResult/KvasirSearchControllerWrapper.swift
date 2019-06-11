@@ -32,7 +32,7 @@ class KvasirSearchControllerWrapper: NSObject, Configurable {
         //        searchController.obscuresBackgroundDuringPresentation = false
         searchController.delegate = self
         searchController.searchResultsUpdater = self
-        searchController.searchBar.scopeButtonTitles = [RealmSentence.toHuman, RealmParagraph.toHuman]
+        searchController.searchBar.scopeButtonTitles = [RealmWordDigest.Category.sentence.toHuman, RealmWordDigest.Category.paragraph.toHuman]
         
         let searchBar = searchController.searchBar
         searchBar.barTintColor = Color(hexString: ThemeConst.secondaryBackgroundColor) // 改变所搜结果可视时，search bar 的背景色

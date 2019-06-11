@@ -13,6 +13,12 @@ import SwifterSwift
 class RealmBookRepository: Repositorable {
     typealias Model = RealmBook
     
+    static let shared: RealmBookRepository = {
+        let repo = RealmBookRepository()
+        return repo
+    }()
+    private init() {}
+    
     deinit {
         #if DEBUG
         print("\(self) deinit")
@@ -34,18 +40,18 @@ class RealmBookRepository: Repositorable {
                 do {
                     let realm = try Realm()
                     
-                    let authors = realm.objects(RealmAuthor.self).filter("\(RealmAuthor.primaryKey()!) IN %@", authorIds)
-                    let translators = realm.objects(RealmTranslator.self).filter("\(RealmTranslator.primaryKey()!) IN %@", translatorIds)
+                    let authors = realm.objects(RealmCreator.self).filter("\(RealmCreator.primaryKey()!) IN %@", authorIds)
+                    let translators = realm.objects(RealmCreator.self).filter("\(RealmCreator.primaryKey()!) IN %@", translatorIds)
                     
                     try realm.write {
                         realm.add(unmanagedModel)
                         
                         authors.forEach({ (ele) in
-                            ele.books.append(unmanagedModel)
+                            ele.writtenBooks.append(unmanagedModel)
                         })
                         
                         translators.forEach({ (ele) in
-                            ele.books.append(unmanagedModel)
+                            ele.translatedBooks.append(unmanagedModel)
                         })
                     }
                     completion(true, nil)
@@ -56,23 +62,14 @@ class RealmBookRepository: Repositorable {
         }
     }
     
-    func queryByCreatorId(_ id: String, creatorType: RealmCreator.Type, completion: @escaping RealmQueryResultsCompletion<Model>) {
+    func queryByCreatorId(_ id: String, completion: @escaping RealmQueryResultsCompletion<Model>) {
         RealmReadingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
                     let realm = try Realm()
-                    let object = realm.object(ofType: creatorType.self, forPrimaryKey: id)
+                    let object = realm.object(ofType: RealmCreator.self, forPrimaryKey: id)
                     
-                    var _entities: List<RealmBook>? = nil
-                    switch creatorType {
-                    case is RealmAuthor.Type:
-                        _entities = (object as? RealmAuthor)?.books
-                    case is RealmTranslator.Type:
-                        _entities = (object as? RealmTranslator)?.books
-                    default:
-                        break
-                    }
-                    guard let entities = _entities else {
+                    guard let entities = object?.writtenBooks else {
                         completion(false, nil)
                         return
                     }
@@ -94,7 +91,7 @@ class RealmBookRepository: Repositorable {
         managedModel.preUpdate()
     }
     
-    func batchCreate(unmanagedBook: RealmBook, unmanagedAuthors: [RealmAuthor], unmanagedTranslators: [RealmTranslator], completion: @escaping RealmCreateCompletion) {
+    func batchCreate(unmanagedBook: RealmBook, unmanagedAuthors: [RealmCreator], unmanagedTranslators: [RealmCreator], completion: @escaping RealmCreateCompletion) {
         RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
@@ -136,7 +133,7 @@ class RealmBookRepository: Repositorable {
                     // book not existed, then create
                     let bookToCreate = unmanagedBook
                     
-                    func operatingCreatorsFromInfo<creator: RealmCreator>(_ unmanagedCreators: [creator], type: creator.Type) -> (existedCreator: Results<creator>, toCreate: [creator]) {
+                    func operatingCreatorsFromInfo(_ unmanagedCreators: [RealmCreator]) -> (existedCreator: Results<RealmCreator>, toCreate: [RealmCreator]) {
                         // put all creator names into a set, for dedup purpose later.
                         let nameSet = Set(unmanagedCreators.map{ $0.name }).filter{ !$0.isEmpty }
                         
@@ -147,18 +144,18 @@ class RealmBookRepository: Repositorable {
                             // no components means no creator
                             return (
                                 // workaround to create an empty Results<Type>
-                                realm.objects(creator.self).filter(NSPredicate(value: false)),
+                                realm.objects(RealmCreator.self).filter(NSPredicate(value: false)),
                                 []
                             )
                         }
                         
-                        let existedCreators = realm.objects(creator.self).filter(searchConditions.joined(separator: " OR "))
+                        let existedCreators = realm.objects(RealmCreator.self).filter(searchConditions.joined(separator: " OR "))
                         
                         // use set to dedup, and now get the creator needed to be created
                         let existedCreatorNameSet = Set(existedCreators.map{ $0.name })
                         let namesOfCreatorToCreate = nameSet.subtracting(existedCreatorNameSet)
                         
-                        let creatorsToCreate = namesOfCreatorToCreate.map({ (ele) -> creator in
+                        let creatorsToCreate = namesOfCreatorToCreate.map({ (ele) -> RealmCreator in
                             let creator = unmanagedCreators.first(where: { $0.name == ele })!
                             creator.preCreate()
                             return creator
@@ -167,11 +164,11 @@ class RealmBookRepository: Repositorable {
                         return (existedCreators, creatorsToCreate)
                     }
                     // create authors
-                    let (existedAuthors, authorsToCreate) = operatingCreatorsFromInfo(unmanagedAuthors, type: RealmAuthor.self)
+                    let (existedAuthors, authorsToCreate) = operatingCreatorsFromInfo(unmanagedAuthors)
                     
                     
                     // create translators
-                    let (existedTranslators, translatorsToCreate) = operatingCreatorsFromInfo(unmanagedTranslators, type: RealmTranslator.self)
+                    let (existedTranslators, translatorsToCreate) = operatingCreatorsFromInfo(unmanagedTranslators)
                     
                     try realm.write {
                         realm.add(bookToCreate)
@@ -180,14 +177,14 @@ class RealmBookRepository: Repositorable {
                         
                         (existedAuthors + authorsToCreate).forEach({ (ele) in
                             // workaround: 不知怎的，这里会重复添加，即一个作者会有两个相同的书籍
-                            if !ele.books.contains(bookToCreate) {
-                                ele.books.append(bookToCreate)
+                            if !ele.writtenBooks.contains(bookToCreate) {
+                                ele.writtenBooks.append(bookToCreate)
                             }
                         })
 
                         (existedTranslators + translatorsToCreate).forEach({ (ele) in
-                            if !ele.books.contains(bookToCreate) {
-                                ele.books.append(bookToCreate)
+                            if !ele.translatedBooks.contains(bookToCreate) {
+                                ele.translatedBooks.append(bookToCreate)
                             }
                         })
                     }

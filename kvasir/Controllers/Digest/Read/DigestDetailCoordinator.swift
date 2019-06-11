@@ -8,15 +8,15 @@
 
 import RealmSwift
 
-class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
+class DigestDetailCoordinator: UpdateCoordinatorable {
     private let configuation: Configurable.Configuration
     var digestId: String {
         return configuation["id"] as? String ?? ""
     }
-    private(set) var entity: Digest?
+    private(set) var entity: RealmWordDigest?
     /// Digest 对应标签的集合
     private(set) var tagIdSet: Set<String>?
-    private var repository = RealmWordRepository<Digest>()
+    private var repository = RealmWordRepository.shared
     private var putInfo = PutInfo()
     
     private var realmNotificationToken: NotificationToken?
@@ -25,7 +25,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         return configuation["tagSection"] as? Int ?? 0
     }
     
-    var reload: ((_ entity: Digest?) -> Void)?
+    var reload: ((_ entity: RealmWordDigest?) -> Void)?
     var errorHandler: ((_ message: String) -> Void)?
     var entityDeleteHandler: (() -> Void)?
     
@@ -45,7 +45,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
     
     func put(info: PutInfoScript) throws {
         let validators: [String: SimpleValidator] = [
-            "content": createNotEmptyStringValidator("\(Digest.toHuman)内容")
+            "content": createNotEmptyStringValidator("\(entity?.category.toHuman ?? "")内容")
         ]
         
         do {
@@ -73,7 +73,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         self.tagIdSet = entity?.tagIdSet
     }
     
-    func queryOne(completion: @escaping RealmQueryAnEntityCompletion<Digest>) {
+    func queryOne(completion: @escaping RealmQueryAnEntityCompletion<RealmWordDigest>) {
         guard !digestId.isEmpty else {
             completion(false, nil)
             return
@@ -82,7 +82,7 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
         repository.queryBy(id: digestId) { [weak self] (success, entity) in
             guard let self = self else { return }
             guard success else {
-                self.errorHandler?("没找到\(Digest.toHuman)")
+                self.errorHandler?("没找到数据")
                 return
             }
             
@@ -113,19 +113,20 @@ class DigestDetailCoordinator<Digest: RealmWordDigest>: UpdateCoordinatorable {
     }
     
     func updateBookRef(book: RealmBook, completion: @escaping RealmSaveCompletion) {
-        guard let model = entity else {
+        guard let model = entity, let entity = entity else {
             completion(false)
             return
         }
         let oldBook = model.book
         let newBook = book
         
-        if Digest.self == RealmSentence.self {
-            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine)s", inverseKey: "book", elements: [model] as! [RealmSentence] ) { (success) in
+        switch entity.category {
+        case .sentence:
+            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "digests", inverseKey: #keyPath(RealmWordDigest.book), elements: [model]) { (success) in
                 completion(success)
             }
-        } else if Digest.self == RealmParagraph.self {
-            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "\(Digest.toMachine)s", inverseKey: "book", elements: [model] as! [RealmParagraph] ) { (success) in
+        default:
+            RealmBookRepository.updateManyToOneRelations(newOwner: newBook, oldOwner: oldBook, key: "digests", inverseKey: #keyPath(RealmWordDigest.book), elements: [model] ) { (success) in
                 completion(success)
             }
         }

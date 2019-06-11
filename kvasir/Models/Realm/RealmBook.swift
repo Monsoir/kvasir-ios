@@ -8,18 +8,7 @@
 
 import RealmSwift
 
-protocol IBook: IBaicObject {
-    var isbn13: String { get set }
-    var isbn10: String { get set }
-    var name: String { get set }
-    var localeName: String { get set }
-    var summary: String { get set }
-    var publisher: String { get set }
-    var imageLarge: String { get set }
-    var imageMedium: String { get set }
-}
-
-class RealmBook: RealmBasicObject, IBook {
+class RealmBook: RealmBasicObject {
     @objc dynamic var isbn13 = ""
     @objc dynamic var isbn10 = ""
     @objc dynamic var name = ""
@@ -29,11 +18,10 @@ class RealmBook: RealmBasicObject, IBook {
     @objc dynamic var imageLarge = ""
     @objc dynamic var imageMedium = ""
     
-    let sentences = List<RealmSentence>()
-    let paragraphs = List<RealmParagraph>()
+    let digests = List<RealmWordDigest>()
     
-    let authors = LinkingObjects(fromType: RealmAuthor.self, property: "books")
-    let translators = LinkingObjects(fromType: RealmTranslator.self, property: "books")
+    let authors = LinkingObjects(fromType: RealmCreator.self, property: "writtenBooks")
+    let translators = LinkingObjects(fromType: RealmCreator.self, property: "translatedBooks")
     
     override static func indexedProperties() -> [String] {
         return ["isbn13", "isbn10", "name", "localeName"]

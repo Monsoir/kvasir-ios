@@ -26,14 +26,14 @@ private let TableSectionTitles = [
 
 private let FooterIdentifier = "footer"
 
-class DigestMoreDetailViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate, Configurable {
+class DigestMoreDetailViewController: UnifiedViewController, UITableViewDataSource, UITableViewDelegate, Configurable {
     
-    private lazy var coordinator = DigestDetailCoordinator<Digest>(configuration: self.configuration)
-    private lazy var tagCoordinator = DigestDetailTagCoordinator<Digest>(configuration: self.configuration.merging(["tagSection": 1], uniquingKeysWith: { (_, new) -> Any in
+    private lazy var coordinator = DigestDetailCoordinator(configuration: self.configuration)
+    private lazy var tagCoordinator = DigestDetailTagCoordinator(configuration: self.configuration.merging(["tagSection": 1], uniquingKeysWith: { (_, new) -> Any in
         return new
     }))
     private let configuration: Configuration
-    private var entity: Digest? {
+    private var entity: RealmWordDigest? {
         get {
             return coordinator.entity
         }

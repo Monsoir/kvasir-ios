@@ -38,3 +38,25 @@ extension RealmCreator {
         return "creator"
     }
 }
+
+extension RealmCreator: RealmDataBackupable {
+    static var backupPath: URL? {
+        return AppConstants.Paths.exportingFileDirectory?.appendingPathComponent("creators.json")
+    }
+    
+    static func createBackupOperation() -> ExportOperation? {
+        guard let backupPath = self.backupPath else { return nil }
+        return RealmCreatorExportOperation(path: backupPath)
+    }
+}
+
+extension RealmCreator: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("creators.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmCreatorImportOperation(path: recoverPath)
+    }
+}

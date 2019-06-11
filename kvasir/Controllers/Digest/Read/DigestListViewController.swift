@@ -11,13 +11,11 @@ import SnapKit
 import SwifterSwift
 import RealmSwift
 
-class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, UITableViewDataSource, UITableViewDelegate, Configurable {
+class DigestListViewController: UnifiedViewController, UITableViewDataSource, UITableViewDelegate, Configurable {
 
-    private var coordinator: DigestListCoordinator<Digest>!
-    private var results: Results<Digest>? {
-        get {
-            return coordinator.results
-        }
+    private var coordinator: DigestListCoordinator!
+    private var results: Results<RealmWordDigest>? {
+        return coordinator.results
     }
     
     private var configuration: [String: Any]
@@ -25,6 +23,9 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
     /// 是否可以添加新的 Digest, 默认为 false
     private var canAdd: Bool {
         return configuration["canAdd"] as? Bool ?? false
+    }
+    private var category: RealmWordDigest.Category {
+        return configuration[#keyPath(RealmWordDigest.category)] as? RealmWordDigest.Category ?? RealmWordDigest.Category.sentence
     }
     
     private lazy var tableView: UITableView = { [unowned self] in
@@ -41,13 +42,13 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         if let t = configuration["title"] as? String {
             return t
         }
-        return coordinator.bookName.isEmpty ? Digest.toHuman : "\(coordinator.bookName)的\(Digest.toHuman)"
+        return coordinator.bookName.isEmpty ? category.toHuman : "\(coordinator.bookName)的\(category.toHuman)"
     }
     
     required init(configuration: Configurable.Configuration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        coordinator = DigestListCoordinator<Digest>(configuration: configuration)
+        coordinator = DigestListCoordinator(configuration: configuration)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -72,11 +73,11 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
     
     @objc func actionCreate() {
         let dict = [
-            RealmSentence.toMachine: KvasirURL.newSentence.url(),
-            RealmParagraph.toMachine: KvasirURL.newParagraph.url(),
+            RealmWordDigest.Category.sentence.toMachine: KvasirURL.newSentence.url(),
+            RealmWordDigest.Category.paragraph.toMachine: KvasirURL.newParagraph.url(),
         ]
         KvasirNavigator.present(
-            dict[Digest.toMachine]!,
+            dict[category.toMachine]!,
             context: nil,
             wrap: UINavigationController.self,
             from: AppRootViewController,
@@ -117,27 +118,18 @@ class DigestListViewController<Digest: RealmWordDigest>: UnifiedViewController, 
         cell?.title = digest.title
         cell?.bookName = digest.book?.name
         cell?.recordUpdatedDate = digest.updateAtReadable
-        switch digest {
-        case is RealmSentence:
-            cell?.tagColors = (digest as! RealmSentence).tags.map { $0.color }
-        case is RealmParagraph:
-            cell?.tagColors = (digest as! RealmParagraph).tags.map { $0.color }
-        default:
-            cell?.tagColors = []
-        }
+        cell?.tagColors = digest.tags.map { $0.color }
         
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let digest = results?[indexPath.row] else { return }
-        switch digest {
-        case is RealmSentence:
+        switch category {
+        case .sentence:
             KvasirNavigator.push(KvasirURL.detailSentence.url(with: ["id": digest.id]), context: nil, from: navigationController, animated: true)
-        case is RealmParagraph:
+        case .paragraph:
             KvasirNavigator.push(KvasirURL.detailParagraph.url(with: ["id": digest.id]), context: nil, from: navigationController, animated: true)
-        default:
-            break
         }
     }
 }
@@ -189,7 +181,7 @@ private extension DigestListViewController {
     }
     
     func reloadBackgroundView() {
-        self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(Digest.toHuman)的摘录", position: .upper) : nil
+        self.tableView.backgroundView = self.results?.count ?? 0 <= 0 ? CollectionTypeEmptyBackgroundView(title: "还没有\(category.toHuman)的摘录", position: .upper) : nil
     }
     
     func reload() {

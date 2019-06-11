@@ -12,7 +12,7 @@ import RealmSwift
 class BookListCoordinator: ListQueryCoordinatorable {
     typealias Model = RealmBook
     
-    private lazy var repository = RealmBookRepository()
+    private lazy var repository = RealmBookRepository.shared
     private(set) var results: Results<RealmBook>?
     private(set) var configuration: [String: Any]!
     private(set) var realmNotificationTokens = Set<NotificationToken>()
@@ -60,16 +60,17 @@ class BookListCoordinator: ListQueryCoordinatorable {
         }
         
         if let creatorId = configuration["creatorId"] as? String, !creatorId.isEmpty {
-            let creatoryType = configuration["creatorType"] as? String
-            if creatoryType == "translator" {
-                repository.queryByCreatorId(creatorId, creatorType: RealmTranslator.self) { (success, _results) in
+            let creatorCategory = configuration["creatorCategory"] as? RealmCreator.Category ?? .author
+            switch creatorCategory {
+            case .author:
+                repository.queryByCreatorId(creatorId) { (success, _results) in
                     guard success, let results = _results else {
                         return
                     }
                     setupResult(results: results)
                 }
-            } else {
-                repository.queryByCreatorId(creatorId, creatorType: RealmAuthor.self) { (success, _results) in
+            case .translator:
+                repository.queryByCreatorId(creatorId) { (success, _results) in
                     guard success, let results = _results else {
                         return
                     }

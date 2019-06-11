@@ -139,8 +139,8 @@ extension BookListViewController: UITableViewDataSource {
             "title": book.name,
             "author": book.authors.first?.name ?? "",
             "publisher": book.publisher,
-            "sentencesCount": book.sentences.count,
-            "paragraphsCount": book.paragraphs.count,
+            "sentencesCount": book.digests.filter("\(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.sentence.rawValue).count,
+            "paragraphsCount": book.digests.filter("\(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.paragraph.rawValue).count,
             ] as [String : Any]
         cell?.payload = payload
         return cell!

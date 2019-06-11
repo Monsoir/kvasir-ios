@@ -30,6 +30,10 @@ extension RealmWordDigest {
         super.preUpdate()
         content.trim()
     }
+    
+    var tagIdSet: Set<String> {
+        return Set<String>(tags.map { $0.id })
+    }
 }
 
 extension RealmWordDigest {
@@ -42,15 +46,25 @@ extension RealmWordDigest {
     }
 }
 
-extension RealmWordDigest {
-    var tagIdSet: Set<String> {
-        switch self {
-        case is RealmSentence:
-            return Set((self as! RealmSentence).tags.map{ $0.id })
-        case is RealmParagraph:
-            return Set((self as! RealmParagraph).tags.map{ $0.id })
-        default:
-            return Set()
-        }
+extension RealmWordDigest: RealmDataBackupable {
+    static var backupPath: URL? {
+        return AppConstants.Paths.exportingFileDirectory?.appendingPathComponent("digests.json")
+    }
+    
+    static func createBackupOperation() -> ExportOperation? {
+        guard let backupPath = self.backupPath else { return nil }
+        return RealmDigestExportOperation(path: backupPath)
     }
 }
+
+extension RealmWordDigest: RealmDataRecoverable {
+    static var recoverPath: URL? {
+        return AppConstants.Paths.importingUnzipDirectory?.appendingPathComponent("digests.json")
+    }
+    
+    static func createRecoverOperation() -> ImportOperation? {
+        guard let recoverPath = self.recoverPath else { return nil }
+        return RealmDigestImportOperation(path: recoverPath)
+    }
+}
+

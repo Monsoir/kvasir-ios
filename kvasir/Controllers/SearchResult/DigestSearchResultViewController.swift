@@ -31,8 +31,8 @@ class DigestSearchResultViewController: UIViewController, Configurable {
         return view
     }()
     
-    private lazy var sentenceCoordinator = DigestSearchResultCoordinator2<RealmSentence>()
-    private lazy var paragraphCoordinator = DigestSearchResultCoordinator2<RealmParagraph>()
+    private lazy var sentenceCoordinator = DigestSearchResultCoordinator()
+    private lazy var paragraphCoordinator = DigestSearchResultCoordinator()
     
     private var results: [DigestSearchResult] {
         switch searchType {

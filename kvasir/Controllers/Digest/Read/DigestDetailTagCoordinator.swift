@@ -8,12 +8,12 @@
 
 import RealmSwift
 
-class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable, UpdateCoordinatorable {
+class DigestDetailTagCoordinator: ListQueryCoordinatorable, UpdateCoordinatorable {
     typealias Model = RealmTag
     
     private let configuration: Configuration
     private(set) var results: Results<RealmTag>?
-    private lazy var repository = RealmTagRepository()
+    private lazy var repository = RealmTagRepository.shared
     private var putInfo = PutInfo()
     
     private(set) var realmNotificationTokens = Set<NotificationToken>()
@@ -68,7 +68,7 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
             return
         }
         
-        repository.updateTagToDigestRelation(tagId: tagId, digestType: Digest.self, digestIds: digestIds, completion: { success in
+        repository.updateTagToDigestRelation(tagId: tagId, digestIds: digestIds, completion: { success in
             GlobalDefaultDispatchQueue.async {
                 NotificationCenter.default.post(
                     name: NSNotification.Name(rawValue: AppNotification.Name.relationBetweenDigestAndTagWillChange),
@@ -76,7 +76,6 @@ class DigestDetailTagCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatora
                     userInfo: [
                         "changeSuccess": success,
                         "tagId": tagId,
-                        "digestType": "\(Digest.toMachine)",
                         "digestIdSet": Set<String>(digestIds),
                     ]
                 )

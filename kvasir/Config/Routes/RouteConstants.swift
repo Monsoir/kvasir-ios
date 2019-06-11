@@ -12,6 +12,8 @@ struct RouteConstants {
     struct Nouns {
         static let kvasir = "kvasir"
         static let digest = "digest"
+        static let sentence = "sentence"
+        static let paragraph = "paragraph"
         static let book = "book"
         static let books = "books"
         static let author = "author"

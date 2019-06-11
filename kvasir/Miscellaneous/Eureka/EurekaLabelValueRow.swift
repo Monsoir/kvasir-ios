@@ -14,14 +14,14 @@ final class EurekaLabelValueRow<creator: RealmCreator>: OptionsRow<PushSelectorC
     public typealias PresenterRow = CreatorCanidateListViewController
     
     /// Defines how the view controller will be presented, pushed, etc.
-    public var presentationMode: PresentationMode<PresenterRow<creator>>?
+    public var presentationMode: PresentationMode<PresenterRow>?
     
     /// Will be called before the presentation occurs.
-    public var onPresentCallback: ((FormViewController, PresenterRow<creator>) -> Void)?
+    public var onPresentCallback: ((FormViewController, PresenterRow) -> Void)?
     
     public required init(tag: String?) {
         super.init(tag: tag)
-        presentationMode = .show(controllerProvider: ControllerProvider.callback { return CreatorCanidateListViewController<creator>(){ _ in } }, onDismiss: { vc in _ = vc.navigationController?.popViewController(animated: true) })
+        presentationMode = .show(controllerProvider: ControllerProvider.callback { return CreatorCanidateListViewController(){ _ in } }, onDismiss: { vc in _ = vc.navigationController?.popViewController(animated: true) })
         
         displayValueFor = {
             guard let model = $0 else { return "" }
@@ -54,7 +54,7 @@ final class EurekaLabelValueRow<creator: RealmCreator>: OptionsRow<PushSelectorC
      */
     public override func prepare(for segue: UIStoryboardSegue) {
         super.prepare(for: segue)
-        guard let rowVC = segue.destination as? PresenterRow<creator> else { return }
+        guard let rowVC = segue.destination as? PresenterRow else { return }
         rowVC.title = selectorTitle ?? rowVC.title
         rowVC.onDismissCallback = presentationMode?.onDismissCallback ?? rowVC.onDismissCallback
         onPresentCallback?(cell.formViewController()!, rowVC)
@@ -62,12 +62,12 @@ final class EurekaLabelValueRow<creator: RealmCreator>: OptionsRow<PushSelectorC
     }
 }
 
-class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewController, TypedRowControllerType, UITableViewDelegate, UITableViewDataSource {
+class CreatorCanidateListViewController: UnifiedViewController, TypedRowControllerType, UITableViewDelegate, UITableViewDataSource {
     
     public var row: RowOf<EurekaLabelValueModel>!
     public var onDismissCallback: ((UIViewController) -> ())?
     
-    private var results: Results<Creator>?
+    private var results: Results<RealmCreator>?
     private var realmNotificationToken: NotificationToken?
     
     private lazy var tableView: UITableView = { [unowned self] in
@@ -102,7 +102,7 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewCont
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "选择\(Creator.toHuman)"
+        title = "选择"
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -117,7 +117,7 @@ class CreatorCanidateListViewController<Creator: RealmCreator> : UnifiedViewCont
     }
     
     private func fetchData() {
-        let repository = RealmCreatorRepository<Creator>()
+        let repository = RealmCreatorRepository.shared
         repository.queryAllSortingByUpdatedAtDesc { [weak self] (success, results) in
             guard success, let strongSelf = self else {
                 return

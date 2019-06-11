@@ -26,8 +26,7 @@ struct PlainBook: Codable {
     var authors: [String]
     var translators: [String]
     
-    var sentenceIds: [String]
-    var paragraphIds: [String]
+    var digestIds: [String]
     
     init(object: RealmBook) {
         self.id = object.id
@@ -60,8 +59,7 @@ struct PlainBook: Codable {
             return results
         }()
         
-        self.sentenceIds = object.sentences.map { $0.id }
-        self.paragraphIds = object.paragraphs.map { $0.id }
+        self.digestIds = object.digests.map { $0.id }
     }
     
     struct Collection: Codable {

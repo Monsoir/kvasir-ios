@@ -21,14 +21,13 @@ private struct NotificationTokens {
 }
 
 class TopListDeputyCoodinator {
-    private lazy var bookRepository = RealmBookRepository()
-    private lazy var authorRepository = RealmCreatorRepository<RealmAuthor>()
-    private lazy var translatorRepository = RealmCreatorRepository<RealmTranslator>()
-    private lazy var tagRepository = RealmTagRepository()
+    private lazy var bookRepository = RealmBookRepository.shared
+    private lazy var creatorRepository = RealmCreatorRepository.shared
+    private lazy var tagRepository = RealmTagRepository.shared
     
     private(set) var bookResults: Results<RealmBook>?
-    private(set) var authorResults: Results<RealmAuthor>?
-    private(set) var translatorResults: Results<RealmTranslator>?
+    private(set) var authorResults: Results<RealmCreator>?
+    private(set) var translatorResults: Results<RealmCreator>?
     private(set) var tagResults: Results<RealmTag>?
     
     private lazy var notificationTokens = NotificationTokens()
@@ -45,20 +44,22 @@ class TopListDeputyCoodinator {
     
     func setupQuery() {
         bookRepository.queryAll { [weak self] (success, _results) in
-            guard success, let results = _results, let strongSelf = self else {
+            guard let self = self else { return }
+            guard success, let results = _results else {
                 return
             }
             
-            strongSelf.bookResults = results
-            strongSelf.notificationTokens.bookToken = results.observe({ (changes) in
+            self.bookResults = results
+            self.notificationTokens.bookToken = results.observe({ [weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .initial: fallthrough
                 case .update:
-                    strongSelf.reload?(
-                        strongSelf.bookResults?.count ?? 0,
-                        strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0,
-                        strongSelf.tagResults?.count ?? 0
+                    self.reload?(
+                        self.bookResults?.count ?? 0,
+                        self.authorResults?.count ?? 0,
+                        self.translatorResults?.count ?? 0,
+                        self.tagResults?.count ?? 0
                     )
                 default:
                     break
@@ -66,21 +67,23 @@ class TopListDeputyCoodinator {
             })
         }
         
-        authorRepository.queryAll { [weak self] (success, _results) in
-            guard success, let results = _results, let strongSelf = self else {
+        creatorRepository.queryAll(by: RealmCreator.Category.author.rawValue) { [weak self] (success, results) in
+            guard let self = self else { return }
+            guard success, let results = results else {
                 return
             }
             
-            strongSelf.authorResults = results
-            strongSelf.notificationTokens.authorToken = results.observe({ (changes) in
+            self.authorResults = results
+            self.notificationTokens.authorToken = results.observe({ [weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .initial: fallthrough
                 case .update:
-                    strongSelf.reload?(
-                        strongSelf.bookResults?.count ?? 0,
-                        strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0,
-                        strongSelf.tagResults?.count ?? 0
+                    self.reload?(
+                        self.bookResults?.count ?? 0,
+                        self.authorResults?.count ?? 0,
+                        self.translatorResults?.count ?? 0,
+                        self.tagResults?.count ?? 0
                     )
                 default:
                     break
@@ -88,21 +91,23 @@ class TopListDeputyCoodinator {
             })
         }
         
-        translatorRepository.queryAll { [weak self] (success, _results) in
-            guard success, let results = _results, let strongSelf = self else {
+        creatorRepository.queryAll(by: RealmCreator.Category.translator.rawValue) { [weak self] (success, results) in
+            guard let self = self else { return }
+            guard success, let results = results else {
                 return
             }
             
-            strongSelf.translatorResults = results
-            strongSelf.notificationTokens.translatorToken = results.observe({ (changes) in
+            self.translatorResults = results
+            self.notificationTokens.translatorToken = results.observe({ [weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .initial: fallthrough
                 case .update:
-                    strongSelf.reload?(
-                        strongSelf.bookResults?.count ?? 0,
-                        strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0,
-                        strongSelf.tagResults?.count ?? 0
+                    self.reload?(
+                        self.bookResults?.count ?? 0,
+                        self.authorResults?.count ?? 0,
+                        self.translatorResults?.count ?? 0,
+                        self.tagResults?.count ?? 0
                     )
                 default:
                     break
@@ -110,21 +115,23 @@ class TopListDeputyCoodinator {
             })
         }
         
-        tagRepository.queryAll { [weak self] (success, _results) in
-            guard success, let results = _results, let strongSelf = self else {
+        tagRepository.queryAll { [weak self] (success, results) in
+            guard let self = self else { return }
+            guard success, let results = results else {
                 return
             }
             
-            strongSelf.tagResults = results
-            strongSelf.notificationTokens.tagToken = results.observe({ (changes) in
+            self.tagResults = results
+            self.notificationTokens.tagToken = results.observe({ [weak self] (changes) in
+                guard let self = self else { return }
                 switch changes {
                 case .initial: fallthrough
                 case .update:
-                    strongSelf.reload?(
-                        strongSelf.bookResults?.count ?? 0,
-                        strongSelf.authorResults?.count ?? 0,
-                        strongSelf.translatorResults?.count ?? 0,
-                        strongSelf.tagResults?.count ?? 0
+                    self.reload?(
+                        self.bookResults?.count ?? 0,
+                        self.authorResults?.count ?? 0,
+                        self.translatorResults?.count ?? 0,
+                        self.tagResults?.count ?? 0
                     )
                 default:
                     break

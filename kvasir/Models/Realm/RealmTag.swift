@@ -12,8 +12,7 @@ class RealmTag: RealmBasicObject {
     @objc dynamic var name = ""
     @objc dynamic var color = ""
     
-    let sentences = List<RealmSentence>()
-    let paragraphs = List<RealmParagraph>()
+    let wordDigests = List<RealmWordDigest>()
     
     override static func indexedProperties() -> [String] {
         return ["name"]

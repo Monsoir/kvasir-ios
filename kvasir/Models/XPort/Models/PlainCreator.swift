@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PlainCreator<Creator: RealmCreator>: Codable {
+struct PlainCreator: Codable {
     var id: String
     var serverId: String
     var createdAt: String
@@ -17,9 +17,10 @@ struct PlainCreator<Creator: RealmCreator>: Codable {
     var name: String
     var localeName: String
     
-    var books: [PlainBook.Tiny]
+    var writtenBooks: [PlainBook.Tiny]
+    var translatedBooks: [PlainBook.Tiny]
     
-    init(object: Creator) {
+    init(object: RealmCreator) {
         self.id = object.id
         self.serverId = object.serverId
         self.createdAt = object.createdAt.iso8601String
@@ -27,30 +28,18 @@ struct PlainCreator<Creator: RealmCreator>: Codable {
         
         self.name = object.name
         self.localeName = object.localeName
-        
-        switch object {
-        case is RealmAuthor:
-            self.books = (object as! RealmAuthor).books.map { PlainBook.Tiny(object: $0) }
-        case is RealmTranslator:
-            self.books = (object as! RealmTranslator).books.map { PlainBook.Tiny(object: $0) }
-        default:
-            self.books = []
-        }
+        self.writtenBooks = object.writtenBooks.map { PlainBook.Tiny(object: $0) }
+        self.translatedBooks = object.translatedBooks.map { PlainBook.Tiny(object: $0) }
     }
     
-    struct Collection {
-        struct Authors: Codable {
-            var authors: [PlainCreator<RealmAuthor>]
-        }
-        struct Translators: Codable {
-            var translators: [PlainCreator<RealmTranslator>]
-        }
+    struct Collection: Codable {
+        var creators: [PlainCreator]
     }
 }
 
 extension PlainCreator {
-    var realmObject: Creator {
-        let object = Creator()
+    var realmObject: RealmCreator {
+        let object = RealmCreator()
         object.id = id
         object.serverId = serverId
         object.createdAt = Date(iso8601String: createdAt) ?? Date()

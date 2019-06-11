@@ -9,11 +9,11 @@
 import Foundation
 import RealmSwift
 
-class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
+class CreateDigestCoordinator: CreateCoordinatorable {
     private let configuration: Configuration
-    private lazy var repository = RealmWordRepository<Digest>()
-    var entity: Digest {
-        return configuration["entity"] as! Digest
+    private lazy var repository = RealmWordRepository.shared
+    var entity: RealmWordDigest {
+        return configuration["entity"] as! RealmWordDigest
     }
     private var postInfo = PostInfo()
     
@@ -28,7 +28,7 @@ class CreateDigestCoordinator<Digest: RealmWordDigest>: CreateCoordinatorable {
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
-            "content": createNotEmptyStringValidator("\(Digest.toHuman)内容")
+            "content": createNotEmptyStringValidator("\(entity.category.toHuman)内容")
         ]
         
         do {

@@ -99,7 +99,7 @@ class TagDetailViewController: UnifiedViewController {
             guard let self = self else { return }
             MainQueue.async {
                 self.navigationController?.popViewController(animated: true)
-                HUD.flash(.label("该标签已删除"), onView: nil, delay: 1.0, completion: nil)
+                HUD.flash(.label("该标签已被删除"), onView: nil, delay: 1.0, completion: nil)
             }
         }
     }
@@ -139,9 +139,9 @@ extension TagDetailViewController: UITableViewDataSource {
         var count = 0
         switch section {
         case 0:
-            count = coordinator.tagResult?.sentences.count ?? 0
+            count = coordinator.sentences?.count ?? 0
         case 1:
-            count = coordinator.tagResult?.paragraphs.count ?? 0
+            count = coordinator.paragraphs?.count ?? 0
         default:
             count = 0
         }
@@ -187,49 +187,16 @@ extension TagDetailViewController: UITableViewDataSource {
             cell?.title = digest.title
             cell?.bookName = digest.book?.name
             cell?.recordUpdatedDate = digest.updateAtReadable
-            switch digest {
-            case is RealmSentence:
-                cell?.tagColors = (digest as! RealmSentence).tags.map { $0.color }
-            case is RealmParagraph:
-                cell?.tagColors = (digest as! RealmParagraph).tags.map { $0.color }
-            default:
-                break
-            }
+            cell?.tagColors = digest.tags.map { $0.color }
             return cell!
         }
-        
-        func cellForBookAtIndexPath(_ indexPath: IndexPath, book: RealmBook?) -> UITableViewCell {
-            guard let book = book else { return UITableViewCell() }
-            var cell: BookListTableViewCell?
-            if book.hasImage {
-                cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithThumbnailIdentifierAddon)) as? BookListTableViewCell
-                if cell == nil {
-                    cell = BookListTableViewCell(style: .default, reuseIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithThumbnailIdentifierAddon), needThumbnail: true)
-                }
-            } else {
-                cell = tableView.dequeueReusableCell(withIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithoutThumbnailIdentifierAddon)) as? BookListTableViewCell
-                if cell == nil {
-                    cell = BookListTableViewCell(style: .default, reuseIdentifier: BookListTableViewCell.reuseIdentifier(extra: BookListTableViewCell.cellWithoutThumbnailIdentifierAddon), needThumbnail: false)
-                }
-            }
-            
-            let payload = [
-                "thumbnail": book.thumbnailImage,
-                "title": book.name,
-                "author": book.authors.first?.name ?? "",
-                "publisher": book.publisher,
-                "sentencesCount": book.sentences.count,
-                "paragraphsCount": book.paragraphs.count,
-                ] as [String : Any]
-            cell?.payload = payload
-            return cell!
-        }
+
         switch indexPath.section {
         case 0:
-            let digest = coordinator.tagResult?.sentences.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
+            guard let digest = coordinator.sentences?[indexPath.row] else { return UITableViewCell() }
             return cellForDigestAtIndexPath(indexPath, digest: digest)
         case 1:
-            let digest = coordinator.tagResult?.paragraphs.sorted(byKeyPath: "updatedAt", ascending: false)[indexPath.row]
+            guard let digest = coordinator.paragraphs?[indexPath.row] else { return UITableViewCell() }
             return cellForDigestAtIndexPath(indexPath, digest: digest)
         default:
             return UITableViewCell()
@@ -247,12 +214,11 @@ extension TagDetailViewController: UITableViewDelegate {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: TopListTableViewHeaderActionable.reuseIdentifier()) as? TopListTableViewHeaderActionable else { return nil }
         
         func headerAccessoryTitleForSection(_ section: Int) -> (tip: String, title: String) {
-            let tag = coordinator.tagResult
             switch section {
             case 0:
-                return ("查看全部 \(tag?.sentences.count ?? 0)", RealmSentence.toHuman)
+                return ("查看全部 \(coordinator.sentences?.count ?? 0)", RealmWordDigest.Category.sentence.toHuman)
             case 1:
-                return ("查看全部 \(tag?.paragraphs.count ?? 0)", RealmParagraph.toHuman)
+                return ("查看全部 \(coordinator.paragraphs?.count ?? 0)", RealmWordDigest.Category.paragraph.toHuman)
             default:
                 return ("", "")
             }
@@ -289,13 +255,13 @@ extension TagDetailViewController: UITableViewDelegate {
         case 0:
             return coordinator.hasSentences ? nil : {
                 let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
-                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmSentence.toHuman)"
+                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmWordDigest.Category.sentence.toHuman)"
                 return footer
             }()
         case 1:
             return coordinator.hasParagraphs ? nil : {
                 let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlainTextViewFooter.reuseIdentifier()) as? PlainTextViewFooter
-                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmParagraph.toHuman)"
+                footer?.title = "没有找到该\(RealmTag.toHuman)下的\(RealmWordDigest.Category.paragraph.toHuman)"
                 return footer
             }()
         default:
@@ -306,11 +272,11 @@ extension TagDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            guard let digest = coordinator.tagResult?.sentences[indexPath.row] else { break }
+            guard let digest = coordinator.sentences?[indexPath.row] else { break }
             let id = digest.id
             KvasirNavigator.push(KvasirURL.detailSentence.url(with: ["id": id]))
         case 1:
-            guard let digest = coordinator.tagResult?.paragraphs[indexPath.row] else { break }
+            guard let digest = coordinator.paragraphs?[indexPath.row] else { break }
             let id = digest.id
             KvasirNavigator.push(KvasirURL.detailParagraph.url(with: ["id": id]))
         default:

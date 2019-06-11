@@ -11,19 +11,29 @@ import RealmSwift
 
 class TagDetailCoordinator: Configurable, UpdateCoordinatorable {
     private(set) var tagResult: RealmTag?
+    var sentences: Results<RealmWordDigest>? {
+        return tagResult?.wordDigests
+                            .filter("\(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.sentence.rawValue)
+                            .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
+    }
+    var paragraphs: Results<RealmWordDigest>? {
+        return tagResult?.wordDigests
+                            .filter("\(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.paragraph.rawValue)
+                            .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
+    }
     var reloadHandler: ((_ entity: RealmTag?) -> Void)?
     var errorHandler: ((_ message: String) -> Void)?
     var deleteHandler: (() -> Void)?
     
     var hasSentences: Bool {
-        return (tagResult?.sentences.count ?? 0) > 0
+        return (sentences?.count ?? 0) > 0
     }
     
     var hasParagraphs: Bool {
-        return (tagResult?.paragraphs.count ?? 0) > 0
+        return (paragraphs?.count ?? 0) > 0
     }
     
-    private lazy var tagRepository = RealmTagRepository()
+    private lazy var tagRepository = RealmTagRepository.shared
     private var notificationToken: NotificationToken?
     private var configuration: [String: Any]
     private var putInfo = PutInfo()

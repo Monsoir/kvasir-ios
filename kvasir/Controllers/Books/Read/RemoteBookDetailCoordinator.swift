@@ -76,7 +76,7 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
         ]
     }
     
-    private lazy var repository = RealmBookRepository()
+    private lazy var repository = RealmBookRepository.shared
     private var remoteData: [String: Any]?
     
     func batchCreate(completion: @escaping RealmCreateCompletion) {
@@ -110,9 +110,9 @@ class RemoteBookDetailCoordinator: BookDetailCoordinator {
         }
         
         // author infos
-        let authorsToCreate: [RealmAuthor] = extractCreators(combinedName: remoteData["author"] as? String ?? "")
+        let authorsToCreate: [RealmCreator] = extractCreators(combinedName: remoteData["author"] as? String ?? "")
         // translator infos
-        let translatorsToCreate: [RealmTranslator] = extractCreators(combinedName: remoteData["translator"] as? String ?? "")
+        let translatorsToCreate: [RealmCreator] = extractCreators(combinedName: remoteData["translator"] as? String ?? "")
         
         repository.batchCreate(unmanagedBook: bookToCreate, unmanagedAuthors: authorsToCreate, unmanagedTranslators: translatorsToCreate, completion: completion)
     }

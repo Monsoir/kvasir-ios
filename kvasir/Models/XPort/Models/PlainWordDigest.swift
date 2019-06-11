@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PlainWordDigest<Digest: RealmWordDigest>: Codable {
+struct PlainWordDigest: Codable {
     var id: String
     var serverId: String
     var createdAt: String
@@ -16,11 +16,12 @@ struct PlainWordDigest<Digest: RealmWordDigest>: Codable {
     
     var content: String
     var pageIndex: Int
+    var category: Int
     
     var book: PlainBook.Tiny?
     var tags: [PlainTag.Tiny]
     
-    init(object: Digest) {
+    init(object: RealmWordDigest) {
         self.id = object.id
         self.serverId = object.serverId
         self.createdAt = object.createdAt.iso8601String
@@ -33,39 +34,19 @@ struct PlainWordDigest<Digest: RealmWordDigest>: Codable {
             self.book = PlainBook.Tiny(object: book)
         }
         
-        switch object {
-        case is RealmSentence:
-            self.tags = {
-                let digest = (object as! RealmSentence)
-                return digest.tags.map {
-                    return PlainTag.Tiny(object: $0)
-                }
-            }()
-        case is RealmParagraph:
-            self.tags = {
-                let digest = (object as! RealmParagraph)
-                return digest.tags.map {
-                    return PlainTag.Tiny(object: $0)
-                }
-            }()
-        default:
-            self.tags = []
-        }
+        self.tags = object.tags.map { PlainTag.Tiny(object: $0) }
+        self.category = object.category.rawValue
     }
     
-    struct Collection {
-        struct Sentences: Codable {
-            var sentences: [PlainWordDigest<RealmSentence>]
-        }
-        struct Paragraphs: Codable {
-            var paragraphs: [PlainWordDigest<RealmParagraph>]
-        }
+    struct Collection: Codable {
+        var digests: [PlainWordDigest]
     }
 }
 
 extension PlainWordDigest {
-    var realmObject: Digest {
-        let object = Digest()
+    var realmObject: RealmWordDigest {
+        let object = RealmWordDigest()
+        
         object.id = id
         object.serverId = serverId
         object.createdAt = Date(iso8601String: createdAt) ?? Date()
@@ -73,6 +54,7 @@ extension PlainWordDigest {
         
         object.content = content
         object.pageIndex = pageIndex
+        object.category = RealmWordDigest.Category(rawValue: category) ?? .paragraph
         
         return object
     }

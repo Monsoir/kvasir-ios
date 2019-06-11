@@ -9,42 +9,10 @@
 import Foundation
 import RealmSwift
 
-typealias DigestSearchResultCoordinator = TopListCoordinator
-
-extension DigestSearchResultCoordinator {
-    func setupQuery(by content: String, section: Int = 0) {
-        RealmWordRepository<Digest>().queryBy(content: content) { [weak self] (success, results) in
-            guard let self = self else { return }
-            guard success, let results = results else { return }
-            
-            self.replace(digestResults: results)
-            
-            if let token = self.results?.observe({ [weak self] (changes) in
-                guard let self = self else { return }
-                
-                switch changes {
-                case .initial:
-                    self.initialHandler?(self.results)
-                case .update(_, let deletions, let insertions, let modifications):
-                    self.updateHandler?(
-                        deletions.map { IndexPath(row: $0, section: section) },
-                        insertions.map { IndexPath(row: $0, section: section) },
-                        modifications.map { IndexPath(row: $0, section: section) }
-                    )
-                case .error(let e):
-                    self.errorHandler?(e)
-                }
-            }) {
-                self.addRealmNotificationTokens(token)
-            }
-        }
-    }
-}
-
 private let PageSize = 5
-class DigestSearchResultCoordinator2<Digest: RealmWordDigest>: NSObject, Configurable {
+class DigestSearchResultCoordinator: NSObject, Configurable {
     
-    private var results: Results<Digest>?
+    private var results: Results<RealmWordDigest>?
 //    private var paragraphResults: Results<RealmParagraph>?
     private var pageIndex = 0
     private(set) var searchResults = [DigestSearchResult]()
@@ -137,20 +105,16 @@ class DigestSearchResultCoordinator2<Digest: RealmWordDigest>: NSObject, Configu
                 let filteringPredicate = "content CONTAINS[c] '\(keyword)'" // 大小写忽略，模糊匹配
                 switch searchType {
                 case .sentence:
-//                    self.sentenceResults = realm.objects(RealmSentence.self).filter(filteringPredicate).sorted(byKeyPath: "updatedAt", ascending: false)
-//                    if self.sentenceResults?.count ?? 0 <= 0 {
-//                        noMore = true
-//                    }
-                    self.results = realm.objects(RealmSentence.self).filter(filteringPredicate).sorted(byKeyPath: "updatedAt", ascending: false) as! Results<Digest>
+                    self.results = realm.objects(RealmWordDigest.self)
+                                        .filter("\(filteringPredicate) AND \(#keyPath(RealmWordDigest.category)) = \(RealmWordDigest.Category.sentence)")
+                                        .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
                     if self.results?.count ?? 0 <= 0 {
                         noMore = true
                     }
                 case .paragraph:
-//                    self.paragraphResults = realm.objects(RealmParagraph.self).filter(filteringPredicate).sorted(byKeyPath: "updatedAt", ascending: false)
-//                    if self.paragraphResults?.count ?? 0 <= 0 {
-//                        noMore = true
-//                    }
-                    self.results = realm.objects(RealmParagraph.self).filter(filteringPredicate).sorted(byKeyPath: "updatedAt", ascending: false) as! Results<Digest>
+                    self.results = realm.objects(RealmWordDigest.self)
+                                        .filter("\(filteringPredicate) AND \(#keyPath(RealmWordDigest.category)) = \(RealmWordDigest.Category.paragraph)")
+                                        .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
                     if self.results?.count ?? 0 <= 0 {
                         noMore = true
                     }
@@ -181,14 +145,7 @@ class DigestSearchResultCoordinator2<Digest: RealmWordDigest>: NSObject, Configu
                 let uppestIndex = ele.content.index(range.lowerBound, offsetBy: steps, limitedBy: ele.content.endIndex)
                 let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? range.upperBound)])
                 let bookName: String
-                switch Digest.self {
-                case is RealmSentence.Type:
-                    bookName = (ele as! RealmSentence).book?.name ?? ""
-                case is RealmParagraph.Type:
-                    bookName = (ele as! RealmParagraph).book?.name ?? ""
-                default:
-                    bookName = ""
-                }
+                bookName = ele.book?.name ?? ""
                 let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, range: content.range(of: keyword, options: .caseInsensitive)!)
                 searchResults.append(result)
             }
@@ -203,7 +160,7 @@ class DigestSearchResultCoordinator2<Digest: RealmWordDigest>: NSObject, Configu
 }
 
 // MARK: - 公开方法
-extension DigestSearchResultCoordinator2 {
+extension DigestSearchResultCoordinator {
     func setupQuery(by content: String, completion: @escaping ((_: Bool) -> Void)) {
         guard !content.isEmpty else { return }
         guard content != keyword else { return }

@@ -12,16 +12,20 @@ func newDigestControllerFactory(url: URLConvertible, values: [String: Any], cont
     guard let identifier = get(url: url, componentAt: 2) else { return nil }
     
     switch identifier {
-    case RealmSentence.toMachine:
+    case RouteConstants.Nouns.sentence:
         let configuration: Configurable.Configuration = [
-            "entity": RealmSentence(),
+            "entity": RealmWordDigest(),
         ]
-        return CreateDigestContainerViewController<RealmSentence>(configuration: mergingConfigurations(context as? [String: Any] ?? [:], configuration))
-    case RealmParagraph.toMachine:
+        return CreateDigestContainerViewController(configuration: mergingConfigurations(context as? [String: Any] ?? [:], configuration))
+    case RouteConstants.Nouns.paragraph:
         let configuration: Configurable.Configuration = [
-            "entity": RealmParagraph(),
+            "entity": {
+                let temp = RealmWordDigest()
+                temp.category = .paragraph
+                return temp
+            }(),
         ]
-        return CreateDigestContainerViewController<RealmParagraph>(configuration: mergingConfigurations(context as? [String: Any] ?? [:], configuration))
+        return CreateDigestContainerViewController(configuration: mergingConfigurations(context as? [String: Any] ?? [:], configuration))
     default:
         return nil
     }
@@ -31,16 +35,20 @@ func newCreatorControllerFactory(url: URLConvertible, values: [String: Any], con
     guard let identifier = get(url: url, componentAt: 2) else { return nil }
     
     switch identifier {
-    case RealmAuthor.toMachine:
+    case RouteConstants.Nouns.author:
         let configuration: Configurable.Configuration = [
-            "entity": RealmAuthor(),
+            "entity": RealmCreator(),
         ]
-        return CreateCreatorViewController<RealmAuthor>(configuration: mergingConfigurations(context as? Configurable.Configuration ?? [:], configuration))
-    case RealmTranslator.toMachine:
+        return CreateCreatorViewController(configuration: mergingConfigurations(context as? Configurable.Configuration ?? [:], configuration))
+    case RouteConstants.Nouns.translator:
         let configuration: Configurable.Configuration = [
-            "entity": RealmParagraph(),
+            "entity": {
+                let temp = RealmCreator()
+                temp.category = .translator
+                return temp
+            }(),
         ]
-        return CreateCreatorViewController<RealmTranslator>(configuration: mergingConfigurations(context as? Configurable.Configuration ?? [:], configuration))
+        return CreateCreatorViewController(configuration: mergingConfigurations(context as? Configurable.Configuration ?? [:], configuration))
     default:
         return nil
     }
@@ -73,10 +81,16 @@ func allDigestControllerFactory(url: URLConvertible, values: [String: Any], cont
     ]
     
     switch identifier {
-    case RealmSentence.toMachine:
-        return DigestListViewController<RealmSentence>(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
-    case RealmParagraph.toMachine:
-        return DigestListViewController<RealmParagraph>(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
+    case RouteConstants.Nouns.sentence:
+        let configuration: Configurable.Configuration = [
+            #keyPath(RealmWordDigest.category): RealmWordDigest.Category.sentence,
+        ]
+        return DigestListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], configuration))
+    case RouteConstants.Nouns.paragraph:
+        let configuration: Configurable.Configuration = [
+            #keyPath(RealmWordDigest.category): RealmWordDigest.Category.paragraph,
+        ]
+        return DigestListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], configuration))
     default:
         return nil
     }
@@ -90,10 +104,16 @@ func detailDigestControllerFactory(url: URLConvertible, values: [String: Any], c
         "id": id,
     ]
     switch identifier {
-    case RealmSentence.toMachine:
-        return DigestDetailViewController<RealmSentence>(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
-    case RealmParagraph.toMachine:
-        return DigestDetailViewController<RealmParagraph>(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
+    case RouteConstants.Nouns.sentence:
+        let configuration: Configurable.Configuration = [
+            #keyPath(RealmWordDigest.category): RealmWordDigest.Category.sentence,
+        ]
+        return DigestDetailViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], configuration))
+    case RouteConstants.Nouns.paragraph:
+        let configuration: Configurable.Configuration = [
+            #keyPath(RealmWordDigest.category): RealmWordDigest.Category.paragraph,
+        ]
+        return DigestDetailViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], configuration))
     default:
         return nil
     }
@@ -117,16 +137,16 @@ func allResourceControllerFactory(url: URLConvertible, values: [String: Any], co
         return BookListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], extra))
     case RouteConstants.Nouns.author:
         let extra: Configurable.Configuration = [
-            "title": "已知\(RealmAuthor.toHuman)",
-            "creatorType": "author",
+            "title": "已知\(RealmCreator.Category.author.toHuman)",
+            "creatorCatogory": RealmCreator.Category.author,
         ]
-        return AuthorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], extra))
+        return CreatorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], extra))
     case RouteConstants.Nouns.translator:
         let extra: Configurable.Configuration = [
-            "title": "已知\(RealmTranslator.toHuman)",
-            "creatorType": "translator",
+            "title": "已知\(RealmCreator.Category.translator.toHuman)",
+            "creatorCatogory": RealmCreator.Category.translator,
         ]
-        return TranslatorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], extra))
+        return CreatorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], extra))
     case RouteConstants.Nouns.tag:
         let extra: Configurable.Configuration = [
             "title": "已知\(RealmTag.toHuman)",
@@ -185,9 +205,15 @@ func selectResourceControllerFactory(url: URLConvertible, values: [String: Any],
     case RouteConstants.Nouns.book:
         return BookListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], ["title": "选择一本书籍"]))
     case RouteConstants.Nouns.author:
-        return AuthorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], ["title": "选择一个\(RealmAuthor.toHuman)"]))
+        let configuration: Configurable.Configuration = [
+            #keyPath(RealmCreator.category): RealmCreator.Category.author,
+        ]
+        return CreatorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], ["title": "选择一个\(RealmCreator.Category.author.toHuman)"], configuration))
     case RouteConstants.Nouns.translator:
-        return TranslatorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], ["title": "选择一个\(RealmTranslator.toHuman)"]))
+        let configuration: Configurable.Configuration = [
+            #keyPath(RealmCreator.category): RealmCreator.Category.author,
+        ]
+        return CreatorListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:], ["title": "选择一个\(RealmCreator.Category.translator.toHuman)"], configuration))
     default:
         return nil
     }
@@ -201,10 +227,10 @@ func digestOfBookControllerFactory(url: URLConvertible, values: [String: Any], c
     ]
     
     switch digestType {
-    case RealmSentence.toMachine:
-        return DigestListViewController<RealmSentence>(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
-    case RealmParagraph.toMachine:
-        return DigestListViewController<RealmParagraph>(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
+    case RouteConstants.Nouns.sentence:
+        return DigestListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
+    case RouteConstants.Nouns.paragraph:
+        return DigestListViewController(configuration: mergingConfigurations(preDefined, context as? [String: Any] ?? [:]))
     default:
         return nil
     }

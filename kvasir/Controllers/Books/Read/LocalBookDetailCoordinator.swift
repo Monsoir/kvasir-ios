@@ -79,14 +79,14 @@ class LocalBookDetailCoordinator: BookDetailCoordinator {
     }
     
     var sentencesCount: Int {
-        return entity?.sentences.count ?? 0
+        return entity?.digests.filter("\(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.sentence.rawValue).count ?? 0
     }
     
     var paragraphsCount: Int {
-        return entity?.paragraphs.count ?? 0
+        return entity?.digests.filter("\(#keyPath(RealmWordDigest.category)) == %@", RealmWordDigest.Category.paragraph.rawValue).count ?? 0
     }
     
-    private lazy var repository = RealmBookRepository()
+    private lazy var repository = RealmBookRepository.shared
     private var entity: RealmBook?
     
     override func query(_ completion: @escaping BookDetailQueryCompletion) {

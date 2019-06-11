@@ -8,58 +8,26 @@
 
 import Foundation
 
-class RealmCreatorImportOperation<Creator: RealmCreator>: ImportOperation {
+class RealmCreatorImportOperation: ImportOperation {
     override class var restoreKey: String {
-        return Creator.toMachine
+        return RealmCreator.toMachine
     }
     
     override func recover(jsonData: Data) -> (success: Bool, msg: String?, ros: [RealmBasicObject]?, pos: [Codable]?) {
         guard !isCancelled else { return (false, "任务已被取消", nil, nil) }
         
-        switch Creator.self {
-        case is RealmAuthor.Type:
-            return recoverAuthor(jsonData: jsonData)
-        case is RealmTranslator.Type:
-            return recoverTranslator(jsonData: jsonData)
-        default:
-            return (false, "模型无法识别", nil, nil)
-        }
-    }
-    
-    private func recoverAuthor(jsonData: Data) -> (Bool, String?, [RealmBasicObject]?, [Codable]?) {
         // 将 JSON 二进制数据还原为普通数据
         let decoder = JSONDecoder()
-        var results: PlainCreator<RealmAuthor>.Collection.Authors
+        var results: PlainCreator.Collection
         do {
-            results = try decoder.decode(PlainCreator<RealmAuthor>.Collection.Authors.self, from: jsonData)
+            results = try decoder.decode(PlainCreator.Collection.self, from: jsonData)
         } catch {
             return (false, "数据转换失败", nil, nil)
         }
         
         // 将普通数据转换为 Realm 数据
-        let plainObjects = results.authors
-        var objectsToBeAdded = [RealmAuthor]()
-        for ele in plainObjects {
-            guard !isCancelled else { return (false, "任务已被取消", nil, nil) }
-            objectsToBeAdded.append(ele.realmObject)
-        }
-        
-        return (true, nil, objectsToBeAdded, plainObjects)
-    }
-    
-    private func recoverTranslator(jsonData: Data) -> (Bool, String?, [RealmBasicObject]?, [Codable]?) {
-        // 将 JSON 二进制数据还原为普通数据
-        let decoder = JSONDecoder()
-        var results: PlainCreator<RealmTranslator>.Collection.Translators
-        do {
-            results = try decoder.decode(PlainCreator<RealmTranslator>.Collection.Translators.self, from: jsonData)
-        } catch {
-            return (false, "数据转换失败", nil, nil)
-        }
-        
-        // 将普通数据转换为 Realm 数据
-        let plainObjects = results.translators
-        var objectsToBeAdded = [RealmTranslator]()
+        let plainObjects = results.creators
+        var objectsToBeAdded = [RealmCreator]()
         for ele in plainObjects {
             guard !isCancelled else { return (false, "任务已被取消", nil, nil) }
             objectsToBeAdded.append(ele.realmObject)

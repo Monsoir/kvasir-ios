@@ -16,8 +16,7 @@ struct PlainTag: Codable {
     var createdAt: String
     var updatedAt: String
     
-    var sentenceIds: [String]
-    var paragraphIds: [String]
+    var digestIds: [String]
     
     init(object: RealmTag) {
         self.id = object.id
@@ -27,8 +26,7 @@ struct PlainTag: Codable {
         self.createdAt = object.createdAt.iso8601String
         self.updatedAt = object.updatedAt.iso8601String
         
-        self.sentenceIds = object.sentences.map { $0.id }
-        self.paragraphIds = object.paragraphs.map { $0.id }
+        self.digestIds = object.wordDigests.map { $0.id }
     }
     
     struct Collection: Codable {

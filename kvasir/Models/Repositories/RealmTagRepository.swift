@@ -11,6 +11,18 @@ import RealmSwift
 import SwifterSwift
 
 class RealmTagRepository: Repositorable {
+    typealias Model = RealmTag
+    
+    static let shared: RealmTagRepository = {
+        let repo = RealmTagRepository()
+        return repo
+    }()
+    private init() {}
+    
+    deinit {
+        debugPrint("\(self) deinit")
+    }
+    
     func createOne(unmanagedModel: RealmTag, otherInfo: RealmCreateInfo?, completion: @escaping RealmCreateCompletion) {
         preCreate(unmanagedModel: unmanagedModel)
         RealmWritingQueue.async {
@@ -28,12 +40,6 @@ class RealmTagRepository: Repositorable {
                 }
             })
         }
-    }
-    
-    typealias Model = RealmTag
-    
-    deinit {
-        debugPrint("\(self) deinit")
     }
     
     func preCreate(unmanagedModel: RealmTag) {
@@ -81,7 +87,7 @@ class RealmTagRepository: Repositorable {
         }
     }
     
-    func updateTagToDigestRelation<Digest: RealmWordDigest>(tagId: String, digestType: Digest.Type, digestIds: [String], completion: @escaping RealmUpdateCompletion) {
+    func updateTagToDigestRelation(tagId: String, digestIds: [String], completion: @escaping RealmUpdateCompletion) {
         RealmWritingQueue.async {
             autoreleasepool(invoking: { () -> Void in
                 do {
@@ -95,32 +101,20 @@ class RealmTagRepository: Repositorable {
                     }
                     
                     // find digest operating
-                    let digestOperating = realm.objects(Digest.self).filter("\(RealmWordDigest.primaryKey()!) IN %@", digestIds)
+                    let digestOperating = realm.objects(RealmWordDigest.self).filter("\(RealmWordDigest.primaryKey()!) IN %@", digestIds)
                     
                     try realm.write {
                         for digest in digestOperating {
                             // Remove digest if exists in tag before
                             // Add digest if not exists in tag before
-                            switch digestType {
-                            case is RealmSentence.Type:
-                                if let index = tag.sentences.index(of: digest as! RealmSentence) {
-                                    tag.sentences.remove(at: index)
-                                } else {
-                                    tag.sentences.append(digest as! RealmSentence)
-                                }
-                            case is RealmParagraph.Type:
-                                if let index = tag.paragraphs.index(of: digest as! RealmParagraph) {
-                                    tag.paragraphs.remove(at: index)
-                                } else {
-                                    tag.paragraphs.append(digest as! RealmParagraph)
-                                }
-                            default:
-                                continue
+                            if let index = tag.wordDigests.index(of: digest) {
+                                tag.wordDigests.remove(at: index)
+                            } else {
+                                tag.wordDigests.append(digest)
                             }
                         }
                     }
                     completion(true)
-                    
                 } catch {
                     completion(false)
                 }

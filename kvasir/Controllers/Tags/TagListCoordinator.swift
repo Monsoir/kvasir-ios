@@ -12,7 +12,7 @@ import RealmSwift
 class TagListCoordinator: ListQueryCoordinatorable {
     typealias Model = RealmTag
     
-    private lazy var repository = RealmTagRepository()
+    private lazy var repository = RealmTagRepository.shared
     private(set) var results: Results<RealmTag>?
     private(set) var configuration: Configurable.Configuration
     private(set) var realmNotificationTokens = Set<NotificationToken>()

@@ -39,7 +39,7 @@ extension AppDelegate {
             return tag
         }
         
-        let tagRepository = RealmTagRepository()
+        let tagRepository = RealmTagRepository.shared
         tagRepository.createMultiple(unmanagedModels: tagsToBeAdded, update: true, completion: { [weak self] success, _ in
             guard let self = self, success else { return }
             self.setDidInitTagData()

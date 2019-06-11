@@ -204,25 +204,17 @@ extension DataMaintainer {
         // 创建 RealmTag 备份任务
         guard let tagsBackupOperation = RealmTag.createBackupOperation() else { return nil }
         
-        // 创建 RealmSentence 备份任务
-        guard let sentencesBackupOperation = RealmSentence.createBackupOperation() else { return nil }
+        // 创建 RealmWordDigest 备份任务
+        guard let digestsBackupOperation = RealmWordDigest.createBackupOperation() else { return nil }
         
-        // 创建 RealmParagraph 备份任务
-        guard let paragraphsBackupOperation = RealmParagraph.createBackupOperation() else { return nil }
-        
-        // 创建 RealmAuthor 备份任务
-        guard let backupAuthorsTask = RealmAuthor.createBackupOperation() else { return nil }
-        
-        // 创建 RealmTranslator 备份任务
-        guard let backupTranslatorsTask = RealmTranslator.createBackupOperation() else { return nil }
+        // 创建 RealmCreator 备份任务
+        guard let creatorsBackupOperation = RealmCreator.createBackupOperation() else { return nil }
         
         return [
             booksBackupOperation,
             tagsBackupOperation,
-            sentencesBackupOperation,
-            paragraphsBackupOperation,
-            backupAuthorsTask,
-            backupTranslatorsTask,
+            digestsBackupOperation,
+            creatorsBackupOperation,
         ]
     }
     
@@ -234,24 +226,16 @@ extension DataMaintainer {
         guard let tagsRestoreOperation = RealmTag.createRecoverOperation() else { return nil }
 
         // 创建 RealmSentence 还原任务
-        guard let sentencesRestoreOperation = RealmSentence.createRecoverOperation() else { return nil }
+        guard let digestsRestoreOperation = RealmWordDigest.createRecoverOperation() else { return nil }
 
-        // 创建 RealmParagraph 还原任务
-        guard let paragraphsRestoreOperation = RealmParagraph.createRecoverOperation() else { return nil }
-
-        // 创建 RealmAuthor 还原任务
-        guard let authorsRestoreOperation = RealmAuthor.createRecoverOperation() else { return nil }
-
-        // 创建 RealmTranslator 还原任务
-        guard let translatorsRestoreOperation = RealmTranslator.createRecoverOperation() else { return nil }
+        // 创建 RealmCreator 还原任务
+        guard let creatorsRestoreOperation = RealmCreator.createRecoverOperation() else { return nil }
         
         let ops = [
             booksRestoreOperation,
             tagsRestoreOperation,
-            sentencesRestoreOperation,
-            paragraphsRestoreOperation,
-            authorsRestoreOperation,
-            translatorsRestoreOperation,
+            digestsRestoreOperation,
+            creatorsRestoreOperation,
         ]
         ops.forEach { $0.delegate = self }
         return ops
@@ -280,109 +264,59 @@ extension DataMaintainer {
     
     private func restoreRelations() -> [[RealmBasicObject]]? {
         return autoreleasepool { () -> [[RealmBasicObject]]? in
-            guard let (_authorRos, _authorPos) = self.importCaches[RealmAuthor.toMachine] else { return nil }
-            guard let (_translatorRos, _translatorPos) = self.importCaches[RealmTranslator.toMachine] else { return nil }
-            guard let (_bookRos, _bookPos) = self.importCaches[RealmBook.toMachine] else { return nil }
-            guard let (_tagRos, _tagPos) = self.importCaches[RealmTag.toMachine] else { return nil }
-            guard let (_sentenceRos, _) = self.importCaches[RealmSentence.toMachine] else { return nil }
-            guard let (_paragraphRos, _) = self.importCaches[RealmParagraph.toMachine] else { return nil }
+            guard let (_creatorRos, _creatorPos) = self.importCaches[RealmCreatorImportOperation.restoreKey] else { return nil }
+            guard let (_bookRos, _bookPos) = self.importCaches[RealmBookImportOperation.restoreKey] else { return nil }
+            guard let (_tagRos, _tagPos) = self.importCaches[RealmTagImportOperation.restoreKey] else { return nil }
+            guard let (_digstRos, _) = self.importCaches[RealmDigestImportOperation.restoreKey] else { return nil }
             
-            guard let authorRos = _authorRos as? [RealmAuthor], let authorPos = _authorPos as? [PlainCreator<RealmAuthor>] else { return nil }
-            
-            // 恢复 RealmAuthor 对 RealmBook 的关系
-            if let bookRos = _bookRos as? [RealmBook] {
-                for (index, ele) in authorPos.enumerated() {
-                    // 以 author plain objects 循环开始，找到其 book 的所有 id, 组成一个 Set, 加快查找速度
-                    // 遍历 book realm objects, 当某个 book realm object 的 id 存在与上面的 Set 时，说明当前 book realm object 属于当前 author
-                    let ro = authorRos[index]
-                    let relatetdBookIdSet = Set<String>(ele.books.map { $0.id })
-                    bookRos.forEach {
-                        if relatetdBookIdSet.contains($0.id) {
-                            ro.books.append($0)
-                        }
-                    }
-                }
-            } else { return nil }
-            
-            guard let translatorRos = _translatorRos as? [RealmTranslator], let translatorPos = _translatorPos as? [PlainCreator<RealmTranslator>] else { return nil }
-            
-            // 恢复 RealmTranslator 对 RealmBook 的关系
-            if let bookRos = _bookRos as? [RealmBook] {
-                for (index, ele) in translatorPos.enumerated() {
-                    // 以 translator plain objects 循环开始，找到其 book 的所有 id, 组成一个 Set, 加快查找速度
-                    // 遍历 book realm objects, 当某个 book realm object 的 id 存在与上面的 Set 时，说明当前 book realm object 属于当前 translator
-                    let ro = translatorRos[index]
-                    let relatetdBookIdSet = Set<String>(ele.books.map { $0.id })
-                    bookRos.forEach {
-                        if relatetdBookIdSet.contains($0.id) {
-                            ro.books.append($0)
-                        }
-                    }
-                }
-            } else { return nil }
-            
+            guard let creatorRos = _creatorRos as? [RealmCreator], let creatorPos = _creatorPos as? [PlainCreator] else { return nil }
             guard let bookRos = _bookRos as? [RealmBook], let bookPos = _bookPos as? [PlainBook] else { return nil }
             
-            // 恢复 RealmBook 对 RealmSentences 的关系
-            if let sentenceRos = _sentenceRos as? [RealmSentence] {
-                for (index, ele) in bookPos.enumerated() {
-                    let ro = bookRos[index]
-                    let relatedSentenceIdSet = Set<String>(ele.sentenceIds)
-                    sentenceRos.forEach {
-                        if relatedSentenceIdSet.contains($0.id) {
-                            ro.sentences.append($0)
-                            $0.book = ro
-                        }
+            // 恢复 RealmCreator 对 RealmBook 的关系
+            for (index, ele) in creatorPos.enumerated() {
+                let creatorRo = creatorRos[index]
+                
+                let writtenBookIdsOfCurrentCreator = Set<String>(ele.writtenBooks.map { $0.id })
+                let translatedBookIdsOfCurrentCreator = Set<String>(ele.translatedBooks.map { $0.id })
+                bookRos.forEach {
+                    if writtenBookIdsOfCurrentCreator.contains($0.id) {
+                        creatorRo.writtenBooks.append($0)
+                    }
+                    
+                    if translatedBookIdsOfCurrentCreator.contains($0.id) {
+                        creatorRo.translatedBooks.append($0)
                     }
                 }
-            } else { return nil }
+            }
             
-            // 恢复 RealmBook 对 RealmParagraphs 的关系
-            if let paragraphRos = _paragraphRos as? [RealmParagraph] {
-                for (index, ele) in bookPos.enumerated() {
-                    let ro = bookRos[index]
-                    let relatedParagraphIdSet = Set<String>(ele.paragraphIds)
-                    paragraphRos.forEach {
-                        if relatedParagraphIdSet.contains($0.id) {
-                            ro.paragraphs.append($0)
-                            $0.book = ro
-                        }
+            // 恢复 RealmBook 对 RealmwordDigest 的关系
+            guard let digestRos = _digstRos as? [RealmWordDigest] else { return nil }
+            for (index, ele) in bookPos.enumerated() {
+                let bookRo = bookRos[index]
+                let digestIdSet = Set<String>(ele.digestIds)
+                digestRos.forEach {
+                    if digestIdSet.contains($0.id) {
+                        bookRo.digests.append($0)
+                        $0.book = bookRo
                     }
                 }
-            } else { return nil }
+            }
             
             guard let tagRos = _tagRos as? [RealmTag], let tagPos = _tagPos as? [PlainTag] else { return nil }
             
-            // 恢复 RealmTag 对 RealmSentences 的关系
-            if let sentenceRos = _sentenceRos as? [RealmSentence] {
-                for (index, ele) in tagPos.enumerated() {
-                    let ro = tagRos[index]
-                    let relatedSentenceIdSet = Set<String>(ele.sentenceIds)
-                    sentenceRos.forEach {
-                        if relatedSentenceIdSet.contains($0.id) {
-                            ro.sentences.append($0)
-                        }
+            // 恢复 RealmTag 对 RealmwordDigest 的关系
+            for (index, ele) in tagPos.enumerated() {
+                let tagRo = tagRos[index]
+                let digestIdSet = Set<String>(ele.digestIds)
+                digestRos.forEach {
+                    if digestIdSet.contains($0.id) {
+                        tagRo.wordDigests.append($0)
                     }
                 }
-            } else { return nil }
-            
-            // 恢复 RealmTag 对 RealmParagraphs 的关系
-            if let paragraphRos = _paragraphRos as? [RealmParagraph] {
-                for (index, ele) in tagPos.enumerated() {
-                    let ro = tagRos[index]
-                    let relatedParagraphIdSet = Set<String>(ele.paragraphIds)
-                    paragraphRos.forEach {
-                        if relatedParagraphIdSet.contains($0.id) {
-                            ro.paragraphs.append($0)
-                        }
-                    }
-                }
-            } else { return nil }
+            }
             
             return [
-                tagRos, bookRos, authorRos, translatorRos,
-                _sentenceRos as! [RealmSentence],
-                _paragraphRos as! [RealmParagraph],
+                tagRos, bookRos, creatorRos, digestRos,
             ]
         }
     }

@@ -9,18 +9,17 @@
 import Foundation
 import RealmSwift
 
-class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
-    var initialLoadHandler: ((Results<Creator>?) -> Void)?
+class CreatorListCoordinator: ListQueryCoordinatorable {
+    typealias Model = RealmCreator
     
-    typealias Model = Creator
-    
-    private lazy var repository = RealmCreatorRepository<Creator>()
-    private(set) var results: Results<Creator>?
+    var initialLoadHandler: ((Results<Model>?) -> Void)?
+    private lazy var repository = RealmCreatorRepository.shared
+    private(set) var results: Results<Model>?
     private let configuration: [String: Any]
     
     private(set) var realmNotificationTokens = Set<NotificationToken>()
     
-    var initialHandler: ((_ results: Results<Creator>?) -> Void)?
+    var initialHandler: ((_ results: Results<Model>?) -> Void)?
     var updateHandler: ((_ deletions: [IndexPath], _ insertions: [IndexPath], _ modificationIndexPaths: [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
@@ -67,7 +66,7 @@ class CreatorListCoordinator<Creator: RealmCreator>: ListQueryCoordinatorable {
         }
     }
     
-    func delete(a creator: Creator, completion: RealmDeleteCompletion?) {
+    func delete(a creator: Model, completion: RealmDeleteCompletion?) {
         repository.deleteOne(managedModel: creator) { (success) in
             completion?(success)
         }

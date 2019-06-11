@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class CreateBookCoordinator: CreateCoordinatorable {
-    private lazy var repository = RealmBookRepository()
+    private lazy var repository = RealmBookRepository.shared
     private let configuration: Configuration
     var entity: RealmBook {
         return configuration["entity"] as! RealmBook

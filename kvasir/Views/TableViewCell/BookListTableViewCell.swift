@@ -135,6 +135,10 @@ class BookListTableViewCell: ShadowedTableViewCell {
         super.updateConstraints()
     }
     
+    override class var realContentCornerRadius: CGFloat {
+        return 10
+    }
+    
     private func setupSubviews() {
         if needThumbnail {
             realContentView.addSubview(ivThumbnail)

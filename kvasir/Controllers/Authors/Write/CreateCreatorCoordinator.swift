@@ -9,10 +9,10 @@
 import Foundation
 import RealmSwift
 
-class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
-    private lazy var repository = RealmCreatorRepository<Creator>()
-    var entity: Creator {
-        return configuration["entity"] as! Creator
+class CreateCreatorCoordinator: CreateCoordinatorable {
+    private lazy var repository = RealmCreatorRepository.shared
+    var entity: RealmCreator {
+        return configuration["entity"] as! RealmCreator
     }
     
     private var postInfo = PostInfo()
@@ -29,7 +29,7 @@ class CreateCreatorCoordinator<Creator: RealmCreator>: CreateCoordinatorable {
     func post(info: PostInfoScript) throws {
         
         let validators: [String: SimpleValidator] = [
-            "name": createNotEmptyStringValidator("\(Creator.toHuman)名字")
+            "name": createNotEmptyStringValidator("\(entity.category.toHuman)名字")
         ]
         
         do {

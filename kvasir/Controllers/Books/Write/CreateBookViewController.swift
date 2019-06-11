@@ -134,7 +134,7 @@ private extension CreateBookViewController {
                 return buttonRow
             }
             section.multivaluedRowToInsertAt = { index in
-                return EurekaLabelValueRow<RealmAuthor>() {
+                return EurekaLabelValueRow<RealmCreator>() {
                     $0.cellUpdate({ (cell, row) in
                         cell.textLabel?.text = row.value?.label ?? "选择一个作家"
                         cell.detailTextLabel?.text = row.value?.info?["localeName"] as? String ?? ""
@@ -155,7 +155,7 @@ private extension CreateBookViewController {
                 return buttonRow
             }
             section.multivaluedRowToInsertAt = { index in
-                return EurekaLabelValueRow<RealmTranslator>() {
+                return EurekaLabelValueRow<RealmCreator>() {
                     $0.cellUpdate({ (cell, row) in
                         cell.textLabel?.text = row.value?.label ?? "选择一个翻译家"
                         cell.detailTextLabel?.text = row.value?.info?["localeName"] as? String ?? ""
@@ -176,15 +176,6 @@ private extension CreateBookViewController {
     func reloadHeaderView() {
         headerView.height = HeaderHeight
         tableView.tableHeaderView = headerView
-    }
-}
-
-private extension CreateBookViewController {
-    func selectAuthorsComplete(authors: [RealmAuthor]) {
-        guard let newAuthros = authors.first else { return }
-        var selectedAuthors = form.values()["authors"] as? [RealmAuthor] ?? []
-        selectedAuthors.append(newAuthros)
-        form.setValues(["authors": selectedAuthors])
     }
 }
 

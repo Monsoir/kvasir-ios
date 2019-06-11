@@ -10,12 +10,12 @@ import UIKit
 import RealmSwift
 import SwifterSwift
 
-class CreatorListViewController<Creator: RealmCreator>: ResourceListViewController, UITableViewDataSource, UITableViewDelegate {
+class CreatorListViewController: ResourceListViewController, UITableViewDataSource, UITableViewDelegate {
     
-    typealias SelectCompletion =  ((_ creators: [Creator]) -> Void)
+    typealias SelectCompletion =  ((_ creators: [RealmCreator]) -> Void)
     
-    private lazy var coordinator = CreatorListCoordinator<Creator>()
-    private var results: Results<Creator>? {
+    private lazy var coordinator = CreatorListCoordinator()
+    private var results: Results<RealmCreator>? {
         get {
             return coordinator.results
         }
@@ -23,6 +23,9 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
     
     private var selectCompletion: SelectCompletion?
     private var preSelectionIds: [String] = []
+    private var category: RealmCreator.Category {
+        return configuration[#keyPath(RealmCreator.category)] as? RealmCreator.Category ?? .author
+    }
     
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .plain)
@@ -34,7 +37,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
         return view
     }()
     
-    init(with configuration: [String: Any], selectCompletion completion: SelectCompletion? = nil, preSelections: [Creator]? = nil) {
+    init(with configuration: [String: Any], selectCompletion completion: SelectCompletion? = nil, preSelections: [RealmCreator]? = nil) {
         super.init(configuration: configuration)
         self.selectCompletion = completion
         if let selections = preSelections {
@@ -86,17 +89,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
             return texts.joined(separator: "/")
         }()
         cell?.accessoryType = modifyable ? .disclosureIndicator : .none // 可编辑时看作为查看列表而不是进行选择
-        
-        var detail = ""
-        switch creator {
-        case is RealmAuthor:
-            detail = "关联书籍：\((creator as! RealmAuthor).books.count)"
-        case is RealmTranslator:
-            detail = "关联书籍：\((creator as! RealmTranslator).books.count)"
-        default:
-            break
-        }
-        cell?.detailTextLabel?.text = detail
+        cell?.detailTextLabel?.text = "关联书籍：\(creator.writtenBooks.count + creator.translatedBooks.count)"
         
         return cell!
     }
@@ -109,7 +102,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
         if editingStyle == .delete {
             guard let entity = results?[indexPath.row] else { return }
             
-            let sheet = UIAlertController(title: "确定删除\(Creator.toHuman)", message: entity.name, preferredStyle: .actionSheet)
+            let sheet = UIAlertController(title: "确定删除\(entity.category.toHuman)", message: entity.name, preferredStyle: .actionSheet)
             sheet.addAction(title: "删除", style: .destructive, isEnabled: true) { [weak self] (_) in
                 guard let strongSelf = self else { return }
                 strongSelf.doDeleteAuthor(entity: entity)
@@ -119,7 +112,7 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
         }
     }
     
-    private func doDeleteAuthor(entity: Creator) {
+    private func doDeleteAuthor(entity: RealmCreator) {
         coordinator.delete(a: entity, completion: nil)
     }
     
@@ -134,26 +127,28 @@ class CreatorListViewController<Creator: RealmCreator>: ResourceListViewControll
             navigationController?.popViewController()
         }
         
-        switch creator {
-        case is RealmTranslator:
+        switch creator.category {
+        case .author:
             KvasirNavigator.push(KvasirURL.booksOfATranslator.url(with: ["id": creator.id]), context: nil, from: navigationController, animated: true)
-        case is RealmAuthor:
+        case .translator:
             KvasirNavigator.push(KvasirURL.booksOfAnAuthor.url(with: ["id": creator.id]), context: nil, from: navigationController, animated: true)
-        default:
-            break
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     @objc func actionCreate() {
         let configuration: Configuration = [
-            "entity": Creator(),
+            "entity": {
+                let creator = RealmCreator()
+                creator.category = category
+                return creator
+            }(),
         ]
         
-        switch Creator.self {
-        case is RealmAuthor.Type:
+        switch category {
+        case .author:
             KvasirNavigator.present(KvasirURL.newAuthor.url(), context: configuration, wrap: UINavigationController.self)
-        case is RealmTranslator.Type:
+        case .translator:
             KvasirNavigator.present(KvasirURL.newTranslator.url(), context: configuration, wrap: UINavigationController.self)
         default:
             return
@@ -182,7 +177,7 @@ private extension CreatorListViewController {
             tableView.backgroundView = nil
             return
         }
-        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(Creator.toHuman)吧", position: .upper)
+        tableView.backgroundView = CollectionTypeEmptyBackgroundView(title: "右上角添加一个\(category.toHuman)吧", position: .upper)
     }
 
     func configureCoordinator() {
@@ -208,6 +203,3 @@ private extension CreatorListViewController {
         coordinator.setupQuery()
     }
 }
-
-typealias AuthorListViewController = CreatorListViewController<RealmAuthor>
-typealias TranslatorListViewController = CreatorListViewController<RealmTranslator>

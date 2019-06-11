@@ -9,27 +9,30 @@
 import UIKit
 import RealmSwift
 
-class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
-    typealias Model = Digest
+class TopListCoordinator: ListQueryCoordinatorable {
+    typealias Model = RealmWordDigest
     
     var bookName: String {
         return bookResult?.name ?? ""
     }
 //    private lazy var repository = RealmWordRepository<Digest>()
     
-    private(set) var results: Results<Digest>?
+    private(set) var results: Results<Model>?
     private var bookResult: RealmBook?
     private var tagResult: RealmTag?
     
     private(set) var realmNotificationTokens = Set<NotificationToken>()
     private(set) var appNotificationTokens = [NSObjectProtocol]()
     private let configuration: Configurable.Configuration
+    private var category: Model.Category {
+        return (configuration[#keyPath(RealmWordDigest.category)] as? Model.Category) ?? .sentence
+    }
     
-    var initialHandler: ((Results<Digest>?) -> Void)?
+    var initialHandler: ((Results<Model>?) -> Void)?
     var updateHandler: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var errorHandler: ((_ error: Error) -> Void)?
     
-    var tagUpdateHandler: ((_: Set<String>, _: String) -> Void)?
+    var tagUpdateHandler: ((_: Set<String>, _: Model.Category) -> Void)?
     private var tagUpdateUserInfo: [AnyHashable: Any]?
     
     required init(configuration: Configurable.Configuration = [:]) {
@@ -77,27 +80,24 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
                 guard let self = self else { return }
                 guard
                     let userInfo = self.tagUpdateUserInfo,
-                    let digestIds = userInfo["digestIdSet"] as? Set<String>,
-                    let digestType = userInfo["digestType"] as? String
+                    let digestIds = userInfo["digestIdSet"] as? Set<String>
                 else { return }
                 
-                self.tagUpdateHandler?(digestIds, digestType)
+                self.tagUpdateHandler?(digestIds, self.category)
         }
         appNotificationTokens.append(didChangeToken)
     }
     
     private func setupQueryForSpecificBook(bookId: String, updatingSection section: Int) {
-        RealmBookRepository().queryBy(id: bookId) { [weak self] (success, result) in
+        RealmBookRepository.shared.queryBy(id: bookId) { [weak self] (success, result) in
             guard success, let result = result, let self = self else {
                 return
             }
             
             self.bookResult = result
-            if Digest.self == RealmSentence.self {
-                self.results = result.sentences.sorted(byKeyPath: "updatedAt", ascending: false) as? Results<Digest>
-            } else if Digest.self == RealmParagraph.self {
-                self.results = result.paragraphs.sorted(byKeyPath: "updatedAt", ascending: false) as? Results<Digest>
-            }
+            self.results = result.digests
+                                    .filter("\(#keyPath(RealmWordDigest.category)) == %@", self.category.rawValue)
+                                    .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
             
             if let token = self.results?.observe({ [weak self] (changes) in
                 guard let self = self else { return }
@@ -120,19 +120,14 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     }
     
     private func setupQueryForSpecificTag(tagId: String, updatingSection section: Int) {
-        RealmTagRepository().queryBy(id: tagId) { [weak self] (success, result) in
+        RealmTagRepository.shared.queryBy(id: tagId) { [weak self] (success, result) in
             guard let self = self else { return }
             guard success, let result = result else { return }
             
             self.tagResult = result
-            switch Digest.self {
-            case is RealmSentence.Type:
-                self.results = result.sentences.sorted(byKeyPath: "updatedAt", ascending: false) as? Results<Digest>
-            case is RealmParagraph.Type:
-                self.results = result.paragraphs.sorted(byKeyPath: "updatedAt", ascending: false) as? Results<Digest>
-            default:
-                return
-            }
+            self.results = result.wordDigests
+                                    .filter("\(#keyPath(RealmWordDigest.category)) == %@", self.category.rawValue)
+                                    .sorted(byKeyPath: #keyPath(RealmWordDigest.updatedAt), ascending: false)
             
             if let token = self.results?.observe({ [weak self] (changes) in
                 guard let self = self else { return }
@@ -155,7 +150,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
     }
     
     private func setupQueryForAll(updatingSection section: Int) {
-        RealmWordRepository<Digest>().queryAllSortingByUpdatedAtDesc { [weak self] (success, _results) in
+        RealmWordRepository.shared.queryAll(by: category.rawValue) { [weak self] (success, _results) in
             guard success, let results = _results, let self = self else {
                 return
             }
@@ -188,7 +183,7 @@ class TopListCoordinator<Digest: RealmWordDigest>: ListQueryCoordinatorable {
         realmNotificationTokens.insert(token)
     }
     
-    func replace(digestResults: Results<Digest>?) {
+    func replace(digestResults: Results<Model>?) {
         results = digestResults
     }
     

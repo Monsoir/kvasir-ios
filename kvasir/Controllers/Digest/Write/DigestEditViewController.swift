@@ -17,9 +17,9 @@ import CropViewController
 private let ContainerHeight = 50
 typealias TextEditCompletion = (_ text: String) -> Void
 
-class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class DigestEditViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    private var digest: Digest?
+    private var digest: RealmWordDigest?
     private var editCompletion: TextEditCompletion?
     private var editingText: String?
     private var singleLine = false
@@ -71,10 +71,10 @@ class DigestEditViewController<Digest: RealmWordDigest>: UIViewController, UINav
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
-    convenience init(digest: Digest) {
+    convenience init(digest: RealmWordDigest) {
         self.init(nibName: nil, bundle: nil)
         self.digest = digest
-        self.singleLine = (Digest.self == RealmSentence.self)
+        self.singleLine = (digest.category == RealmWordDigest.Category.sentence)
     }
     
     convenience init(text: String, singleLine: Bool = false, editCompletion: @escaping TextEditCompletion) {

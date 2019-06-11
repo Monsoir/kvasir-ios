@@ -10,13 +10,13 @@ import UIKit
 import Eureka
 import SwifterSwift
 
-class CreateCreatorViewController<Creator: RealmCreator>: FormViewController, Configurable {
+class CreateCreatorViewController: FormViewController, Configurable {
     
     private let configuration: Configurable.Configuration
     private var creating: Bool {
         return configuration["creating"] as? Bool ?? true
     }
-    private var coordinator: CreateCreatorCoordinator<Creator>
+    private var coordinator: CreateCreatorCoordinator
     private var createCompletion: ((_: UIViewController) -> Void)? {
         return configuration["completion"] as? (_: UIViewController) -> Void
     }
@@ -25,7 +25,7 @@ class CreateCreatorViewController<Creator: RealmCreator>: FormViewController, Co
     
     required init(configuration: Configurable.Configuration) {
         self.configuration = configuration
-        self.coordinator = CreateCreatorCoordinator<Creator>(configuration: configuration)
+        self.coordinator = CreateCreatorCoordinator(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -79,11 +79,11 @@ private extension CreateCreatorViewController {
         setupImmersiveAppearance()
         navigationItem.leftBarButtonItem = autoGenerateBackItem()
         navigationItem.rightBarButtonItem = btnCreateSave
-        title = "收集一个\(Creator.toHuman)"
+        title = "收集一个\(coordinator.entity.category.toHuman)"
     }
     
     func setupSubviews() {
-        let character = Creator.toHuman
+        let character = coordinator.entity.category.toHuman
         
         form +++ Section()
             <<< TextRow() {
@@ -98,6 +98,3 @@ private extension CreateCreatorViewController {
         }
     }
 }
-
-typealias CreateAuthorViewController = CreateCreatorViewController<RealmAuthor>
-typealias CreateTranslatorViewController = CreateCreatorViewController<RealmTranslator>
