@@ -146,24 +146,14 @@ class DigestSearchResultCoordinator: NSObject, Configurable {
             
             let steps = 10 // 前后最多拿多 10 个字符
             
-            // 对同一条记录，查找所有的匹配项
-//            for range in ranges {
-//                let lowestIndex = ele.content.index(range.lowerBound, offsetBy: -steps, limitedBy: ele.content.startIndex)
-//                let uppestIndex = ele.content.index(range.upperBound, offsetBy: steps, limitedBy: ele.content.endIndex)
-//                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? range.upperBound)]).replacingOccurrences(of: "\n", with: " ")
-//                let bookName: String
-//                bookName = ele.book?.name ?? ""
-//                let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, range: content.range(of: keyword, options: .caseInsensitive)!)
-//                searchResults.append(result)
-//            }
-            
-            // 对同一条记录，只获取第一个匹配项
-            if let range = ranges.first {
-                let lowestIndex = ele.content.index(range.lowerBound, offsetBy: -steps, limitedBy: ele.content.startIndex)
-                let uppestIndex = ele.content.index(range.upperBound, offsetBy: steps, limitedBy: ele.content.endIndex)
-                let content = String(ele.content[(lowestIndex ?? range.lowerBound) ..< (uppestIndex ?? ele.content.endIndex)]).replacingOccurrences(of: "\n", with: " ")
+            if !ranges.isEmpty {
+                let firstRange = ranges.first!
+                let lastRange = ranges.last!
+                let lowesetIndex = ele.content.index(firstRange.lowerBound, offsetBy: -steps, limitedBy: ele.content.startIndex)
+                let uppestIndex = ele.content.index(lastRange.upperBound, offsetBy: steps, limitedBy: ele.content.endIndex)
+                let content = String(ele.content[(lowesetIndex ?? firstRange.lowerBound) ..< (uppestIndex ?? lastRange.upperBound)])
                 let bookName = ele.book?.name ?? ""
-                let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, range: content.range(of: keyword, options: .caseInsensitive)!)
+                let result = DigestSearchResult(id: ele.id, content: content, bookName: bookName, ranges: content.ranges(of: keyword, options: .caseInsensitive))
                 searchResults.append(result)
             }
         }

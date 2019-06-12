@@ -12,5 +12,5 @@ struct DigestSearchResult {
     var id: String
     var content: String
     var bookName: String
-    var range: Range<String.Index>
+    var ranges: [Range<String.Index>]
 }

@@ -172,7 +172,9 @@ extension DigestSearchResultViewController: UITableViewDataSource {
         }
         
         let title = NSMutableAttributedString(string: model.content, attributes: attributes)
-        title.addAttributes(highlightedAttributes, range: NSRange(model.range, in: model.content))
+        for range in model.ranges {
+            title.addAttributes(highlightedAttributes, range: NSRange(range, in: model.content))
+        }
         cell.attributedTitle = title
         cell.bookName = model.bookName
         return cell
