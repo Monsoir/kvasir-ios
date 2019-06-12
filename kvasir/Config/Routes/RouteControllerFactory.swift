@@ -236,8 +236,16 @@ func digestOfBookControllerFactory(url: URLConvertible, values: [String: Any], c
     }
 }
 
-func serverControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
-    return AsServerViewController(configuration: [:])
+func singleControllerFactory(url: URLConvertible, values: [String: Any], context: Any?) -> UIViewController? {
+    guard let identifier = get(url: url, componentAt: 1) else { return nil }
+    switch identifier {
+    case RouteConstants.Nouns.server:
+        return AsServerViewController(configuration: [:])
+    case RouteConstants.Nouns.iap:
+        return IAPViewController(configuration: ["title": "内购项目"])
+    default:
+        return nil
+    }
 }
 
 // MARK: Helpers

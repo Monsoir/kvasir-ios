@@ -33,6 +33,7 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
     case selectAuthors
     case selectTranslators
     case asServer
+    case iap
     
     // Need for args
     case detailSentence
@@ -116,7 +117,10 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             // kvasir://resource/book/<book-id>/digest/paragraph/all
             schema = SchemaBuilder().component(RouteConstants.Nouns.resource).component(RouteConstants.Nouns.books).component("<string:id>").component(RouteConstants.Nouns.digest).component(RouteConstants.Nouns.paragraph).component(RouteConstants.Actions.all)
         case .asServer:
-            schema = SchemaBuilder().component(RouteConstants.Nouns.server)
+            schema = SchemaBuilder().component(RouteConstants.Nouns.static).component(RouteConstants.Nouns.server)
+        case .iap:
+            // kvasir://iap
+            schema = SchemaBuilder().component(RouteConstants.Nouns.static).component(RouteConstants.Nouns.iap)
         }
         return schema.extract()
     }
@@ -172,8 +176,8 @@ enum KvasirURL: KvasirViewControllerRoutable, CaseIterable {
             return digestOfBookControllerFactory(url:values:context:)
         case .detailTag, .detailBook:
             return resourceDetailFactory(url:values:context:)
-        case .asServer:
-            return serverControllerFactory(url:values:context:)
+        case .asServer, .iap:
+            return singleControllerFactory(url:values:context:)
         }
     }
 }

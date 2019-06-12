@@ -26,6 +26,10 @@ private let Resources: [(title: String, url: String)] = [
 ]
 private let ResourceCellIdentifier = "resource"
 
+private let Others: [(title: String, url: String)] = [
+    ("内购项目", KvasirURL.iap.url()),
+]
+
 class TopListViewController: UIViewController {
     private lazy var tableView: UITableView = { [unowned self] in
         let view = UITableView(frame: CGRect.zero, style: .grouped)
@@ -246,6 +250,8 @@ extension TopListViewController: UITableViewDelegate {
                 return "查看全部 \(paragraphsData?.count ?? 0)"
             case 2:
                 return "收集的资源"
+            case 3:
+                return "其他"
             default:
                 return ""
             }
@@ -277,23 +283,42 @@ extension TopListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section >= FocusedSection.count else { return }
         
-        let resource = Resources[indexPath.row]
-        KvasirNavigator.push(resource.url, context: ["canAdd": true])
-        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section == FocusedSection.count {
+            let resource = Resources[indexPath.row]
+            KvasirNavigator.push(resource.url, context: ["canAdd": true])
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        
+        if indexPath.section == FocusedSection.count + 1 {
+            let other = Others[indexPath.row]
+            KvasirNavigator.present(other.url, wrap: UINavigationController.self, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
     }
 }
 
 // MARK: - UITableViewDataSource
 extension TopListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return FocusedSection.count + 1
+        return FocusedSection.count + 1 + 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section < FocusedSection.count {
             return 1
         }
-        return Resources.count
+        
+        if section == FocusedSection.count {
+            return Resources.count
+        }
+        
+        if section == FocusedSection.count + 1 {
+            return Others.count
+        }
+        
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -335,7 +360,7 @@ extension TopListViewController: UITableViewDataSource {
                 break
             }
             return cell
-        } else {
+        } else if indexPath.section == FocusedSection.count {
             var cell = tableView.dequeueReusableCell(withIdentifier: ResourceCellIdentifier)
             if cell == nil {
                 cell = UITableViewCell(style: .value1, reuseIdentifier: ResourceCellIdentifier)
@@ -343,6 +368,16 @@ extension TopListViewController: UITableViewDataSource {
             let resource = Resources[indexPath.row]
             cell?.textLabel?.text = resource.title
             cell?.detailTextLabel?.text = detailTextForResouceCellsAtIndexPath(indexPath)
+            cell?.accessoryType = .disclosureIndicator
+            return cell!
+        } else {
+            var cell = tableView.dequeueReusableCell(withIdentifier: ResourceCellIdentifier)
+            if cell == nil {
+                cell = UITableViewCell(style: .value1, reuseIdentifier: ResourceCellIdentifier)
+            }
+            let other = Others[indexPath.row]
+            cell?.textLabel?.text = other.title
+            cell?.detailTextLabel?.text = ""
             cell?.accessoryType = .disclosureIndicator
             return cell!
         }

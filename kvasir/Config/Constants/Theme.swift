@@ -12,6 +12,7 @@ struct ThemeConst {
     static let outlineColor = "#000000"
     static let mainBackgroundColor = "#FFFFFF"
     static let secondaryBackgroundColor = "#F4F3F4"
+    static let appleBlue = "#006FFF"
 }
 
 enum FinderTagColor: CaseIterable {

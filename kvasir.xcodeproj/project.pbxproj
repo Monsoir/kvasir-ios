@@ -64,6 +64,9 @@
 		447724DF22A559FA00E8AE56 /* PlainCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724DE22A559FA00E8AE56 /* PlainCreator.swift */; };
 		447724E122A55B7300E8AE56 /* RealmCreatorExportOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447724E022A55B7300E8AE56 /* RealmCreatorExportOperation.swift */; };
 		44789C2C22A949A7005563E7 /* KvasirSearchControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44789C2B22A949A7005563E7 /* KvasirSearchControllerWrapper.swift */; };
+		447C92C922B0CADA002120BE /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447C92C822B0CADA002120BE /* IAPViewController.swift */; };
+		447C92CB22B0EA6D002120BE /* iap.plist in Resources */ = {isa = PBXBuildFile; fileRef = 447C92CA22B0EA6D002120BE /* iap.plist */; };
+		447C92CD22B0FCB5002120BE /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 447C92CC22B0FCB5002120BE /* StoreKit.framework */; };
 		4493BE9222A1697A00EEE65C /* ShortTextFieldEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */; };
 		44979C48229BBC1400C217C2 /* UITableViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C47229BBC1400C217C2 /* UITableViewEx.swift */; };
 		44979C4A229BC5F200C217C2 /* UICollectionViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */; };
@@ -246,6 +249,9 @@
 		447724DE22A559FA00E8AE56 /* PlainCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainCreator.swift; sourceTree = "<group>"; };
 		447724E022A55B7300E8AE56 /* RealmCreatorExportOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCreatorExportOperation.swift; sourceTree = "<group>"; };
 		44789C2B22A949A7005563E7 /* KvasirSearchControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KvasirSearchControllerWrapper.swift; sourceTree = "<group>"; };
+		447C92C822B0CADA002120BE /* IAPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
+		447C92CA22B0EA6D002120BE /* iap.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = iap.plist; sourceTree = "<group>"; };
+		447C92CC22B0FCB5002120BE /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4493BE9122A1697A00EEE65C /* ShortTextFieldEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortTextFieldEditViewController.swift; sourceTree = "<group>"; };
 		44979C47229BBC1400C217C2 /* UITableViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewEx.swift; sourceTree = "<group>"; };
 		44979C49229BC5F200C217C2 /* UICollectionViewEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewEx.swift; sourceTree = "<group>"; };
@@ -368,6 +374,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				447C92CD22B0FCB5002120BE /* StoreKit.framework in Frameworks */,
 				E51C8D6FEAA1A3E33D257F0E /* Pods_kvasir.framework in Frameworks */,
 				7A12D36AE642A57ACFCE1548 /* Pods_kvasir.framework in Frameworks */,
 			);
@@ -546,6 +553,7 @@
 			isa = PBXGroup;
 			children = (
 				446DB7B222896AAE00BE3DDF /* Sensitive.swift */,
+				447C92CA22B0EA6D002120BE /* iap.plist */,
 			);
 			path = Sensitive;
 			sourceTree = "<group>";
@@ -598,6 +606,14 @@
 				44296ABF22A66F0700F9F63F /* Export */,
 			);
 			path = Operations;
+			sourceTree = "<group>";
+		};
+		447C92C722B0CA7D002120BE /* IAP */ = {
+			isa = PBXGroup;
+			children = (
+				447C92C822B0CADA002120BE /* IAPViewController.swift */,
+			);
+			path = IAP;
 			sourceTree = "<group>";
 		};
 		44979C51229BD26800C217C2 /* TableViewSectionHeaderFooter */ = {
@@ -754,6 +770,7 @@
 				44B2C07E2271B1D200B584F5 /* Books */,
 				44CD98B9229AC450009C6976 /* Tags */,
 				44D33B7F22A27D7600984295 /* AsServer */,
+				447C92C722B0CA7D002120BE /* IAP */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1031,6 +1048,7 @@
 		656747A6593936160D864F63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				447C92CC22B0FCB5002120BE /* StoreKit.framework */,
 				CCF2AFB17A5EEB488ACCEC1F /* Pods_kvasir.framework */,
 				B949F28CCF52D9FF7D7D99F2 /* Pods_kvasirTests.framework */,
 				CF2EB26A987F46EDE46903F9 /* Pods_kvasirUITests.framework */,
@@ -1121,6 +1139,11 @@
 				TargetAttributes = {
 					44A7ECDE2246A5D800D1C402 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					44A7ECF22246A5DB00D1C402 = {
 						CreatedOnToolsVersion = 10.1;
@@ -1157,6 +1180,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				447C92CB22B0EA6D002120BE /* iap.plist in Resources */,
 				44A7ECED2246A5DA00D1C402 /* LaunchScreen.storyboard in Resources */,
 				44C2111122A7ED5800665018 /* website in Resources */,
 				44A7ECEA2246A5DA00D1C402 /* Assets.xcassets in Resources */,
@@ -1202,6 +1226,7 @@
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/TORoundedButton/TORoundedButton.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1220,6 +1245,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TORoundedButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1355,6 +1381,7 @@
 				44ECD9662277032700618576 /* RealmBookRepository.swift in Sources */,
 				4493BE9222A1697A00EEE65C /* ShortTextFieldEditViewController.swift in Sources */,
 				44ECD94F2276F66000618576 /* DigestListCoordinator.swift in Sources */,
+				447C92C922B0CADA002120BE /* IAPViewController.swift in Sources */,
 				44A7ED402246A62300D1C402 /* AppDelegate+Appearance.swift in Sources */,
 				444B761D2265F74C004B9CD4 /* CreateDigestInfoViewController.swift in Sources */,
 				44979C4C229BC7CB00C217C2 /* TagDetailViewController.swift in Sources */,
@@ -1609,14 +1636,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A9WCJZAVJ6;
+				DEVELOPMENT_TEAM = GRB82L9A3D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = kvasir/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wenyongyang.kvasir-test";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenyongyang.kvasir;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1630,14 +1657,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A9WCJZAVJ6;
+				DEVELOPMENT_TEAM = GRB82L9A3D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = kvasir/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wenyongyang.kvasir-test";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenyongyang.kvasir;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

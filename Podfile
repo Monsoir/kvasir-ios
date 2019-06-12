@@ -18,6 +18,7 @@ target 'kvasir' do
   pod 'CropViewController'
   pod "GCDWebServer", "~> 3.0"
   pod 'SSZipArchive'
+  pod 'TORoundedButton'
   
 #  target 'kvasir-with-tesseract' do
 #    inherit! :search_paths

@@ -32,6 +32,7 @@ PODS:
   - SwifterSwift/SpriteKit (4.6.0)
   - SwifterSwift/SwiftStdlib (4.6.0)
   - SwifterSwift/UIKit (4.6.0)
+  - TORoundedButton (1.0.0)
   - URLNavigator (2.1.0)
 
 DEPENDENCIES:
@@ -46,6 +47,7 @@ DEPENDENCIES:
   - SnapKit (~> 4.0.0)
   - SSZipArchive
   - SwifterSwift
+  - TORoundedButton
   - URLNavigator
 
 SPEC REPOS:
@@ -62,6 +64,7 @@ SPEC REPOS:
     - SnapKit
     - SSZipArchive
     - SwifterSwift
+    - TORoundedButton
     - URLNavigator
 
 SPEC CHECKSUMS:
@@ -77,8 +80,9 @@ SPEC CHECKSUMS:
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   SwifterSwift: 812ffec6f301922f5430e75be3f2939ea3a80024
+  TORoundedButton: b73a05520a33f2ed101bcbd87d017c0affbe9ff2
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: db1c495109e8be09470fb55ebbd159c0e9a2ad1a
+PODFILE CHECKSUM: b1d87a537f529a19828e4f6fdaaa3ee38369bb6e
 
 COCOAPODS: 1.6.1
